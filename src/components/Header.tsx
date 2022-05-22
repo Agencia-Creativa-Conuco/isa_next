@@ -36,7 +36,7 @@ const Header = (
         <Link href="/" passHref>
           <SLink>
             <Logo>
-              <Image src={logo} alt="Logo universidad ISA" />
+              <Image src={logo} alt="Logo universidad ISA" priority />
             </Logo>
           </SLink>
         </Link>

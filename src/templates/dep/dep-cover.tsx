@@ -4,6 +4,7 @@ import Image from 'next/image'
 import colors from 'components/colors'
 import { container, mq } from 'components/grid'
 import cover from '../../../public/images/direccion-extension-y-proyectos/cover.jpg'
+import blur from 'styles/blur'
 
 const DEPCover = () => {
   const title = 'Dirección Extensión y Proyectos',
@@ -14,13 +15,14 @@ const DEPCover = () => {
     <Section fluid>
       <DecoLogo>
         <Logo
-          src={cover ?? ''}
+          src={cover ?? blur}
           alt="Dirección Extensión y Proyectos"
           width={1920}
           height={1536}
           objectFit="cover"
           objectPosition="100% 50%"
           priority
+          blurDataURL={blur.src}
         />
         <DecoLogo2 />
       </DecoLogo>

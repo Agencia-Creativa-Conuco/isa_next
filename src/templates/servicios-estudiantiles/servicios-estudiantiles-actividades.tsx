@@ -108,10 +108,10 @@ const ServiciosEstudiantilesActividades = () => {
               const { image, position } = item
 
               return (
-                <Media>
+                <Media key={index}>
                   <Image
-                    key={index}
                     src={image}
+                    alt={item.title}
                     width={1920}
                     height={1080}
                     objectFit="cover"

@@ -24,64 +24,6 @@ export interface Scalars {
   Float: number;
 }
 
-/** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum ActionMonitorActionIdType {
-  /** Identify a resource by the Database ID. */
-  DATABASE_ID = "DATABASE_ID",
-  /** Identify a resource by the (hashed) Global ID. */
-  ID = "ID",
-  /** Identify a resource by the slug. Available to non-hierarchcial Types where the slug is a unique identifier. */
-  SLUG = "SLUG",
-  /** Identify a resource by the URI. */
-  URI = "URI",
-}
-
-/** Arguments for filtering the ActionMonitorActionToTermNodeConnection connection */
-export interface ActionMonitorActionToTermNodeConnectionWhereArgs {
-  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
-  cacheDomain?: InputMaybe<Scalars["String"]>;
-  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
-  childOf?: InputMaybe<Scalars["Int"]>;
-  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
-  childless?: InputMaybe<Scalars["Boolean"]>;
-  /** Retrieve terms where the description is LIKE the input value. Default empty. */
-  descriptionLike?: InputMaybe<Scalars["String"]>;
-  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
-  exclude?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
-  excludeTree?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
-  hideEmpty?: InputMaybe<Scalars["Boolean"]>;
-  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
-  hierarchical?: InputMaybe<Scalars["Boolean"]>;
-  /** Array of term ids to include. Default empty array. */
-  include?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Array of names to return term(s) for. Default empty. */
-  name?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  /** Retrieve terms where the name is LIKE the input value. Default empty. */
-  nameLike?: InputMaybe<Scalars["String"]>;
-  /** Array of object IDs. Results will be limited to terms associated with these objects. */
-  objectIds?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Direction the connection should be ordered in */
-  order?: InputMaybe<OrderEnum>;
-  /** Field(s) to order terms by. Defaults to 'name'. */
-  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
-  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
-  padCounts?: InputMaybe<Scalars["Boolean"]>;
-  /** Parent term ID to retrieve direct-child terms of. Default empty. */
-  parent?: InputMaybe<Scalars["Int"]>;
-  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
-  search?: InputMaybe<Scalars["String"]>;
-  /** Array of slugs to return term(s) for. Default empty. */
-  slug?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  /** The Taxonomy to filter terms by */
-  taxonomies?: InputMaybe<Array<InputMaybe<TaxonomyEnum>>>;
-  /** Array of term taxonomy IDs, to match when querying terms. */
-  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Whether to prime meta caches for matched terms. Default true. */
-  updateTermMetaCache?: InputMaybe<Scalars["Boolean"]>;
-}
-
 /** What rating to display avatars up to. Accepts 'G', 'PG', 'R', 'X', and are judged in that order. Default is the value of the 'avatar_rating' option */
 export enum AvatarRatingEnum {
   /** Indicates a G level avatar rating level. */
@@ -443,8 +385,6 @@ export enum ContentNodeIdTypeEnum {
 /** Allowed Content Types */
 export enum ContentTypeEnum {
   /** The Type of Content object */
-  ACTION_MONITOR = "ACTION_MONITOR",
-  /** The Type of Content object */
   ATTACHMENT = "ATTACHMENT",
   /** The Type of Content object */
   CARRERA = "CARRERA",
@@ -542,26 +482,6 @@ export enum ContentTypesOfPostFormatEnum {
 export enum ContentTypesOfTagEnum {
   /** The Type of Content object */
   POST = "POST",
-}
-
-/** Input for the createActionMonitorAction mutation */
-export interface CreateActionMonitorActionInput {
-  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
-  clientMutationId?: InputMaybe<Scalars["String"]>;
-  /** The content of the object */
-  content?: InputMaybe<Scalars["String"]>;
-  /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
-  date?: InputMaybe<Scalars["String"]>;
-  /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
-  menuOrder?: InputMaybe<Scalars["Int"]>;
-  /** The password used to protect the content of the object */
-  password?: InputMaybe<Scalars["String"]>;
-  /** The slug of the object */
-  slug?: InputMaybe<Scalars["String"]>;
-  /** The status of the object */
-  status?: InputMaybe<PostStatusEnum>;
-  /** The title of the object */
-  title?: InputMaybe<Scalars["String"]>;
 }
 
 /** Input for the createCarrera mutation */
@@ -1059,16 +979,6 @@ export interface DateQueryInput {
   week?: InputMaybe<Scalars["Int"]>;
   /** 4 digit year (e.g. 2017) */
   year?: InputMaybe<Scalars["Int"]>;
-}
-
-/** Input for the deleteActionMonitorAction mutation */
-export interface DeleteActionMonitorActionInput {
-  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
-  clientMutationId?: InputMaybe<Scalars["String"]>;
-  /** Whether the object should be force deleted instead of being moved to the trash */
-  forceDelete?: InputMaybe<Scalars["Boolean"]>;
-  /** The ID of the ActionMonitorAction to delete */
-  id: Scalars["ID"];
 }
 
 /** Input for the deleteCarrera mutation */
@@ -2779,48 +2689,6 @@ export interface RestoreCommentInput {
   id: Scalars["ID"];
 }
 
-/** Arguments for filtering the RootQueryToActionMonitorActionConnection connection */
-export interface RootQueryToActionMonitorActionConnectionWhereArgs {
-  /** Filter the connection based on dates */
-  dateQuery?: InputMaybe<DateQueryInput>;
-  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
-  hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
-  id?: InputMaybe<Scalars["Int"]>;
-  /** Array of IDs for the objects to retrieve */
-  in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Get objects with a specific mimeType property */
-  mimeType?: InputMaybe<MimeTypeEnum>;
-  /** Slug / post_name of the object */
-  name?: InputMaybe<Scalars["String"]>;
-  /** Specify objects to retrieve. Use slugs */
-  nameIn?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
-  notIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** What paramater to use to order the objects by. */
-  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
-  /** Use ID to return only children. Use 0 to return only top-level items */
-  parent?: InputMaybe<Scalars["ID"]>;
-  /** Specify objects whose parent is in an array */
-  parentIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Specify posts whose parent is not in an array */
-  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Show posts with a specific password. */
-  password?: InputMaybe<Scalars["String"]>;
-  /** List Actions of the PREVIEW stream type. */
-  previewStream?: InputMaybe<Scalars["Boolean"]>;
-  /** Show Posts based on a keyword search */
-  search?: InputMaybe<Scalars["String"]>;
-  /** List Actions performed since a timestamp. */
-  sinceTimestamp?: InputMaybe<Scalars["Float"]>;
-  /** Retrieve posts where post status is in an array. */
-  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
-  /** Show posts with a specific status. */
-  status?: InputMaybe<PostStatusEnum>;
-  /** Title of the object */
-  title?: InputMaybe<Scalars["String"]>;
-}
-
 /** Arguments for filtering the RootQueryToCarreraConnection connection */
 export interface RootQueryToCarreraConnectionWhereArgs {
   /** The user that's connected as the author of the object. Use the userId for the author object. */
@@ -4061,28 +3929,6 @@ export enum TermObjectsConnectionOrderbyEnum {
   TERM_ID = "TERM_ID",
   /** Order the connection by term order. */
   TERM_ORDER = "TERM_ORDER",
-}
-
-/** Input for the updateActionMonitorAction mutation */
-export interface UpdateActionMonitorActionInput {
-  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
-  clientMutationId?: InputMaybe<Scalars["String"]>;
-  /** The content of the object */
-  content?: InputMaybe<Scalars["String"]>;
-  /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
-  date?: InputMaybe<Scalars["String"]>;
-  /** The ID of the ActionMonitorAction object */
-  id: Scalars["ID"];
-  /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
-  menuOrder?: InputMaybe<Scalars["Int"]>;
-  /** The password used to protect the content of the object */
-  password?: InputMaybe<Scalars["String"]>;
-  /** The slug of the object */
-  slug?: InputMaybe<Scalars["String"]>;
-  /** The status of the object */
-  status?: InputMaybe<PostStatusEnum>;
-  /** The title of the object */
-  title?: InputMaybe<Scalars["String"]>;
 }
 
 /** Input for the updateCarrera mutation */
@@ -5409,42 +5255,7 @@ export enum UsersConnectionSearchColumnEnum {
   URL = "URL",
 }
 
-/** The different statuses a Gatsby Preview can be in for a single node. */
-export enum WPGatsbyRemotePreviewStatusEnum {
-  GATSBY_PREVIEW_PROCESS_ERROR = "GATSBY_PREVIEW_PROCESS_ERROR",
-  NO_PAGE_CREATED_FOR_PREVIEWED_NODE = "NO_PAGE_CREATED_FOR_PREVIEWED_NODE",
-  PREVIEW_SUCCESS = "PREVIEW_SUCCESS",
-  RECEIVED_PREVIEW_DATA_FROM_WRONG_URL = "RECEIVED_PREVIEW_DATA_FROM_WRONG_URL",
-}
-
-/** The different statuses a Gatsby Preview can be in for a single node. */
-export enum WPGatsbyWPPreviewedNodeStatus {
-  NO_NODE_FOUND = "NO_NODE_FOUND",
-  NO_PREVIEW_PATH_FOUND = "NO_PREVIEW_PATH_FOUND",
-  PREVIEW_PAGE_UPDATED_BUT_NOT_YET_DEPLOYED = "PREVIEW_PAGE_UPDATED_BUT_NOT_YET_DEPLOYED",
-  PREVIEW_READY = "PREVIEW_READY",
-  RECEIVED_PREVIEW_DATA_FROM_WRONG_URL = "RECEIVED_PREVIEW_DATA_FROM_WRONG_URL",
-  REMOTE_NODE_NOT_YET_UPDATED = "REMOTE_NODE_NOT_YET_UPDATED",
-}
-
-/** Input for the wpGatsbyRemotePreviewStatus mutation */
-export interface WpGatsbyRemotePreviewStatusInput {
-  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
-  clientMutationId?: InputMaybe<Scalars["String"]>;
-  /** The modified date of the latest revision for this preview. */
-  modified?: InputMaybe<Scalars["String"]>;
-  /** The Gatsby page path for this preview. */
-  pagePath?: InputMaybe<Scalars["String"]>;
-  /** The previewed revisions post parent id */
-  parentDatabaseId?: InputMaybe<Scalars["Float"]>;
-  /** The remote status of the previewed node */
-  status: WPGatsbyRemotePreviewStatusEnum;
-  /** Additional context about the preview status */
-  statusContext?: InputMaybe<Scalars["String"]>;
-}
-
 export const scalarsEnumsHash: import("gqty").ScalarsEnumsHash = {
-  ActionMonitorActionIdType: true,
   AvatarRatingEnum: true,
   Boolean: true,
   CarreraIdType: true,
@@ -5497,8 +5308,6 @@ export const scalarsEnumsHash: import("gqty").ScalarsEnumsHash = {
   UserRoleEnum: true,
   UsersConnectionOrderbyEnum: true,
   UsersConnectionSearchColumnEnum: true,
-  WPGatsbyRemotePreviewStatusEnum: true,
-  WPGatsbyWPPreviewedNodeStatus: true,
 };
 export const generatedSchema = {
   AcfFieldGroup: {
@@ -5575,109 +5384,6 @@ export const generatedSchema = {
     __typename: { __type: "String!" },
     fieldGroupName: { __type: "String" },
     urlVideo: { __type: "String" },
-  },
-  ActionMonitorAction: {
-    __typename: { __type: "String!" },
-    actionMonitorActionId: { __type: "Int!" },
-    actionType: { __type: "String" },
-    conditionalTags: { __type: "ConditionalTags" },
-    content: {
-      __type: "String",
-      __args: { format: "PostObjectFieldFormatEnum" },
-    },
-    contentType: { __type: "ContentNodeToContentTypeConnectionEdge" },
-    contentTypeName: { __type: "String!" },
-    databaseId: { __type: "Int!" },
-    date: { __type: "String" },
-    dateGmt: { __type: "String" },
-    desiredSlug: { __type: "String" },
-    editingLockedBy: { __type: "ContentNodeToEditLockConnectionEdge" },
-    enclosure: { __type: "String" },
-    enqueuedScripts: {
-      __type: "ContentNodeToEnqueuedScriptConnection",
-      __args: { after: "String", before: "String", first: "Int", last: "Int" },
-    },
-    enqueuedStylesheets: {
-      __type: "ContentNodeToEnqueuedStylesheetConnection",
-      __args: { after: "String", before: "String", first: "Int", last: "Int" },
-    },
-    guid: { __type: "String" },
-    id: { __type: "ID!" },
-    isContentNode: { __type: "Boolean!" },
-    isPreview: { __type: "Boolean" },
-    isRestricted: { __type: "Boolean" },
-    isTermNode: { __type: "Boolean!" },
-    lastEditedBy: { __type: "ContentNodeToEditLastConnectionEdge" },
-    link: { __type: "String" },
-    modified: { __type: "String" },
-    modifiedGmt: { __type: "String" },
-    preview: { __type: "ActionMonitorActionToPreviewConnectionEdge" },
-    previewData: { __type: "GatsbyPreviewData" },
-    previewRevisionDatabaseId: { __type: "Int" },
-    previewRevisionId: { __type: "ID" },
-    referencedNodeGlobalRelayID: { __type: "String" },
-    referencedNodeID: { __type: "String" },
-    referencedNodePluralName: { __type: "String" },
-    referencedNodeSingularName: { __type: "String" },
-    referencedNodeStatus: { __type: "String" },
-    slug: { __type: "String" },
-    status: { __type: "String" },
-    styles: { __type: "String" },
-    template: { __type: "ContentTemplate" },
-    templates: { __type: "[String]" },
-    terms: {
-      __type: "ActionMonitorActionToTermNodeConnection",
-      __args: {
-        after: "String",
-        before: "String",
-        first: "Int",
-        last: "Int",
-        where: "ActionMonitorActionToTermNodeConnectionWhereArgs",
-      },
-    },
-    title: {
-      __type: "String",
-      __args: { format: "PostObjectFieldFormatEnum" },
-    },
-    uri: { __type: "String" },
-  },
-  ActionMonitorActionToPreviewConnectionEdge: {
-    __typename: { __type: "String!" },
-    node: { __type: "ActionMonitorAction" },
-  },
-  ActionMonitorActionToTermNodeConnection: {
-    __typename: { __type: "String!" },
-    edges: { __type: "[ActionMonitorActionToTermNodeConnectionEdge]" },
-    nodes: { __type: "[TermNode]" },
-    pageInfo: { __type: "WPPageInfo" },
-  },
-  ActionMonitorActionToTermNodeConnectionEdge: {
-    __typename: { __type: "String!" },
-    cursor: { __type: "String" },
-    node: { __type: "TermNode" },
-  },
-  ActionMonitorActionToTermNodeConnectionWhereArgs: {
-    cacheDomain: { __type: "String" },
-    childOf: { __type: "Int" },
-    childless: { __type: "Boolean" },
-    descriptionLike: { __type: "String" },
-    exclude: { __type: "[ID]" },
-    excludeTree: { __type: "[ID]" },
-    hideEmpty: { __type: "Boolean" },
-    hierarchical: { __type: "Boolean" },
-    include: { __type: "[ID]" },
-    name: { __type: "[String]" },
-    nameLike: { __type: "String" },
-    objectIds: { __type: "[ID]" },
-    order: { __type: "OrderEnum" },
-    orderby: { __type: "TermObjectsConnectionOrderbyEnum" },
-    padCounts: { __type: "Boolean" },
-    parent: { __type: "Int" },
-    search: { __type: "String" },
-    slug: { __type: "[String]" },
-    taxonomies: { __type: "[TaxonomyEnum]" },
-    termTaxonomId: { __type: "[ID]" },
-    updateTermMetaCache: { __type: "Boolean" },
   },
   AtlasContentModelerSettingsSettings: {
     __typename: { __type: "String!" },
@@ -6296,7 +6002,6 @@ export const generatedSchema = {
   },
   ContentType: {
     __typename: { __type: "String!" },
-    archivePath: { __type: "String" },
     canExport: { __type: "Boolean" },
     conditionalTags: { __type: "ConditionalTags" },
     connectedTaxonomies: {
@@ -6385,21 +6090,6 @@ export const generatedSchema = {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
     node: { __type: "Taxonomy" },
-  },
-  CreateActionMonitorActionInput: {
-    clientMutationId: { __type: "String" },
-    content: { __type: "String" },
-    date: { __type: "String" },
-    menuOrder: { __type: "Int" },
-    password: { __type: "String" },
-    slug: { __type: "String" },
-    status: { __type: "PostStatusEnum" },
-    title: { __type: "String" },
-  },
-  CreateActionMonitorActionPayload: {
-    __typename: { __type: "String!" },
-    actionMonitorAction: { __type: "ActionMonitorAction" },
-    clientMutationId: { __type: "String" },
   },
   CreateCarreraInput: {
     authorId: { __type: "ID" },
@@ -6770,17 +6460,6 @@ export const generatedSchema = {
   DefaultTemplate: {
     __typename: { __type: "String!" },
     templateName: { __type: "String" },
-  },
-  DeleteActionMonitorActionInput: {
-    clientMutationId: { __type: "String" },
-    forceDelete: { __type: "Boolean" },
-    id: { __type: "ID!" },
-  },
-  DeleteActionMonitorActionPayload: {
-    __typename: { __type: "String!" },
-    actionMonitorAction: { __type: "ActionMonitorAction" },
-    clientMutationId: { __type: "String" },
-    deletedId: { __type: "ID" },
   },
   DeleteCarreraInput: {
     clientMutationId: { __type: "String" },
@@ -7291,18 +6970,6 @@ export const generatedSchema = {
     __typename: { __type: "String!" },
     fieldGroupName: { __type: "String" },
     telefono: { __type: "String" },
-  },
-  GatsbyPreviewData: {
-    __typename: { __type: "String!" },
-    id: { __type: "ID" },
-    isDraft: { __type: "Boolean" },
-    manifestIds: { __type: "[String]" },
-    modified: { __type: "String" },
-    parentDatabaseId: { __type: "Int" },
-    previewDatabaseId: { __type: "Int" },
-    remoteUrl: { __type: "String" },
-    singleName: { __type: "String" },
-    userDatabaseId: { __type: "Int" },
   },
   GeneralSettings: {
     __typename: { __type: "String!" },
@@ -9420,38 +9087,6 @@ export const generatedSchema = {
     comment: { __type: "Comment" },
     restoredId: { __type: "ID" },
   },
-  RootQueryToActionMonitorActionConnection: {
-    __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToActionMonitorActionConnectionEdge]" },
-    nodes: { __type: "[ActionMonitorAction]" },
-    pageInfo: { __type: "WPPageInfo" },
-  },
-  RootQueryToActionMonitorActionConnectionEdge: {
-    __typename: { __type: "String!" },
-    cursor: { __type: "String" },
-    node: { __type: "ActionMonitorAction" },
-  },
-  RootQueryToActionMonitorActionConnectionWhereArgs: {
-    dateQuery: { __type: "DateQueryInput" },
-    hasPassword: { __type: "Boolean" },
-    id: { __type: "Int" },
-    in: { __type: "[ID]" },
-    mimeType: { __type: "MimeTypeEnum" },
-    name: { __type: "String" },
-    nameIn: { __type: "[String]" },
-    notIn: { __type: "[ID]" },
-    orderby: { __type: "[PostObjectsConnectionOrderbyInput]" },
-    parent: { __type: "ID" },
-    parentIn: { __type: "[ID]" },
-    parentNotIn: { __type: "[ID]" },
-    password: { __type: "String" },
-    previewStream: { __type: "Boolean" },
-    search: { __type: "String" },
-    sinceTimestamp: { __type: "Float" },
-    stati: { __type: "[PostStatusEnum]" },
-    status: { __type: "PostStatusEnum" },
-    title: { __type: "String" },
-  },
   RootQueryToCarreraConnection: {
     __typename: { __type: "String!" },
     edges: { __type: "[RootQueryToCarreraConnectionEdge]" },
@@ -10540,7 +10175,6 @@ export const generatedSchema = {
   },
   Taxonomy: {
     __typename: { __type: "String!" },
-    archivePath: { __type: "String" },
     connectedContentTypes: {
       __type: "TaxonomyToContentTypeConnection",
       __args: { after: "String", before: "String", first: "Int", last: "Int" },
@@ -10649,22 +10283,6 @@ export const generatedSchema = {
     templates: { __type: "[String]" },
     uri: { __type: "String" },
     $on: { __type: "$UniformResourceIdentifiable!" },
-  },
-  UpdateActionMonitorActionInput: {
-    clientMutationId: { __type: "String" },
-    content: { __type: "String" },
-    date: { __type: "String" },
-    id: { __type: "ID!" },
-    menuOrder: { __type: "Int" },
-    password: { __type: "String" },
-    slug: { __type: "String" },
-    status: { __type: "PostStatusEnum" },
-    title: { __type: "String" },
-  },
-  UpdateActionMonitorActionPayload: {
-    __typename: { __type: "String!" },
-    actionMonitorAction: { __type: "ActionMonitorAction" },
-    clientMutationId: { __type: "String" },
   },
   UpdateCarreraInput: {
     authorId: { __type: "ID" },
@@ -11825,56 +11443,12 @@ export const generatedSchema = {
     field: { __type: "UsersConnectionOrderbyEnum!" },
     order: { __type: "OrderEnum" },
   },
-  WPGatsby: {
-    __typename: { __type: "String!" },
-    arePrettyPermalinksEnabled: { __type: "Boolean" },
-    gatsbyPreviewStatus: {
-      __type: "WPGatsbyPreviewStatus",
-      __args: { nodeId: "Float!" },
-    },
-    isPreviewFrontendOnline: { __type: "Boolean" },
-  },
-  WPGatsbyCompatibility: {
-    __typename: { __type: "String!" },
-    satisfies: { __type: "WPGatsbySatisfies" },
-  },
-  WPGatsbyPageNode: {
-    __typename: { __type: "String!" },
-    path: { __type: "String" },
-  },
-  WPGatsbyPreviewStatus: {
-    __typename: { __type: "String!" },
-    modifiedLocal: { __type: "String" },
-    modifiedRemote: { __type: "String" },
-    pageNode: { __type: "WPGatsbyPageNode" },
-    remoteStatus: { __type: "WPGatsbyRemotePreviewStatusEnum" },
-    statusContext: { __type: "String" },
-    statusType: { __type: "WPGatsbyWPPreviewedNodeStatus" },
-  },
-  WPGatsbySatisfies: {
-    __typename: { __type: "String!" },
-    wpGQL: { __type: "Boolean" },
-    wpGatsby: { __type: "Boolean" },
-  },
   WPPageInfo: {
     __typename: { __type: "String!" },
     endCursor: { __type: "String" },
     hasNextPage: { __type: "Boolean!" },
     hasPreviousPage: { __type: "Boolean!" },
     startCursor: { __type: "String" },
-  },
-  WpGatsbyRemotePreviewStatusInput: {
-    clientMutationId: { __type: "String" },
-    modified: { __type: "String" },
-    pagePath: { __type: "String" },
-    parentDatabaseId: { __type: "Float" },
-    status: { __type: "WPGatsbyRemotePreviewStatusEnum!" },
-    statusContext: { __type: "String" },
-  },
-  WpGatsbyRemotePreviewStatusPayload: {
-    __typename: { __type: "String!" },
-    clientMutationId: { __type: "String" },
-    success: { __type: "Boolean" },
   },
   WritingSettings: {
     __typename: { __type: "String!" },
@@ -11884,10 +11458,6 @@ export const generatedSchema = {
   },
   mutation: {
     __typename: { __type: "String!" },
-    createActionMonitorAction: {
-      __type: "CreateActionMonitorActionPayload",
-      __args: { input: "CreateActionMonitorActionInput!" },
-    },
     createCarrera: {
       __type: "CreateCarreraPayload",
       __args: { input: "CreateCarreraInput!" },
@@ -11963,10 +11533,6 @@ export const generatedSchema = {
     createUser: {
       __type: "CreateUserPayload",
       __args: { input: "CreateUserInput!" },
-    },
-    deleteActionMonitorAction: {
-      __type: "DeleteActionMonitorActionPayload",
-      __args: { input: "DeleteActionMonitorActionInput!" },
     },
     deleteCarrera: {
       __type: "DeleteCarreraPayload",
@@ -12065,10 +11631,6 @@ export const generatedSchema = {
       __type: "SendPasswordResetEmailPayload",
       __args: { input: "SendPasswordResetEmailInput!" },
     },
-    updateActionMonitorAction: {
-      __type: "UpdateActionMonitorActionPayload",
-      __args: { input: "UpdateActionMonitorActionInput!" },
-    },
     updateCarrera: {
       __type: "UpdateCarreraPayload",
       __args: { input: "UpdateCarreraInput!" },
@@ -12149,10 +11711,6 @@ export const generatedSchema = {
       __type: "UpdateUserPayload",
       __args: { input: "UpdateUserInput!" },
     },
-    wpGatsbyRemotePreviewStatus: {
-      __type: "WpGatsbyRemotePreviewStatusPayload",
-      __args: { input: "WpGatsbyRemotePreviewStatusInput!" },
-    },
   },
   query: {
     __typename: { __type: "String!" },
@@ -12162,33 +11720,6 @@ export const generatedSchema = {
     acfOptionsRedesSociales: { __type: "AcfOptionsRedesSociales" },
     acfOptionsServiciosOpcionales: { __type: "AcfOptionsServiciosOpcionales" },
     acfOptionsVideoInstitucional: { __type: "AcfOptionsVideoInstitucional" },
-    actionMonitorAction: {
-      __type: "ActionMonitorAction",
-      __args: {
-        asPreview: "Boolean",
-        id: "ID!",
-        idType: "ActionMonitorActionIdType",
-      },
-    },
-    actionMonitorActionBy: {
-      __type: "ActionMonitorAction",
-      __args: {
-        actionMonitorActionId: "Int",
-        id: "ID",
-        slug: "String",
-        uri: "String",
-      },
-    },
-    actionMonitorActions: {
-      __type: "RootQueryToActionMonitorActionConnection",
-      __args: {
-        after: "String",
-        before: "String",
-        first: "Int",
-        last: "Int",
-        where: "RootQueryToActionMonitorActionConnectionWhereArgs",
-      },
-    },
     allSettings: { __type: "Settings" },
     atlasContentModelerSettingsSettings: {
       __type: "AtlasContentModelerSettingsSettings",
@@ -12388,7 +11919,6 @@ export const generatedSchema = {
         where: "RootQueryToInvestigadorConnectionWhereArgs",
       },
     },
-    isWpGatsby: { __type: "Boolean" },
     lineaDeInvestigacion: {
       __type: "LineaDeInvestigacion",
       __args: {
@@ -12592,7 +12122,6 @@ export const generatedSchema = {
         where: "RootQueryToContentRevisionUnionConnectionWhereArgs",
       },
     },
-    schemaMd5: { __type: "String" },
     slide: {
       __type: "Slide",
       __args: { asPreview: "Boolean", id: "ID!", idType: "SlideIdType" },
@@ -12673,11 +12202,6 @@ export const generatedSchema = {
       },
     },
     viewer: { __type: "User" },
-    wpGatsby: { __type: "WPGatsby" },
-    wpGatsbyCompatibility: {
-      __type: "WPGatsbyCompatibility",
-      __args: { wpGQLVersionRange: "String!", wpGatsbyVersionRange: "String!" },
-    },
     writingSettings: { __type: "WritingSettings" },
   },
   subscription: {},
@@ -12737,7 +12261,6 @@ export const generatedSchema = {
       "Slide_Datoscta",
     ],
     ContentNode: [
-      "ActionMonitorAction",
       "Carrera",
       "Departamento",
       "Facultad",
@@ -12753,7 +12276,6 @@ export const generatedSchema = {
       "Slide",
     ],
     DatabaseIdentifier: [
-      "ActionMonitorAction",
       "Carrera",
       "Category",
       "Comment",
@@ -12777,7 +12299,6 @@ export const generatedSchema = {
       "User",
     ],
     Node: [
-      "ActionMonitorAction",
       "Carrera",
       "Category",
       "Comment",
@@ -12808,61 +12329,6 @@ export const generatedSchema = {
       "User",
       "UserRole",
     ],
-    NodeWithContentEditor: ["ActionMonitorAction", "Page", "Post"],
-    NodeWithTemplate: [
-      "ActionMonitorAction",
-      "Carrera",
-      "Departamento",
-      "Facultad",
-      "Grado",
-      "Investigacion",
-      "Investigador",
-      "LineaDeInvestigacion",
-      "MediaItem",
-      "Page",
-      "PeriodoDeAdmision",
-      "Post",
-      "Recurso",
-      "Slide",
-    ],
-    NodeWithTitle: [
-      "ActionMonitorAction",
-      "Carrera",
-      "Departamento",
-      "Facultad",
-      "Grado",
-      "Investigacion",
-      "Investigador",
-      "LineaDeInvestigacion",
-      "MediaItem",
-      "Page",
-      "PeriodoDeAdmision",
-      "Post",
-      "Recurso",
-      "Slide",
-    ],
-    UniformResourceIdentifiable: [
-      "ActionMonitorAction",
-      "Carrera",
-      "Category",
-      "ContentType",
-      "Departamento",
-      "Facultad",
-      "Grado",
-      "GrupoDeRequisitos",
-      "Investigacion",
-      "Investigador",
-      "LineaDeInvestigacion",
-      "MediaItem",
-      "Page",
-      "PeriodoDeAdmision",
-      "Post",
-      "PostFormat",
-      "Recurso",
-      "Slide",
-      "Tag",
-      "User",
-    ],
     NodeWithAuthor: [
       "Carrera",
       "Departamento",
@@ -12889,6 +12355,57 @@ export const generatedSchema = {
       "Recurso",
       "Slide",
     ],
+    NodeWithTemplate: [
+      "Carrera",
+      "Departamento",
+      "Facultad",
+      "Grado",
+      "Investigacion",
+      "Investigador",
+      "LineaDeInvestigacion",
+      "MediaItem",
+      "Page",
+      "PeriodoDeAdmision",
+      "Post",
+      "Recurso",
+      "Slide",
+    ],
+    NodeWithTitle: [
+      "Carrera",
+      "Departamento",
+      "Facultad",
+      "Grado",
+      "Investigacion",
+      "Investigador",
+      "LineaDeInvestigacion",
+      "MediaItem",
+      "Page",
+      "PeriodoDeAdmision",
+      "Post",
+      "Recurso",
+      "Slide",
+    ],
+    UniformResourceIdentifiable: [
+      "Carrera",
+      "Category",
+      "ContentType",
+      "Departamento",
+      "Facultad",
+      "Grado",
+      "GrupoDeRequisitos",
+      "Investigacion",
+      "Investigador",
+      "LineaDeInvestigacion",
+      "MediaItem",
+      "Page",
+      "PeriodoDeAdmision",
+      "Post",
+      "PostFormat",
+      "Recurso",
+      "Slide",
+      "Tag",
+      "User",
+    ],
     HierarchicalTermNode: ["Category"],
     MenuItemLinkable: ["Category", "GrupoDeRequisitos", "Page", "Post", "Tag"],
     TermNode: ["Category", "GrupoDeRequisitos", "PostFormat", "Tag"],
@@ -12905,6 +12422,7 @@ export const generatedSchema = {
       "Post",
       "Tag",
     ],
+    NodeWithContentEditor: ["Page", "Post"],
     NodeWithPageAttributes: ["Page"],
     NodeWithRevisions: ["Page", "Post"],
     Page_Datosrecursos_Relacion: ["Recurso"],
@@ -13122,285 +12640,6 @@ export interface AcfOptionsVideoInstitucional_Videoinstitucional {
    */
   fieldGroupName?: Maybe<ScalarsEnums["String"]>;
   urlVideo?: Maybe<ScalarsEnums["String"]>;
-}
-
-/**
- * The ActionMonitorAction type
- */
-export interface ActionMonitorAction {
-  __typename?: "ActionMonitorAction";
-  /**
-   * The id field matches the WP_Post-&gt;ID field.
-   * @deprecated Deprecated in favor of the databaseId field
-   */
-  actionMonitorActionId: ScalarsEnums["Int"];
-  /**
-   * The type of action (CREATE, UPDATE, DELETE)
-   */
-  actionType?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * @deprecated Deprecated in favor of using Next.js pages
-   */
-  conditionalTags?: Maybe<ConditionalTags>;
-  /**
-   * The content of the post.
-   */
-  content: (args?: {
-    /**
-     * Format of the field output
-     */
-    format?: Maybe<PostObjectFieldFormatEnum>;
-  }) => Maybe<ScalarsEnums["String"]>;
-  /**
-   * Connection between the ContentNode type and the ContentType type
-   */
-  contentType?: Maybe<ContentNodeToContentTypeConnectionEdge>;
-  /**
-   * The name of the Content Type the node belongs to
-   */
-  contentTypeName: ScalarsEnums["String"];
-  /**
-   * The unique identifier stored in the database
-   */
-  databaseId: ScalarsEnums["Int"];
-  /**
-   * Post publishing date.
-   */
-  date?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The publishing date set in GMT.
-   */
-  dateGmt?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The desired slug of the post
-   */
-  desiredSlug?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * If a user has edited the node within the past 15 seconds, this will return the user that last edited. Null if the edit lock doesn&#039;t exist or is greater than 15 seconds
-   */
-  editingLockedBy?: Maybe<ContentNodeToEditLockConnectionEdge>;
-  /**
-   * The RSS enclosure for the object
-   */
-  enclosure?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * Connection between the ContentNode type and the EnqueuedScript type
-   */
-  enqueuedScripts: (args?: {
-    /**
-     * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
-    /**
-     * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
-    /**
-     * The number of items to return after the referenced "after" cursor
-     */
-    first?: Maybe<Scalars["Int"]>;
-    /**
-     * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
-  }) => Maybe<ContentNodeToEnqueuedScriptConnection>;
-  /**
-   * Connection between the ContentNode type and the EnqueuedStylesheet type
-   */
-  enqueuedStylesheets: (args?: {
-    /**
-     * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
-    /**
-     * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
-    /**
-     * The number of items to return after the referenced "after" cursor
-     */
-    first?: Maybe<Scalars["Int"]>;
-    /**
-     * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
-  }) => Maybe<ContentNodeToEnqueuedStylesheetConnection>;
-  /**
-   * The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table.
-   */
-  guid?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The globally unique identifier of the action_monitor object.
-   */
-  id: ScalarsEnums["ID"];
-  /**
-   * Whether the node is a Content Node
-   */
-  isContentNode: ScalarsEnums["Boolean"];
-  /**
-   * Whether the object is a node in the preview state
-   */
-  isPreview?: Maybe<ScalarsEnums["Boolean"]>;
-  /**
-   * Whether the object is restricted from the current viewer
-   */
-  isRestricted?: Maybe<ScalarsEnums["Boolean"]>;
-  /**
-   * Whether the node is a Term
-   */
-  isTermNode: ScalarsEnums["Boolean"];
-  /**
-   * The user that most recently edited the node
-   */
-  lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
-  /**
-   * The permalink of the post
-   */
-  link?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The local modified time for a post. If a post was recently updated the modified field will change to match the corresponding time.
-   */
-  modified?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT.
-   */
-  modifiedGmt?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * Connection between the ActionMonitorAction type and the ActionMonitorAction type
-   */
-  preview?: Maybe<ActionMonitorActionToPreviewConnectionEdge>;
-  /**
-   * The preview data of the post that triggered this action.
-   */
-  previewData?: Maybe<GatsbyPreviewData>;
-  /**
-   * The database id of the preview node
-   */
-  previewRevisionDatabaseId?: Maybe<ScalarsEnums["Int"]>;
-  /**
-   * Whether the object is a node in the preview state
-   */
-  previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
-  /**
-   * The global relay ID of the post that triggered this action
-   */
-  referencedNodeGlobalRelayID?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The post ID of the post that triggered this action
-   */
-  referencedNodeID?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The WPGraphQL plural name of the referenced post
-   */
-  referencedNodePluralName?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The WPGraphQL single name of the referenced post
-   */
-  referencedNodeSingularName?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The post status of the post that triggered this action
-   */
-  referencedNodeStatus?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
-   */
-  slug?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The current status of the object
-   */
-  status?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * Link to edit the content
-   */
-  styles?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The template assigned to the node
-   */
-  template?: Maybe<ContentTemplate>;
-  templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
-  /**
-   * Connection between the ActionMonitorAction type and the TermNode type
-   */
-  terms: (args?: {
-    /**
-     * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
-    /**
-     * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
-    /**
-     * The number of items to return after the referenced "after" cursor
-     */
-    first?: Maybe<Scalars["Int"]>;
-    /**
-     * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
-    /**
-     * Arguments for filtering the connection
-     */
-    where?: Maybe<ActionMonitorActionToTermNodeConnectionWhereArgs>;
-  }) => Maybe<ActionMonitorActionToTermNodeConnection>;
-  /**
-   * The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made.
-   */
-  title: (args?: {
-    /**
-     * Format of the field output
-     */
-    format?: Maybe<PostObjectFieldFormatEnum>;
-  }) => Maybe<ScalarsEnums["String"]>;
-  /**
-   * The unique resource identifier path
-   */
-  uri?: Maybe<ScalarsEnums["String"]>;
-}
-
-/**
- * Connection between the ActionMonitorAction type and the ActionMonitorAction type
- */
-export interface ActionMonitorActionToPreviewConnectionEdge {
-  __typename?: "ActionMonitorActionToPreviewConnectionEdge";
-  /**
-   * The node of the connection, without the edges
-   */
-  node?: Maybe<ActionMonitorAction>;
-}
-
-/**
- * Connection between the ActionMonitorAction type and the TermNode type
- */
-export interface ActionMonitorActionToTermNodeConnection {
-  __typename?: "ActionMonitorActionToTermNodeConnection";
-  /**
-   * Edges for the ActionMonitorActionToTermNodeConnection connection
-   */
-  edges?: Maybe<Array<Maybe<ActionMonitorActionToTermNodeConnectionEdge>>>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes?: Maybe<Array<Maybe<TermNode>>>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface ActionMonitorActionToTermNodeConnectionEdge {
-  __typename?: "ActionMonitorActionToTermNodeConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node?: Maybe<TermNode>;
 }
 
 /**
@@ -14674,7 +13913,6 @@ export interface ConditionalTags {
  */
 export interface ContentNode {
   __typename?:
-    | "ActionMonitorAction"
     | "Carrera"
     | "Departamento"
     | "Facultad"
@@ -14969,10 +14207,6 @@ export interface ContentTemplate {
 export interface ContentType {
   __typename?: "ContentType";
   /**
-   * The url path of the first page of the archive page for this content type.
-   */
-  archivePath?: Maybe<ScalarsEnums["String"]>;
-  /**
    * Whether this content type should can be exported.
    */
   canExport?: Maybe<ScalarsEnums["Boolean"]>;
@@ -15211,21 +14445,6 @@ export interface ContentTypeToTaxonomyConnectionEdge {
    * The item at the end of the edge
    */
   node?: Maybe<Taxonomy>;
-}
-
-/**
- * The payload for the createActionMonitorAction mutation
- */
-export interface CreateActionMonitorActionPayload {
-  __typename?: "CreateActionMonitorActionPayload";
-  /**
-   * The Post object mutation type.
-   */
-  actionMonitorAction?: Maybe<ActionMonitorAction>;
-  /**
-   * If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
-   */
-  clientMutationId?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -15522,7 +14741,6 @@ export interface CreateUserPayload {
  */
 export interface DatabaseIdentifier {
   __typename?:
-    | "ActionMonitorAction"
     | "Carrera"
     | "Category"
     | "Comment"
@@ -15560,25 +14778,6 @@ export interface DefaultTemplate {
    * The name of the template
    */
   templateName?: Maybe<ScalarsEnums["String"]>;
-}
-
-/**
- * The payload for the deleteActionMonitorAction mutation
- */
-export interface DeleteActionMonitorActionPayload {
-  __typename?: "DeleteActionMonitorActionPayload";
-  /**
-   * The object before it was deleted
-   */
-  actionMonitorAction?: Maybe<ActionMonitorAction>;
-  /**
-   * If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
-   */
-  clientMutationId?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The ID of the deleted object
-   */
-  deletedId?: Maybe<ScalarsEnums["ID"]>;
 }
 
 /**
@@ -16912,49 +16111,6 @@ export interface Facultad_Contacto_whatsapp {
    */
   fieldGroupName?: Maybe<ScalarsEnums["String"]>;
   telefono?: Maybe<ScalarsEnums["String"]>;
-}
-
-/**
- * Gatsby Preview webhook data.
- */
-export interface GatsbyPreviewData {
-  __typename?: "GatsbyPreviewData";
-  /**
-   * The Relay id of the previewed node.
-   */
-  id?: Maybe<ScalarsEnums["ID"]>;
-  /**
-   * Wether or not the preview is a draft.
-   */
-  isDraft?: Maybe<ScalarsEnums["Boolean"]>;
-  /**
-   * A list of manifest ID&#039;s a preview action has seen during it&#039;s lifetime.
-   */
-  manifestIds?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
-  /**
-   * The modified time of the previewed node.
-   */
-  modified?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The WordPress database ID of the preview. If this is a draft it will potentially return 0, if it&#039;s a revision of a post, it will return the ID of the original post that this is a revision of.
-   */
-  parentDatabaseId?: Maybe<ScalarsEnums["Int"]>;
-  /**
-   * The WordPress database ID of the preview. Could be a revision or draft ID.
-   */
-  previewDatabaseId?: Maybe<ScalarsEnums["Int"]>;
-  /**
-   * The WP url at the time of the preview.
-   */
-  remoteUrl?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The GraphQL single field name for the type of the preview.
-   */
-  singleName?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The database ID of the user who made the original preview.
-   */
-  userDatabaseId?: Maybe<ScalarsEnums["Int"]>;
 }
 
 /**
@@ -19559,7 +18715,6 @@ export interface MenuToMenuItemConnectionEdge {
  */
 export interface Node {
   __typename?:
-    | "ActionMonitorAction"
     | "Carrera"
     | "Category"
     | "Comment"
@@ -19660,7 +18815,7 @@ export interface NodeWithComments {
  * A node that supports the content editor
  */
 export interface NodeWithContentEditor {
-  __typename?: "ActionMonitorAction" | "Page" | "Post";
+  __typename?: "Page" | "Post";
   /**
    * The content of the post.
    */
@@ -19921,7 +19076,6 @@ export interface NodeWithRevisionsToContentNodeConnectionEdge {
  */
 export interface NodeWithTemplate {
   __typename?:
-    | "ActionMonitorAction"
     | "Carrera"
     | "Departamento"
     | "Facultad"
@@ -19947,7 +19101,6 @@ export interface NodeWithTemplate {
  */
 export interface NodeWithTitle {
   __typename?:
-    | "ActionMonitorAction"
     | "Carrera"
     | "Departamento"
     | "Facultad"
@@ -22166,40 +21319,6 @@ export interface RestoreCommentPayload {
 }
 
 /**
- * Connection between the RootQuery type and the ActionMonitorAction type
- */
-export interface RootQueryToActionMonitorActionConnection {
-  __typename?: "RootQueryToActionMonitorActionConnection";
-  /**
-   * Edges for the RootQueryToActionMonitorActionConnection connection
-   */
-  edges?: Maybe<Array<Maybe<RootQueryToActionMonitorActionConnectionEdge>>>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes?: Maybe<Array<Maybe<ActionMonitorAction>>>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface RootQueryToActionMonitorActionConnectionEdge {
-  __typename?: "RootQueryToActionMonitorActionConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node?: Maybe<ActionMonitorAction>;
-}
-
-/**
  * Connection between the RootQuery type and the carrera type
  */
 export interface RootQueryToCarreraConnection {
@@ -23821,10 +22940,6 @@ export interface TagToTaxonomyConnectionEdge {
 export interface Taxonomy {
   __typename?: "Taxonomy";
   /**
-   * The url path of the first page of the archive page for this content type.
-   */
-  archivePath?: Maybe<ScalarsEnums["String"]>;
-  /**
    * List of Content Types associated with the Taxonomy
    */
   connectedContentTypes: (args?: {
@@ -24192,7 +23307,6 @@ export interface Theme {
  */
 export interface UniformResourceIdentifiable {
   __typename?:
-    | "ActionMonitorAction"
     | "Carrera"
     | "Category"
     | "ContentType"
@@ -24234,21 +23348,6 @@ export interface UniformResourceIdentifiable {
    */
   uri?: Maybe<ScalarsEnums["String"]>;
   $on: $UniformResourceIdentifiable;
-}
-
-/**
- * The payload for the updateActionMonitorAction mutation
- */
-export interface UpdateActionMonitorActionPayload {
-  __typename?: "UpdateActionMonitorActionPayload";
-  /**
-   * The Post object mutation type.
-   */
-  actionMonitorAction?: Maybe<ActionMonitorAction>;
-  /**
-   * If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
-   */
-  clientMutationId?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -25772,74 +24871,6 @@ export interface UserToUserRoleConnectionEdge {
 }
 
 /**
- * Information needed by gatsby-source-wordpress.
- */
-export interface WPGatsby {
-  __typename?: "WPGatsby";
-  /**
-   * Returns wether or not pretty permalinks are enabled.
-   */
-  arePrettyPermalinksEnabled?: Maybe<ScalarsEnums["Boolean"]>;
-  /**
-   * The current status of a Gatsby Preview.
-   */
-  gatsbyPreviewStatus: (args: {
-    /**
-     * The post id for the previewed node.
-     */
-    nodeId: Scalars["Float"];
-  }) => Maybe<WPGatsbyPreviewStatus>;
-  /**
-   * Wether or not the Preview frontend URL is online.
-   */
-  isPreviewFrontendOnline?: Maybe<ScalarsEnums["Boolean"]>;
-}
-
-/**
- * Check compatibility with a given version of gatsby-source-wordpress and the WordPress source site.
- */
-export interface WPGatsbyCompatibility {
-  __typename?: "WPGatsbyCompatibility";
-  satisfies?: Maybe<WPGatsbySatisfies>;
-}
-
-/**
- * A previewed Gatsby page node.
- */
-export interface WPGatsbyPageNode {
-  __typename?: "WPGatsbyPageNode";
-  path?: Maybe<ScalarsEnums["String"]>;
-}
-
-/**
- * Check compatibility with a given version of gatsby-source-wordpress and the WordPress source site.
- */
-export interface WPGatsbyPreviewStatus {
-  __typename?: "WPGatsbyPreviewStatus";
-  modifiedLocal?: Maybe<ScalarsEnums["String"]>;
-  modifiedRemote?: Maybe<ScalarsEnums["String"]>;
-  pageNode?: Maybe<WPGatsbyPageNode>;
-  remoteStatus?: Maybe<ScalarsEnums["WPGatsbyRemotePreviewStatusEnum"]>;
-  statusContext?: Maybe<ScalarsEnums["String"]>;
-  statusType?: Maybe<ScalarsEnums["WPGatsbyWPPreviewedNodeStatus"]>;
-}
-
-/**
- * Check compatibility with WPGatsby and WPGraphQL.
- */
-export interface WPGatsbySatisfies {
-  __typename?: "WPGatsbySatisfies";
-  /**
-   * Whether the provided version range requirement for WPGraphQL is met by this WP instance.
-   */
-  wpGQL?: Maybe<ScalarsEnums["Boolean"]>;
-  /**
-   * Whether the provided version range requirement for WPGatsby is met by this WP instance.
-   */
-  wpGatsby?: Maybe<ScalarsEnums["Boolean"]>;
-}
-
-/**
  * Information about pagination in a connection.
  */
 export interface WPPageInfo {
@@ -25863,21 +24894,6 @@ export interface WPPageInfo {
 }
 
 /**
- * The payload for the wpGatsbyRemotePreviewStatus mutation
- */
-export interface WpGatsbyRemotePreviewStatusPayload {
-  __typename?: "WpGatsbyRemotePreviewStatusPayload";
-  /**
-   * If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
-   */
-  clientMutationId?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * Wether or not the revision mutation was successful
-   */
-  success?: Maybe<ScalarsEnums["Boolean"]>;
-}
-
-/**
  * The writing setting type
  */
 export interface WritingSettings {
@@ -25898,9 +24914,6 @@ export interface WritingSettings {
 
 export interface Mutation {
   __typename?: "Mutation";
-  createActionMonitorAction: (args: {
-    input: CreateActionMonitorActionInput;
-  }) => Maybe<CreateActionMonitorActionPayload>;
   createCarrera: (args: {
     input: CreateCarreraInput;
   }) => Maybe<CreateCarreraPayload>;
@@ -25946,9 +24959,6 @@ export interface Mutation {
   createSlide: (args: { input: CreateSlideInput }) => Maybe<CreateSlidePayload>;
   createTag: (args: { input: CreateTagInput }) => Maybe<CreateTagPayload>;
   createUser: (args: { input: CreateUserInput }) => Maybe<CreateUserPayload>;
-  deleteActionMonitorAction: (args: {
-    input: DeleteActionMonitorActionInput;
-  }) => Maybe<DeleteActionMonitorActionPayload>;
   deleteCarrera: (args: {
     input: DeleteCarreraInput;
   }) => Maybe<DeleteCarreraPayload>;
@@ -26012,9 +25022,6 @@ export interface Mutation {
   sendPasswordResetEmail: (args: {
     input: SendPasswordResetEmailInput;
   }) => Maybe<SendPasswordResetEmailPayload>;
-  updateActionMonitorAction: (args: {
-    input: UpdateActionMonitorActionInput;
-  }) => Maybe<UpdateActionMonitorActionPayload>;
   updateCarrera: (args: {
     input: UpdateCarreraInput;
   }) => Maybe<UpdateCarreraPayload>;
@@ -26063,9 +25070,6 @@ export interface Mutation {
   updateSlide: (args: { input: UpdateSlideInput }) => Maybe<UpdateSlidePayload>;
   updateTag: (args: { input: UpdateTagInput }) => Maybe<UpdateTagPayload>;
   updateUser: (args: { input: UpdateUserInput }) => Maybe<UpdateUserPayload>;
-  wpGatsbyRemotePreviewStatus: (args: {
-    input: WpGatsbyRemotePreviewStatusInput;
-  }) => Maybe<WpGatsbyRemotePreviewStatusPayload>;
 }
 
 export interface Query {
@@ -26074,24 +25078,6 @@ export interface Query {
   acfOptionsRedesSociales?: Maybe<AcfOptionsRedesSociales>;
   acfOptionsServiciosOpcionales?: Maybe<AcfOptionsServiciosOpcionales>;
   acfOptionsVideoInstitucional?: Maybe<AcfOptionsVideoInstitucional>;
-  actionMonitorAction: (args: {
-    asPreview?: Maybe<Scalars["Boolean"]>;
-    id: Scalars["ID"];
-    idType?: Maybe<ActionMonitorActionIdType>;
-  }) => Maybe<ActionMonitorAction>;
-  actionMonitorActionBy: (args?: {
-    actionMonitorActionId?: Maybe<Scalars["Int"]>;
-    id?: Maybe<Scalars["ID"]>;
-    slug?: Maybe<Scalars["String"]>;
-    uri?: Maybe<Scalars["String"]>;
-  }) => Maybe<ActionMonitorAction>;
-  actionMonitorActions: (args?: {
-    after?: Maybe<Scalars["String"]>;
-    before?: Maybe<Scalars["String"]>;
-    first?: Maybe<Scalars["Int"]>;
-    last?: Maybe<Scalars["Int"]>;
-    where?: Maybe<RootQueryToActionMonitorActionConnectionWhereArgs>;
-  }) => Maybe<RootQueryToActionMonitorActionConnection>;
   allSettings?: Maybe<Settings>;
   atlasContentModelerSettingsSettings?: Maybe<AtlasContentModelerSettingsSettings>;
   carrera: (args: {
@@ -26257,7 +25243,6 @@ export interface Query {
     last?: Maybe<Scalars["Int"]>;
     where?: Maybe<RootQueryToInvestigadorConnectionWhereArgs>;
   }) => Maybe<RootQueryToInvestigadorConnection>;
-  isWpGatsby?: Maybe<ScalarsEnums["Boolean"]>;
   lineaDeInvestigacion: (args: {
     asPreview?: Maybe<Scalars["Boolean"]>;
     id: Scalars["ID"];
@@ -26430,7 +25415,6 @@ export interface Query {
     last?: Maybe<Scalars["Int"]>;
     where?: Maybe<RootQueryToContentRevisionUnionConnectionWhereArgs>;
   }) => Maybe<RootQueryToContentRevisionUnionConnection>;
-  schemaMd5?: Maybe<ScalarsEnums["String"]>;
   slide: (args: {
     asPreview?: Maybe<Scalars["Boolean"]>;
     id: Scalars["ID"];
@@ -26505,11 +25489,6 @@ export interface Query {
     where?: Maybe<RootQueryToUserConnectionWhereArgs>;
   }) => Maybe<RootQueryToUserConnection>;
   viewer?: Maybe<User>;
-  wpGatsby?: Maybe<WPGatsby>;
-  wpGatsbyCompatibility: (args: {
-    wpGQLVersionRange: Scalars["String"];
-    wpGatsbyVersionRange: Scalars["String"];
-  }) => Maybe<WPGatsbyCompatibility>;
   writingSettings?: Maybe<WritingSettings>;
 }
 
@@ -26529,10 +25508,6 @@ export interface SchemaObjectTypes {
   AcfOptionsServiciosOpcionales_Serviciosopcionales_servicios: AcfOptionsServiciosOpcionales_Serviciosopcionales_servicios;
   AcfOptionsVideoInstitucional: AcfOptionsVideoInstitucional;
   AcfOptionsVideoInstitucional_Videoinstitucional: AcfOptionsVideoInstitucional_Videoinstitucional;
-  ActionMonitorAction: ActionMonitorAction;
-  ActionMonitorActionToPreviewConnectionEdge: ActionMonitorActionToPreviewConnectionEdge;
-  ActionMonitorActionToTermNodeConnection: ActionMonitorActionToTermNodeConnection;
-  ActionMonitorActionToTermNodeConnectionEdge: ActionMonitorActionToTermNodeConnectionEdge;
   AtlasContentModelerSettingsSettings: AtlasContentModelerSettingsSettings;
   Avatar: Avatar;
   Carrera: Carrera;
@@ -26582,7 +25557,6 @@ export interface SchemaObjectTypes {
   ContentTypeToContentNodeConnectionEdge: ContentTypeToContentNodeConnectionEdge;
   ContentTypeToTaxonomyConnection: ContentTypeToTaxonomyConnection;
   ContentTypeToTaxonomyConnectionEdge: ContentTypeToTaxonomyConnectionEdge;
-  CreateActionMonitorActionPayload: CreateActionMonitorActionPayload;
   CreateCarreraPayload: CreateCarreraPayload;
   CreateCategoryPayload: CreateCategoryPayload;
   CreateCommentPayload: CreateCommentPayload;
@@ -26603,7 +25577,6 @@ export interface SchemaObjectTypes {
   CreateTagPayload: CreateTagPayload;
   CreateUserPayload: CreateUserPayload;
   DefaultTemplate: DefaultTemplate;
-  DeleteActionMonitorActionPayload: DeleteActionMonitorActionPayload;
   DeleteCarreraPayload: DeleteCarreraPayload;
   DeleteCategoryPayload: DeleteCategoryPayload;
   DeleteCommentPayload: DeleteCommentPayload;
@@ -26653,7 +25626,6 @@ export interface SchemaObjectTypes {
   Facultad_Contacto_telefonos: Facultad_Contacto_telefonos;
   Facultad_Contacto_telefonos_extensiones: Facultad_Contacto_telefonos_extensiones;
   Facultad_Contacto_whatsapp: Facultad_Contacto_whatsapp;
-  GatsbyPreviewData: GatsbyPreviewData;
   GeneralSettings: GeneralSettings;
   GenerateAuthorizationCodePayload: GenerateAuthorizationCodePayload;
   Grado: Grado;
@@ -26768,8 +25740,6 @@ export interface SchemaObjectTypes {
   RegisterUserPayload: RegisterUserPayload;
   ResetUserPasswordPayload: ResetUserPasswordPayload;
   RestoreCommentPayload: RestoreCommentPayload;
-  RootQueryToActionMonitorActionConnection: RootQueryToActionMonitorActionConnection;
-  RootQueryToActionMonitorActionConnectionEdge: RootQueryToActionMonitorActionConnectionEdge;
   RootQueryToCarreraConnection: RootQueryToCarreraConnection;
   RootQueryToCarreraConnectionEdge: RootQueryToCarreraConnectionEdge;
   RootQueryToCategoryConnection: RootQueryToCategoryConnection;
@@ -26852,7 +25822,6 @@ export interface SchemaObjectTypes {
   TermNodeToEnqueuedStylesheetConnection: TermNodeToEnqueuedStylesheetConnection;
   TermNodeToEnqueuedStylesheetConnectionEdge: TermNodeToEnqueuedStylesheetConnectionEdge;
   Theme: Theme;
-  UpdateActionMonitorActionPayload: UpdateActionMonitorActionPayload;
   UpdateCarreraPayload: UpdateCarreraPayload;
   UpdateCategoryPayload: UpdateCategoryPayload;
   UpdateCommentPayload: UpdateCommentPayload;
@@ -26911,13 +25880,7 @@ export interface SchemaObjectTypes {
   UserToSlideConnectionEdge: UserToSlideConnectionEdge;
   UserToUserRoleConnection: UserToUserRoleConnection;
   UserToUserRoleConnectionEdge: UserToUserRoleConnectionEdge;
-  WPGatsby: WPGatsby;
-  WPGatsbyCompatibility: WPGatsbyCompatibility;
-  WPGatsbyPageNode: WPGatsbyPageNode;
-  WPGatsbyPreviewStatus: WPGatsbyPreviewStatus;
-  WPGatsbySatisfies: WPGatsbySatisfies;
   WPPageInfo: WPPageInfo;
-  WpGatsbyRemotePreviewStatusPayload: WpGatsbyRemotePreviewStatusPayload;
   WritingSettings: WritingSettings;
 }
 export type SchemaObjectTypesNames =
@@ -26932,10 +25895,6 @@ export type SchemaObjectTypesNames =
   | "AcfOptionsServiciosOpcionales_Serviciosopcionales_servicios"
   | "AcfOptionsVideoInstitucional"
   | "AcfOptionsVideoInstitucional_Videoinstitucional"
-  | "ActionMonitorAction"
-  | "ActionMonitorActionToPreviewConnectionEdge"
-  | "ActionMonitorActionToTermNodeConnection"
-  | "ActionMonitorActionToTermNodeConnectionEdge"
   | "AtlasContentModelerSettingsSettings"
   | "Avatar"
   | "Carrera"
@@ -26985,7 +25944,6 @@ export type SchemaObjectTypesNames =
   | "ContentTypeToContentNodeConnectionEdge"
   | "ContentTypeToTaxonomyConnection"
   | "ContentTypeToTaxonomyConnectionEdge"
-  | "CreateActionMonitorActionPayload"
   | "CreateCarreraPayload"
   | "CreateCategoryPayload"
   | "CreateCommentPayload"
@@ -27006,7 +25964,6 @@ export type SchemaObjectTypesNames =
   | "CreateTagPayload"
   | "CreateUserPayload"
   | "DefaultTemplate"
-  | "DeleteActionMonitorActionPayload"
   | "DeleteCarreraPayload"
   | "DeleteCategoryPayload"
   | "DeleteCommentPayload"
@@ -27056,7 +26013,6 @@ export type SchemaObjectTypesNames =
   | "Facultad_Contacto_telefonos"
   | "Facultad_Contacto_telefonos_extensiones"
   | "Facultad_Contacto_whatsapp"
-  | "GatsbyPreviewData"
   | "GeneralSettings"
   | "GenerateAuthorizationCodePayload"
   | "Grado"
@@ -27171,8 +26127,6 @@ export type SchemaObjectTypesNames =
   | "RegisterUserPayload"
   | "ResetUserPasswordPayload"
   | "RestoreCommentPayload"
-  | "RootQueryToActionMonitorActionConnection"
-  | "RootQueryToActionMonitorActionConnectionEdge"
   | "RootQueryToCarreraConnection"
   | "RootQueryToCarreraConnectionEdge"
   | "RootQueryToCategoryConnection"
@@ -27255,7 +26209,6 @@ export type SchemaObjectTypesNames =
   | "TermNodeToEnqueuedStylesheetConnection"
   | "TermNodeToEnqueuedStylesheetConnectionEdge"
   | "Theme"
-  | "UpdateActionMonitorActionPayload"
   | "UpdateCarreraPayload"
   | "UpdateCategoryPayload"
   | "UpdateCommentPayload"
@@ -27314,13 +26267,7 @@ export type SchemaObjectTypesNames =
   | "UserToSlideConnectionEdge"
   | "UserToUserRoleConnection"
   | "UserToUserRoleConnectionEdge"
-  | "WPGatsby"
-  | "WPGatsbyCompatibility"
-  | "WPGatsbyPageNode"
-  | "WPGatsbyPreviewStatus"
-  | "WPGatsbySatisfies"
   | "WPPageInfo"
-  | "WpGatsbyRemotePreviewStatusPayload"
   | "WritingSettings";
 
 export interface $AcfFieldGroup {
@@ -27384,7 +26331,6 @@ export interface $Commenter {
 }
 
 export interface $ContentNode {
-  ActionMonitorAction?: ActionMonitorAction;
   Carrera?: Carrera;
   Departamento?: Departamento;
   Facultad?: Facultad;
@@ -27410,7 +26356,6 @@ export interface $ContentTemplate {
 }
 
 export interface $DatabaseIdentifier {
-  ActionMonitorAction?: ActionMonitorAction;
   Carrera?: Carrera;
   Category?: Category;
   Comment?: Comment;
@@ -27465,7 +26410,6 @@ export interface $MenuItemObjectUnion {
 }
 
 export interface $Node {
-  ActionMonitorAction?: ActionMonitorAction;
   Carrera?: Carrera;
   Category?: Category;
   Comment?: Comment;
@@ -27520,7 +26464,6 @@ export interface $NodeWithComments {
 }
 
 export interface $NodeWithContentEditor {
-  ActionMonitorAction?: ActionMonitorAction;
   Page?: Page;
   Post?: Post;
 }
@@ -27551,7 +26494,6 @@ export interface $NodeWithRevisions {
 }
 
 export interface $NodeWithTemplate {
-  ActionMonitorAction?: ActionMonitorAction;
   Carrera?: Carrera;
   Departamento?: Departamento;
   Facultad?: Facultad;
@@ -27568,7 +26510,6 @@ export interface $NodeWithTemplate {
 }
 
 export interface $NodeWithTitle {
-  ActionMonitorAction?: ActionMonitorAction;
   Carrera?: Carrera;
   Departamento?: Departamento;
   Facultad?: Facultad;
@@ -27600,7 +26541,6 @@ export interface $TermNode {
 }
 
 export interface $UniformResourceIdentifiable {
-  ActionMonitorAction?: ActionMonitorAction;
   Carrera?: Carrera;
   Category?: Category;
   ContentType?: ContentType;
@@ -27633,7 +26573,6 @@ export type MakeNullable<T> = {
 };
 
 export interface ScalarsEnums extends MakeNullable<Scalars> {
-  ActionMonitorActionIdType: ActionMonitorActionIdType | undefined;
   AvatarRatingEnum: AvatarRatingEnum | undefined;
   CarreraIdType: CarreraIdType | undefined;
   CategoryIdType: CategoryIdType | undefined;
@@ -27689,6 +26628,4 @@ export interface ScalarsEnums extends MakeNullable<Scalars> {
   UserRoleEnum: UserRoleEnum | undefined;
   UsersConnectionOrderbyEnum: UsersConnectionOrderbyEnum | undefined;
   UsersConnectionSearchColumnEnum: UsersConnectionSearchColumnEnum | undefined;
-  WPGatsbyRemotePreviewStatusEnum: WPGatsbyRemotePreviewStatusEnum | undefined;
-  WPGatsbyWPPreviewedNodeStatus: WPGatsbyWPPreviewedNodeStatus | undefined;
 }

@@ -34,14 +34,16 @@ const GradeOffer = ({ grado }: GradoProps) => {
         {facultades?.map((facultad, key) => {
           return (
             <Facultad key={key}>
-              <Link href={facultad.uri ?? ''}>
-                <Title
-                  color={colors.primary.dark}
-                  bgHover={colors.gray.light}
-                  isFaculty
-                >
-                  {facultad.nombre}
-                </Title>
+              <Link href={facultad.uri ?? ''} passHref>
+                <SLink>
+                  <Title
+                    color={colors.primary.dark}
+                    bgHover={colors.gray.light}
+                    isFaculty
+                  >
+                    {facultad.nombre}
+                  </Title>
+                </SLink>
               </Link>
               <Container>
                 {carreras
@@ -53,14 +55,16 @@ const GradeOffer = ({ grado }: GradoProps) => {
                   })
                   .map((carrera, key) => {
                     return (
-                      <Link href={carrera.uri ?? ''} key={key}>
-                        <Title
-                          color={colors.text.base}
-                          bgHover={colors.gray.light}
-                          isCareer
-                        >
-                          {carrera.nombre}
-                        </Title>
+                      <Link href={carrera.uri ?? ''} key={key} passHref>
+                        <SLink>
+                          <Title
+                            color={colors.text.base}
+                            bgHover={colors.gray.light}
+                            isCareer
+                          >
+                            {carrera.nombre}
+                          </Title>
+                        </SLink>
                       </Link>
                     )
                   })}
@@ -140,4 +144,8 @@ const Title = styled.span`
           font-weight: 300;
         `}
   `}
+`
+
+const SLink = styled.a`
+  text-decoration: none;
 `

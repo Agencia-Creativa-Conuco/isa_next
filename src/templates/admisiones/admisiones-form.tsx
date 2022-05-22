@@ -87,7 +87,7 @@ const AdmisionesForm = () => {
             objectFit="cover"
             objectPosition="40% 40%"
             placeholder="blur"
-          ></Image>
+          />
         </Media>
 
         <Wrapper>
