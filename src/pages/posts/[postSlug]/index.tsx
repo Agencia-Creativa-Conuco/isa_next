@@ -8,9 +8,6 @@ import PostSingleCover from 'templates/post/post-single-cover'
 import PostSingleContent from 'templates/post/post-single-content'
 import PostFileCover from 'templates/post/post-file-cover'
 
-import { Footer, Header, Hero } from 'components'
-import Head from 'next/head'
-
 export interface PostProps {
   post: Post | Post['preview']['node'] | null | undefined
 }

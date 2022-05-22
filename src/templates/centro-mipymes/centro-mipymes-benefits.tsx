@@ -12,7 +12,7 @@ const CentroMipymesBenefits = () => {
       <li>Se les ayudará a identificar las necesidades de la empresa y aprovechar las oportunidades del mercado.</li>
       <li>Se analizarán las alternativas más viables para ayudar en la búsqueda de soluciones para los principales problemas que afectan a la organización.</li>
       <li>Se les brindará ayuda profesional en las áreas que lo requieran.</li>
-      </ul`,
+      </ul>`,
 
     image: beneficios,
   }
@@ -30,7 +30,7 @@ const CentroMipymesBenefits = () => {
       <Conatiner>
         <Content>
           <Title>{data.title}</Title>
-          <Copy dangerouslySetInnerHTML={{ __html: data.copy }} />
+          <Copy dangerouslySetInnerHTML={{ __html: data?.copy }} />
         </Content>
       </Conatiner>
     </Section>
@@ -74,4 +74,4 @@ const Title = styled.h3`
   padding-bottom: 2.5rem;
 `
 
-const Copy = styled.p``
+const Copy = styled.div``
