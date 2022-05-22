@@ -127,15 +127,16 @@ const Nav = ({
                   <NavItemTag
                     aria-current={isCurrentPage ? 'page' : undefined}
                     onClick={(e) => {
-                      menuToggle(item.id, item)
+                      menuToggle(item?.id, item)
                     }}
                   >
                     {item?.label}
                   </NavItemTag>
                 ) : (
-                  <Link href={item.uri ?? ''} passHref>
+                  <Link href={item?.uri ?? ''} passHref>
                     <NavItemLink
                       aria-current={isCurrentPage ? 'page' : undefined}
+                      target={item?.target}
                     >
                       {item?.label}
                     </NavItemLink>
