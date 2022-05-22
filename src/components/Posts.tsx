@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { h3 } from 'styles/tipography'
 import { container, mq } from 'components/grid'
 import blur from 'styles/blur'
+import colors from 'components/colors'
 
 interface Props {
   posts: Post[] | undefined
@@ -102,18 +103,15 @@ const ItemTitle = styled.h2`
   margin-top: 1rem;
 `
 
-const Excerpt = styled.div``
+const Excerpt = styled.div`
+  font-size: 1.6rem;
+  color: ${colors.text.base};
+  font-weight: initial;
+  text-transform: initial;
+`
 
 const SLink = styled.a`
   text-decoration: none;
   color: inherit;
   /* margin */
-`
-const ContainerBottom = styled.div`
-  display: flex;
-  justify-content: center;
-`
-
-const ColBottom = styled.span`
-  margin: 0 4rem;
 `
