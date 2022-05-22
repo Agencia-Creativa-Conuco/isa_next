@@ -21,8 +21,6 @@ const HomeOffer = () => {
       return item.datosMenu.visibleInicio
     })
 
-  console.log(items)
-
   return (
     <Section id="section_2">
       <OfferNavigation items={items} />

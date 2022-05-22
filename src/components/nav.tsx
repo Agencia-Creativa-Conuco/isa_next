@@ -97,7 +97,6 @@ const Nav = ({
     }
   }, [ref, isMobileMenuOpen])
 
-  console.log(itemActive)
   return list?.length ? (
     <NavContainer
       ref={ref}
@@ -153,9 +152,6 @@ const Nav = ({
       {/* <MenuBox hidden={state.theme.menu.isMenuVisible?false:true}> */}
       <MenuBox hidden={isMenuVisible ? false : true}>
         {list.map((item, index) => {
-          const children = item?.children
-
-          console.log(itemActive.id, item.id)
           return itemActive?.children?.length ? (
             <Navigation
               key={index}
