@@ -36,7 +36,7 @@ const NavItem = ({
   expandColor = 'inherit',
   ...props
 }: NavItemProps) => {
-  const { label, url, childItems } = item
+  const { label, uri, childItems } = item
 
   const children = childItems({
     first: 1000,
@@ -44,7 +44,7 @@ const NavItem = ({
 
   const hasChildren = children?.length > 0
   const isCurrentPage = false
-  const isLink = url !== '#'
+  const isLink = uri !== '#'
 
   const [isOpen, setOpen] = useState(defaultOpen)
 
@@ -78,9 +78,9 @@ const NavItem = ({
           <LeftArrowMenuIcon />
         </Expand>
       ) : null}
-      {/* If link url is the current page, add `aria-current` for a11y */}
+      {/* If link uri is the current page, add `aria-current` for a11y */}
       {isLink && !hasChildren ? (
-        <Link href={url ?? ''} passHref>
+        <Link href={uri ?? ''} passHref>
           <ItemLink
             aria-current={isCurrentPage ? 'page' : undefined}
             fontWeight={fontWeight}

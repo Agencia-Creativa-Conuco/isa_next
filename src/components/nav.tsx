@@ -133,7 +133,7 @@ const Nav = ({
                     {item?.label}
                   </NavItemTag>
                 ) : (
-                  <Link href={item.url ?? ''} passHref>
+                  <Link href={item.uri ?? ''} passHref>
                     <NavItemLink
                       aria-current={isCurrentPage ? 'page' : undefined}
                     >
