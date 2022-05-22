@@ -20,8 +20,12 @@ const Page = ({ slug }) => {
     idType: CarreraIdType.SLUG,
   })
 
+  const recursos = carrera
+    .recursos()
+    ?.nodes.filter((recurso) => recurso.tipo[0] !== 'pensum')
+
   return (
-    <Layout>
+    <Layout recursos={recursos}>
       <Article>
         <CarreraCover {...{ carrera }} />
         <CarreraPerfil {...{ carrera }} />

@@ -13,7 +13,7 @@ const CentroMipymes = (props) => {
   }
 
   return (
-    <Layout {...props} {...metaData}>
+    <Layout uri="/centro-mipymes" {...props} {...metaData}>
       <CentroMipymesCover />
       <CentroMipymesPhilosophy />
       <CentroMipymesServices />

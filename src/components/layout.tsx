@@ -1,37 +1,43 @@
 import React from 'react'
-// import Helmet from 'react-helmet'
-import { Global } from '@emotion/react'
 import styled from '@emotion/styled'
 
-import globalStyles from 'styles/global-styles'
 import Header from 'components/Header'
 import Footer from 'components/Footer'
 import ResourcesList from './resourceslist'
 import Contact from './contact'
-// import usePages from '../hooks/usePages'
 import PageIndexes from './page-indexes'
 import Seo from '../components/seo'
-// import query from 'next/client'
-
-import { client } from 'client'
+import { client, Recurso } from 'client'
 
 if (typeof window !== 'undefined') {
   // eslint-disable-next-line global-require
   //   require('smooth-scroll')('a[href*="#"]')
 }
 
-const Layout = (props) => {
+interface LayoutProps {
+  recursos?: Recurso[]
+  uri?: string
+  children?: any
+}
+
+const Layout = ({ recursos = [], uri, children, ...props }: LayoutProps) => {
   const { useQuery } = client
   const settings = useQuery()?.generalSettings
+
+  const recursosPagina = uri
+    ? useQuery()
+        .nodeByUri({
+          uri: uri,
+        })
+        .$on.Page.datosRecursos.relacion.map((item) => item.$on.Recurso)
+    : []
+
+  console.log(recursosPagina)
+  const listaRecursos = recursos.concat(recursosPagina)
   //Si contacto no es pasado en props, utiliza page;
   //   const [page] = usePages().filter((page) => page.uri === props.path)
 
-  const {
-    children,
-    // contacto = page,
-    contacto,
-    data,
-  } = props
+  // const recursos = page?.datosRecursos?.relacion.map((item) => item.$on.Recurso)
 
   // const [resultsSearch, setResultsSearch] = useState()
 
@@ -46,7 +52,7 @@ const Layout = (props) => {
         <meta name="description" content={settings.description} />
       </Helmet> */}
 
-      <Seo {...props} />
+      {/* <Seo {...props} /> */}
 
       <Header />
 
@@ -63,10 +69,12 @@ const Layout = (props) => {
           Se muestran recursos relacionados con el tipo de dato 
             - Se excluye el tipo pensum para los objetos de tipo WpCarrera. Ya que los pensums se muestran de una forma distinta en las carreras
         */}
-        {/* <ResourcesList
-          items={contacto?.recursos || []}
-          exclude={contacto?.type === 'WpCarrera' ? ['pensum'] : []}
-        /> */}
+        {listaRecursos?.length ? (
+          <ResourcesList
+            items={listaRecursos || []}
+            // exclude={contacto?.type === 'carrera' ? ['pensum'] : []}
+          />
+        ) : null}
         {/* Se muestra información de contacto relacionada con el tipo de dato */}
         {/* <Contact data={contacto?.contacto} /> */}
         {/* {data && <PageIndexes data={data} />} */}

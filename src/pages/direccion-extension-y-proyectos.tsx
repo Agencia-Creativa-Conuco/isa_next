@@ -53,7 +53,12 @@ const DEPPage = (props) => {
   }
 
   return (
-    <Layout {...{ data }} {...props} {...metaData}>
+    <Layout
+      uri="/direccion-extension-y-proyectos"
+      {...{ data }}
+      {...props}
+      {...metaData}
+    >
       <Container>
         <DEPCover />
         <DEPActivities />

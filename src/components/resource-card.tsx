@@ -9,6 +9,7 @@ import Image from 'next/image'
 import { mq } from 'components/grid'
 import { Recurso } from 'client'
 import blur from 'styles/blur'
+import Link from 'next/link'
 
 interface ResourceCardProps {
   title?: string
@@ -33,22 +34,22 @@ const ResourceCard = ({
               alt={item.nombre}
               width={1920}
               height={1920}
-              objectFit="cover"
+              objectFit="contain"
+              objectPosition="center center"
               blurDataURL={blur.src}
               placeholder="blur"
-              //   height="100%"
-              //   fit="contain"
-              //   position="center center"
             />
           </Media>
         </CardMedia>
         <CardBody>
           <ResourceName color={color}>{title}</ResourceName>
           <ButtonBox>
-            <Link href={item?.archivo.sourceUrl() ?? ''} download>
-              <Button>
-                <DownArrowIcon />
-              </Button>
+            <Link href={item?.archivo.sourceUrl() ?? ''} passHref>
+              <SLink download target="_blank">
+                <Button>
+                  <DownArrowIcon />
+                </Button>
+              </SLink>
             </Link>
             <Button onClick={openModal}>
               <EyeIcon />
@@ -148,6 +149,6 @@ const Button = styled.button`
   }
 `
 
-const Link = styled.a`
+const SLink = styled.a`
   text-decoration: none;
 `

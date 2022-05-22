@@ -1,7 +1,7 @@
 import React from 'react'
 import { GetStaticPropsContext } from 'next'
 import { getNextStaticProps } from '@faustjs/next'
-import { client } from 'client'
+import { client, PageIdType } from 'client'
 import styled from '@emotion/styled'
 
 import Layout from 'components/layout'
@@ -46,7 +46,7 @@ const Admissions = (props) => {
   }
 
   return (
-    <Layout {...{ data }} {...props} {...metaData}>
+    <Layout uri="/admisiones" {...{ data }}>
       <Container>
         <AdmisionesCover />
         <CalendarSection id="section_1">

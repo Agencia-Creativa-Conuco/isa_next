@@ -52,7 +52,7 @@ const ServiciosEstudiantilesPage = (props) => {
   }
   // Load the post, but only if the data is ready.
   return (
-    <Layout {...{ data }} {...props} {...metaData}>
+    <Layout uri="/decanato-estudiantes" {...{ data }} {...props} {...metaData}>
       <Container>
         <ServiciosEstudiantilesCover />
         <ServiciosEstudiantilesActividades />

@@ -95,7 +95,7 @@ const ProjectLines = (props) => {
   }
 
   return (
-    <Layout {...props} {...metaData}>
+    <Layout uri="/investigacion/facilidades" {...props} {...metaData}>
       <Section as="article">
         <Cover>
           <Container>

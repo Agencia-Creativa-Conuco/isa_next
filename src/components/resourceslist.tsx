@@ -5,7 +5,6 @@ import { h3 } from 'styles/tipography'
 import { SearchIcon } from './icons'
 import ResourceCard from './resource-card'
 import colors from 'components/colors'
-// import useRecursos from "../hooks/useRecursos";
 import useModal from 'hooks/useModal'
 import ctas from 'styles/cta'
 import { container, mq } from 'components/grid'
@@ -48,24 +47,9 @@ const ResourcesList = ({
   exclude = [],
   items = [],
 }: ResourcesListProps) => {
-  const { useQuery } = client
-  const resources = useQuery()
-    .recursos({
-      first: 10000,
-      where: {
-        in: items.map((item) => item.id),
-      },
-    })
-    ?.nodes?.filter((resource) => !exclude.includes(resource.datosRecurso.tipo))
-
-  // const resources = useRecursos().filter((recurso) => {
-  //   const { id, tipoRecurso } = recurso
-
-  //   //Verifica que el recurso está relacionado al post.
-  //   const esRelacionado = items.filter((item) => item.id === id).length
-
-  //   return !exclude.includes(tipoRecurso) && esRelacionado
-  // })
+  const resources = items?.filter(
+    (resource) => !exclude.includes(resource.datosRecurso.tipo),
+  )
 
   const { openModal, ModalUI } = useModal()
 
@@ -111,14 +95,12 @@ const ResourcesList = ({
           <ContainerCard>
             {resources.length ? (
               resources.map((item, index) => {
-                const { nombre, imagenPortada, archivo } = item
+                const { nombre } = item
 
                 return (
                   <ResourceCard
                     key={index}
                     title={nombre}
-                    // icon={imagenPortada}
-                    // to={archivo}
                     color={resourceColor}
                     item={item}
                   />

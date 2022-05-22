@@ -8312,7 +8312,12 @@ export const generatedSchema = {
   Page_Datosrecursos: {
     __typename: { __type: "String!" },
     fieldGroupName: { __type: "String" },
+    recursos: { __type: "[Page_Datosrecursos_Recursos]" },
     relacion: { __type: "[Page_Datosrecursos_Relacion]" },
+  },
+  Page_Datosrecursos_Recursos: {
+    __typename: { __type: "String!" },
+    $on: { __type: "$Page_Datosrecursos_Recursos!" },
   },
   Page_Datosrecursos_Relacion: {
     __typename: { __type: "String!" },
@@ -12425,6 +12430,7 @@ export const generatedSchema = {
     NodeWithContentEditor: ["Page", "Post"],
     NodeWithPageAttributes: ["Page"],
     NodeWithRevisions: ["Page", "Post"],
+    Page_Datosrecursos_Recursos: ["Recurso"],
     Page_Datosrecursos_Relacion: ["Recurso"],
     NodeWithExcerpt: ["Post"],
     NodeWithTrackbacks: ["Post"],
@@ -19685,7 +19691,13 @@ export interface Page_Datosrecursos {
    * The name of the ACF Field Group
    */
   fieldGroupName?: Maybe<ScalarsEnums["String"]>;
+  recursos?: Maybe<Array<Maybe<Page_Datosrecursos_Recursos>>>;
   relacion?: Maybe<Array<Maybe<Page_Datosrecursos_Relacion>>>;
+}
+
+export interface Page_Datosrecursos_Recursos {
+  __typename?: "Recurso";
+  $on: $Page_Datosrecursos_Recursos;
 }
 
 export interface Page_Datosrecursos_Relacion {
@@ -26527,6 +26539,10 @@ export interface $NodeWithTitle {
 
 export interface $NodeWithTrackbacks {
   Post?: Post;
+}
+
+export interface $Page_Datosrecursos_Recursos {
+  Recurso?: Recurso;
 }
 
 export interface $Page_Datosrecursos_Relacion {

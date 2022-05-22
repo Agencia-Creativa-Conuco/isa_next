@@ -36,7 +36,7 @@ const ResearchPage = () => {
   }
 
   return (
-    <Layout {...{ data }} {...metaData}>
+    <Layout uri="liaai" {...{ data }} {...metaData}>
       <Container>
         <DIPCover />
         <DIPPhilosophy />

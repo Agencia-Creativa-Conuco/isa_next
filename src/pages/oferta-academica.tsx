@@ -39,7 +39,7 @@ const OfertaAcademica = (props) => {
 
   // Load the post, but only if the data is ready.
   return (
-    <Layout {...{ data }} {...props} {...metaData}>
+    <Layout uri="/oferta-academica" {...{ data }} {...props} {...metaData}>
       <Container>
         <OfertaCover />
         <OfertaAcademicaList />

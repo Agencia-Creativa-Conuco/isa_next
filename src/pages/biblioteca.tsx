@@ -32,7 +32,12 @@ const Biblioteca = (props) => {
   }
 
   return (
-    <Layout {...{ data }} {...props} {...metaData}>
+    <Layout
+      uri="centro-de-educacion-tecnica-huascar-rodriguez-herrera"
+      {...{ data }}
+      {...props}
+      {...metaData}
+    >
       <Container>
         <BibliotecaCover />
         <BibliotecaServicios />

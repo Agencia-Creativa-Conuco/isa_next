@@ -61,7 +61,7 @@ const LIAAI = (props) => {
   const imagesSlider = [liaai01, liaai03, liaai04, liaai05, liaai07]
 
   return (
-    <Layout {...props} {...metaData}>
+    <Layout uri="/liaai" {...props} {...metaData}>
       <Section>
         <Container>
           <Overlay>

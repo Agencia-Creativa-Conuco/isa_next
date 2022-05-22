@@ -23,7 +23,7 @@ export function PageComponent({ page }: PageProps) {
   const pageCustom = pageSettings.pageCustom
 
   return (
-    <Layout>
+    <Layout uri={page.uri}>
       {/* <Global styles={css`${styles}`} /> */}
       <Article as="article">
         {/* COVER */}

@@ -20,7 +20,9 @@ const CardInfo = ({ item }: CardInfoProps) => {
         <Title>{nombre}</Title>
         <Copy>{descripcion}</Copy>
         <Link href={archivo.sourceUrl() ?? ''} passHref>
-          <SLink download>Descargar</SLink>
+          <SLink download target="_blank">
+            Descargar
+          </SLink>
         </Link>
       </Content>
       {imagenPortada ? (
@@ -28,7 +30,9 @@ const CardInfo = ({ item }: CardInfoProps) => {
           <Image
             src={imagenPortada.mediaItemUrl ?? blur}
             alt={nombre}
-            objectFit="cover"
+            width={1920}
+            height={1920}
+            objectFit="contain"
             blurDataURL={blur.src}
             placeholder="blur"
           />
@@ -55,10 +59,6 @@ const Wrapper = styled.div`
       }
     }
   `}
-`
-
-const Container = styled.div`
-  ${container}
 `
 
 const Content = styled.div`

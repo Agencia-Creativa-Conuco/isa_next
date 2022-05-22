@@ -14,7 +14,7 @@ const EgresadosSingle = (props) => {
   }
 
   return (
-    <Layout {...props} {...metaData}>
+    <Layout uri="/egresados" {...props} {...metaData}>
       <EgresadosCover />
       <EgresadosBody />
     </Layout>

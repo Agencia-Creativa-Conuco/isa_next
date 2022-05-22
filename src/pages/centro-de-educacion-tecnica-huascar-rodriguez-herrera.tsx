@@ -17,7 +17,11 @@ const CentroHuascar = (props) => {
   }
 
   return (
-    <Layout {...props} {...metaData}>
+    <Layout
+      uri="centro-de-educacion-tecnica-huascar-rodriguez-herrera"
+      {...props}
+      {...metaData}
+    >
       <Cover />
       <Filosofia />
       <Galeria />

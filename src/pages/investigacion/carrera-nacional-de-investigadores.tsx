@@ -27,7 +27,7 @@ const CarreraNacionalDeInvestigadores = (props) => {
   }
 
   return (
-    <Layout {...props} {...metaData}>
+    <Layout uri="/carrera-nacional-de-investigacion" {...props} {...metaData}>
       <Section as="article">
         <Cover>
           <Container>
