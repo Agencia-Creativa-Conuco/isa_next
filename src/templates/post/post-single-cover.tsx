@@ -19,7 +19,7 @@ const PostCover = ({ post }: PostCoverProps) => {
             <Image
               src={featuredImage?.node.mediaItemUrl ?? blur}
               width={1920}
-              height={1920}
+              height={1080}
               objectFit="cover"
               blurDataURL={blur.src}
               placeholder="blur"
@@ -90,6 +90,7 @@ const Media = styled.div`
   width: 100%;
   height: 100%;
   font-size: 0;
+  display: grid;
 `
 
 const Content = styled.div`
@@ -112,4 +113,5 @@ const Title = styled.h1`
   background-color: white;
   display: inline;
   z-index: 2;
+  line-height: 1.2;
 `

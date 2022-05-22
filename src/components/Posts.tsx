@@ -1,17 +1,24 @@
-import React from 'react';
-import Link from 'next/link';
-import type { Post } from 'client';
-import styles from 'scss/components/Posts.module.scss';
-import Heading, { HeadingProps } from './Heading';
+import React from 'react'
+import Link from 'next/link'
+import type { Post } from 'client'
+import { HeadingProps } from './Heading'
+
+import styled from '@emotion/styled'
+import Image from 'next/image'
+import Cta from 'components/CTA'
+import colors from 'components/colors'
+import { h3 } from 'styles/tipography'
+import { container, mq } from 'components/grid'
+import blur from 'styles/blur'
 
 interface Props {
-  posts: Post[] | undefined;
-  intro?: string;
-  id?: string;
-  heading?: string;
-  headingLevel?: HeadingProps['level'];
-  postTitleLevel?: HeadingProps['level'];
-  readMoreText?: string;
+  posts: Post[] | undefined
+  intro?: string
+  id?: string
+  heading?: string
+  headingLevel?: HeadingProps['level']
+  postTitleLevel?: HeadingProps['level']
+  readMoreText?: string
 }
 
 function Posts({
@@ -25,44 +32,96 @@ function Posts({
 }: Props): JSX.Element {
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <section className={styles['posts-block']} {...(id && { id })}>
-      <div className="wrap">
-        {heading && (
-          <Heading level={headingLevel} className={styles.heading}>
-            {heading}
-          </Heading>
-        )}
-        {intro && <p className={styles.intro}>{intro}</p>}
-        <div className="posts">
-          {posts.map((post) => (
-            <div
-              className={styles.single}
-              key={post.id ?? ''}
-              id={`post-${post.id}`}>
-              <div>
-                <Heading level={postTitleLevel} className={styles.title}>
-                  <Link href={`/posts/${post.slug}`}>
-                    <a>{post.title()}</a>
-                  </Link>
-                </Heading>
-                <div
-                  className={styles.excerpt}
-                  // eslint-disable-next-line react/no-danger
-                  dangerouslySetInnerHTML={{ __html: post.excerpt() ?? '' }}
-                />
-                <Link href={`/posts/${post.slug}`}>
-                  <a aria-label={`Read more about ${post.title || 'the post'}`}>
-                    {readMoreText}
-                  </a>
-                </Link>
-              </div>
-            </div>
-          ))}
-          {posts && posts?.length < 1 && <p>No posts found.</p>}
-        </div>
-      </div>
-    </section>
-  );
+    <Section as="article">
+      <Container>
+        <Title>Noticias</Title>
+        <RowLayout>
+          {posts.map((post, key) => {
+            return (
+              <Link href={post.uri ?? ''} key={key} passHref>
+                <SLink>
+                  <Article>
+                    <Image
+                      src={post?.featuredImage?.node.mediaItemUrl ?? blur}
+                      alt={post.title()}
+                      width={1920}
+                      height={1080}
+                      objectFit="cover"
+                      blurDataURL={blur.src}
+                      placeholder="blur"
+                      priority
+                    />
+                    <ItemTitle>{post.title()}</ItemTitle>
+                    <Excerpt
+                      dangerouslySetInnerHTML={{ __html: post.excerpt() }}
+                    />
+                  </Article>
+                </SLink>
+              </Link>
+            )
+          })}
+        </RowLayout>
+      </Container>
+    </Section>
+  )
 }
 
-export default Posts;
+export default Posts
+
+const Article = styled.article`
+  margin-bottom: 4rem;
+`
+
+const Section = styled.article`
+  padding: 0;
+  margin-top: 5.5rem;
+  margin-bottom: 5.5rem;
+
+  ${mq.md} {
+    margin-top: 12rem;
+    margin-bottom: 9.6rem;
+  }
+`
+
+const Container = styled.div`
+  ${container}
+`
+
+const RowLayout = styled.div`
+  display: grid;
+  grid-template-columns: 100%;
+  grid-column-gap: 2.5rem;
+  grid-row-gap: 1rem;
+  ${mq.md} {
+    grid-template-columns: auto auto;
+  }
+
+  ${mq.lg} {
+    grid-template-columns: auto auto auto;
+  }
+`
+const Title = styled.h1`
+  margin-bottom: 4rem;
+`
+
+const ItemTitle = styled.h2`
+  ${h3}
+  text-transform: initial;
+  margin-top: 1rem;
+`
+
+const Excerpt = styled.div``
+
+const SLink = styled.a`
+  text-decoration: none;
+  color: inherit;
+  /* margin */
+`
+const ContainerBottom = styled.div`
+  display: flex;
+  justify-content: center;
+`
+
+const ColBottom = styled.span`
+  margin: 0 4rem;
+`
