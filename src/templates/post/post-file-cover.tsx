@@ -81,6 +81,7 @@ const ImageContainer = styled.div`
   max-width: 25rem;
   width: 25rem;
   background-color: gray;
+  font-size: 0;
   ${mq.sm} {
     max-width: 40rem;
     width: initial;

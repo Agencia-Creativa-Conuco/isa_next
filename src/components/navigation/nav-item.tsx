@@ -36,15 +36,13 @@ const NavItem = ({
   expandColor = 'inherit',
   ...props
 }: NavItemProps) => {
-  const { label, uri, childItems } = item
-
-  const children = childItems({
+  const children = item?.childItems({
     first: 1000,
   })?.nodes
 
   const hasChildren = children?.length > 0
   const isCurrentPage = false
-  const isLink = uri !== '#'
+  const isLink = item?.uri !== '#'
 
   const [isOpen, setOpen] = useState(defaultOpen)
 
@@ -80,13 +78,13 @@ const NavItem = ({
       ) : null}
       {/* If link uri is the current page, add `aria-current` for a11y */}
       {isLink && !hasChildren ? (
-        <Link href={uri ?? ''} passHref>
+        <Link href={item?.uri ?? ''} passHref>
           <ItemLink
             aria-current={isCurrentPage ? 'page' : undefined}
             fontWeight={fontWeight}
             aria-label="Item de la navegacion..."
           >
-            {label}
+            {item?.label}
           </ItemLink>
         </Link>
       ) : (
@@ -98,7 +96,7 @@ const NavItem = ({
             setOpen(!isOpen)
           }}
         >
-          {label}
+          {item?.label}
         </ItemLabel>
       )}
       <Spring

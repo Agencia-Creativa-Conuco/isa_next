@@ -25,15 +25,12 @@ export default function Page() {
   return (
     <Layout>
       <main className="content content-single">
-        <div className="wrap">
-          <h2>Category: {category?.name}</h2>
-          <Posts posts={posts.nodes} />
+        <Posts posts={posts.nodes} heading={`Categoría: ${category?.name}`} />
 
-          <Pagination
-            pageInfo={posts.pageInfo}
-            basePath={`/category/${categorySlug}`}
-          />
-        </div>
+        <Pagination
+          pageInfo={posts.pageInfo}
+          basePath={`/category/${categorySlug}`}
+        />
       </main>
     </Layout>
   )

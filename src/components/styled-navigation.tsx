@@ -16,11 +16,10 @@ interface ItemProps {
 }
 
 const Item = ({ item, level = 1 }: ItemProps) => {
-  const { label, url, datosMenu, childItems } = item
-
   const isMain = level === 1
 
-  const items = childItems()?.nodes
+  const datosMenu = item?.datosMenu
+  const items = item?.childItems()?.nodes
 
   return (
     <Component>
@@ -37,11 +36,11 @@ const Item = ({ item, level = 1 }: ItemProps) => {
             bgHover={colors.gray.light}
             {...{ isMain, level }}
           >
-            {label}
+            {item?.label}
           </Title>
         </Etiqueta>
       ) : (
-        <StyledLink href={url} aria-label="Click para abrir el...">
+        <StyledLink href={item?.uri} aria-label="Click para abrir el...">
           <Title
             color={
               (level + 1) % 2 === 0 && level !== 1
@@ -53,12 +52,12 @@ const Item = ({ item, level = 1 }: ItemProps) => {
             bgHover={colors.gray.light}
             {...{ isMain, level }}
           >
-            {label}
+            {item?.label}
           </Title>
         </StyledLink>
       )}
       {items?.length ? (
-        <ItemList items={childItems()?.nodes} level={level + 1} />
+        <ItemList items={item?.childItems()?.nodes} level={level + 1} />
       ) : null}
     </Component>
   )
@@ -235,14 +234,14 @@ const Navigation = ({ items }: NavigationProps) => {
             return !item?.parentId
           })
           .map((item, index) => {
-            const { id, url, childItems, parentId, datosMenu, ...props } = item
+            const { ...props } = item
 
-            const isActive = view === id
+            const isActive = view === item?.id
 
-            return childItems()?.nodes.length ? (
+            return item?.childItems()?.nodes.length ? (
               <NavItem key={index} {...{ item, isActive, setView }} />
             ) : (
-              <Link href={url ?? ''} key={index} passHref>
+              <Link href={item?.uri ?? ''} key={index} passHref>
                 <StyledLink
                   rel="noopener"
                   aria-label="Click para abrir el..."

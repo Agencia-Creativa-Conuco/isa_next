@@ -5,37 +5,29 @@ import { HeadingProps } from './Heading'
 
 import styled from '@emotion/styled'
 import Image from 'next/image'
-import Cta from 'components/CTA'
-import colors from 'components/colors'
 import { h3 } from 'styles/tipography'
 import { container, mq } from 'components/grid'
 import blur from 'styles/blur'
 
 interface Props {
   posts: Post[] | undefined
-  intro?: string
-  id?: string
   heading?: string
   headingLevel?: HeadingProps['level']
   postTitleLevel?: HeadingProps['level']
-  readMoreText?: string
 }
 
 function Posts({
   posts,
-  intro,
   heading,
-  id,
   headingLevel = 'h1',
   postTitleLevel = 'h2',
-  readMoreText = 'Read more',
 }: Props): JSX.Element {
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
     <Section as="article">
-      <Container>
-        <Title>Noticias</Title>
-        <RowLayout>
+      <Container space large as={headingLevel}>
+        <Title>{heading}</Title>
+        <PostsList>
           {posts.map((post, key) => {
             return (
               <Link href={post.uri ?? ''} key={key} passHref>
@@ -51,7 +43,7 @@ function Posts({
                       placeholder="blur"
                       priority
                     />
-                    <ItemTitle>{post.title()}</ItemTitle>
+                    <ItemTitle as={postTitleLevel}>{post.title()}</ItemTitle>
                     <Excerpt
                       dangerouslySetInnerHTML={{ __html: post.excerpt() }}
                     />
@@ -60,7 +52,7 @@ function Posts({
               </Link>
             )
           })}
-        </RowLayout>
+        </PostsList>
       </Container>
     </Section>
   )
@@ -87,17 +79,17 @@ const Container = styled.div`
   ${container}
 `
 
-const RowLayout = styled.div`
+const PostsList = styled.div`
   display: grid;
-  grid-template-columns: 100%;
+  grid-template-columns: 1fr;
   grid-column-gap: 2.5rem;
   grid-row-gap: 1rem;
   ${mq.md} {
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr 1fr;
   }
 
   ${mq.lg} {
-    grid-template-columns: auto auto auto;
+    grid-template-columns: 1fr 1fr 1fr;
   }
 `
 const Title = styled.h1`

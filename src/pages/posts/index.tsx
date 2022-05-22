@@ -1,12 +1,11 @@
 import { getNextStaticProps } from '@faustjs/next'
 import { client, OrderEnum, PostObjectsConnectionOrderbyEnum } from 'client'
-import { Footer, Header, Pagination, Posts } from 'components'
+import { Pagination, Posts } from 'components'
 import Layout from 'components/layout'
 import { GetStaticPropsContext } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React from 'react'
-import styles from 'scss/pages/posts.module.scss'
 
 const POSTS_PER_PAGE = 6
 
@@ -30,13 +29,7 @@ export default function Page() {
   return (
     <Layout>
       <main className="content content-index">
-        <Posts
-          posts={posts.nodes}
-          heading="Blog Posts"
-          headingLevel="h2"
-          postTitleLevel="h3"
-          id={styles.post_list}
-        />
+        <Posts posts={posts.nodes} heading="Publicaciones" />
         <Pagination pageInfo={posts.pageInfo} basePath="/posts" />
       </main>
     </Layout>
