@@ -266,19 +266,16 @@ const Navigation = ({ items }: NavigationProps) => {
             const items = childItems()?.nodes
 
             return items?.length ? (
-              <DisplayerSection
-                key={index}
-                // hidden={!isActive}
-              >
+              <DisplayerSection key={index}>
                 <Spring
                   reset={isActive}
                   from={{
-                    marginTop: isActive ? '-500%' : '0%',
+                    marginTop: isActive ? '-1920px' : '0%',
                     opacity: isActive ? 0 : 1,
                   }}
                   to={[
                     {
-                      marginTop: isActive ? '0' : '-500%',
+                      marginTop: isActive ? '0' : '-1920px',
                       opacity: isActive ? 1 : 0,
                     },
                   ]}

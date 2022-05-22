@@ -116,9 +116,7 @@ const Nav = ({
         {items
           ?.filter((item) => !item.parentId)
           .map((item, index) => {
-            const { label, url, childItems } = item
-
-            const children = childItems().nodes
+            const children = item.childItems()?.nodes
             // Check if the link matched the current page url
             const isCurrentPage = true
 
@@ -132,14 +130,14 @@ const Nav = ({
                       menuToggle(item.id, item)
                     }}
                   >
-                    {label}
+                    {item?.label}
                   </NavItemTag>
                 ) : (
-                  <Link href={url} passHref>
+                  <Link href={item.url ?? ''} passHref>
                     <NavItemLink
                       aria-current={isCurrentPage ? 'page' : undefined}
                     >
-                      {label}
+                      {item?.label}
                     </NavItemLink>
                   </Link>
                 )}

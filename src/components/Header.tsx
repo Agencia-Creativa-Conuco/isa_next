@@ -84,7 +84,6 @@ const HeaderWrapper = styled.header`
     position: relative;
     z-index: 100;
     transition: background 0.2s ease-in-out;
-    overflow: hidden;
     ${props.isSticky
       ? css`
           position: fixed;

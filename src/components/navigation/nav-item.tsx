@@ -1,36 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import ResizeObserver from 'resize-observer-polyfill'
-import { useSpring, animated } from '@react-spring/web'
+import { animated, Spring, config } from '@react-spring/web'
 import Link from 'next/link'
 import NavList from './nav-list'
 import { LeftArrowMenuIcon } from '../icons'
 import colors from 'components/colors'
 import { mq } from 'components/grid'
 import { MenuItem } from 'client'
-
-///////////////////////////////////////////////////
-// export function usePrevious(value) {
-//   const ref = useRef()
-//   useEffect(() => void (ref.current = value), [value])
-//   return ref.current
-// }
-
-export function useMeasure() {
-  const ref = useRef()
-  const [bounds, set] = useState({ left: 0, top: 0, width: 0, height: 0 })
-  const [ro] = useState(
-    () => new ResizeObserver(([entry]) => set(entry.contentRect)),
-  )
-
-  useEffect(() => {
-    if (ref.current) ro.observe(ref.current)
-    return () => ro.disconnect()
-  }, [ro])
-  return { ref, bounds }
-}
-//////////////////////////////////////////////////////
 
 interface NavItemProps {
   item?: MenuItem
@@ -70,19 +47,6 @@ const NavItem = ({
   const isLink = url !== '#'
 
   const [isOpen, setOpen] = useState(defaultOpen)
-  // const previous = usePrevious(isOpen)
-  const {
-    ref: bind,
-    bounds: { height: viewHeight },
-  } = useMeasure()
-  const { height, opacity, transform } = useSpring({
-    from: { height: 0, opacity: 0, transform: 'translate3d(20px,0,0)' },
-    to: {
-      height: isOpen ? viewHeight : 0,
-      opacity: isOpen ? 1 : 0,
-      transform: `translate3d(${isOpen ? 0 : 20}px,0,0)`,
-    },
-  })
 
   return (
     <Item
@@ -137,30 +101,50 @@ const NavItem = ({
           {label}
         </ItemLabel>
       )}
-
-      <AListWrapper
-        style={{
-          opacity,
-          height: isOpen ? 'auto' : height,
-          // height: isOpen && previous !== isOpen ? 'auto' : height,
+      <Spring
+        reset={isOpen}
+        from={{
+          opacity: isOpen ? 0 : 1,
         }}
+        to={{
+          opacity: isOpen ? 1 : 0,
+        }}
+        config={config.default}
       >
-        <AList style={{ transform }} {...bind}>
-          {hasChildren ? (
-            <NavList
-              items={children}
-              itemColor={color}
-              itemBg={bg}
-              itemBgCurrent={bgCurrent}
-              itemBorderColor={borderColor}
-              itemBorderAll
-              itemFontWeight={fontWeightAll ? fontWeight : 'initial'}
-              itemFontWeightAll={fontWeightAll}
-              itemExpandColor={expandColor}
-            />
-          ) : null}
-        </AList>
-      </AListWrapper>
+        {(styles) => (
+          <AListWrapper style={styles}>
+            <Spring
+              reset={isOpen}
+              from={{
+                marginTop: isOpen ? -1920 : 0,
+                opacity: isOpen ? 0 : 1,
+              }}
+              to={{
+                marginTop: isOpen ? 0 : -1920,
+                opacity: isOpen ? 1 : 0,
+              }}
+            >
+              {(styles) => (
+                <AList style={styles}>
+                  {hasChildren ? (
+                    <NavList
+                      items={children}
+                      itemColor={color}
+                      itemBg={bg}
+                      itemBgCurrent={bgCurrent}
+                      itemBorderColor={borderColor}
+                      itemBorderAll
+                      itemFontWeight={fontWeightAll ? fontWeight : 'initial'}
+                      itemFontWeightAll={fontWeightAll}
+                      itemExpandColor={expandColor}
+                    />
+                  ) : null}
+                </AList>
+              )}
+            </Spring>
+          </AListWrapper>
+        )}
+      </Spring>
     </Item>
   )
 }
