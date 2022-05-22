@@ -21,7 +21,7 @@ const Header = (
   const { useQuery } = client
   const menu = useQuery().menuItems({
     first: 10000,
-    where: { location: MenuLocationEnum.PRIMARY, parentId: '0' },
+    where: { location: MenuLocationEnum.PRIMARY },
   })
 
   // const menuItems = getHierarchicalItems(menu.menuItems.nodes)

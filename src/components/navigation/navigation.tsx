@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import NavList from './nav-list'
 import { container, mq } from 'components/grid'
-import { MenuItem } from 'client'
+import { getHierarchicalItems } from 'lib/auxiliar'
 /**
  * Navigation Component
  *
@@ -13,7 +13,7 @@ import { MenuItem } from 'client'
 interface NavigationProps {
   split?: boolean
   isMain?: boolean
-  items?: MenuItem[]
+  items?: any[]
   noGutters?: boolean
   labelColor?: string
   itemColor?: string
@@ -70,9 +70,7 @@ const Navigation = ({
           </StyledCol>
         ) : (
           items.map((item, index) => {
-            const children = item?.childItems({
-              first: 1000,
-            })?.nodes
+            const children = item?.children
 
             return children ? (
               <StyledCol key={index}>

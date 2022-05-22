@@ -7,11 +7,11 @@ import { LeftArrowIcon } from './icons'
 import { Spring, animated, config } from '@react-spring/web'
 import colors from 'components/colors'
 import { container, mq } from 'components/grid'
-import { MenuItem } from 'client'
 import blur from 'styles/blur'
+import { getHierarchicalItems } from 'lib/auxiliar'
 
 interface ItemProps {
-  item?: MenuItem
+  item?: any
   level?: number
 }
 
@@ -19,7 +19,7 @@ const Item = ({ item, level = 1 }: ItemProps) => {
   const isMain = level === 1
 
   const datosMenu = item?.datosMenu
-  const items = item?.childItems()?.nodes
+  const items = item?.children
 
   return (
     <Component>
@@ -57,7 +57,7 @@ const Item = ({ item, level = 1 }: ItemProps) => {
         </StyledLink>
       )}
       {items?.length ? (
-        <ItemList items={item?.childItems()?.nodes} level={level + 1} />
+        <ItemList items={item?.children} level={level + 1} />
       ) : null}
     </Component>
   )
@@ -124,7 +124,7 @@ const Title = styled.span`
 `
 
 interface ItemListProps {
-  items?: MenuItem[]
+  items?: any[]
   level?: number
 }
 
@@ -170,7 +170,7 @@ const ListContainer = styled.ul`
 `
 
 interface NavItemProps {
-  item?: MenuItem
+  item?: any
   isActive?: boolean
   setView?: any
 }
@@ -181,7 +181,7 @@ const NavItem = ({ item, isActive, setView }: NavItemProps) => {
     label,
     description,
     datosMenu: { icono },
-    childItems,
+    children,
   } = item
 
   return icono.mediaItemUrl ? (
@@ -206,7 +206,7 @@ const NavItem = ({ item, isActive, setView }: NavItemProps) => {
         <OfferTitle>{label}</OfferTitle>
         {description ? <OfferCopy>{description}</OfferCopy> : null}
       </MenuItemBody>
-      {childItems()?.nodes.length ? (
+      {children?.length ? (
         <ExpandIcon
           bgColor={isActive ? 'white' : colors.primary.dark}
           color={isActive ? colors.primary.dark : 'white'}
@@ -220,16 +220,17 @@ const NavItem = ({ item, isActive, setView }: NavItemProps) => {
 }
 
 interface NavigationProps {
-  items: MenuItem[]
+  items: any[]
 }
 
 const Navigation = ({ items }: NavigationProps) => {
   const [view, setView] = useState()
+  const list = getHierarchicalItems(items)
 
   return (
     <NavWrapper>
       <Container as="div">
-        {items
+        {list
           .filter((item) => {
             return !item?.parentId
           })
@@ -238,7 +239,7 @@ const Navigation = ({ items }: NavigationProps) => {
 
             const isActive = view === item?.id
 
-            return item?.childItems()?.nodes.length ? (
+            return item?.children?.length ? (
               <NavItem key={index} {...{ item, isActive, setView }} />
             ) : (
               <Link href={item?.uri ?? ''} key={index} passHref>
@@ -255,14 +256,12 @@ const Navigation = ({ items }: NavigationProps) => {
       </Container>
 
       <Displayer as="div">
-        {items
+        {list
           .filter((item) => !item.parentId)
           .map((item, index) => {
-            const { id, childItems } = item
+            const isActive = view === item?.id
 
-            const isActive = view === id
-
-            const items = childItems()?.nodes
+            const items = item.children
 
             return items?.length ? (
               <DisplayerSection key={index}>

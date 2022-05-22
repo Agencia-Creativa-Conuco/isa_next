@@ -10,7 +10,7 @@ const OfertaAcademicaList = () => {
 
   const items = menuItems({
     first: 1000,
-    where: { location: MenuLocationEnum.OFFER, parentId: null },
+    where: { location: MenuLocationEnum.OFFER },
   })?.nodes
 
   return items?.length ? (

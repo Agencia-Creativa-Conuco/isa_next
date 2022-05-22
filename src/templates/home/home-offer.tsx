@@ -9,17 +9,19 @@ const HomeOffer = () => {
 
   const items = menuItems({
     first: 1000,
-    where: { location: MenuLocationEnum.HOME, parentId: null },
+    where: { location: MenuLocationEnum.HOME },
   })
     ?.nodes.concat(
       menuItems({
         first: 1000,
-        where: { location: MenuLocationEnum.OFFER, parentId: null },
+        where: { location: MenuLocationEnum.OFFER },
       })?.nodes,
     )
     .filter((item) => {
-      return !item.parentId && item.datosMenu.visibleInicio
+      return item.datosMenu.visibleInicio
     })
+
+  console.log(items)
 
   return (
     <Section id="section_2">

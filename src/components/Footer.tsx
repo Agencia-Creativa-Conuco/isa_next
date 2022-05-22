@@ -15,16 +15,17 @@ import Link from 'next/link'
 import { container, mq } from 'components/grid'
 import { client, MenuLocationEnum } from 'client'
 import logoFooter from '../../public/images/site/logo-footer.svg'
+import { getHierarchicalItems } from 'lib/auxiliar'
 
 const Footer = () => {
   const { useQuery } = client
 
   const menu = useQuery().menuItems({
     first: 10000,
-    where: { location: MenuLocationEnum.FOOTER, parentId: '0' },
+    where: { location: MenuLocationEnum.FOOTER },
   })
 
-  const items = menu?.nodes
+  const items = getHierarchicalItems(menu?.nodes)
 
   const redes = useQuery().acfOptionsRedesSociales.redesSociales.redes
 

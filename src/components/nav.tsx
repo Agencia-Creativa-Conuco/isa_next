@@ -6,7 +6,7 @@ import { mq } from 'components/grid'
 import Navigation from './navigation/navigation'
 import colors from 'components/colors'
 import { fadeIn, slideDown } from 'styles/animations'
-import { MenuItem } from 'client'
+import { getHierarchicalItems } from 'lib/auxiliar'
 
 /**
  * Navigation Component
@@ -15,7 +15,7 @@ import { MenuItem } from 'client'
  */
 
 interface NavProps {
-  items?: MenuItem[]
+  items?: any[]
   isMobileMenuOpen?: boolean
   hideXS?: boolean
   hideSM?: boolean
@@ -44,15 +44,17 @@ const Nav = ({
   showXL,
   ...other
 }: NavProps) => {
-  const [itemActive, setItemActive] = useState('')
+  const init: any = ''
+  const [itemActive, setItemActive] = useState(init)
   const [isMenuVisible, setMenuVisible] = useState(false)
 
+  const list = getHierarchicalItems(items)
   //Show submenu
-  const menuToggle = (id?: string, item?: MenuItem) => {
-    if (itemActive && id === itemActive) {
+  const menuToggle = (item?: any) => {
+    if (itemActive?.id === item.id) {
       hideMenu()
-    } else if (item.childItems()) {
-      showMenu(id)
+    } else if (item.children?.length) {
+      showMenu(item)
     }
   }
 
@@ -61,9 +63,9 @@ const Nav = ({
     setItemActive('')
   }
 
-  const showMenu = (id?: string) => {
+  const showMenu = (item?: string) => {
     setMenuVisible(true)
-    setItemActive(id)
+    setItemActive(item)
   }
 
   const ref = useRef(null)
@@ -95,7 +97,8 @@ const Nav = ({
     }
   }, [ref, isMobileMenuOpen])
 
-  return items?.length ? (
+  console.log(itemActive)
+  return list?.length ? (
     <NavContainer
       ref={ref}
       {...{
@@ -113,21 +116,21 @@ const Nav = ({
       }}
     >
       <MenuContainer>
-        {items
+        {list
           ?.filter((item) => !item.parentId)
           .map((item, index) => {
-            const children = item.childItems()?.nodes
+            const children = item?.children
             // Check if the link matched the current page url
             const isCurrentPage = true
 
             return (
               <NavItem key={index} align="right" color={colors.primary.dark}>
                 {/* If link url is the current page, add `aria-current` for a11y */}
-                {children.length ? (
+                {children?.length ? (
                   <NavItemTag
                     aria-current={isCurrentPage ? 'page' : undefined}
                     onClick={(e) => {
-                      menuToggle(item?.id, item)
+                      menuToggle(item)
                     }}
                   >
                     {item?.label}
@@ -149,15 +152,14 @@ const Nav = ({
 
       {/* <MenuBox hidden={state.theme.menu.isMenuVisible?false:true}> */}
       <MenuBox hidden={isMenuVisible ? false : true}>
-        {items?.map((item, index) => {
-          const { childItems } = item
+        {list.map((item, index) => {
+          const children = item?.children
 
-          const children = childItems()?.nodes
-
-          return children?.length ? (
+          console.log(itemActive.id, item.id)
+          return itemActive?.children?.length ? (
             <Navigation
               key={index}
-              items={children}
+              items={item.children}
               split
               noGutters
               itemColor={colors.text.base}
@@ -166,7 +168,7 @@ const Nav = ({
               itemBgCurrent="rgba(255,255,255,0.05)"
               itemBorderColor="white"
               isMain
-              hidden={itemActive === item.id ? false : true}
+              hidden={itemActive.id === item.id ? false : true}
             />
           ) : null
         })}

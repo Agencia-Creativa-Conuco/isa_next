@@ -10,7 +10,7 @@ import { mq } from 'components/grid'
 import { MenuItem } from 'client'
 
 interface NavItemProps {
-  item?: MenuItem
+  item?: any
   isMain?: boolean
   defaultOpen?: boolean
   color?: string
@@ -36,9 +36,7 @@ const NavItem = ({
   expandColor = 'inherit',
   ...props
 }: NavItemProps) => {
-  const children = item?.childItems({
-    first: 1000,
-  })?.nodes
+  const children = item.children
 
   const hasChildren = children?.length > 0
   const isCurrentPage = false

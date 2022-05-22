@@ -48,9 +48,7 @@ const Layout = (props) => {
 
       <Seo {...props} />
 
-      <Header
-      //   {...{ setResultsSearch }}
-      />
+      <Header />
 
       <Main>
         {React.Children.map(children, (child) => {

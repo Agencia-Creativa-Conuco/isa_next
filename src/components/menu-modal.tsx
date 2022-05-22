@@ -7,16 +7,19 @@ import Navigation from 'components/navigation/navigation'
 import colors from 'components/colors'
 import SocialBox from 'components/social-box'
 import { MenuItem } from 'client'
+import { getHierarchicalItems } from 'lib/auxiliar'
 
 interface MenuModalProps {
   items?: MenuItem[]
 }
+
 const MenuModal = ({ items = [] }: MenuModalProps) => {
+  const list = getHierarchicalItems(items)
   return (
     <>
       <MenuOverlay color={colors.blue.dark}>
         <Navigation
-          items={items}
+          items={list}
           noGutters
           itemColor={colors.text_main}
           labelColor={colors.text_main}
