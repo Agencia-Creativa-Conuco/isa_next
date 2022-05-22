@@ -11,7 +11,6 @@ const HomeCover = () => {
     titulo: '¡Bienvenidos a la UNIVERSIDAD ISA!',
     copy:
       'La Universidad ISA propicia en sus aulas el desarrollo de líderes visionarios, guiados por los valores de honestidad, responsabilidad, respeto, compromiso social y calidad. Forma hombres y mujeres pragmáticos, disciplinados, con capacidad de emprender iniciativas empresariales, poseedores de una fuerte sensibilidad social y de espíritu de servicio.',
-    imagenPortada: coverImage,
     cta: {
       url: '/admisiones',
       target: null,
@@ -23,10 +22,10 @@ const HomeCover = () => {
     <Cover fluid>
       <Media>
         <SlideImage
-          src={items.imagenPortada}
+          src={coverImage}
           alt={items.titulo}
           width={1920}
-          height={1536}
+          height={1728}
           priority
           objectFit="cover"
           objectPosition="30% 0%"
@@ -107,6 +106,7 @@ const Copy = styled.div``
 const Media = styled.div`
   position: relative;
   grid-area: col_1;
+  font-size: 0;
 
   &:before {
     content: '';

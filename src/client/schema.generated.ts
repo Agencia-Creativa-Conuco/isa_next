@@ -940,6 +940,7 @@ export interface CreateRecursoInput {
   slug?: InputMaybe<Scalars["String"]>;
   /** The status of the object */
   status?: InputMaybe<PostStatusEnum>;
+  tipo?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
   /** The title of the object */
   title?: InputMaybe<Scalars["String"]>;
 }
@@ -4492,6 +4493,7 @@ export interface UpdateRecursoInput {
   slug?: InputMaybe<Scalars["String"]>;
   /** The status of the object */
   status?: InputMaybe<PostStatusEnum>;
+  tipo?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
   /** The title of the object */
   title?: InputMaybe<Scalars["String"]>;
 }
@@ -6678,6 +6680,7 @@ export const generatedSchema = {
     password: { __type: "String" },
     slug: { __type: "String" },
     status: { __type: "PostStatusEnum" },
+    tipo: { __type: "[String]" },
     title: { __type: "String" },
   },
   CreateRecursoPayload: {
@@ -9345,6 +9348,7 @@ export const generatedSchema = {
     styles: { __type: "String" },
     template: { __type: "ContentTemplate" },
     templates: { __type: "[String]" },
+    tipo: { __type: "[String]" },
     title: {
       __type: "String",
       __args: { format: "PostObjectFieldFormatEnum" },
@@ -10957,6 +10961,7 @@ export const generatedSchema = {
     password: { __type: "String" },
     slug: { __type: "String" },
     status: { __type: "PostStatusEnum" },
+    tipo: { __type: "[String]" },
     title: { __type: "String" },
   },
   UpdateRecursoPayload: {
@@ -22038,6 +22043,7 @@ export interface Recurso {
    */
   template?: Maybe<ContentTemplate>;
   templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
+  tipo?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
   /**
    * The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made.
    */

@@ -4,17 +4,23 @@ import { css } from '@emotion/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { LeftArrowIcon } from './icons'
-import { Spring, animated } from '@react-spring/web'
-import colors from 'styles/colors'
+import { Spring, animated, config } from '@react-spring/web'
+import colors from 'components/colors'
 import { container, mq } from 'components/grid'
 import { MenuItem } from 'client'
+import blur from 'styles/blur'
 
-const Item = ({ item, ...other }) => {
-  const { label, url, datosMenu, childItems = [] } = item
+interface ItemProps {
+  item?: MenuItem
+  level?: number
+}
 
-  const { level = 1 } = other
+const Item = ({ item, level = 1 }: ItemProps) => {
+  const { label, url, datosMenu, childItems } = item
 
   const isMain = level === 1
+
+  const items = childItems()?.nodes
 
   return (
     <Component>
@@ -51,8 +57,8 @@ const Item = ({ item, ...other }) => {
           </Title>
         </StyledLink>
       )}
-      {childItems()?.nodes.length ? (
-        <ItemList items={childItems} level={level + 1} />
+      {items?.length ? (
+        <ItemList items={childItems()?.nodes} level={level + 1} />
       ) : null}
     </Component>
   )
@@ -118,14 +124,17 @@ const Title = styled.span`
   `}
 `
 
-const ItemList = ({ items, ...other }) => {
-  const { level = 1 } = other
+interface ItemListProps {
+  items?: MenuItem[]
+  level?: number
+}
 
+const ItemList = ({ items, level }: ItemListProps) => {
   return (
     <List {...{ level }}>
       <ListContainer>
-        {items().nodes.map((item?: MenuItem) => {
-          return <Item key={item.id} item={item} {...other} />
+        {items.map((item, index) => {
+          return <Item key={index} item={item} level={level} />
         })}
       </ListContainer>
     </List>
@@ -161,7 +170,13 @@ const ListContainer = styled.ul`
   ${container}
 `
 
-const NavItem = ({ item, isActive, setView }) => {
+interface NavItemProps {
+  item?: MenuItem
+  isActive?: boolean
+  setView?: any
+}
+
+const NavItem = ({ item, isActive, setView }: NavItemProps) => {
   const {
     id,
     label,
@@ -180,17 +195,19 @@ const NavItem = ({ item, isActive, setView }) => {
       <MenuItemBody>
         <IconWrapper>
           <Image
-            src={icono.mediaItemUrl}
+            src={icono.mediaItemUrl ?? blur}
             alt={label}
             width={1920}
             height={1920}
             priority
+            blurDataURL={blur.src}
+            placeholder="blur"
           />
         </IconWrapper>
         <OfferTitle>{label}</OfferTitle>
         {description ? <OfferCopy>{description}</OfferCopy> : null}
       </MenuItemBody>
-      {childItems().nodes.length ? (
+      {childItems()?.nodes.length ? (
         <ExpandIcon
           bgColor={isActive ? 'white' : colors.primary.dark}
           color={isActive ? colors.primary.dark : 'white'}
@@ -203,57 +220,73 @@ const NavItem = ({ item, isActive, setView }) => {
   ) : null
 }
 
-const StyledNavigation = ({ items }) => {
-  const [view, setView] = useState('')
+interface NavigationProps {
+  items: MenuItem[]
+}
 
-  return items.length ? (
-    <Navigation>
+const Navigation = ({ items }: NavigationProps) => {
+  const [view, setView] = useState()
+
+  return (
+    <NavWrapper>
       <Container as="div">
         {items
-          .filter((item: MenuItem) => {
-            return !item.parentId && item.datosMenu.visibleInicio
+          .filter((item) => {
+            return !item?.parentId
           })
-          .map((item: MenuItem, index: number) => {
+          .map((item, index) => {
             const { id, url, childItems, parentId, datosMenu, ...props } = item
 
             const isActive = view === id
 
-            return childItems().nodes.length ? (
+            return childItems()?.nodes.length ? (
               <NavItem key={index} {...{ item, isActive, setView }} />
             ) : (
-              url && (
-                <Link href={url} key={index} passHref>
-                  <StyledLink
-                    rel="noopener"
-                    aria-label="Click para abrir el..."
-                    {...props}
-                  >
-                    <NavItem {...{ item, isActive, setView }} />
-                  </StyledLink>
-                </Link>
-              )
+              <Link href={url ?? ''} key={index} passHref>
+                <StyledLink
+                  rel="noopener"
+                  aria-label="Click para abrir el..."
+                  {...props}
+                >
+                  <NavItem {...{ item, isActive, setView }} />
+                </StyledLink>
+              </Link>
             )
           })}
       </Container>
 
       <Displayer as="div">
         {items
-          .filter((item?: MenuItem) => !item.parentId)
-          .map((item?: MenuItem) => {
+          .filter((item) => !item.parentId)
+          .map((item, index) => {
             const { id, childItems } = item
 
             const isActive = view === id
 
-            return childItems().nodes.length ? (
-              <DisplayerSection key={item.id} hidden={!isActive}>
+            const items = childItems()?.nodes
+
+            return items?.length ? (
+              <DisplayerSection
+                key={index}
+                // hidden={!isActive}
+              >
                 <Spring
                   reset={isActive}
-                  from={{ marginTop: '-100%', opacity: 0 }}
-                  to={[{ marginTop: '0', opacity: 1 }]}
+                  from={{
+                    marginTop: isActive ? '-500%' : '0%',
+                    opacity: isActive ? 0 : 1,
+                  }}
+                  to={[
+                    {
+                      marginTop: isActive ? '0' : '-500%',
+                      opacity: isActive ? 1 : 0,
+                    },
+                  ]}
+                  config={config.default}
                 >
                   {(styles) => (
                     <Anim style={styles}>
-                      <ItemList items={childItems} />
+                      <ItemList items={items} />
                     </Anim>
                   )}
                 </Spring>
@@ -261,11 +294,11 @@ const StyledNavigation = ({ items }) => {
             ) : null
           })}
       </Displayer>
-    </Navigation>
-  ) : null
+    </NavWrapper>
+  )
 }
 
-export default StyledNavigation
+export default Navigation
 
 const Container = styled.div`
   ${container}
@@ -280,7 +313,7 @@ const Anim = styled(animated.div)`
   padding: 5rem 0;
 `
 
-const Navigation = styled.div`
+const NavWrapper = styled.div`
   box-shadow: 0 0 2.5rem rgba(0, 0, 0, 0.15);
 `
 

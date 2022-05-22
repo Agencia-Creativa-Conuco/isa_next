@@ -8,9 +8,13 @@ import useModal from 'hooks/useModal'
 import Link from 'next/link'
 import { container, mq } from './grid'
 import es from 'date-fns/locale/es'
-import { client } from 'client'
+import { client, PeriodoDeAdmision } from 'client'
 
-const Event = ({ event }) => {
+interface EventProps {
+  event?: PeriodoDeAdmision
+}
+
+const Event = ({ event }: EventProps) => {
   const { openModal, ModalUI } = useModal()
   const examDates = event.datosPeriodosDeAdmision.fechasExamenesAdmision.map(
     (date) => moment(date.fechaExamen, '', 'es').toDate(),
@@ -64,7 +68,7 @@ const Calendar = ({
 }: CalendarProps) => {
   const { useQuery } = client
   //Obtiene los datos de los Eventos
-  const events = useQuery().periodosDeAdmision()
+  const events = useQuery().periodosDeAdmision().nodes
 
   //Ordena los eventos de menor a mayor
   // const events = events.nodes.nodes
@@ -72,15 +76,15 @@ const Calendar = ({
   // .sort((a, b) => a.order - b.order)
 
   // Load the post, but only if the data is ready.
-  return noEventsTitle || events.nodes.length ? (
+  return noEventsTitle || events.length ? (
     <Section>
       <Global styles={birthdayStyle} />
 
       <Container>
         {title ? <Title>{title}</Title> : null}
-        {events.nodes.length ? (
+        {events.length ? (
           <EventList>
-            {events.nodes.map((event, index) => {
+            {events.map((event, index) => {
               return <Event key={index} event={event} />
             })}
           </EventList>

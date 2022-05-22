@@ -1,24 +1,16 @@
-import { getNextStaticProps } from '@faustjs/next';
-import { client } from 'client';
-import { Footer, Header, Hero } from 'components';
-import { GetStaticPropsContext } from 'next';
-import Head from 'next/head';
+import { getNextStaticProps } from '@faustjs/next'
+import { client } from 'client'
+import { Footer, Header, Hero } from 'components'
+import Layout from 'components/layout'
+import { GetStaticPropsContext } from 'next'
+import Head from 'next/head'
 
 export default function Page() {
-  const { useQuery } = client;
-  const generalSettings = useQuery().generalSettings;
+  const { useQuery } = client
+  const generalSettings = useQuery().generalSettings
 
   return (
-    <>
-      <Header
-        title={generalSettings.title}
-        description={generalSettings.description}
-      />
-
-      <Head>
-        <title>Custom Page - {generalSettings.title}</title>
-      </Head>
-
+    <Layout>
       <Hero title="Custom Page" />
 
       <main className="content content-single">
@@ -28,7 +20,8 @@ export default function Page() {
             <a
               href="https://nextjs.org/docs/basic-features/pages"
               target="_blank"
-              rel="noreferrer">
+              rel="noreferrer"
+            >
               Next.js
             </a>
             . Take a look at <code>src/pages/custom-page.tsx</code> for an
@@ -36,15 +29,13 @@ export default function Page() {
           </p>
         </div>
       </main>
-
-      <Footer copyrightHolder={generalSettings.title} />
-    </>
-  );
+    </Layout>
+  )
 }
 
 export async function getStaticProps(context: GetStaticPropsContext) {
   return getNextStaticProps(context, {
     Page,
     client,
-  });
+  })
 }

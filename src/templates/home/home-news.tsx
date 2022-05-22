@@ -5,33 +5,42 @@ import Image from 'next/image'
 import Link from 'next/link'
 import colors from 'components/colors'
 import { container, mq } from 'components/grid'
+import { client } from 'client'
+import blur from 'styles/blur'
 
-const HomeNews = ({ posts }) => {
+const HomeNews = () => {
+  const { usePosts } = client
+
+  //Noticias
+  const posts = usePosts()?.nodes
+
   const newsTitle = 'Noticias Recientes'
 
-  return posts.nodes.length ? (
+  return posts?.length ? (
     <Container id="section_3">
       <Title>{newsTitle}</Title>
       <ColumnOne>
-        {posts.nodes.slice(0, 1).map((item, index) => {
+        {posts.slice(0, 1).map((item, index) => {
           const { title, excerpt, uri, featuredImage } = item
-          return item.uri ? (
+          return item.uri && featuredImage?.node?.mediaItemUrl ? (
             <Card key={index} main>
               <Link href={uri} passHref>
                 <SLink aria-label="Click para abrir el post...">
                   <CardMedia>
                     <Media>
                       <Image
-                        src={featuredImage?.node?.mediaItemUrl}
+                        src={featuredImage?.node?.mediaItemUrl ?? blur}
                         alt={title()}
                         width={1920}
                         height={1080}
                         objectFit="cover"
+                        blurDataURL={blur.src}
+                        placeholder="blur"
                       />
                     </Media>
                   </CardMedia>
                   <CardBody>
-                    <CardTitle main>{title}</CardTitle>
+                    <CardTitle main>{title()}</CardTitle>
                     <Excerpt
                       main
                       dangerouslySetInnerHTML={{ __html: excerpt() }}
@@ -44,10 +53,10 @@ const HomeNews = ({ posts }) => {
         })}
       </ColumnOne>
       <ColumnTwo>
-        {posts.nodes.slice(1, 4).map((item, index) => {
+        {posts.slice(1, 4).map((item, index) => {
           const { title, excerpt, uri, featuredImage } = item
 
-          return item.uri ? (
+          return item.uri && featuredImage?.node?.mediaItemUrl ? (
             <Card key={index} bgDeco={colors.secondary.lighter}>
               <Link href={uri} passHref>
                 <SLink aria-label="Click para abrir el post...">
@@ -55,11 +64,13 @@ const HomeNews = ({ posts }) => {
                     <CardMedia>
                       <Media>
                         <Image
-                          src={featuredImage.node.mediaItemUrl}
+                          src={featuredImage.node.mediaItemUrl ?? blur}
                           alt={title()}
                           width={1920}
                           height={1080}
                           objectFit="cover"
+                          blurDataURL={blur.src}
+                          placeholder="blur"
                         />
                       </Media>
                     </CardMedia>

@@ -19,6 +19,7 @@ interface Props {
   space?: boolean
   spaceTop?: boolean
   spaceBottom?: boolean
+  maxWidth?: string
 }
 
 const container = ({
@@ -30,9 +31,10 @@ const container = ({
   space,
   spaceTop,
   spaceBottom,
+  maxWidth,
 }: Props) => css`
     width: 100%;
-    max-width: 100%;
+    max-width: ${maxWidth ?? `100%`};
     padding-left: ${gap};
     padding-right: ${gap};
     position: relative;

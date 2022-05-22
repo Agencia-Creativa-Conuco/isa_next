@@ -1,41 +1,46 @@
-import React from 'react';
-import styles from 'scss/components/CTA.module.scss';
-import Heading, { HeadingProps } from './Heading';
+import React from 'react'
+import Link from 'next/link'
+import styled from '@emotion/styled'
+import ctaStyles from 'styles/cta'
 
-interface Props {
-  title: string;
-  buttonText?: string;
-  buttonURL?: string;
-  children?: React.ReactNode;
-  headingLevel?: HeadingProps['level'];
+interface CtaProps {
+  to: any
+  children: any
+  color?: string
+  bgColor?: string
+  bgActiveColor?: string
+  shadowColor?: string
+  paddingX?: string
+  download?: boolean
+  target?: string
+  rel?: string
 }
-
-function CTA({
-  title = 'Get in touch',
-  buttonText,
-  buttonURL,
+const Cta = ({
+  to,
   children,
-  headingLevel = 'h1',
-}: Props): JSX.Element {
+  color,
+  bgColor,
+  bgActiveColor,
+  shadowColor,
+  paddingX,
+  download,
+  target,
+  rel,
+  ...other
+}: CtaProps) => {
   return (
-    <section className={styles.cta}>
-      <div className={styles.wrap}>
-        <Heading level={headingLevel} className={styles.title}>
-          {title}
-        </Heading>
-        <div className={styles.intro}>
-          <div className={styles.children}>{children}</div>
-          {buttonText && buttonURL && (
-            <div className={styles['button-wrap']}>
-              <a href={buttonURL} className="button">
-                {buttonText}
-              </a>
-            </div>
-          )}
-        </div>
-      </div>
-    </section>
-  );
+    <Link href={to} passHref>
+      <a {...{ download }} {...other} target={target} rel={rel}>
+        <Span {...{ color, bgColor, bgActiveColor, shadowColor, paddingX }}>
+          {children}
+        </Span>
+      </a>
+    </Link>
+  )
 }
 
-export default CTA;
+export default Cta
+
+const Span = styled.span`
+  ${ctaStyles}
+`
