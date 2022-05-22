@@ -36,6 +36,7 @@ export function PageComponent({ page }: PageProps) {
               <Media>
                 <Image
                   src={featuredImage?.node?.mediaItemUrl ?? blur}
+                  alt={title()}
                   width={1920}
                   height={960}
                   objectFit="cover"
