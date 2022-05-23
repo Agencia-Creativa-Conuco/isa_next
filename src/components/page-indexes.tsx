@@ -53,8 +53,8 @@ const Wrapper = styled.div`
     align-items: baseline;
     align-items: end;
     justify-content: end;
-    padding-bottom: 1rem;
-    padding-right: 1rem;
+    padding-bottom: 1.5rem;
+    padding-right: 1.5rem;
     position: fixed;
     bottom: 0;
     right: 0;
@@ -73,11 +73,11 @@ const Wrapper = styled.div`
 `
 
 const ContainerArrow = styled.div`
-  background: ${colors.primary.base};
+  background: ${colors.secondary.light};
   border-radius: 1rem;
   display: flex;
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 4rem;
+  height: 4rem;
   color: white;
   padding: 0.8rem;
 

@@ -69,7 +69,8 @@ const OfferInternational = (props) => {
             src={internacionalImage}
             alt={title}
             width={1920}
-            height={1920}
+            height={2300}
+            objectFit="cover"
           />
         </MediaWrapper>
       </TopRow>
