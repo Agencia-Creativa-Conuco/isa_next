@@ -75,7 +75,7 @@ interface CarrerasProps {
   carreras: Carrera[]
 }
 const Carreras = ({ carreras }: CarrerasProps) => {
-  return (
+  return carreras.length ? (
     <Container>
       {carreras.map((carrera, key) => {
         return (
@@ -93,7 +93,7 @@ const Carreras = ({ carreras }: CarrerasProps) => {
         )
       })}
     </Container>
-  )
+  ) : null
 }
 
 const Facultad = styled.div`
