@@ -10,7 +10,6 @@ import {
 import Link from 'next/link'
 import colors from 'components/colors'
 import { container, mq } from 'components/grid'
-import { ContentTypesOfCategoryEnum } from 'client'
 
 const Contact = ({ data }) => {
   const {
@@ -21,10 +20,13 @@ const Contact = ({ data }) => {
     whatsapp = [],
     horarios,
     direcciones,
-    mostrar,
   } = data
 
-  return mostrar ? (
+  return telefonos?.length ||
+    emails?.length ||
+    whatsapp?.length ||
+    horarios ||
+    direcciones ? (
     <Section id="section_contact">
       <SSection>
         <Container>

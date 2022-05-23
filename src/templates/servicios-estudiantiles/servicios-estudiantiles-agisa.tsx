@@ -12,7 +12,7 @@ import agisa05 from '../../../public/images/servicios-estudiantiles/agisa05.jpg'
 import agisa06 from '../../../public/images/servicios-estudiantiles/agisa06.jpg'
 import agisa07 from '../../../public/images/servicios-estudiantiles/agisa07.jpg'
 
-const ServiciosEstudiantilesAGISA = () => {
+const ServiciosEstudiantilesAGISA = (props) => {
   const images = [agisa01, agisa02, agisa03, agisa04, agisa05, agisa06, agisa07]
 
   const [nav1, setNav1] = useState(null)
@@ -38,7 +38,7 @@ const ServiciosEstudiantilesAGISA = () => {
     </ul>
   `
   return (
-    <Section id="section_7">
+    <Section {...props}>
       <Wrapper>
         <MediaContainer>
           <DecoMedia>

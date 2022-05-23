@@ -3,13 +3,13 @@ import styled from '@emotion/styled'
 import { container, mq } from 'components/grid'
 import servicios_profesionales from '../../../public/images/direccion-extension-y-proyectos/servicios_profesionales.jpg'
 
-const DEPServices = () => {
+const DEPServices = (props) => {
   const title = 'Servicios Profesionales ISA',
     copy =
       'ISA ofrece una amplia cartera de servicios de asistencias técnicas, asesorías especializadas y consultorías dirigidas a los sectores empresariales y agroproductivos, con miras a fortalecer la vinculación entre ambos. A continuación, se presentan los principales servicios que ofrece la institución agrupados por segmentos:'
 
   return (
-    <BImage id="section_3">
+    <BImage {...props}>
       <Section as="div">
         <Container>
           <Content>

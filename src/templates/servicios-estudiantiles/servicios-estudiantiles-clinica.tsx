@@ -5,7 +5,7 @@ import colors from 'components/colors'
 import { container, mq } from 'components/grid'
 import enfermeria from '../../../public/images/servicios-estudiantiles/enfermeria.png'
 
-const ServiciosEstudiantilesClinica = () => {
+const ServiciosEstudiantilesClinica = (props) => {
   const title = 'Salud y Enfermería',
     content = `
             <p>Incentiva la salud y ofrece servicios de atención primaria a la comunidad universitaria. </p>
@@ -18,7 +18,7 @@ const ServiciosEstudiantilesClinica = () => {
     image = enfermeria
 
   return (
-    <Section id="section_4">
+    <Section {...props}>
       <DecoLogo>
         <Media src={image} alt="Bienestar Estudiantil" objectFit="cover" />
       </DecoLogo>

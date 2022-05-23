@@ -13,39 +13,9 @@ import ServiciosEstudiantilesExcelencia from 'templates/servicios-estudiantiles/
 import ServiciosEstudiantilesActividades from 'templates/servicios-estudiantiles/servicios-estudiantiles-actividades'
 import Layout from 'components/layout'
 import PageMeta from 'components/PageMeta'
+import { idxModelGenerator } from 'lib/auxiliar'
 
 const ServiciosEstudiantilesPage = (props) => {
-  const data = [
-    {
-      name: 'Activiades Extracurriculares',
-      id: '#section_1',
-    },
-    {
-      name: 'Departamento de  Desarrollo y Bienestar Estudiantil',
-      id: '#section_2',
-    },
-    {
-      name: 'Orientación e Inclusión Estudiantil',
-      id: '#section_3',
-    },
-    {
-      name: 'Servicio de Enfermería',
-      id: '#section_4',
-    },
-    {
-      name: 'Unidad de Deporte',
-      id: '#section_5',
-    },
-    {
-      name: 'Programa de Premiación a la Exelencia',
-      id: '#section_6',
-    },
-    {
-      name: 'Asociación De Graduados De ISA (AGISA)',
-      id: '#section_7',
-    },
-  ]
-
   const metaData = {
     title: 'Decanato de estudiantes',
     description:
@@ -57,13 +27,29 @@ const ServiciosEstudiantilesPage = (props) => {
       <Layout>
         <Container>
           <ServiciosEstudiantilesCover />
-          <ServiciosEstudiantilesActividades />
-          <ServiciosEstudiantilesBienestar />
-          <ServiciosEstudiantilesPsicologia />
-          <ServiciosEstudiantilesClinica />
-          <ServiciosEstudiantilesDeportes />
-          <ServiciosEstudiantilesExcelencia />
-          <ServiciosEstudiantilesAGISA />
+          <ServiciosEstudiantilesActividades
+            {...idxModelGenerator('Activiades Extracurriculares')}
+          />
+          <ServiciosEstudiantilesBienestar
+            {...idxModelGenerator(
+              'Departamento de  Desarrollo y Bienestar Estudiantil',
+            )}
+          />
+          <ServiciosEstudiantilesPsicologia
+            {...idxModelGenerator('Orientación e Inclusión Estudiantil')}
+          />
+          <ServiciosEstudiantilesClinica
+            {...idxModelGenerator('Servicio de Enfermería')}
+          />
+          <ServiciosEstudiantilesDeportes
+            {...idxModelGenerator('Unidad de Deporte')}
+          />
+          <ServiciosEstudiantilesExcelencia
+            {...idxModelGenerator('Programa de Premiación a la Exelencia')}
+          />
+          <ServiciosEstudiantilesAGISA
+            {...idxModelGenerator('Asociación De Graduados De ISA (AGISA)')}
+          />
         </Container>
       </Layout>
     </PageMeta>

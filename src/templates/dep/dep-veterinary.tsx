@@ -5,7 +5,7 @@ import colors from 'components/colors'
 import { container, mq } from 'components/grid'
 import clinica_veterinaria from '../../../public/images/direccion-extension-y-proyectos/clinica_veterinaria.png'
 
-const DEPVeterinary = () => {
+const DEPVeterinary = (props) => {
   const title = 'Clínica Veterinaria',
     copy =
       'La Clínica Veterinaria está preparada para ofrecerle a nuestros clientes los mejores servicios en cuanto a la salud de sus animales, tanto en el ámbito preventivo como curativo y en el aspecto docente ofrece a los estudiantes la oportunidad de poder conocer, diagnosticar, tratar y sobre todo prevenir las principales patologías que afectan a nuestros animales de compañía.',
@@ -32,7 +32,7 @@ const DEPVeterinary = () => {
     image = clinica_veterinaria
 
   return (
-    <Section id="section_7">
+    <Section {...props}>
       <Container>
         <SpecialCol>
           <Media>

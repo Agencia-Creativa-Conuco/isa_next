@@ -10,25 +10,11 @@ import DIPGeneral from '../templates/dip/dip-general'
 import DIPPhilosophy from '../templates/dip/dip-philosophy'
 import DIPTeam from '../templates/dip/dip-team'
 import PageMeta from 'components/PageMeta'
+import { idxModelGenerator } from 'lib/auxiliar'
 
 const ResearchPage = () => {
   //Obtiene los datos de los Proyectos
   // const investigaciones = useInvestigaciones()
-
-  const data = [
-    {
-      name: 'Departamento De Investigaciones y Publicaciones',
-      id: '#section_1',
-    },
-    {
-      name: 'Equipos de Iinvestigacion',
-      id: '#section_2',
-    },
-    {
-      name: 'Departamento De Investigaciones y Publicaciones General',
-      id: '#section_3',
-    },
-  ]
 
   const metaData = {
     title: 'Investigación',
@@ -41,9 +27,17 @@ const ResearchPage = () => {
       <Layout>
         <Container>
           <DIPCover />
-          <DIPPhilosophy />
-          <DIPTeam />
-          <DIPGeneral />
+          <DIPPhilosophy
+            {...idxModelGenerator(
+              'Departamento De Investigaciones y Publicaciones',
+            )}
+          />
+          <DIPTeam {...idxModelGenerator('Equipos de Iinvestigacion')} />
+          <DIPGeneral
+            {...idxModelGenerator(
+              'Departamento De Investigaciones y Publicaciones General',
+            )}
+          />
         </Container>
       </Layout>
     </PageMeta>

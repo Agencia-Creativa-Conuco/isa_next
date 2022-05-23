@@ -7,7 +7,7 @@ import { css } from '@emotion/react'
 
 import { Spring, animated } from '@react-spring/web'
 
-const DIPPhilosophy = () => {
+const DIPPhilosophy = (props) => {
   const tabs = [
     {
       title: 'Departamento De Investigaciones y Publicaciones',
@@ -49,7 +49,7 @@ const DIPPhilosophy = () => {
   const handlerView = (value) => setView(value)
 
   return (
-    <StyledSection fluid id="section_1">
+    <StyledSection fluid {...props}>
       <Container>
         <DecoContainer />
         <ColumnOne>

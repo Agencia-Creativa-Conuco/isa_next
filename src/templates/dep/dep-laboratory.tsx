@@ -6,7 +6,7 @@ import { container, mq } from 'components/grid'
 import ler from '../../../public/images/direccion-extension-y-proyectos/ler.jpg'
 import liaai from '../../../public/images/direccion-extension-y-proyectos/liaai.jpg'
 
-const DEPLaboratory = () => {
+const DEPLaboratory = (props) => {
   const dataLaboratory = [
     {
       title: 'Laboratorio de Energía Renovables',
@@ -28,7 +28,7 @@ const DEPLaboratory = () => {
   ]
 
   return (
-    <Section id="section_5">
+    <Section {...props}>
       {dataLaboratory.map((item, index) => {
         const { title, copy, image, cta } = item
 

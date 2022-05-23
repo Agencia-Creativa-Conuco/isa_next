@@ -13,7 +13,7 @@ import club_de_ciencias from '../../../public/images/servicios-estudiantiles/clu
 import cine_foro from '../../../public/images/servicios-estudiantiles/cine_foro.jpg'
 import cine_club from '../../../public/images/servicios-estudiantiles/cine_club.jpg'
 
-const ServiciosEstudiantilesActividades = () => {
+const ServiciosEstudiantilesActividades = (props) => {
   const title = 'Grupos y clubes estudiantiles',
     actividadesExtracurriculares = [
       {
@@ -92,7 +92,7 @@ const ServiciosEstudiantilesActividades = () => {
   }, [slider1, slider2])
 
   return actividadesExtracurriculares ? (
-    <Section id="section_1" fluid>
+    <Section fluid {...props}>
       <SectionTitle>{title}</SectionTitle>
       <InfoContainer>
         <ImageWrapper>

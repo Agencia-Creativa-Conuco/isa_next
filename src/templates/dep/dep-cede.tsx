@@ -6,7 +6,7 @@ import Cta from 'components/CTA'
 import { container, mq } from 'components/grid'
 import cede from '../../../public/images/direccion-extension-y-proyectos/cede.jpg'
 
-const DEPCede = () => {
+const DEPCede = (props) => {
   const title =
       'Centro De Emprendimiento y Desarrollo Empresarial De La Universidad ISA (CEDE)',
     copy =
@@ -15,7 +15,7 @@ const DEPCede = () => {
     cta = null
 
   return (
-    <Section id="section_6">
+    <Section {...props}>
       <Container>
         <Media>
           <Image

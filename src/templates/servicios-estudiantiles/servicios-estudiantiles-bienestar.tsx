@@ -6,7 +6,7 @@ import colors from 'components/colors'
 import { container, mq } from 'components/grid'
 import bienestar_estudiantil from '../../../public/images/servicios-estudiantiles/bienestar_estudiantil.jpg'
 
-const ServiciosEstudiantilesBienestar = () => {
+const ServiciosEstudiantilesBienestar = (props) => {
   const title = 'Bienestar Estudiantil',
     content = `
             <p>Implementa estrategias para garantizar el bienestar y facilitar el desarrollo integral de los/las estudiantes. Este departamento, a su vez, está estructurado por diferentes unidades: Orientación e Inclusión Estudiantil, Arte, Cultura y Valores, Articulación Estudiante entorno, conformado por comités estudiantiles. </p>
@@ -14,7 +14,7 @@ const ServiciosEstudiantilesBienestar = () => {
     image = bienestar_estudiantil
 
   return (
-    <Section id="section_2" fluid>
+    <Section fluid {...props}>
       <Media>
         <Image
           src={image}

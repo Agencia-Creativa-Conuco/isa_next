@@ -6,7 +6,7 @@ import colors from 'components/colors'
 import { container, mq } from 'components/grid'
 import ambitos from '../../../public/images/direccion-extension-y-proyectos/ambitos.svg'
 
-const DEPDevelopment = () => {
+const DEPDevelopment = (props) => {
   const title = 'Proyectos En Desarrollo',
     content = `
             <p>Además de dedicarse a la docencia y la investigación, la Universidad cuenta con una amplia trayectoria en la elaboración y ejecución de proyectos, principalmente relacionados al desarrollo social y agroproductivo. Esto ha conllevado a que la institución posea una fuerte vinculación con las distintas entidades, ONG, Ministerios y Estamentos Estatales que brindan soporte al desarrollo del país y a los sectores más vulnerables.</p>
@@ -27,7 +27,7 @@ const DEPDevelopment = () => {
         `
 
   return (
-    <Section id="section_2">
+    <Section {...props}>
       <Container fluid>
         <LSection as="div">
           <ContainerWrapper>

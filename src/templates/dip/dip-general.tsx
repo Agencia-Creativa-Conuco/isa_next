@@ -9,7 +9,7 @@ import { container, mq } from 'components/grid'
 import { client } from 'client'
 import blur from 'styles/blur'
 
-const DIPGeneral = () => {
+const DIPGeneral = (props) => {
   const { useQuery } = client
 
   const facultades = useQuery().facultades({
@@ -39,7 +39,7 @@ const DIPGeneral = () => {
   }, [slider1, slider2])
 
   return departamentos.length ? (
-    <Section fluid id="section_3">
+    <Section fluid {...props}>
       <Carousel
         arrows={false}
         dots

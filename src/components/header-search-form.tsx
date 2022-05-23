@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { CloseIcon } from './icons'
 import ScreenReaderText from 'styles/screen-reader'
-// import SearchForm from './search/search-form'
+import SearchForm from 'components/search/search-form'
 // import useSearch from './hooks/useSearch'
 
 import { mq } from 'components/grid'
@@ -45,9 +45,7 @@ const SearchInput = ({
         />
         <ModalInner role="dialog" aria-modal="true">
           <SectionInner>
-            {/* Input */}
-            {/* <SearchForm searchButton={false} /> */}
-
+            <SearchForm searchButton={false} />
             <CloseButton onClick={closeSearchModal}>
               <ScreenReaderText>Cerrar búsqueda</ScreenReaderText>
               <CloseIcon />

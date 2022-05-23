@@ -3,7 +3,7 @@ import React from 'react'
 import TeamSlider from 'components/team-slider'
 import { client } from 'client'
 
-const DIPTeam = () => {
+const DIPTeam = (props) => {
   const { useQuery } = client
   const investigadores = useQuery()
     .investigadores({
@@ -26,7 +26,7 @@ const DIPTeam = () => {
   })
 
   return interno.length || externo.length ? (
-    <Container id="section_2">
+    <Container {...props}>
       <TeamSlider
         investigadores={interno}
         title="EQUIPO DE INVESTIGACIÓN INTERNO"

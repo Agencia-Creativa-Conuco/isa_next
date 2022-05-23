@@ -5,7 +5,7 @@ import colors from 'components/colors'
 import { container, mq } from 'components/grid'
 import orientacion_estudiantil from '../../../public/images/servicios-estudiantiles/orientacion_estudiantil.jpg'
 
-const ServiciosEstudiantilesPsicologia = () => {
+const ServiciosEstudiantilesPsicologia = (props) => {
   const title = 'Orientación e Inclusión Estudiantil',
     content = `
             <p>Orientación e inclusión estudiantil es un servicio orientado a propiciar el bienestar estudiantil y potenciar, en todas sus dimensiones, el desarrollo integral del estudiante mediante los servicios de orientación académica, personal, social y profesional.</p>
@@ -26,7 +26,7 @@ const ServiciosEstudiantilesPsicologia = () => {
     cta = null
 
   return (
-    <Section id="section_3" fluid>
+    <Section fluid {...props}>
       <Media>
         <Image
           src={image}

@@ -58,13 +58,10 @@ const Layout = (props) => {
             - Se excluye el tipo pensum para los objetos de tipo WpCarrera. Ya que los pensums se muestran de una forma distinta en las carreras
         */}
         {props.recursos?.length ? (
-          <ResourcesList
-            items={props.recursos || []}
-            // exclude={contacto?.type === 'carrera' ? ['pensum'] : []}
-          />
+          <ResourcesList items={props.recursos || []} />
         ) : null}
         {/* Se muestra información de contacto relacionada con el tipo de dato */}
-        {props.contacto?.mostrar ? <Contact data={props.contacto} /> : null}
+        {props.contacto ? <Contact data={props.contacto} /> : null}
         {typeof window !== 'undefined' && <PageIndexes items={indexes} />}
       </Main>
 

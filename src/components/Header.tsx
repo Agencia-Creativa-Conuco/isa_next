@@ -62,14 +62,13 @@ const Header = (
         </NavWrapper>
 
         <WrapperSearch>
-          {/* <SearchInput
+          <SearchInput
             {...{
               isSearchModalOpen,
               toggleSearchModal,
-              setResultsSearch,
               isMobileMenuOpen,
             }}
-          /> */}
+          />
         </WrapperSearch>
       </Container>
     </HeaderWrapper>

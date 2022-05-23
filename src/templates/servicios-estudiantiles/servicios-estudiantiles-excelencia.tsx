@@ -14,7 +14,7 @@ import excelencia07 from '../../../public/images/servicios-estudiantiles/excelen
 import excelencia08 from '../../../public/images/servicios-estudiantiles/excelencia08.jpg'
 import excelencia09 from '../../../public/images/servicios-estudiantiles/excelencia09.jpg'
 
-const ServiciosEstudiantilesExcelencia = () => {
+const ServiciosEstudiantilesExcelencia = (props) => {
   const images = [
     excelencia01,
     excelencia02,
@@ -50,7 +50,7 @@ const ServiciosEstudiantilesExcelencia = () => {
   // image = images["servicios-estudiantiles"].excelencia,
 
   return (
-    <Section id="section_6">
+    <Section {...props}>
       <Wrapper>
         <MediaContainer>
           <DecoMedia>

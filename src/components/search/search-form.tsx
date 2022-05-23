@@ -1,15 +1,14 @@
 import React, { useEffect, useRef } from 'react'
-import { mq } from '../layout/index'
+import { mq } from 'components/grid'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import Input from '../styles/input'
+import Input from 'styles/input'
 import { SearchIcon } from '../icons'
 import { BaseToggle } from '../navigation/nav-toggle'
-import { useQueryParam, StringParam } from 'use-query-params'
-import { navigate } from 'gatsby'
+// import { useQueryParam, StringParam } from 'use-query-params'
 
 const SearchForm = ({ searchButton = true }) => {
-  const [query] = useQueryParam('s', StringParam)
+  // const [query] = useQueryParam('s', StringParam)
 
   const ref = useRef(null)
 
@@ -25,12 +24,12 @@ const SearchForm = ({ searchButton = true }) => {
       aria-label="Buscar:"
       onSubmit={(e) => {
         e.preventDefault()
-        navigate(`/search/?s=${ref.current.value}`)
+        // navigate(`/search/?s=${ref.current.value}`)
       }}
     >
       <Input
-        defaultValue={query}
-        css={inputStyles(searchButton)}
+        // defaultValue={query}
+        // css={inputStyles(searchButton)}
         type="search"
         placeholder="Buscar:"
         name="search"

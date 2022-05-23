@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import colors from 'components/colors'
 import { container } from 'components/grid'
 
-const DEPActivities = () => {
+const DEPActivities = (props) => {
   const title = 'Actividades Que Realiza',
     content = `
             <p>La Universidad ISA, desde sus inicios, ha enfocado sus esfuerzos en realizar labores extensionistas y comunitarias para apoyar a la sociedad en su conjunto, especialmente a aquellos sectores más susceptibles. Dichas actividades son realizadas a través de la Dirección de Extensión y Proyectos, de los departamentos académicos y de programas y proyectos específicos.</p>
@@ -11,7 +11,7 @@ const DEPActivities = () => {
         `
 
   return (
-    <Section id="section_1">
+    <Section {...props}>
       <Container>
         <DivTitle>
           <SectionTitle>{title}</SectionTitle>

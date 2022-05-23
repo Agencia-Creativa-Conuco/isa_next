@@ -14,39 +14,9 @@ import DEPCede from '../templates/dep/dep-cede'
 import DEPServicesMenu from '../templates/dep/dep-services-menu'
 import DEPPymes from '../templates/dep/dep-pymes'
 import PageMeta from 'components/PageMeta'
+import { idxModelGenerator } from 'lib/auxiliar'
 
 const DEPPage = (props) => {
-  const data = [
-    {
-      name: 'Actividades Que Realiza',
-      id: '#section_1',
-    },
-    {
-      name: 'Proyectos En Desarrollo',
-      id: '#section_2',
-    },
-    {
-      name: 'Servicios Profesionales ISA',
-      id: '#section_3',
-    },
-    {
-      name: 'Centro MIPYMES',
-      id: '#section_4',
-    },
-    {
-      name: 'Laboratorios',
-      id: '#section_5',
-    },
-    {
-      name: 'CEDE',
-      id: '#section_6',
-    },
-    {
-      name: 'Clínica Veterinaria',
-      id: '#section_7',
-    },
-  ]
-
   const metaData = {
     title: 'Dirección Extensión y Proyectos',
     description:
@@ -58,14 +28,14 @@ const DEPPage = (props) => {
       <Layout>
         <Container>
           <DEPCover />
-          <DEPActivities />
-          <DEPDevelopment />
-          <DEPServices />
+          <DEPActivities {...idxModelGenerator('Actividades Que Realiza')} />
+          <DEPDevelopment {...idxModelGenerator('Proyectos En Desarrollo')} />
+          <DEPServices {...idxModelGenerator('Servicios Profesionales ISA')} />
           <DEPServicesMenu />
-          <DEPPymes />
-          <DEPLaboratory />
-          <DEPCede />
-          <DEPVeterinary />
+          <DEPPymes {...idxModelGenerator('Centro MIPYMES')} />
+          <DEPLaboratory {...idxModelGenerator('Laboratorios')} />
+          <DEPCede {...idxModelGenerator('CEDE')} />
+          <DEPVeterinary {...idxModelGenerator('Clínica Veterinaria')} />
         </Container>
       </Layout>
     </PageMeta>
