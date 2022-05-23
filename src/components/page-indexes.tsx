@@ -15,7 +15,7 @@ const PageIndexes = ({ items = [] }) => {
 
   const [isVisible, setIsVisible] = useState(false)
 
-  return (
+  return items?.length ? (
     <Wrapper data-open={isVisible} onClick={() => setIsVisible(!isVisible)}>
       {isVisible && <Global styles={{ body: { overflowY: 'hidden' } }} />}
 
@@ -42,7 +42,7 @@ const PageIndexes = ({ items = [] }) => {
         </ContainerArrow>
       )}
     </Wrapper>
-  )
+  ) : null
 }
 
 export default PageIndexes

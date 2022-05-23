@@ -65,9 +65,7 @@ const Layout = (props) => {
         ) : null}
         {/* Se muestra información de contacto relacionada con el tipo de dato */}
         {props.contacto?.mostrar ? <Contact data={props.contacto} /> : null}
-        {indexes.length && typeof window !== 'undefined' && (
-          <PageIndexes items={indexes} />
-        )}
+        {typeof window !== 'undefined' && <PageIndexes items={indexes} />}
       </Main>
 
       <Footer />
