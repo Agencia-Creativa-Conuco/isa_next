@@ -13,7 +13,7 @@ import OfertaAcademicaList from 'templates/oferta-academica/oferta-academica-ofe
 import Page from 'components/PageMeta'
 import { idxModelGenerator } from 'lib/auxiliar'
 
-const OfertaAcademica = (props) => {
+const OfertaAcademica = () => {
   const metaData = {
     title: 'Oferta Académica',
     description:

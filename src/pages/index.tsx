@@ -1,9 +1,6 @@
 import { getNextStaticProps } from '@faustjs/next'
 import { GetStaticPropsContext } from 'next'
-import Head from 'next/head'
 import React from 'react'
-import { CTA, Footer, Header, Hero } from 'components'
-import styles from 'scss/pages/home.module.scss'
 import { client } from 'client'
 
 import HomeCover from 'templates/home/home-cover'
@@ -15,22 +12,8 @@ import HomeContact from 'templates/home/home-contact'
 import Layout from 'components/layout'
 
 export default function Page() {
-  const { useQuery } = client
-  const { generalSettings } = useQuery()
-
   return (
     <Layout>
-      {/* <Header
-      // title={generalSettings.title}
-      // description={generalSettings.description}
-      /> */}
-
-      <Head>
-        <title>
-          {generalSettings.title} - {generalSettings.description}
-        </title>
-      </Head>
-
       <main className="content">
         <HomeCover />
         <HomeOffer />
@@ -39,7 +22,6 @@ export default function Page() {
         <HomeAplication />
         <HomeContact />
       </main>
-      {/* <Footer copyrightHolder={generalSettings.title} /> */}
     </Layout>
   )
 }

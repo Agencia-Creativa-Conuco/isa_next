@@ -40,21 +40,23 @@ const Item = ({ item, level = 1 }: ItemProps) => {
           </Title>
         </Etiqueta>
       ) : (
-        <StyledLink href={item?.uri} aria-label="Click para abrir el...">
-          <Title
-            color={
-              (level + 1) % 2 === 0 && level !== 1
-                ? colors.text.base
-                : level >= 2
-                ? colors.primary.dark
-                : colors.primary.dark
-            }
-            bgHover={colors.gray.light}
-            {...{ isMain, level }}
-          >
-            {item?.label}
-          </Title>
-        </StyledLink>
+        <Link href={item?.uri ?? ''} passHref>
+          <StyledLink aria-label="Click para abrir el...">
+            <Title
+              color={
+                (level + 1) % 2 === 0 && level !== 1
+                  ? colors.text.base
+                  : level >= 2
+                  ? colors.primary.dark
+                  : colors.primary.dark
+              }
+              bgHover={colors.gray.light}
+              {...{ isMain, level }}
+            >
+              {item?.label}
+            </Title>
+          </StyledLink>
+        </Link>
       )}
       {items?.length ? (
         <ItemList items={item?.children} level={level + 1} />
