@@ -13,16 +13,23 @@ if (typeof window !== 'undefined') {
   //   require('smooth-scroll')('a[href*="#"]')
 }
 
-const findIndexes = (children: any[]) => {
-  const resultado = children.reduce((prev, curr) => {
-    if (curr?.props?.id) {
-      prev.push({ id: curr.props.id, name: curr.props.name })
-    }
-    if (curr?.props?.children?.length) {
-      return findIndexes(curr.props.children)
-    }
-    return prev
-  }, [])
+const findIndexes = (children: any) => {
+  let resultado: any
+  if (Array.isArray(children)) {
+    resultado = children.reduce((prev, curr) => {
+      if (curr?.props?.id) {
+        prev.push({ id: curr.props.id, name: curr.props.name })
+      }
+      if (curr?.props?.children?.length) {
+        return findIndexes(curr.props.children)
+      }
+      return prev
+    }, [])
+  } else if (children.props?.children) {
+    resultado = findIndexes(children?.props?.children)
+  } else {
+    resultado = []
+  }
 
   return resultado
 }
@@ -36,7 +43,8 @@ const findIndexes = (children: any[]) => {
 const Layout = (props) => {
   const { useQuery } = client
   const settings = useQuery()?.generalSettings
-  const indexes = findIndexes([props.children])
+
+  const indexes = props?.children ? findIndexes(props?.children) : []
 
   // const [resultsSearch, setResultsSearch] = useState()
 

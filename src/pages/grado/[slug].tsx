@@ -7,6 +7,7 @@ import styled from '@emotion/styled'
 import GradoCover from '../../templates/grado/grado-cover'
 import GradoOffer from '../../templates/grado/grado-offer'
 import { fetchAPI } from 'lib/api'
+import Layout from 'components/layout'
 
 const Page = ({ slug }) => {
   const { useQuery } = client
@@ -18,10 +19,12 @@ const Page = ({ slug }) => {
   grado.carreras()
 
   return (
-    <Article>
-      <GradoCover {...{ grado }} />
-      <GradoOffer {...{ grado }} />
-    </Article>
+    <Layout>
+      <Article>
+        <GradoCover {...{ grado }} />
+        <GradoOffer {...{ grado }} />
+      </Article>
+    </Layout>
   )
 }
 

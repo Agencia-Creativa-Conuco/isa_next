@@ -43,8 +43,8 @@ const Form = ({
   useEffect(() => {
     const scripts = [
       'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js',
-      '//js.hs-scripts.com/20627890.js',
-      '//js.hsforms.net/forms/shell.js',
+      // '//js.hs-scripts.com/20627890.js',
+      // '//js.hsforms.net/forms/shell.js',
     ]
 
     scripts.map((url) => {

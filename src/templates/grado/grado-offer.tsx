@@ -5,7 +5,6 @@ import Link from 'next/link'
 import colors from 'components/colors'
 import { container, mq } from 'components/grid'
 import { client, Grado } from 'client'
-import Layout from 'components/layout'
 
 interface GradoProps {
   grado: Grado
@@ -16,64 +15,64 @@ const GradeOffer = ({ grado }: GradoProps) => {
 
   const carreras = grado.carreras({
     first: 100,
-  }).nodes
+  })?.nodes
 
   const facultades = useQuery()
     .facultades({
       first: 100,
     })
-    .nodes.filter((facultad) =>
-      carreras.map((carrera) => carrera.facultad.node.id).includes(facultad.id),
+    ?.nodes.filter((facultad) =>
+      carreras
+        .map((carrera) => carrera.facultad?.node?.id)
+        .includes(facultad?.id),
     )
 
   return facultades.length ? (
-    <Layout>
-      <Section>
-        <SectionTitle>Oferta Académica</SectionTitle>
+    <Section>
+      <SectionTitle>Oferta Académica</SectionTitle>
 
-        {facultades?.map((facultad, key) => {
-          return (
-            <Facultad key={key}>
-              <Link href={facultad.uri ?? ''} passHref>
-                <SLink>
-                  <Title
-                    color={colors.primary.dark}
-                    bgHover={colors.gray.light}
-                    isFaculty
-                  >
-                    {facultad.nombre}
-                  </Title>
-                </SLink>
-              </Link>
-              <Container>
-                {carreras
-                  .filter((carrera) => {
-                    return (
-                      carrera.grado.node.id === grado.id &&
-                      carrera.facultad.node.id === facultad.id
-                    )
-                  })
-                  .map((carrera, key) => {
-                    return (
-                      <Link href={carrera.uri ?? ''} key={key} passHref>
-                        <SLink>
-                          <Title
-                            color={colors.text.base}
-                            bgHover={colors.gray.light}
-                            isCareer
-                          >
-                            {carrera.nombre}
-                          </Title>
-                        </SLink>
-                      </Link>
-                    )
-                  })}
-              </Container>
-            </Facultad>
-          )
-        })}
-      </Section>
-    </Layout>
+      {facultades?.map((facultad, key) => {
+        return (
+          <Facultad key={key}>
+            <Link href={facultad.uri ?? ''} passHref>
+              <SLink>
+                <Title
+                  color={colors.primary.dark}
+                  bgHover={colors.gray.light}
+                  isFaculty
+                >
+                  {facultad.nombre}
+                </Title>
+              </SLink>
+            </Link>
+            <Container>
+              {carreras
+                .filter((carrera) => {
+                  return (
+                    carrera.grado?.node?.id === grado?.id &&
+                    carrera.facultad?.node?.id === facultad?.id
+                  )
+                })
+                .map((carrera, key) => {
+                  return (
+                    <Link href={carrera.uri ?? ''} key={key} passHref>
+                      <SLink>
+                        <Title
+                          color={colors.text.base}
+                          bgHover={colors.gray.light}
+                          isCareer
+                        >
+                          {carrera.nombre}
+                        </Title>
+                      </SLink>
+                    </Link>
+                  )
+                })}
+            </Container>
+          </Facultad>
+        )
+      })}
+    </Section>
   ) : null
 }
 
