@@ -32,7 +32,7 @@ const FileCover = ({ post }: FileCoverProps) => {
 
           <div>
             <Content>
-              <Title>{title}</Title>
+              <Title>{title()}</Title>
               <div dangerouslySetInnerHTML={{ __html: content() }} />
             </Content>
             <CTABox>

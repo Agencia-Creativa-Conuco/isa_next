@@ -7,6 +7,7 @@ import Layout from 'components/layout'
 import PostSingleCover from 'templates/post/post-single-cover'
 import PostSingleContent from 'templates/post/post-single-content'
 import PostFileCover from 'templates/post/post-file-cover'
+import { SITE_URL } from 'lib/constants'
 
 export interface PostProps {
   post: Post | Post['preview']['node'] | null | undefined
@@ -18,6 +19,21 @@ export function PostComponent({ post }: PostProps) {
 
   const isFile = post.datosPublicacion.tipo === 'file'
 
+  const seo = {
+    title: post.title(),
+    description: post.excerpt,
+    canonical: SITE_URL + post.uri,
+    // noFollow: post.seo.metaRobotsNofollow,
+    // noIndex: post.seo.metaRobotsNoindex,
+    openGraph: {
+      // type: post.seo.opengraphType,
+      images: [
+        {
+          url: `${SITE_URL}/_next/image?url=${post.featuredImage.node.mediaItemUrl}&w=1920&q=75`,
+        },
+      ],
+    },
+  }
   return (
     <Layout>
       {isFile ? (
