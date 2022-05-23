@@ -25,6 +25,7 @@ const DepartamentoCarreras = ({ departamento }: DepartamentoProps) => {
         .nodes?.map((carrera) => carrera.grado.node.id)
         .includes(grado.id)
     })
+    .sort((a, b) => a.orden - b.orden)
 
   return grados.length ? (
     <Section space thin>

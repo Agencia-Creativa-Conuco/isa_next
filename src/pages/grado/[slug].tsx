@@ -8,6 +8,7 @@ import GradoCover from '../../templates/grado/grado-cover'
 import GradoOffer from '../../templates/grado/grado-offer'
 import { fetchAPI } from 'lib/api'
 import Layout from 'components/layout'
+import { SITE_URL } from 'lib/constants'
 
 const Page = ({ slug }) => {
   const { useQuery } = client
@@ -16,8 +17,29 @@ const Page = ({ slug }) => {
     idType: GradoIdType.SLUG,
   })
 
+  const seo = {
+    title: grado.title(),
+    description: `Programas de ${grado.title()} de la Universidad ISA`,
+    canonical: SITE_URL + grado.uri,
+    // noFollow: grado.seo.metaRobotsNofollow,
+    // noIndex: grado.seo.metaRobotsNoindex,
+    // openGraph: {
+    //   type: grado.seo.opengraphType,
+    //   images: [
+    //     {
+    //       url: `${SITE_URL}/_next/image?url=${grado.featuredImage.node.mediaItemUrl}&w=1920&q=75`,
+    //     },
+    //   ],
+    // },
+    // additionalMetaTags: [
+    //   {
+    //     property: 'cornerstone',
+    //     content: false,
+    //   },
+    // ],
+  }
   return (
-    <Layout>
+    <Layout {...{ seo }}>
       <Article>
         <GradoCover {...{ grado }} />
         <GradoOffer {...{ grado }} />

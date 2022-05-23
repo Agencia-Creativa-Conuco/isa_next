@@ -10,6 +10,7 @@ import FacultadAreas from 'templates/facultad/facultad-areas'
 
 import Layout from 'components/layout'
 import { fetchAPI } from 'lib/api'
+import { SITE_URL } from 'lib/constants'
 
 const Page = ({ slug }) => {
   const { useQuery } = client
@@ -17,8 +18,26 @@ const Page = ({ slug }) => {
     id: slug,
     idType: FacultadIdType.SLUG,
   })
+
+  const contacto = facultad.contacto
+
+  const seo = {
+    title: facultad.title(),
+    description: facultad.copy,
+    canonical: SITE_URL + facultad.uri,
+    // noFollow: facultad.seo.metaRobotsNofollow,
+    // noIndex: facultad.seo.metaRobotsNoindex,
+    openGraph: {
+      // type: facultad.seo.opengraphType,
+      images: [
+        {
+          url: `${SITE_URL}/_next/image?url=${facultad.featuredImage.node.mediaItemUrl}&w=1920&q=75`,
+        },
+      ],
+    },
+  }
   return (
-    <Layout contacto={facultad.contacto}>
+    <Layout {...{ seo, contacto }}>
       <Article>
         <FacultadCover {...{ facultad }} />
         <FacultadPerfil {...{ facultad }} />

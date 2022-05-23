@@ -11,6 +11,7 @@ import InvestigacionCarrousel from 'templates/investigacion/investigacion-carrou
 import InvestigacionResume from 'templates/investigacion/investigacion-resume'
 import Layout from 'components/layout'
 import { fetchAPI } from 'lib/api'
+import { SITE_URL } from 'lib/constants'
 
 const Page = ({ slug }) => {
   const { useQuery } = client
@@ -21,8 +22,23 @@ const Page = ({ slug }) => {
 
   const investigadores = investigacion.investigadores().nodes
 
+  const seo = {
+    title: investigacion.title(),
+    description: investigacion.descripcionCorta,
+    canonical: SITE_URL + investigacion.uri,
+    // noFollow: investigacion.seo.metaRobotsNofollow,
+    // noIndex: investigacion.seo.metaRobotsNoindex,
+    openGraph: {
+      // type: investigacion.seo.opengraphType,
+      images: [
+        {
+          url: `${SITE_URL}/_next/image?url=${investigacion.featuredImage.node.mediaItemUrl}&w=1920&q=75`,
+        },
+      ],
+    },
+  }
   return (
-    <Layout>
+    <Layout {...{ seo }}>
       <Article key={investigacion.id}>
         <InvestigacionCover {...{ investigacion }} />
         <InvestigacionCarrousel {...{ investigacion }} />

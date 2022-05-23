@@ -10,6 +10,8 @@ import DepartamentoCarreras from 'templates/departamento/departamento-carreras'
 import Layout from 'components/layout'
 import { fetchAPI } from 'lib/api'
 
+import { SITE_URL } from 'lib/constants'
+
 const Page = ({ slug }) => {
   const { useQuery } = client
   const departamento = useQuery().departamento({
@@ -17,8 +19,26 @@ const Page = ({ slug }) => {
     idType: DepartamentoIdType.SLUG,
   })
 
+  const contacto = departamento.contacto
+
+  const seo = {
+    title: departamento.title(),
+    description: departamento.copy,
+    canonical: SITE_URL + departamento.uri,
+    // noFollow: departamento.seo.metaRobotsNofollow,
+    // noIndex: departamento.seo.metaRobotsNoindex,
+    openGraph: {
+      // type: departamento.seo.opengraphType,
+      images: [
+        {
+          url: `${SITE_URL}/_next/image?url=${departamento.featuredImage.node.mediaItemUrl}&w=1920&q=75`,
+        },
+      ],
+    },
+  }
+
   return (
-    <Layout contacto={departamento.contacto}>
+    <Layout {...{ seo, contacto }}>
       <Article>
         <DepartamentoCover {...{ departamento }} />
         <DepartamentoCarreras {...{ departamento }} />

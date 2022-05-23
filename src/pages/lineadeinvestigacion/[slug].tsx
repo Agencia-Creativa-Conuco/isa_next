@@ -10,6 +10,7 @@ import { fetchAPI } from 'lib/api'
 import Layout from 'components/layout'
 import blur from 'styles/blur'
 import colors from 'components/colors'
+import { SITE_URL } from 'lib/constants'
 
 const Page = ({ slug }) => {
   const { useQuery } = client
@@ -20,8 +21,14 @@ const Page = ({ slug }) => {
 
   const investigaciones = lineaDeInvestigacion.investigaciones().nodes
 
+  const seo = {
+    title: lineaDeInvestigacion.title(),
+    description: lineaDeInvestigacion.title(),
+    canonical: SITE_URL + lineaDeInvestigacion.uri,
+  }
+
   return (
-    <Layout>
+    <Layout {...{ seo }}>
       <Article>
         <Cover>
           <Container spaceTop>

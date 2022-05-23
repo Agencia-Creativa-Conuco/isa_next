@@ -13,6 +13,8 @@ import CarreraForm from 'templates/carrera/carrera-form'
 import Layout from 'components/layout'
 import { fetchAPI } from 'lib/api'
 
+import { SITE_URL } from 'lib/constants'
+
 const Page = ({ slug }) => {
   const { useQuery } = client
   const carrera = useQuery().carrera({
@@ -26,8 +28,23 @@ const Page = ({ slug }) => {
     .recursos()
     .nodes?.filter((recurso) => recurso.tipo.toString() !== 'pensum')
 
+  const seo = {
+    title: carrera.title(),
+    description: carrera.copy,
+    canonical: SITE_URL + carrera.uri,
+    // noFollow: carrera.seo.metaRobotsNofollow,
+    // noIndex: carrera.seo.metaRobotsNoindex,
+    openGraph: {
+      // type: carrera.seo.opengraphType,
+      images: [
+        {
+          url: `${SITE_URL}/_next/image?url=${carrera.featuredImage.node.mediaItemUrl}&w=1920&q=75`,
+        },
+      ],
+    },
+  }
   return (
-    <Layout {...{ contacto, recursos }}>
+    <Layout {...{ contacto, recursos, seo }}>
       <Article>
         <CarreraCover {...{ carrera }} />
         <CarreraPerfil {...{ carrera }} />

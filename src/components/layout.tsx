@@ -7,6 +7,7 @@ import ResourcesList from './resourceslist'
 import Contact from './contact'
 import PageIndexes from './page-indexes'
 import { client, Recurso } from 'client'
+import { NextSeo } from 'next-seo'
 
 if (typeof window !== 'undefined') {
   // eslint-disable-next-line global-require
@@ -50,6 +51,7 @@ const Layout = (props) => {
 
   return (
     <>
+      <NextSeo {...props.seo} />
       <Header />
 
       <Main>

@@ -3741,6 +3741,12 @@ export interface RootQueryToUserConnectionWhereArgs {
   >;
 }
 
+/** Types of cards */
+export enum SEOCardType {
+  summary = "summary",
+  summary_large_image = "summary_large_image",
+}
+
 /** Input for the sendPasswordResetEmail mutation */
 export interface SendPasswordResetEmailInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -5299,6 +5305,7 @@ export const scalarsEnumsHash: import("gqty").ScalarsEnumsHash = {
   PostStatusEnum: true,
   RecursoIdType: true,
   RelationEnum: true,
+  SEOCardType: true,
   SlideIdType: true,
   String: true,
   TagIdType: true,
@@ -5462,6 +5469,7 @@ export const generatedSchema = {
       __type: "CarreraToRecursoConnection",
       __args: { after: "String", before: "String", first: "Int", last: "Int" },
     },
+    seo: { __type: "PostTypeSEO" },
     slug: { __type: "String" },
     status: { __type: "String" },
     styles: { __type: "String" },
@@ -5506,7 +5514,6 @@ export const generatedSchema = {
     emails: { __type: "[Carrera_Contacto_emails]" },
     fieldGroupName: { __type: "String" },
     horarios: { __type: "[Carrera_Contacto_horarios]" },
-    mostrar: { __type: "Boolean" },
     telefonos: { __type: "[Carrera_Contacto_telefonos]" },
     whatsapp: { __type: "[Carrera_Contacto_whatsapp]" },
   },
@@ -5611,6 +5618,7 @@ export const generatedSchema = {
         where: "CategoryToPostConnectionWhereArgs",
       },
     },
+    seo: { __type: "TaxonomySEO" },
     slug: { __type: "String" },
     taxonomy: { __type: "CategoryToTaxonomyConnectionEdge" },
     taxonomyName: { __type: "String" },
@@ -6721,6 +6729,7 @@ export const generatedSchema = {
     preview: { __type: "DepartamentoToPreviewConnectionEdge" },
     previewRevisionDatabaseId: { __type: "Int" },
     previewRevisionId: { __type: "ID" },
+    seo: { __type: "PostTypeSEO" },
     slug: { __type: "String" },
     status: { __type: "String" },
     styles: { __type: "String" },
@@ -6768,7 +6777,6 @@ export const generatedSchema = {
     emails: { __type: "[Departamento_Contacto_emails]" },
     fieldGroupName: { __type: "String" },
     horarios: { __type: "[Departamento_Contacto_horarios]" },
-    mostrar: { __type: "Boolean" },
     telefonos: { __type: "[Departamento_Contacto_telefonos]" },
     whatsapp: { __type: "[Departamento_Contacto_whatsapp]" },
   },
@@ -6897,6 +6905,7 @@ export const generatedSchema = {
     previewRevisionDatabaseId: { __type: "Int" },
     previewRevisionId: { __type: "ID" },
     puestoDecano: { __type: "String" },
+    seo: { __type: "PostTypeSEO" },
     slug: { __type: "String" },
     status: { __type: "String" },
     styles: { __type: "String" },
@@ -6940,7 +6949,6 @@ export const generatedSchema = {
     emails: { __type: "[Facultad_Contacto_emails]" },
     fieldGroupName: { __type: "String" },
     horarios: { __type: "[Facultad_Contacto_horarios]" },
-    mostrar: { __type: "Boolean" },
     telefonos: { __type: "[Facultad_Contacto_telefonos]" },
     whatsapp: { __type: "[Facultad_Contacto_whatsapp]" },
   },
@@ -7054,6 +7062,7 @@ export const generatedSchema = {
     preview: { __type: "GradoToPreviewConnectionEdge" },
     previewRevisionDatabaseId: { __type: "Int" },
     previewRevisionId: { __type: "ID" },
+    seo: { __type: "PostTypeSEO" },
     slug: { __type: "String" },
     status: { __type: "String" },
     styles: { __type: "String" },
@@ -7105,6 +7114,7 @@ export const generatedSchema = {
   GradoToGrupoDeRequisitosConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
+    isPrimary: { __type: "Boolean" },
     node: { __type: "GrupoDeRequisitos" },
   },
   GradoToGrupoDeRequisitosConnectionWhereArgs: {
@@ -7231,6 +7241,7 @@ export const generatedSchema = {
     isTermNode: { __type: "Boolean!" },
     link: { __type: "String" },
     name: { __type: "String" },
+    seo: { __type: "TaxonomySEO" },
     slug: { __type: "String" },
     taxonomy: { __type: "GrupoDeRequisitosToTaxonomyConnectionEdge" },
     taxonomyName: { __type: "String" },
@@ -7467,6 +7478,7 @@ export const generatedSchema = {
     previewRevisionDatabaseId: { __type: "Int" },
     previewRevisionId: { __type: "ID" },
     resumen: { __type: "String" },
+    seo: { __type: "PostTypeSEO" },
     slug: { __type: "String" },
     status: { __type: "String" },
     styles: { __type: "String" },
@@ -7551,6 +7563,7 @@ export const generatedSchema = {
     previewRevisionDatabaseId: { __type: "Int" },
     previewRevisionId: { __type: "ID" },
     puestoTrabajo: { __type: "String" },
+    seo: { __type: "PostTypeSEO" },
     slug: { __type: "String" },
     status: { __type: "String" },
     styles: { __type: "String" },
@@ -7640,6 +7653,7 @@ export const generatedSchema = {
     preview: { __type: "LineaDeInvestigacionToPreviewConnectionEdge" },
     previewRevisionDatabaseId: { __type: "Int" },
     previewRevisionId: { __type: "ID" },
+    seo: { __type: "PostTypeSEO" },
     slug: { __type: "String" },
     status: { __type: "String" },
     styles: { __type: "String" },
@@ -7766,6 +7780,7 @@ export const generatedSchema = {
     parentId: { __type: "ID" },
     previewRevisionDatabaseId: { __type: "Int" },
     previewRevisionId: { __type: "ID" },
+    seo: { __type: "PostTypeSEO" },
     sizes: { __type: "String", __args: { size: "MediaItemSizeEnum" } },
     slug: { __type: "String" },
     sourceUrl: { __type: "String", __args: { size: "MediaItemSizeEnum" } },
@@ -8182,6 +8197,7 @@ export const generatedSchema = {
         where: "PageToRevisionConnectionWhereArgs",
       },
     },
+    seo: { __type: "PostTypeSEO" },
     slug: { __type: "String" },
     status: { __type: "String" },
     styles: { __type: "String" },
@@ -8279,7 +8295,6 @@ export const generatedSchema = {
     emails: { __type: "[Page_Contacto_emails]" },
     fieldGroupName: { __type: "String" },
     horarios: { __type: "[Page_Contacto_horarios]" },
-    mostrar: { __type: "Boolean" },
     telefonos: { __type: "[Page_Contacto_telefonos]" },
     whatsapp: { __type: "[Page_Contacto_whatsapp]" },
   },
@@ -8369,6 +8384,7 @@ export const generatedSchema = {
     preview: { __type: "PeriodoDeAdmisionToPreviewConnectionEdge" },
     previewRevisionDatabaseId: { __type: "Int" },
     previewRevisionId: { __type: "ID" },
+    seo: { __type: "PostTypeSEO" },
     slug: { __type: "String" },
     status: { __type: "String" },
     styles: { __type: "String" },
@@ -8504,6 +8520,7 @@ export const generatedSchema = {
         where: "PostToRevisionConnectionWhereArgs",
       },
     },
+    seo: { __type: "PostTypeSEO" },
     slug: { __type: "String" },
     status: { __type: "String" },
     styles: { __type: "String" },
@@ -8587,6 +8604,7 @@ export const generatedSchema = {
         where: "PostFormatToPostConnectionWhereArgs",
       },
     },
+    seo: { __type: "TaxonomySEO" },
     slug: { __type: "String" },
     taxonomy: { __type: "PostFormatToTaxonomyConnectionEdge" },
     taxonomyName: { __type: "String" },
@@ -8707,6 +8725,7 @@ export const generatedSchema = {
   PostToCategoryConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
+    isPrimary: { __type: "Boolean" },
     node: { __type: "Category" },
   },
   PostToCategoryConnectionWhereArgs: {
@@ -8782,6 +8801,7 @@ export const generatedSchema = {
   PostToPostFormatConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
+    isPrimary: { __type: "Boolean" },
     node: { __type: "PostFormat" },
   },
   PostToPostFormatConnectionWhereArgs: {
@@ -8863,6 +8883,7 @@ export const generatedSchema = {
   PostToTagConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
+    isPrimary: { __type: "Boolean" },
     node: { __type: "Tag" },
   },
   PostToTagConnectionWhereArgs: {
@@ -8949,6 +8970,34 @@ export const generatedSchema = {
     viewItem: { __type: "String" },
     viewItems: { __type: "String" },
   },
+  PostTypeSEO: {
+    __typename: { __type: "String!" },
+    breadcrumbs: { __type: "[SEOPostTypeBreadcrumbs]" },
+    canonical: { __type: "String" },
+    cornerstone: { __type: "Boolean" },
+    focuskw: { __type: "String" },
+    fullHead: { __type: "String" },
+    metaDesc: { __type: "String" },
+    metaKeywords: { __type: "String" },
+    metaRobotsNofollow: { __type: "String" },
+    metaRobotsNoindex: { __type: "String" },
+    opengraphAuthor: { __type: "String" },
+    opengraphDescription: { __type: "String" },
+    opengraphImage: { __type: "MediaItem" },
+    opengraphModifiedTime: { __type: "String" },
+    opengraphPublishedTime: { __type: "String" },
+    opengraphPublisher: { __type: "String" },
+    opengraphSiteName: { __type: "String" },
+    opengraphTitle: { __type: "String" },
+    opengraphType: { __type: "String" },
+    opengraphUrl: { __type: "String" },
+    readingTime: { __type: "Float" },
+    schema: { __type: "SEOPostTypeSchema" },
+    title: { __type: "String" },
+    twitterDescription: { __type: "String" },
+    twitterImage: { __type: "MediaItem" },
+    twitterTitle: { __type: "String" },
+  },
   Post_Datospublicacion: {
     __typename: { __type: "String!" },
     archivo: { __type: "MediaItem" },
@@ -9016,6 +9065,7 @@ export const generatedSchema = {
     previewRevisionDatabaseId: { __type: "Int" },
     previewRevisionId: { __type: "ID" },
     recursoId: { __type: "Int!" },
+    seo: { __type: "PostTypeSEO" },
     slug: { __type: "String" },
     status: { __type: "String" },
     styles: { __type: "String" },
@@ -9958,6 +10008,209 @@ export const generatedSchema = {
     cursor: { __type: "String" },
     node: { __type: "UserRole" },
   },
+  SEOBreadcrumbs: {
+    __typename: { __type: "String!" },
+    archivePrefix: { __type: "String" },
+    boldLast: { __type: "Boolean" },
+    enabled: { __type: "Boolean" },
+    homeText: { __type: "String" },
+    notFoundText: { __type: "String" },
+    prefix: { __type: "String" },
+    searchPrefix: { __type: "String" },
+    separator: { __type: "String" },
+    showBlogPage: { __type: "Boolean" },
+  },
+  SEOConfig: {
+    __typename: { __type: "String!" },
+    breadcrumbs: { __type: "SEOBreadcrumbs" },
+    contentTypes: { __type: "SEOContentTypes" },
+    openGraph: { __type: "SEOOpenGraph" },
+    redirects: { __type: "[SEORedirect]" },
+    schema: { __type: "SEOSchema" },
+    social: { __type: "SEOSocial" },
+    webmaster: { __type: "SEOWebmaster" },
+  },
+  SEOContentType: {
+    __typename: { __type: "String!" },
+    archive: { __type: "SEOContentTypeArchive" },
+    metaDesc: { __type: "String" },
+    metaRobotsNoindex: { __type: "Boolean" },
+    schema: { __type: "SEOPageInfoSchema" },
+    schemaType: { __type: "String" },
+    title: { __type: "String" },
+  },
+  SEOContentTypeArchive: {
+    __typename: { __type: "String!" },
+    archiveLink: { __type: "String" },
+    breadcrumbTitle: { __type: "String" },
+    fullHead: { __type: "String" },
+    hasArchive: { __type: "Boolean" },
+    metaDesc: { __type: "String" },
+    metaRobotsNoindex: { __type: "Boolean" },
+    title: { __type: "String" },
+  },
+  SEOContentTypes: {
+    __typename: { __type: "String!" },
+    carrera: { __type: "SEOContentType" },
+    departamento: { __type: "SEOContentType" },
+    facultad: { __type: "SEOContentType" },
+    grado: { __type: "SEOContentType" },
+    investigacion: { __type: "SEOContentType" },
+    investigador: { __type: "SEOContentType" },
+    lineaDeInvestigacion: { __type: "SEOContentType" },
+    mediaItem: { __type: "SEOContentType" },
+    page: { __type: "SEOContentType" },
+    periodoDeAdmision: { __type: "SEOContentType" },
+    post: { __type: "SEOContentType" },
+    recurso: { __type: "SEOContentType" },
+    slide: { __type: "SEOContentType" },
+  },
+  SEOOpenGraph: {
+    __typename: { __type: "String!" },
+    defaultImage: { __type: "MediaItem" },
+    frontPage: { __type: "SEOOpenGraphFrontPage" },
+  },
+  SEOOpenGraphFrontPage: {
+    __typename: { __type: "String!" },
+    description: { __type: "String" },
+    image: { __type: "MediaItem" },
+    title: { __type: "String" },
+  },
+  SEOPageInfoSchema: {
+    __typename: { __type: "String!" },
+    raw: { __type: "String" },
+  },
+  SEOPostTypeBreadcrumbs: {
+    __typename: { __type: "String!" },
+    text: { __type: "String" },
+    url: { __type: "String" },
+  },
+  SEOPostTypePageInfo: {
+    __typename: { __type: "String!" },
+    schema: { __type: "SEOPageInfoSchema" },
+  },
+  SEOPostTypeSchema: {
+    __typename: { __type: "String!" },
+    articleType: { __type: "[String]" },
+    pageType: { __type: "[String]" },
+    raw: { __type: "String" },
+  },
+  SEORedirect: {
+    __typename: { __type: "String!" },
+    format: { __type: "String" },
+    origin: { __type: "String" },
+    target: { __type: "String" },
+    type: { __type: "Int" },
+  },
+  SEOSchema: {
+    __typename: { __type: "String!" },
+    companyLogo: { __type: "MediaItem" },
+    companyName: { __type: "String" },
+    companyOrPerson: { __type: "String" },
+    homeUrl: { __type: "String" },
+    inLanguage: { __type: "String" },
+    logo: { __type: "MediaItem" },
+    personLogo: { __type: "MediaItem" },
+    personName: { __type: "String" },
+    siteName: { __type: "String" },
+    siteUrl: { __type: "String" },
+    wordpressSiteName: { __type: "String" },
+  },
+  SEOSocial: {
+    __typename: { __type: "String!" },
+    facebook: { __type: "SEOSocialFacebook" },
+    instagram: { __type: "SEOSocialInstagram" },
+    linkedIn: { __type: "SEOSocialLinkedIn" },
+    mySpace: { __type: "SEOSocialMySpace" },
+    pinterest: { __type: "SEOSocialPinterest" },
+    twitter: { __type: "SEOSocialTwitter" },
+    wikipedia: { __type: "SEOSocialWikipedia" },
+    youTube: { __type: "SEOSocialYoutube" },
+  },
+  SEOSocialFacebook: {
+    __typename: { __type: "String!" },
+    defaultImage: { __type: "MediaItem" },
+    url: { __type: "String" },
+  },
+  SEOSocialInstagram: {
+    __typename: { __type: "String!" },
+    url: { __type: "String" },
+  },
+  SEOSocialLinkedIn: {
+    __typename: { __type: "String!" },
+    url: { __type: "String" },
+  },
+  SEOSocialMySpace: {
+    __typename: { __type: "String!" },
+    url: { __type: "String" },
+  },
+  SEOSocialPinterest: {
+    __typename: { __type: "String!" },
+    metaTag: { __type: "String" },
+    url: { __type: "String" },
+  },
+  SEOSocialTwitter: {
+    __typename: { __type: "String!" },
+    cardType: { __type: "SEOCardType" },
+    username: { __type: "String" },
+  },
+  SEOSocialWikipedia: {
+    __typename: { __type: "String!" },
+    url: { __type: "String" },
+  },
+  SEOSocialYoutube: {
+    __typename: { __type: "String!" },
+    url: { __type: "String" },
+  },
+  SEOTaxonomySchema: {
+    __typename: { __type: "String!" },
+    raw: { __type: "String" },
+  },
+  SEOUser: {
+    __typename: { __type: "String!" },
+    breadcrumbTitle: { __type: "String" },
+    canonical: { __type: "String" },
+    fullHead: { __type: "String" },
+    language: { __type: "String" },
+    metaDesc: { __type: "String" },
+    metaRobotsNofollow: { __type: "String" },
+    metaRobotsNoindex: { __type: "String" },
+    opengraphDescription: { __type: "String" },
+    opengraphImage: { __type: "MediaItem" },
+    opengraphTitle: { __type: "String" },
+    region: { __type: "String" },
+    schema: { __type: "SEOUserSchema" },
+    social: { __type: "SEOUserSocial" },
+    title: { __type: "String" },
+    twitterDescription: { __type: "String" },
+    twitterImage: { __type: "MediaItem" },
+    twitterTitle: { __type: "String" },
+  },
+  SEOUserSchema: {
+    __typename: { __type: "String!" },
+    articleType: { __type: "[String]" },
+    pageType: { __type: "[String]" },
+    raw: { __type: "String" },
+  },
+  SEOUserSocial: {
+    __typename: { __type: "String!" },
+    facebook: { __type: "String" },
+    instagram: { __type: "String" },
+    linkedIn: { __type: "String" },
+    mySpace: { __type: "String" },
+    pinterest: { __type: "String" },
+    soundCloud: { __type: "String" },
+    twitter: { __type: "String" },
+    wikipedia: { __type: "String" },
+    youTube: { __type: "String" },
+  },
+  SEOWebmaster: {
+    __typename: { __type: "String!" },
+    baiduVerify: { __type: "String" },
+    googleVerify: { __type: "String" },
+    msVerify: { __type: "String" },
+    yandexVerify: { __type: "String" },
+  },
   SendPasswordResetEmailInput: {
     clientMutationId: { __type: "String" },
     username: { __type: "String!" },
@@ -10029,6 +10282,7 @@ export const generatedSchema = {
     preview: { __type: "SlideToPreviewConnectionEdge" },
     previewRevisionDatabaseId: { __type: "Int" },
     previewRevisionId: { __type: "ID" },
+    seo: { __type: "PostTypeSEO" },
     slideId: { __type: "Int!" },
     slug: { __type: "String" },
     status: { __type: "String" },
@@ -10091,6 +10345,7 @@ export const generatedSchema = {
         where: "TagToPostConnectionWhereArgs",
       },
     },
+    seo: { __type: "TaxonomySEO" },
     slug: { __type: "String" },
     tagId: { __type: "Int" },
     taxonomy: { __type: "TagToTaxonomyConnectionEdge" },
@@ -10204,6 +10459,33 @@ export const generatedSchema = {
     showInQuickEdit: { __type: "Boolean" },
     showInRest: { __type: "Boolean" },
     showUi: { __type: "Boolean" },
+  },
+  TaxonomySEO: {
+    __typename: { __type: "String!" },
+    breadcrumbs: { __type: "[SEOPostTypeBreadcrumbs]" },
+    canonical: { __type: "String" },
+    cornerstone: { __type: "Boolean" },
+    focuskw: { __type: "String" },
+    fullHead: { __type: "String" },
+    metaDesc: { __type: "String" },
+    metaKeywords: { __type: "String" },
+    metaRobotsNofollow: { __type: "String" },
+    metaRobotsNoindex: { __type: "String" },
+    opengraphAuthor: { __type: "String" },
+    opengraphDescription: { __type: "String" },
+    opengraphImage: { __type: "MediaItem" },
+    opengraphModifiedTime: { __type: "String" },
+    opengraphPublishedTime: { __type: "String" },
+    opengraphPublisher: { __type: "String" },
+    opengraphSiteName: { __type: "String" },
+    opengraphTitle: { __type: "String" },
+    opengraphType: { __type: "String" },
+    opengraphUrl: { __type: "String" },
+    schema: { __type: "SEOTaxonomySchema" },
+    title: { __type: "String" },
+    twitterDescription: { __type: "String" },
+    twitterImage: { __type: "MediaItem" },
+    twitterTitle: { __type: "String" },
   },
   TaxonomyToContentTypeConnection: {
     __typename: { __type: "String!" },
@@ -10862,6 +11144,7 @@ export const generatedSchema = {
       __type: "UserToUserRoleConnection",
       __args: { after: "String", before: "String", first: "Int", last: "Int" },
     },
+    seo: { __type: "SEOUser" },
     slides: {
       __type: "UserToSlideConnection",
       __args: {
@@ -11454,6 +11737,7 @@ export const generatedSchema = {
     endCursor: { __type: "String" },
     hasNextPage: { __type: "Boolean!" },
     hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
     startCursor: { __type: "String" },
   },
   WritingSettings: {
@@ -12128,6 +12412,7 @@ export const generatedSchema = {
         where: "RootQueryToContentRevisionUnionConnectionWhereArgs",
       },
     },
+    seo: { __type: "SEOConfig" },
     slide: {
       __type: "Slide",
       __args: { asPreview: "Boolean", id: "ID!", idType: "SlideIdType" },
@@ -12925,6 +13210,10 @@ export interface Carrera {
     last?: Maybe<Scalars["Int"]>;
   }) => Maybe<CarreraToRecursoConnection>;
   /**
+   * The Yoast SEO data of the carrera
+   */
+  seo?: Maybe<PostTypeSEO>;
+  /**
    * The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
    */
   slug?: Maybe<ScalarsEnums["String"]>;
@@ -13046,7 +13335,6 @@ export interface Carrera_Contacto {
    */
   fieldGroupName?: Maybe<ScalarsEnums["String"]>;
   horarios?: Maybe<Array<Maybe<Carrera_Contacto_horarios>>>;
-  mostrar?: Maybe<ScalarsEnums["Boolean"]>;
   telefonos?: Maybe<Array<Maybe<Carrera_Contacto_telefonos>>>;
   whatsapp?: Maybe<Array<Maybe<Carrera_Contacto_whatsapp>>>;
 }
@@ -13350,6 +13638,10 @@ export interface Category {
      */
     where?: Maybe<CategoryToPostConnectionWhereArgs>;
   }) => Maybe<CategoryToPostConnection>;
+  /**
+   * The Yoast SEO data of the Categories taxonomy.
+   */
+  seo?: Maybe<TaxonomySEO>;
   /**
    * An alphanumeric identifier for the object unique to its type.
    */
@@ -15366,6 +15658,10 @@ export interface Departamento {
    */
   previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
   /**
+   * The Yoast SEO data of the departamento
+   */
+  seo?: Maybe<PostTypeSEO>;
+  /**
    * The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
    */
   slug?: Maybe<ScalarsEnums["String"]>;
@@ -15499,7 +15795,6 @@ export interface Departamento_Contacto {
    */
   fieldGroupName?: Maybe<ScalarsEnums["String"]>;
   horarios?: Maybe<Array<Maybe<Departamento_Contacto_horarios>>>;
-  mostrar?: Maybe<ScalarsEnums["Boolean"]>;
   telefonos?: Maybe<Array<Maybe<Departamento_Contacto_telefonos>>>;
   whatsapp?: Maybe<Array<Maybe<Departamento_Contacto_whatsapp>>>;
 }
@@ -15921,6 +16216,10 @@ export interface Facultad {
   previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
   puestoDecano?: Maybe<ScalarsEnums["String"]>;
   /**
+   * The Yoast SEO data of the facultad
+   */
+  seo?: Maybe<PostTypeSEO>;
+  /**
    * The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
    */
   slug?: Maybe<ScalarsEnums["String"]>;
@@ -16043,7 +16342,6 @@ export interface Facultad_Contacto {
    */
   fieldGroupName?: Maybe<ScalarsEnums["String"]>;
   horarios?: Maybe<Array<Maybe<Facultad_Contacto_horarios>>>;
-  mostrar?: Maybe<ScalarsEnums["Boolean"]>;
   telefonos?: Maybe<Array<Maybe<Facultad_Contacto_telefonos>>>;
   whatsapp?: Maybe<Array<Maybe<Facultad_Contacto_whatsapp>>>;
 }
@@ -16393,6 +16691,10 @@ export interface Grado {
    */
   previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
   /**
+   * The Yoast SEO data of the grado
+   */
+  seo?: Maybe<PostTypeSEO>;
+  /**
    * The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
    */
   slug?: Maybe<ScalarsEnums["String"]>;
@@ -16511,6 +16813,10 @@ export interface GradoToGrupoDeRequisitosConnectionEdge {
    * A cursor for use in pagination
    */
   cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The Yoast SEO Primary gruposderequisitos
+   */
+  isPrimary?: Maybe<ScalarsEnums["Boolean"]>;
   /**
    * The item at the end of the edge
    */
@@ -16755,6 +17061,10 @@ export interface GrupoDeRequisitos {
    * The human friendly name of the object.
    */
   name?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The Yoast SEO data of the Grupos De Requisitos taxonomy.
+   */
+  seo?: Maybe<TaxonomySEO>;
   /**
    * An alphanumeric identifier for the object unique to its type.
    */
@@ -17232,6 +17542,10 @@ export interface Investigacion {
   previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
   resumen?: Maybe<ScalarsEnums["String"]>;
   /**
+   * The Yoast SEO data of the investigacion
+   */
+  seo?: Maybe<PostTypeSEO>;
+  /**
    * The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
    */
   slug?: Maybe<ScalarsEnums["String"]>;
@@ -17526,6 +17840,10 @@ export interface Investigador {
   previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
   puestoTrabajo?: Maybe<ScalarsEnums["String"]>;
   /**
+   * The Yoast SEO data of the investigador
+   */
+  seo?: Maybe<PostTypeSEO>;
+  /**
    * The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
    */
   slug?: Maybe<ScalarsEnums["String"]>;
@@ -17811,6 +18129,10 @@ export interface LineaDeInvestigacion {
    * Whether the object is a node in the preview state
    */
   previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
+  /**
+   * The Yoast SEO data of the lineaDeInvestigacion
+   */
+  seo?: Maybe<PostTypeSEO>;
   /**
    * The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
    */
@@ -18218,6 +18540,10 @@ export interface MediaItem {
    * Whether the object is a node in the preview state
    */
   previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
+  /**
+   * The Yoast SEO data of the mediaItem
+   */
+  seo?: Maybe<PostTypeSEO>;
   /**
    * The sizes attribute value for an image.
    */
@@ -19485,6 +19811,10 @@ export interface Page {
     where?: Maybe<PageToRevisionConnectionWhereArgs>;
   }) => Maybe<PageToRevisionConnection>;
   /**
+   * The Yoast SEO data of the page
+   */
+  seo?: Maybe<PostTypeSEO>;
+  /**
    * The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
    */
   slug?: Maybe<ScalarsEnums["String"]>;
@@ -19607,7 +19937,6 @@ export interface Page_Contacto {
    */
   fieldGroupName?: Maybe<ScalarsEnums["String"]>;
   horarios?: Maybe<Array<Maybe<Page_Contacto_horarios>>>;
-  mostrar?: Maybe<ScalarsEnums["Boolean"]>;
   telefonos?: Maybe<Array<Maybe<Page_Contacto_telefonos>>>;
   whatsapp?: Maybe<Array<Maybe<Page_Contacto_whatsapp>>>;
 }
@@ -19872,6 +20201,10 @@ export interface PeriodoDeAdmision {
    * Whether the object is a node in the preview state
    */
   previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
+  /**
+   * The Yoast SEO data of the periodoDeAdmision
+   */
+  seo?: Maybe<PostTypeSEO>;
   /**
    * The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
    */
@@ -20301,6 +20634,10 @@ export interface Post {
     where?: Maybe<PostToRevisionConnectionWhereArgs>;
   }) => Maybe<PostToRevisionConnection>;
   /**
+   * The Yoast SEO data of the post
+   */
+  seo?: Maybe<PostTypeSEO>;
+  /**
    * The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
    */
   slug?: Maybe<ScalarsEnums["String"]>;
@@ -20529,6 +20866,10 @@ export interface PostFormat {
     where?: Maybe<PostFormatToPostConnectionWhereArgs>;
   }) => Maybe<PostFormatToPostConnection>;
   /**
+   * The Yoast SEO data of the Formats taxonomy.
+   */
+  seo?: Maybe<TaxonomySEO>;
+  /**
    * An alphanumeric identifier for the object unique to its type.
    */
   slug?: Maybe<ScalarsEnums["String"]>;
@@ -20663,6 +21004,10 @@ export interface PostToCategoryConnectionEdge {
    */
   cursor?: Maybe<ScalarsEnums["String"]>;
   /**
+   * The Yoast SEO Primary category
+   */
+  isPrimary?: Maybe<ScalarsEnums["Boolean"]>;
+  /**
    * The item at the end of the edge
    */
   node?: Maybe<Category>;
@@ -20730,6 +21075,10 @@ export interface PostToPostFormatConnectionEdge {
    * A cursor for use in pagination
    */
   cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The Yoast SEO Primary post_format
+   */
+  isPrimary?: Maybe<ScalarsEnums["Boolean"]>;
   /**
    * The item at the end of the edge
    */
@@ -20809,6 +21158,10 @@ export interface PostToTagConnectionEdge {
    * A cursor for use in pagination
    */
   cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The Yoast SEO Primary post_tag
+   */
+  isPrimary?: Maybe<ScalarsEnums["Boolean"]>;
   /**
    * The item at the end of the edge
    */
@@ -20954,6 +21307,35 @@ export interface PostTypeLabelDetails {
    * Label for viewing post type archives.
    */
   viewItems?: Maybe<ScalarsEnums["String"]>;
+}
+
+export interface PostTypeSEO {
+  __typename?: "PostTypeSEO";
+  breadcrumbs?: Maybe<Array<Maybe<SEOPostTypeBreadcrumbs>>>;
+  canonical?: Maybe<ScalarsEnums["String"]>;
+  cornerstone?: Maybe<ScalarsEnums["Boolean"]>;
+  focuskw?: Maybe<ScalarsEnums["String"]>;
+  fullHead?: Maybe<ScalarsEnums["String"]>;
+  metaDesc?: Maybe<ScalarsEnums["String"]>;
+  metaKeywords?: Maybe<ScalarsEnums["String"]>;
+  metaRobotsNofollow?: Maybe<ScalarsEnums["String"]>;
+  metaRobotsNoindex?: Maybe<ScalarsEnums["String"]>;
+  opengraphAuthor?: Maybe<ScalarsEnums["String"]>;
+  opengraphDescription?: Maybe<ScalarsEnums["String"]>;
+  opengraphImage?: Maybe<MediaItem>;
+  opengraphModifiedTime?: Maybe<ScalarsEnums["String"]>;
+  opengraphPublishedTime?: Maybe<ScalarsEnums["String"]>;
+  opengraphPublisher?: Maybe<ScalarsEnums["String"]>;
+  opengraphSiteName?: Maybe<ScalarsEnums["String"]>;
+  opengraphTitle?: Maybe<ScalarsEnums["String"]>;
+  opengraphType?: Maybe<ScalarsEnums["String"]>;
+  opengraphUrl?: Maybe<ScalarsEnums["String"]>;
+  readingTime?: Maybe<ScalarsEnums["Float"]>;
+  schema?: Maybe<SEOPostTypeSchema>;
+  title?: Maybe<ScalarsEnums["String"]>;
+  twitterDescription?: Maybe<ScalarsEnums["String"]>;
+  twitterImage?: Maybe<MediaItem>;
+  twitterTitle?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -21189,6 +21571,10 @@ export interface Recurso {
    * @deprecated Deprecated in favor of the databaseId field
    */
   recursoId: ScalarsEnums["Int"];
+  /**
+   * The Yoast SEO data of the recurso
+   */
+  seo?: Maybe<PostTypeSEO>;
   /**
    * The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
    */
@@ -22383,6 +22769,284 @@ export interface RootQueryToUserRoleConnectionEdge {
 }
 
 /**
+ * The Yoast SEO breadcrumb config
+ */
+export interface SEOBreadcrumbs {
+  __typename?: "SEOBreadcrumbs";
+  archivePrefix?: Maybe<ScalarsEnums["String"]>;
+  boldLast?: Maybe<ScalarsEnums["Boolean"]>;
+  enabled?: Maybe<ScalarsEnums["Boolean"]>;
+  homeText?: Maybe<ScalarsEnums["String"]>;
+  notFoundText?: Maybe<ScalarsEnums["String"]>;
+  prefix?: Maybe<ScalarsEnums["String"]>;
+  searchPrefix?: Maybe<ScalarsEnums["String"]>;
+  separator?: Maybe<ScalarsEnums["String"]>;
+  showBlogPage?: Maybe<ScalarsEnums["Boolean"]>;
+}
+
+/**
+ * The Yoast SEO site level configuration data
+ */
+export interface SEOConfig {
+  __typename?: "SEOConfig";
+  breadcrumbs?: Maybe<SEOBreadcrumbs>;
+  contentTypes?: Maybe<SEOContentTypes>;
+  openGraph?: Maybe<SEOOpenGraph>;
+  redirects?: Maybe<Array<Maybe<SEORedirect>>>;
+  schema?: Maybe<SEOSchema>;
+  social?: Maybe<SEOSocial>;
+  webmaster?: Maybe<SEOWebmaster>;
+}
+
+/**
+ * he Yoast SEO search appearance content types fields
+ */
+export interface SEOContentType {
+  __typename?: "SEOContentType";
+  archive?: Maybe<SEOContentTypeArchive>;
+  metaDesc?: Maybe<ScalarsEnums["String"]>;
+  metaRobotsNoindex?: Maybe<ScalarsEnums["Boolean"]>;
+  schema?: Maybe<SEOPageInfoSchema>;
+  schemaType?: Maybe<ScalarsEnums["String"]>;
+  title?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * he Yoast SEO search appearance content types fields
+ */
+export interface SEOContentTypeArchive {
+  __typename?: "SEOContentTypeArchive";
+  archiveLink?: Maybe<ScalarsEnums["String"]>;
+  breadcrumbTitle?: Maybe<ScalarsEnums["String"]>;
+  fullHead?: Maybe<ScalarsEnums["String"]>;
+  hasArchive?: Maybe<ScalarsEnums["Boolean"]>;
+  metaDesc?: Maybe<ScalarsEnums["String"]>;
+  metaRobotsNoindex?: Maybe<ScalarsEnums["Boolean"]>;
+  title?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * The Yoast SEO search appearance content types
+ */
+export interface SEOContentTypes {
+  __typename?: "SEOContentTypes";
+  carrera?: Maybe<SEOContentType>;
+  departamento?: Maybe<SEOContentType>;
+  facultad?: Maybe<SEOContentType>;
+  grado?: Maybe<SEOContentType>;
+  investigacion?: Maybe<SEOContentType>;
+  investigador?: Maybe<SEOContentType>;
+  lineaDeInvestigacion?: Maybe<SEOContentType>;
+  mediaItem?: Maybe<SEOContentType>;
+  page?: Maybe<SEOContentType>;
+  periodoDeAdmision?: Maybe<SEOContentType>;
+  post?: Maybe<SEOContentType>;
+  recurso?: Maybe<SEOContentType>;
+  slide?: Maybe<SEOContentType>;
+}
+
+/**
+ * The Open Graph data
+ */
+export interface SEOOpenGraph {
+  __typename?: "SEOOpenGraph";
+  defaultImage?: Maybe<MediaItem>;
+  frontPage?: Maybe<SEOOpenGraphFrontPage>;
+}
+
+/**
+ * The Open Graph Front page data
+ */
+export interface SEOOpenGraphFrontPage {
+  __typename?: "SEOOpenGraphFrontPage";
+  description?: Maybe<ScalarsEnums["String"]>;
+  image?: Maybe<MediaItem>;
+  title?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * The Schema for post type
+ */
+export interface SEOPageInfoSchema {
+  __typename?: "SEOPageInfoSchema";
+  raw?: Maybe<ScalarsEnums["String"]>;
+}
+
+export interface SEOPostTypeBreadcrumbs {
+  __typename?: "SEOPostTypeBreadcrumbs";
+  text?: Maybe<ScalarsEnums["String"]>;
+  url?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * The page info SEO details
+ */
+export interface SEOPostTypePageInfo {
+  __typename?: "SEOPostTypePageInfo";
+  schema?: Maybe<SEOPageInfoSchema>;
+}
+
+/**
+ * The Schema types
+ */
+export interface SEOPostTypeSchema {
+  __typename?: "SEOPostTypeSchema";
+  articleType?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
+  pageType?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
+  raw?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * The Yoast redirect data  (Yoast Premium only)
+ */
+export interface SEORedirect {
+  __typename?: "SEORedirect";
+  format?: Maybe<ScalarsEnums["String"]>;
+  origin?: Maybe<ScalarsEnums["String"]>;
+  target?: Maybe<ScalarsEnums["String"]>;
+  type?: Maybe<ScalarsEnums["Int"]>;
+}
+
+/**
+ * The Yoast SEO schema data
+ */
+export interface SEOSchema {
+  __typename?: "SEOSchema";
+  companyLogo?: Maybe<MediaItem>;
+  companyName?: Maybe<ScalarsEnums["String"]>;
+  companyOrPerson?: Maybe<ScalarsEnums["String"]>;
+  homeUrl?: Maybe<ScalarsEnums["String"]>;
+  inLanguage?: Maybe<ScalarsEnums["String"]>;
+  logo?: Maybe<MediaItem>;
+  personLogo?: Maybe<MediaItem>;
+  personName?: Maybe<ScalarsEnums["String"]>;
+  siteName?: Maybe<ScalarsEnums["String"]>;
+  siteUrl?: Maybe<ScalarsEnums["String"]>;
+  wordpressSiteName?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * The Yoast SEO Social media links
+ */
+export interface SEOSocial {
+  __typename?: "SEOSocial";
+  facebook?: Maybe<SEOSocialFacebook>;
+  instagram?: Maybe<SEOSocialInstagram>;
+  linkedIn?: Maybe<SEOSocialLinkedIn>;
+  mySpace?: Maybe<SEOSocialMySpace>;
+  pinterest?: Maybe<SEOSocialPinterest>;
+  twitter?: Maybe<SEOSocialTwitter>;
+  wikipedia?: Maybe<SEOSocialWikipedia>;
+  youTube?: Maybe<SEOSocialYoutube>;
+}
+
+export interface SEOSocialFacebook {
+  __typename?: "SEOSocialFacebook";
+  defaultImage?: Maybe<MediaItem>;
+  url?: Maybe<ScalarsEnums["String"]>;
+}
+
+export interface SEOSocialInstagram {
+  __typename?: "SEOSocialInstagram";
+  url?: Maybe<ScalarsEnums["String"]>;
+}
+
+export interface SEOSocialLinkedIn {
+  __typename?: "SEOSocialLinkedIn";
+  url?: Maybe<ScalarsEnums["String"]>;
+}
+
+export interface SEOSocialMySpace {
+  __typename?: "SEOSocialMySpace";
+  url?: Maybe<ScalarsEnums["String"]>;
+}
+
+export interface SEOSocialPinterest {
+  __typename?: "SEOSocialPinterest";
+  metaTag?: Maybe<ScalarsEnums["String"]>;
+  url?: Maybe<ScalarsEnums["String"]>;
+}
+
+export interface SEOSocialTwitter {
+  __typename?: "SEOSocialTwitter";
+  cardType?: Maybe<ScalarsEnums["SEOCardType"]>;
+  username?: Maybe<ScalarsEnums["String"]>;
+}
+
+export interface SEOSocialWikipedia {
+  __typename?: "SEOSocialWikipedia";
+  url?: Maybe<ScalarsEnums["String"]>;
+}
+
+export interface SEOSocialYoutube {
+  __typename?: "SEOSocialYoutube";
+  url?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * The Schema types for Taxonomy
+ */
+export interface SEOTaxonomySchema {
+  __typename?: "SEOTaxonomySchema";
+  raw?: Maybe<ScalarsEnums["String"]>;
+}
+
+export interface SEOUser {
+  __typename?: "SEOUser";
+  breadcrumbTitle?: Maybe<ScalarsEnums["String"]>;
+  canonical?: Maybe<ScalarsEnums["String"]>;
+  fullHead?: Maybe<ScalarsEnums["String"]>;
+  language?: Maybe<ScalarsEnums["String"]>;
+  metaDesc?: Maybe<ScalarsEnums["String"]>;
+  metaRobotsNofollow?: Maybe<ScalarsEnums["String"]>;
+  metaRobotsNoindex?: Maybe<ScalarsEnums["String"]>;
+  opengraphDescription?: Maybe<ScalarsEnums["String"]>;
+  opengraphImage?: Maybe<MediaItem>;
+  opengraphTitle?: Maybe<ScalarsEnums["String"]>;
+  region?: Maybe<ScalarsEnums["String"]>;
+  schema?: Maybe<SEOUserSchema>;
+  social?: Maybe<SEOUserSocial>;
+  title?: Maybe<ScalarsEnums["String"]>;
+  twitterDescription?: Maybe<ScalarsEnums["String"]>;
+  twitterImage?: Maybe<MediaItem>;
+  twitterTitle?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * The Schema types for User
+ */
+export interface SEOUserSchema {
+  __typename?: "SEOUserSchema";
+  articleType?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
+  pageType?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
+  raw?: Maybe<ScalarsEnums["String"]>;
+}
+
+export interface SEOUserSocial {
+  __typename?: "SEOUserSocial";
+  facebook?: Maybe<ScalarsEnums["String"]>;
+  instagram?: Maybe<ScalarsEnums["String"]>;
+  linkedIn?: Maybe<ScalarsEnums["String"]>;
+  mySpace?: Maybe<ScalarsEnums["String"]>;
+  pinterest?: Maybe<ScalarsEnums["String"]>;
+  soundCloud?: Maybe<ScalarsEnums["String"]>;
+  twitter?: Maybe<ScalarsEnums["String"]>;
+  wikipedia?: Maybe<ScalarsEnums["String"]>;
+  youTube?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * The Yoast SEO  webmaster fields
+ */
+export interface SEOWebmaster {
+  __typename?: "SEOWebmaster";
+  baiduVerify?: Maybe<ScalarsEnums["String"]>;
+  googleVerify?: Maybe<ScalarsEnums["String"]>;
+  msVerify?: Maybe<ScalarsEnums["String"]>;
+  yandexVerify?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
  * The payload for the sendPasswordResetEmail mutation
  */
 export interface SendPasswordResetEmailPayload {
@@ -22636,6 +23300,10 @@ export interface Slide {
    */
   previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
   /**
+   * The Yoast SEO data of the slide
+   */
+  seo?: Maybe<PostTypeSEO>;
+  /**
    * The id field matches the WP_Post-&gt;ID field.
    * @deprecated Deprecated in favor of the databaseId field
    */
@@ -22833,6 +23501,10 @@ export interface Tag {
      */
     where?: Maybe<TagToPostConnectionWhereArgs>;
   }) => Maybe<TagToPostConnection>;
+  /**
+   * The Yoast SEO data of the Tags taxonomy.
+   */
+  seo?: Maybe<TaxonomySEO>;
   /**
    * An alphanumeric identifier for the object unique to its type.
    */
@@ -23046,6 +23718,34 @@ export interface Taxonomy {
    * Whether to generate and allow a UI for managing terms in this taxonomy in the admin
    */
   showUi?: Maybe<ScalarsEnums["Boolean"]>;
+}
+
+export interface TaxonomySEO {
+  __typename?: "TaxonomySEO";
+  breadcrumbs?: Maybe<Array<Maybe<SEOPostTypeBreadcrumbs>>>;
+  canonical?: Maybe<ScalarsEnums["String"]>;
+  cornerstone?: Maybe<ScalarsEnums["Boolean"]>;
+  focuskw?: Maybe<ScalarsEnums["String"]>;
+  fullHead?: Maybe<ScalarsEnums["String"]>;
+  metaDesc?: Maybe<ScalarsEnums["String"]>;
+  metaKeywords?: Maybe<ScalarsEnums["String"]>;
+  metaRobotsNofollow?: Maybe<ScalarsEnums["String"]>;
+  metaRobotsNoindex?: Maybe<ScalarsEnums["String"]>;
+  opengraphAuthor?: Maybe<ScalarsEnums["String"]>;
+  opengraphDescription?: Maybe<ScalarsEnums["String"]>;
+  opengraphImage?: Maybe<MediaItem>;
+  opengraphModifiedTime?: Maybe<ScalarsEnums["String"]>;
+  opengraphPublishedTime?: Maybe<ScalarsEnums["String"]>;
+  opengraphPublisher?: Maybe<ScalarsEnums["String"]>;
+  opengraphSiteName?: Maybe<ScalarsEnums["String"]>;
+  opengraphTitle?: Maybe<ScalarsEnums["String"]>;
+  opengraphType?: Maybe<ScalarsEnums["String"]>;
+  opengraphUrl?: Maybe<ScalarsEnums["String"]>;
+  schema?: Maybe<SEOTaxonomySchema>;
+  title?: Maybe<ScalarsEnums["String"]>;
+  twitterDescription?: Maybe<ScalarsEnums["String"]>;
+  twitterImage?: Maybe<MediaItem>;
+  twitterTitle?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -24193,6 +24893,10 @@ export interface User {
     last?: Maybe<Scalars["Int"]>;
   }) => Maybe<UserToUserRoleConnection>;
   /**
+   * The Yoast SEO data of a user
+   */
+  seo?: Maybe<SEOUser>;
+  /**
    * Connection between the User type and the slide type
    */
   slides: (args?: {
@@ -24898,6 +25602,10 @@ export interface WPPageInfo {
    */
   hasPreviousPage: ScalarsEnums["Boolean"];
   /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
    * When paginating backwards, the cursor to continue.
    */
   startCursor?: Maybe<ScalarsEnums["String"]>;
@@ -25425,6 +26133,7 @@ export interface Query {
     last?: Maybe<Scalars["Int"]>;
     where?: Maybe<RootQueryToContentRevisionUnionConnectionWhereArgs>;
   }) => Maybe<RootQueryToContentRevisionUnionConnection>;
+  seo?: Maybe<SEOConfig>;
   slide: (args: {
     asPreview?: Maybe<Scalars["Boolean"]>;
     id: Scalars["ID"];
@@ -25738,6 +26447,7 @@ export interface SchemaObjectTypes {
   PostToTermNodeConnection: PostToTermNodeConnection;
   PostToTermNodeConnectionEdge: PostToTermNodeConnectionEdge;
   PostTypeLabelDetails: PostTypeLabelDetails;
+  PostTypeSEO: PostTypeSEO;
   Post_Datospublicacion: Post_Datospublicacion;
   Post_Datospublicacion_DatosDelEvento: Post_Datospublicacion_DatosDelEvento;
   Query: Query;
@@ -25812,6 +26522,33 @@ export interface SchemaObjectTypes {
   RootQueryToUserConnectionEdge: RootQueryToUserConnectionEdge;
   RootQueryToUserRoleConnection: RootQueryToUserRoleConnection;
   RootQueryToUserRoleConnectionEdge: RootQueryToUserRoleConnectionEdge;
+  SEOBreadcrumbs: SEOBreadcrumbs;
+  SEOConfig: SEOConfig;
+  SEOContentType: SEOContentType;
+  SEOContentTypeArchive: SEOContentTypeArchive;
+  SEOContentTypes: SEOContentTypes;
+  SEOOpenGraph: SEOOpenGraph;
+  SEOOpenGraphFrontPage: SEOOpenGraphFrontPage;
+  SEOPageInfoSchema: SEOPageInfoSchema;
+  SEOPostTypeBreadcrumbs: SEOPostTypeBreadcrumbs;
+  SEOPostTypePageInfo: SEOPostTypePageInfo;
+  SEOPostTypeSchema: SEOPostTypeSchema;
+  SEORedirect: SEORedirect;
+  SEOSchema: SEOSchema;
+  SEOSocial: SEOSocial;
+  SEOSocialFacebook: SEOSocialFacebook;
+  SEOSocialInstagram: SEOSocialInstagram;
+  SEOSocialLinkedIn: SEOSocialLinkedIn;
+  SEOSocialMySpace: SEOSocialMySpace;
+  SEOSocialPinterest: SEOSocialPinterest;
+  SEOSocialTwitter: SEOSocialTwitter;
+  SEOSocialWikipedia: SEOSocialWikipedia;
+  SEOSocialYoutube: SEOSocialYoutube;
+  SEOTaxonomySchema: SEOTaxonomySchema;
+  SEOUser: SEOUser;
+  SEOUserSchema: SEOUserSchema;
+  SEOUserSocial: SEOUserSocial;
+  SEOWebmaster: SEOWebmaster;
   SendPasswordResetEmailPayload: SendPasswordResetEmailPayload;
   Settings: Settings;
   Slide: Slide;
@@ -25825,6 +26562,7 @@ export interface SchemaObjectTypes {
   TagToPostConnectionEdge: TagToPostConnectionEdge;
   TagToTaxonomyConnectionEdge: TagToTaxonomyConnectionEdge;
   Taxonomy: Taxonomy;
+  TaxonomySEO: TaxonomySEO;
   TaxonomyToContentTypeConnection: TaxonomyToContentTypeConnection;
   TaxonomyToContentTypeConnectionEdge: TaxonomyToContentTypeConnectionEdge;
   TermNodeToEnqueuedScriptConnection: TermNodeToEnqueuedScriptConnection;
@@ -26125,6 +26863,7 @@ export type SchemaObjectTypesNames =
   | "PostToTermNodeConnection"
   | "PostToTermNodeConnectionEdge"
   | "PostTypeLabelDetails"
+  | "PostTypeSEO"
   | "Post_Datospublicacion"
   | "Post_Datospublicacion_DatosDelEvento"
   | "Query"
@@ -26199,6 +26938,33 @@ export type SchemaObjectTypesNames =
   | "RootQueryToUserConnectionEdge"
   | "RootQueryToUserRoleConnection"
   | "RootQueryToUserRoleConnectionEdge"
+  | "SEOBreadcrumbs"
+  | "SEOConfig"
+  | "SEOContentType"
+  | "SEOContentTypeArchive"
+  | "SEOContentTypes"
+  | "SEOOpenGraph"
+  | "SEOOpenGraphFrontPage"
+  | "SEOPageInfoSchema"
+  | "SEOPostTypeBreadcrumbs"
+  | "SEOPostTypePageInfo"
+  | "SEOPostTypeSchema"
+  | "SEORedirect"
+  | "SEOSchema"
+  | "SEOSocial"
+  | "SEOSocialFacebook"
+  | "SEOSocialInstagram"
+  | "SEOSocialLinkedIn"
+  | "SEOSocialMySpace"
+  | "SEOSocialPinterest"
+  | "SEOSocialTwitter"
+  | "SEOSocialWikipedia"
+  | "SEOSocialYoutube"
+  | "SEOTaxonomySchema"
+  | "SEOUser"
+  | "SEOUserSchema"
+  | "SEOUserSocial"
+  | "SEOWebmaster"
   | "SendPasswordResetEmailPayload"
   | "Settings"
   | "Slide"
@@ -26212,6 +26978,7 @@ export type SchemaObjectTypesNames =
   | "TagToPostConnectionEdge"
   | "TagToTaxonomyConnectionEdge"
   | "Taxonomy"
+  | "TaxonomySEO"
   | "TaxonomyToContentTypeConnection"
   | "TaxonomyToContentTypeConnectionEdge"
   | "TermNodeToEnqueuedScriptConnection"
@@ -26626,6 +27393,7 @@ export interface ScalarsEnums extends MakeNullable<Scalars> {
   PostStatusEnum: PostStatusEnum | undefined;
   RecursoIdType: RecursoIdType | undefined;
   RelationEnum: RelationEnum | undefined;
+  SEOCardType: SEOCardType | undefined;
   SlideIdType: SlideIdType | undefined;
   TagIdType: TagIdType | undefined;
   TaxonomyEnum: TaxonomyEnum | undefined;

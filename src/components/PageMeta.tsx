@@ -1,6 +1,5 @@
 import React from 'react'
 import { client } from 'client'
-import { useRouter } from 'next/router'
 import { PageIdType } from '@faustjs/core/client'
 
 interface PageProps {
@@ -17,11 +16,13 @@ const PageMeta = ({ children, uri, ...props }: PageProps) => {
   const recursos = page?.datosRecursos?.relacion?.map(
     (item) => item.$on.Recurso,
   )
+  const seo = page?.seo
 
-  const p = {
+  const propiedades = {
     ...props,
     contacto,
     recursos,
+    seo,
   }
 
   return (
@@ -29,7 +30,7 @@ const PageMeta = ({ children, uri, ...props }: PageProps) => {
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           return React.cloneElement(child, {
-            ...p,
+            ...propiedades,
           })
         }
         return child
