@@ -30,18 +30,14 @@ const Form = ({
   const [active, setActive] = useState(0)
   const [displayedForms, setDisplayedForms] = useState([])
 
-  const forms = formIds.length ? formIds : [formId]
+  const forms = formIds?.length ? formIds : [formId]
 
   const manageFormSubmit = () => {
-    // const element = document.getElementById(id);
-
     if (active < forms.length - 1) {
       setActive(active + 1)
     } else {
       setSubmited(true)
     }
-
-    // scrollTo(`#${id}`)
   }
 
   useEffect(() => {
@@ -91,10 +87,10 @@ const Form = ({
               )
             })}
           </FormDots>
-          {forms.map((form, index) => {
+          {forms.map((form: string, index) => {
             const isVisible = active === index
 
-            return isVisible ? (
+            return isVisible && form ? (
               <FormContainer
                 key={index}
                 id={index.toString()}
