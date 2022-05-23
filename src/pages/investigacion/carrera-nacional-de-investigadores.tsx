@@ -7,6 +7,8 @@ import Layout from '../../components/layout'
 import colors from 'components/colors'
 import { container, mq } from 'components/grid'
 import PageMeta from 'components/PageMeta'
+import { SITE_URL } from 'lib/constants'
+import { useRouter } from 'next/router'
 
 const CarreraNacionalDeInvestigadores = (props) => {
   const { useQuery } = client
@@ -20,16 +22,19 @@ const CarreraNacionalDeInvestigadores = (props) => {
     )
 
   const title = 'Miembros De La Carrera Nacional De Investigadores UNISA'
-
-  const metaData = {
-    title: 'Carrera nacional de investigadores',
+  const router = useRouter()
+  const seo = {
+    title: title,
     description:
       'Investigadores que apoyan a Universidad ISA en sus investigaciones y que pertenecen a la carrera nacional de investigadores',
+    canonical: SITE_URL + router.asPath,
+    // noFollow: carrera.seo.metaRobotsNofollow,
+    // noIndex: carrera.seo.metaRobotsNoindex,
   }
 
   return (
     <PageMeta uri="/carrera-nacional-de-investigadores">
-      <Layout>
+      <Layout {...{ seo }}>
         <Section as="article">
           <Cover>
             <Container>

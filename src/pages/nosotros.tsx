@@ -12,20 +12,25 @@ import NosotrosPhilosophy from 'templates/nosotros/nosotros-philosophy'
 import { PageIdType } from '@faustjs/core/client'
 import Page from 'components/PageMeta'
 import { idxModelGenerator } from 'lib/auxiliar'
+import { SITE_URL } from 'lib/constants'
+import { useRouter } from 'next/router'
 
-// import PageIndexes from '../../../components/page-indexes'
+const Nosotros = () => {
+  const router = useRouter()
 
-const Nosotros = (props) => {
-  const metaData = {
+  const seo = {
     title: 'NOSOTROS',
     description:
       'La Universidad ISA propicia en sus aulas el desarrollo de líderes visionarios, guiados por los valores de honestidad, responsabilidad, respeto, compromiso social y calidad.',
+    canonical: SITE_URL + router.asPath,
+    // noFollow: carrera.seo.metaRobotsNofollow,
+    // noIndex: carrera.seo.metaRobotsNoindex,
   }
 
   // Load the post, but only if the data is ready.
   return (
-    <Page uri="/nosotros">
-      <Layout>
+    <Page uri={router.asPath}>
+      <Layout {...{ seo }}>
         <Container>
           <NosotrosCover />
           <NosotrosHistory {...idxModelGenerator('Nuestra Historia')} />

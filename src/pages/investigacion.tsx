@@ -11,20 +11,24 @@ import DIPPhilosophy from '../templates/dip/dip-philosophy'
 import DIPTeam from '../templates/dip/dip-team'
 import PageMeta from 'components/PageMeta'
 import { idxModelGenerator } from 'lib/auxiliar'
+import { useRouter } from 'next/router'
+import { SITE_URL } from 'lib/constants'
 
 const ResearchPage = () => {
-  //Obtiene los datos de los Proyectos
-  // const investigaciones = useInvestigaciones()
+  const router = useRouter()
 
-  const metaData = {
+  const seo = {
     title: 'Investigación',
     description:
       'La Vicerrectoría de Investigaciones es la unidad operativa de la Universidad ISA que tiene como misión institucional normar, dirigir y desarrollar las actividades de investigación de la institución.',
+    canonical: SITE_URL + router.asPath,
+    // noFollow: carrera.seo.metaRobotsNofollow,
+    // noIndex: carrera.seo.metaRobotsNoindex,
   }
 
   return (
-    <PageMeta uri="/investigacion">
-      <Layout>
+    <PageMeta uri={router.asPath}>
+      <Layout {...{ seo }}>
         <Container>
           <DIPCover />
           <DIPPhilosophy

@@ -17,6 +17,8 @@ import liaai04 from '../../public/images/liaai/liaai04.jpg'
 import liaai05 from '../../public/images/liaai/liaai05.jpg'
 import liaai07 from '../../public/images/liaai/liaai07.jpg'
 import Page from 'components/PageMeta'
+import { useRouter } from 'next/router'
+import { SITE_URL } from 'lib/constants'
 
 const Arrows = (props) => {
   const Arrow = styled.div`
@@ -59,11 +61,22 @@ const LIAAI = (props) => {
       'El Laboratorio de Inocuidad de Alimentos y Análisis Industrial (LIAAI), es una dependencia de carácter científico y tecnológico, con autonomía administrativa, adscrito a la Universidad ISA.  El LIAAI nace con la intención de responder a la necesidad del sector agrícola e industrial de tener a la  disposición un laboratorio, con personal altamente capacitado, tecnología especializada, capaz de ofrecer servicios de análisis destinados a confirmar la calidad de los productos según los requerimientos nacionales e internacionales.',
   }
 
+  const router = useRouter()
+
+  const seo = {
+    title: 'LIAAI',
+    description:
+      'El Laboratorio de Inocuidad de Alimentos y Análisis Industrial (LIAAI), es una dependencia de carácter científico y tecnológico, con autonomía administrativa, adscrito a la Universidad ISA.  El LIAAI nace con la intención de responder a la necesidad del sector agrícola e industrial de tener a la  disposición un laboratorio, con personal altamente capacitado, tecnología especializada, capaz de ofrecer servicios de análisis destinados a confirmar la calidad de los productos según los requerimientos nacionales e internacionales.',
+    canonical: SITE_URL + router.asPath,
+    // noFollow: carrera.seo.metaRobotsNofollow,
+    // noIndex: carrera.seo.metaRobotsNoindex,
+  }
+
   const imagesSlider = [liaai01, liaai03, liaai04, liaai05, liaai07]
 
   return (
-    <Page uri="/liaai">
-      <Layout>
+    <Page uri={router.asPath}>
+      <Layout {...{ seo }}>
         <Section>
           <Container>
             <Overlay>

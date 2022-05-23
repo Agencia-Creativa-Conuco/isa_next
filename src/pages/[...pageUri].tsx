@@ -10,6 +10,7 @@ import Image from 'next/image'
 import { container, mq } from 'components/grid'
 import colors from 'components/colors'
 import blur from 'styles/blur'
+import { SITE_URL } from 'lib/constants'
 
 export interface PageProps {
   page: PageType | PageType['preview']['node'] | null | undefined
@@ -27,8 +28,24 @@ export function PageComponent({ page }: PageProps) {
     (item) => item.$on.Recurso,
   )
 
+  const seo = {
+    title: page.title(),
+    description: page.title(),
+    canonical: SITE_URL + page.uri,
+    // noFollow: page.seo.metaRobotsNofollow,
+    // noIndex: page.seo.metaRobotsNoindex,
+    openGraph: {
+      // type: page.seo.opengraphType,
+      images: [
+        {
+          url: `${SITE_URL}/_next/image?url=${page.featuredImage.node.mediaItemUrl}&w=1920&q=75`,
+        },
+      ],
+    },
+  }
+
   return (
-    <Layout {...{ contacto, recursos }}>
+    <Layout {...{ contacto, recursos, seo }}>
       {/* <Global styles={css`${styles}`} /> */}
       <Article as="article">
         {/* COVER */}

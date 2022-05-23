@@ -8,8 +8,10 @@ import Link from 'next/link'
 import Layout from 'components/layout'
 import colors from 'components/colors'
 import { container, mq } from 'components/grid'
+import { SITE_URL } from 'lib/constants'
+import { useRouter } from 'next/router'
 
-const ProjectLines = (props) => {
+const ProjectLines = () => {
   const { useQuery } = client
   const lineasDeInvestigacion = useQuery().lineasDeInvestigacion({
     first: 1000,
@@ -37,13 +39,17 @@ const ProjectLines = (props) => {
         .includes(facultad.id)
     })
 
-  const metaData = {
+  const router = useRouter()
+  const seo = {
     title: 'Líneas de investigación',
     description: 'Líneas de investigación',
+    canonical: SITE_URL + router.asPath,
+    // noFollow: carrera.seo.metaRobotsNofollow,
+    // noIndex: carrera.seo.metaRobotsNoindex,
   }
 
   return (
-    <Layout {...props} {...metaData}>
+    <Layout {...{ seo }}>
       <Section>
         <Cover>
           <Container>

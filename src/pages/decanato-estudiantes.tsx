@@ -14,17 +14,25 @@ import ServiciosEstudiantilesActividades from 'templates/servicios-estudiantiles
 import Layout from 'components/layout'
 import PageMeta from 'components/PageMeta'
 import { idxModelGenerator } from 'lib/auxiliar'
+import { useRouter } from 'next/router'
+import { SITE_URL } from 'lib/constants'
 
 const ServiciosEstudiantilesPage = (props) => {
-  const metaData = {
+  const router = useRouter()
+
+  const seo = {
     title: 'Decanato de estudiantes',
     description:
       'Junto a nuestra oferta académica, tenemos disponible diversos servicios que cubren las diferentes necesidades de los estudiantes durante su paso por la universidad. Descubre aquí cuáles son e iniciemos esta aventura juntos.',
+    canonical: SITE_URL + router.asPath,
+    // noFollow: carrera.seo.metaRobotsNofollow,
+    // noIndex: carrera.seo.metaRobotsNoindex,
   }
+
   // Load the post, but only if the data is ready.
   return (
-    <PageMeta uri="/decanato-estudiantes">
-      <Layout>
+    <PageMeta uri={router.asPath}>
+      <Layout {...{ seo }}>
         <Container>
           <ServiciosEstudiantilesCover />
           <ServiciosEstudiantilesActividades

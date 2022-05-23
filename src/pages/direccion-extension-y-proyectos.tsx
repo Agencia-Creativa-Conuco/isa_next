@@ -15,17 +15,24 @@ import DEPServicesMenu from '../templates/dep/dep-services-menu'
 import DEPPymes from '../templates/dep/dep-pymes'
 import PageMeta from 'components/PageMeta'
 import { idxModelGenerator } from 'lib/auxiliar'
+import { useRouter } from 'next/router'
+import { SITE_URL } from 'lib/constants'
 
 const DEPPage = (props) => {
-  const metaData = {
+  const router = useRouter()
+
+  const seo = {
     title: 'Dirección Extensión y Proyectos',
     description:
       'La Dirección de Extensión y Proyectos es una dependencia de la Vicerrectoría de Investigación, Extensión y Postgrado (VIEP), la misma ha sido como un instrumento para la difusión del conocimiento, la aplicación de la ciencia, el apoyo a los sectores productivos y empresariales, el mejoramiento de la competitividad, así como el intercambio cultural y deportivo, todo ello visto como fundamento para el desarrollo integral de la sociedad y el cumplimiento de la labor de la Universidad.',
+    canonical: SITE_URL + router.asPath,
+    // noFollow: carrera.seo.metaRobotsNofollow,
+    // noIndex: carrera.seo.metaRobotsNoindex,
   }
 
   return (
-    <PageMeta uri="/direccion-extension-y-proyectos">
-      <Layout>
+    <PageMeta uri={router.asPath}>
+      <Layout {...{ seo }}>
         <Container>
           <DEPCover />
           <DEPActivities {...idxModelGenerator('Actividades Que Realiza')} />

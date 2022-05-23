@@ -16,18 +16,24 @@ import colors from 'components/colors'
 
 import PageMeta from 'components/PageMeta'
 import { idxModelGenerator } from 'lib/auxiliar'
+import { useRouter } from 'next/router'
+import { SITE_URL } from 'lib/constants'
 
 // markup
 const Admissions = () => {
-  const metaData = {
+  const router = useRouter()
+  const seo = {
     title: 'Admisiones',
     description:
       'Sigue estos pasos y estudia con nosotros, aplica para vivir una experiencia educativa de calidad que marcará un antes y un después en tu carrera profesional. ¿Estás listo?',
+    canonical: SITE_URL + router.asPath,
+    // noFollow: carrera.seo.metaRobotsNofollow,
+    // noIndex: carrera.seo.metaRobotsNoindex,
   }
 
   return (
-    <PageMeta uri="/admisiones">
-      <Layout>
+    <PageMeta uri={router.asPath}>
+      <Layout {...{ seo }}>
         <Container>
           <AdmisionesCover />
           <CalendarSection {...idxModelGenerator('Calendario de Admisión')}>

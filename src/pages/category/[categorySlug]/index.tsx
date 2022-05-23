@@ -5,6 +5,7 @@ import { GetStaticPropsContext } from 'next'
 import { useRouter } from 'next/router'
 import { client } from 'client'
 import Layout from 'components/layout'
+import { SITE_URL } from 'lib/constants'
 
 const POSTS_PER_PAGE = 6
 
@@ -22,8 +23,16 @@ export default function Page() {
     last: isBefore ? POSTS_PER_PAGE : undefined,
   })
 
+  const seo = {
+    title: 'Categoría - ' + category.name,
+    description: category.name + ' de la Universidad ISA',
+    canonical: `${SITE_URL}/category/${category.slug}`,
+    // noFollow: carrera.seo.metaRobotsNofollow,
+    // noIndex: carrera.seo.metaRobotsNoindex,
+  }
+
   return (
-    <Layout>
+    <Layout {...{ seo }}>
       <main className="content content-single">
         <Posts posts={posts.nodes} heading={`Categoría: ${category?.name}`} />
 

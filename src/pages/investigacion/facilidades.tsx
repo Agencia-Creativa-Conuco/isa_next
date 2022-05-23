@@ -19,6 +19,8 @@ import sas from '../../../public/images/investigacion/facilidades/sas.jpg'
 import turnitin from '../../../public/images/investigacion/facilidades/turnitin.jpg'
 import blur from 'styles/blur'
 import PageMeta from 'components/PageMeta'
+import { SITE_URL } from 'lib/constants'
+import { useRouter } from 'next/router'
 
 const ProjectLines = () => {
   const title = 'Facilidades y Recursos de Investigación'
@@ -90,14 +92,19 @@ const ProjectLines = () => {
     },
   ]
 
-  const metaData = {
+  const router = useRouter()
+
+  const seo = {
     title: 'Facilidades y recursos',
     description: 'Facilidades y recursos de investigación.',
+    canonical: SITE_URL + router.asPath,
+    // noFollow: carrera.seo.metaRobotsNofollow,
+    // noIndex: carrera.seo.metaRobotsNoindex,
   }
 
   return (
     <PageMeta uri="/investigacion/facilidades">
-      <Layout>
+      <Layout {...{ seo }}>
         <Section as="article">
           <Cover>
             <Container>

@@ -16,13 +16,11 @@ const PageMeta = ({ children, uri, ...props }: PageProps) => {
   const recursos = page?.datosRecursos?.relacion?.map(
     (item) => item.$on.Recurso,
   )
-  const seo = page?.seo
 
   const propiedades = {
     ...props,
     contacto,
     recursos,
-    seo,
   }
 
   return (

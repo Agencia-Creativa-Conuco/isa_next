@@ -6,6 +6,7 @@ import { GetStaticPropsContext } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React from 'react'
+import { SITE_URL } from 'lib/constants'
 
 const POSTS_PER_PAGE = 6
 
@@ -26,8 +27,16 @@ export default function Page() {
     return null
   }
 
+  const seo = {
+    title: 'Publicaciones',
+    description: 'Publicaciones de la Universidad ISA',
+    canonical: SITE_URL + '/posts',
+    // noFollow: carrera.seo.metaRobotsNofollow,
+    // noIndex: carrera.seo.metaRobotsNoindex,
+  }
+
   return (
-    <Layout>
+    <Layout {...{ seo }}>
       <main className="content content-index">
         <Posts posts={posts.nodes} heading="Publicaciones" />
         <Pagination pageInfo={posts.pageInfo} basePath="/posts" />

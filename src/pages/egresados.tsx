@@ -7,15 +7,27 @@ import Layout from 'components/layout'
 import EgresadosCover from 'templates/egresados/egresados-cover'
 import EgresadosBody from 'templates/egresados/egresados-body'
 import PageMeta from 'components/PageMeta'
+import { SITE_URL } from 'lib/constants'
+import { useRouter } from 'next/router'
 const EgresadosSingle = () => {
   const metaData = {
     title: 'Egresados',
     description: 'Pronto agregaremos una description a la pagina de Egresados',
   }
 
+  const router = useRouter()
+
+  const seo = {
+    title: 'Egresados',
+    description: 'Pronto agregaremos una description a la pagina de Egresados',
+    canonical: SITE_URL + router.asPath,
+    // noFollow: carrera.seo.metaRobotsNofollow,
+    // noIndex: carrera.seo.metaRobotsNoindex,
+  }
+
   return (
-    <PageMeta uri="/egresados">
-      <Layout>
+    <PageMeta uri={router.asPath}>
+      <Layout {...{ seo }}>
         <EgresadosCover />
         <EgresadosBody />
       </Layout>
