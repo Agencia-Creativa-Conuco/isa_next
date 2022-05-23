@@ -117,10 +117,6 @@ const Container = styled.div`
   }
 `
 
-const ContainerSpecial = styled.div`
-  display: grid;
-  grid-template-columns: 100%;
-`
 const SectionTitle = styled.h2`
   text-align: center;
   font-weight: 900;
