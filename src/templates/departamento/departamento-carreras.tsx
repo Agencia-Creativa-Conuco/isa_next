@@ -31,8 +31,8 @@ const DepartamentoCarreras = ({ departamento }: DepartamentoProps) => {
     <Section space thin>
       <Title color={facultad?.color}>Programas académicos</Title>
 
-      {grados.map((grado) => (
-        <ContainerRow key={grado.id}>
+      {grados.map((grado, key) => (
+        <ContainerRow key={key}>
           <SubTitle color={facultad?.color}>{grado.nombre}</SubTitle>
 
           <Container>

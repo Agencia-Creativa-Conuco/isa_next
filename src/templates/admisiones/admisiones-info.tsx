@@ -23,6 +23,7 @@ const AdmisionesInfo = (props) => {
     ?.filter((grade) => {
       return grade.datosRequisitos.requisitos?.length
     })
+    .sort((a, b) => a.orden - b.orden)
 
   const [view, setView] = useState(0)
 
