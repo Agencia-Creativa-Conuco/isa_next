@@ -16,8 +16,6 @@ const Page = ({ slug }) => {
     idType: GradoIdType.SLUG,
   })
 
-  grado.carreras()
-
   return (
     <Layout>
       <Article>

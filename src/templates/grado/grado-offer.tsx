@@ -4,33 +4,45 @@ import { css } from '@emotion/react'
 import Link from 'next/link'
 import colors from 'components/colors'
 import { container, mq } from 'components/grid'
-import { client, Grado } from 'client'
+import { Grado, Carrera } from 'client'
 
 interface GradoProps {
   grado: Grado
 }
 
 const GradeOffer = ({ grado }: GradoProps) => {
-  const { useQuery } = client
-
   const carreras = grado.carreras({
     first: 100,
   })?.nodes
 
-  const facultades = useQuery()
-    .facultades({
-      first: 100,
-    })
-    ?.nodes.filter((facultad) =>
-      carreras
-        .map((carrera) => carrera.facultad?.node?.id)
-        .includes(facultad?.id),
-    )
+  const facultades = carreras.reduce((acu, carrera) => {
+    const facultad = carrera.facultad.node
+    if (facultad) {
+      const existe = acu.map((item) => item.id).includes(facultad.id)
 
-  return facultades.length ? (
+      if (!existe) {
+        acu.push({
+          id: facultad.id,
+          nombre: facultad.nombre,
+          uri: facultad.uri,
+        })
+      }
+    }
+
+    return acu
+  }, [])
+
+  return carreras.length ? (
     <Section>
       <SectionTitle>Oferta Académica</SectionTitle>
 
+      {/* CARRERAS SIN FAULTADES ASIGNADAS */}
+      <Carreras
+        carreras={carreras.filter((carrera) => {
+          return !carrera.facultad.node
+        })}
+      />
+      {/* CARRERAS CON FACULTADES ASIGNADAS */}
       {facultades?.map((facultad, key) => {
         return (
           <Facultad key={key}>
@@ -45,30 +57,11 @@ const GradeOffer = ({ grado }: GradoProps) => {
                 </Title>
               </SLink>
             </Link>
-            <Container>
-              {carreras
-                .filter((carrera) => {
-                  return (
-                    carrera.grado?.node?.id === grado?.id &&
-                    carrera.facultad?.node?.id === facultad?.id
-                  )
-                })
-                .map((carrera, key) => {
-                  return (
-                    <Link href={carrera.uri ?? ''} key={key} passHref>
-                      <SLink>
-                        <Title
-                          color={colors.text.base}
-                          bgHover={colors.gray.light}
-                          isCareer
-                        >
-                          {carrera.nombre}
-                        </Title>
-                      </SLink>
-                    </Link>
-                  )
-                })}
-            </Container>
+            <Carreras
+              carreras={carreras.filter((carrera) => {
+                return carrera.facultad?.node?.id === facultad?.id
+              })}
+            />
           </Facultad>
         )
       })}
@@ -77,6 +70,31 @@ const GradeOffer = ({ grado }: GradoProps) => {
 }
 
 export default GradeOffer
+
+interface CarrerasProps {
+  carreras: Carrera[]
+}
+const Carreras = ({ carreras }: CarrerasProps) => {
+  return (
+    <Container>
+      {carreras.map((carrera, key) => {
+        return (
+          <Link href={carrera.uri ?? ''} key={key} passHref>
+            <SLink>
+              <Title
+                color={colors.text.base}
+                bgHover={colors.gray.light}
+                isCareer
+              >
+                {carrera.nombre}
+              </Title>
+            </SLink>
+          </Link>
+        )
+      })}
+    </Container>
+  )
+}
 
 const Facultad = styled.div`
   margin-bottom: 4rem;
@@ -93,6 +111,7 @@ const Section = styled.section`
 const Container = styled.div`
   display: grid;
   grid-template-columns: 100%;
+  margin-bottom: 4rem;
   ${mq.md} {
     grid-template-columns: 50% 50%;
   }
