@@ -36,7 +36,7 @@ const FileCover = ({ post }: FileCoverProps) => {
               <div dangerouslySetInnerHTML={{ __html: content() }} />
             </Content>
             <CTABox>
-              <Cta to={archivo.mediaItemUrl ?? ''} download>
+              <Cta to={archivo.mediaItemUrl ?? ''} download target="_blank">
                 Descargar
               </Cta>
             </CTABox>

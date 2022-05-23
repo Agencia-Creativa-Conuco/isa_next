@@ -21,7 +21,7 @@ export function PostComponent({ post }: PostProps) {
 
   const seo = {
     title: post.title(),
-    description: post.excerpt,
+    description: post.excerpt(),
     canonical: SITE_URL + post.uri,
     // noFollow: post.seo.metaRobotsNofollow,
     // noIndex: post.seo.metaRobotsNoindex,
@@ -35,7 +35,7 @@ export function PostComponent({ post }: PostProps) {
     },
   }
   return (
-    <Layout>
+    <Layout {...{ seo }}>
       {isFile ? (
         <Article>
           <PostFileCover post={post} />
