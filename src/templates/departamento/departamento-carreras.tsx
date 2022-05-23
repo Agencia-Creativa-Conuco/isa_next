@@ -22,7 +22,7 @@ const DepartamentoCarreras = ({ departamento }: DepartamentoProps) => {
     ?.nodes.filter((grado) => {
       return facultad
         .carreras()
-        .nodes.map((carrera) => carrera.grado.node.id)
+        .nodes?.map((carrera) => carrera.grado.node.id)
         .includes(grado.id)
     })
 

@@ -5,7 +5,7 @@ import { mq } from 'components/grid'
 import HubspotForm from 'react-hubspot-form'
 import Loading from 'components/loading'
 import colors from 'components/colors'
-import { client } from 'client'
+import { HUBSPOT_ID } from 'lib/constants'
 
 interface FormProps {
   formId?: string
@@ -26,10 +26,6 @@ const Form = ({
   submitedText = 'Hola, gracias por contactar Universidad ISA, responderemos su requerimiento en cuanto nos sea posible. Siempre a la orden.',
   ...props
 }: FormProps) => {
-  const { useQuery } = client
-  const idCuentaHubspot = useQuery().acfOptionsConfiguracionesDeHubspot
-    .idCuentaHubspot.idHs
-
   const [submited, setSubmited] = useState(false)
   const [active, setActive] = useState(0)
   const [displayedForms, setDisplayedForms] = useState([])
@@ -107,7 +103,7 @@ const Form = ({
               >
                 <FormCut>
                   <HubspotForm
-                    portalId={idCuentaHubspot}
+                    portalId={HUBSPOT_ID}
                     formId={form}
                     onReady={() => {
                       setDisplayedForms(displayedForms.concat(active))

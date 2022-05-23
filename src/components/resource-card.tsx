@@ -31,7 +31,7 @@ const ResourceCard = ({
           <Media>
             <Image
               src={item?.imagenPortada.mediaItemUrl ?? blur}
-              alt={item.nombre}
+              alt={item?.nombre}
               width={1920}
               height={1920}
               objectFit="contain"

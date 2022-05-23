@@ -19,7 +19,7 @@ const CarreraPensum = ({ carrera }: CarreraProps) => {
     return tipo === 'pensum'
   })
 
-  const facultyColor = facultad?.node.color || colors.primary.base
+  const facultyColor = facultad?.node?.color || colors.primary.base
 
   return pensums?.length ? (
     <Section>

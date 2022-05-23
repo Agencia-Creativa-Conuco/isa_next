@@ -10,6 +10,8 @@ import NosotrosRector from 'templates/nosotros/nosotros-rector'
 import NosotrosCampus from 'templates/nosotros/nosotros-campus'
 import NosotrosPhilosophy from 'templates/nosotros/nosotros-philosophy'
 import { PageIdType } from '@faustjs/core/client'
+import Page from 'components/PageMeta'
+
 // import PageIndexes from '../../../components/page-indexes'
 
 const Nosotros = (props) => {
@@ -40,15 +42,17 @@ const Nosotros = (props) => {
 
   // Load the post, but only if the data is ready.
   return (
-    <Layout uri="/nosotros" {...{ data }}>
-      <Container>
-        <NosotrosCover />
-        <NosotrosHistory />
-        <NosotrosRector />
-        <NosotrosPhilosophy />
-        <NosotrosCampus />
-      </Container>
-    </Layout>
+    <Page uri="/nosotros">
+      <Layout>
+        <Container>
+          <NosotrosCover />
+          <NosotrosHistory />
+          <NosotrosRector />
+          <NosotrosPhilosophy />
+          <NosotrosCampus />
+        </Container>
+      </Layout>
+    </Page>
   )
 }
 

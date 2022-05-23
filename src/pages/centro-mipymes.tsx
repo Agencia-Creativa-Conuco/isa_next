@@ -5,6 +5,8 @@ import CentroMipymesCover from 'templates/centro-mipymes/centro-mipymes-cover'
 import CentroMipymesEconomic from 'templates/centro-mipymes/centro-mipymes-economic'
 import CentroMipymesPhilosophy from 'templates/centro-mipymes/centro-mipymes-philosophy'
 import CentroMipymesServices from 'templates/centro-mipymes/centro-mipymes-services'
+import PageMeta from 'components/PageMeta'
+
 const CentroMipymes = (props) => {
   const metaData = {
     title: 'Centro MiPymes',
@@ -13,13 +15,15 @@ const CentroMipymes = (props) => {
   }
 
   return (
-    <Layout uri="/centro-mipymes" {...props} {...metaData}>
-      <CentroMipymesCover />
-      <CentroMipymesPhilosophy />
-      <CentroMipymesServices />
-      <CentroMipymesBenefits />
-      <CentroMipymesEconomic />
-    </Layout>
+    <PageMeta uri="/centro-mipymes">
+      <Layout>
+        <CentroMipymesCover />
+        <CentroMipymesPhilosophy />
+        <CentroMipymesServices />
+        <CentroMipymesBenefits />
+        <CentroMipymesEconomic />
+      </Layout>
+    </PageMeta>
   )
 }
 

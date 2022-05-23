@@ -18,7 +18,7 @@ const Page = ({ slug }) => {
     idType: FacultadIdType.SLUG,
   })
   return (
-    <Layout>
+    <Layout contacto={facultad.contacto}>
       <Article>
         <FacultadCover {...{ facultad }} />
         <FacultadPerfil {...{ facultad }} />

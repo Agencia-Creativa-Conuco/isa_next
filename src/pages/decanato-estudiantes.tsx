@@ -12,6 +12,7 @@ import ServiciosEstudiantilesDeportes from 'templates/servicios-estudiantiles/se
 import ServiciosEstudiantilesExcelencia from 'templates/servicios-estudiantiles/servicios-estudiantiles-excelencia'
 import ServiciosEstudiantilesActividades from 'templates/servicios-estudiantiles/servicios-estudiantiles-actividades'
 import Layout from 'components/layout'
+import PageMeta from 'components/PageMeta'
 
 const ServiciosEstudiantilesPage = (props) => {
   const data = [
@@ -52,18 +53,20 @@ const ServiciosEstudiantilesPage = (props) => {
   }
   // Load the post, but only if the data is ready.
   return (
-    <Layout uri="/decanato-estudiantes" {...{ data }} {...props} {...metaData}>
-      <Container>
-        <ServiciosEstudiantilesCover />
-        <ServiciosEstudiantilesActividades />
-        <ServiciosEstudiantilesBienestar />
-        <ServiciosEstudiantilesPsicologia />
-        <ServiciosEstudiantilesClinica />
-        <ServiciosEstudiantilesDeportes />
-        <ServiciosEstudiantilesExcelencia />
-        <ServiciosEstudiantilesAGISA />
-      </Container>
-    </Layout>
+    <PageMeta uri="/decanato-estudiantes">
+      <Layout>
+        <Container>
+          <ServiciosEstudiantilesCover />
+          <ServiciosEstudiantilesActividades />
+          <ServiciosEstudiantilesBienestar />
+          <ServiciosEstudiantilesPsicologia />
+          <ServiciosEstudiantilesClinica />
+          <ServiciosEstudiantilesDeportes />
+          <ServiciosEstudiantilesExcelencia />
+          <ServiciosEstudiantilesAGISA />
+        </Container>
+      </Layout>
+    </PageMeta>
   )
 }
 

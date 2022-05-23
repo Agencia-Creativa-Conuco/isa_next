@@ -20,12 +20,14 @@ const Page = ({ slug }) => {
     idType: CarreraIdType.SLUG,
   })
 
+  const contacto = carrera.contacto
+
   const recursos = carrera
     .recursos()
-    ?.nodes.filter((recurso) => recurso.tipo[0] !== 'pensum')
+    .nodes.filter((recurso) => recurso.tipo.toString() !== 'pensum')
 
   return (
-    <Layout recursos={recursos}>
+    <Layout {...{ contacto, recursos }}>
       <Article>
         <CarreraCover {...{ carrera }} />
         <CarreraPerfil {...{ carrera }} />

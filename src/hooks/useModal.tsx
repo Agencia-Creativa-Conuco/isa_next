@@ -110,7 +110,7 @@ const Column = styled.div`
 `
 
 const ModalHeader = styled.div`
-  background-color: ${colors.gray.lighter};
+  background-color: ${colors.gray.light};
   align-self: baseline;
   text-align: left;
   color: ${colors.green.base};

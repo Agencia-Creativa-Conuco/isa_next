@@ -10,6 +10,7 @@ import OfertaTecnics from 'templates/oferta-academica/oferta-academica-tecnics'
 import OfertaInternacional from 'templates/oferta-academica/oferta-academica-internacional'
 import OfertaLabs from 'templates/oferta-academica/oferta-academica-labs'
 import OfertaAcademicaList from 'templates/oferta-academica/oferta-academica-oferta'
+import Page from 'components/PageMeta'
 
 const OfertaAcademica = (props) => {
   const data = [
@@ -39,15 +40,17 @@ const OfertaAcademica = (props) => {
 
   // Load the post, but only if the data is ready.
   return (
-    <Layout uri="/oferta-academica" {...{ data }} {...props} {...metaData}>
-      <Container>
-        <OfertaCover />
-        <OfertaAcademicaList />
-        <OfertaTecnics />
-        <OfertaLabs />
-        <OfertaInternacional />
-      </Container>
-    </Layout>
+    <Page uri="/oferta-academica">
+      <Layout>
+        <Container>
+          <OfertaCover />
+          <OfertaAcademicaList />
+          <OfertaTecnics />
+          <OfertaLabs />
+          <OfertaInternacional />
+        </Container>
+      </Layout>
+    </Page>
   )
 }
 

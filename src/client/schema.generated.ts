@@ -1667,6 +1667,8 @@ export interface MenuItemToMenuItemConnectionWhereArgs {
 export enum MenuLocationEnum {
   /** Put the menu in the footer location */
   FOOTER = "FOOTER",
+  /** Put the menu in the header location */
+  HEADER = "HEADER",
   /** Put the menu in the home location */
   HOME = "HOME",
   /** Put the menu in the offer location */
@@ -5504,6 +5506,7 @@ export const generatedSchema = {
     emails: { __type: "[Carrera_Contacto_emails]" },
     fieldGroupName: { __type: "String" },
     horarios: { __type: "[Carrera_Contacto_horarios]" },
+    mostrar: { __type: "Boolean" },
     telefonos: { __type: "[Carrera_Contacto_telefonos]" },
     whatsapp: { __type: "[Carrera_Contacto_whatsapp]" },
   },
@@ -6765,6 +6768,7 @@ export const generatedSchema = {
     emails: { __type: "[Departamento_Contacto_emails]" },
     fieldGroupName: { __type: "String" },
     horarios: { __type: "[Departamento_Contacto_horarios]" },
+    mostrar: { __type: "Boolean" },
     telefonos: { __type: "[Departamento_Contacto_telefonos]" },
     whatsapp: { __type: "[Departamento_Contacto_whatsapp]" },
   },
@@ -6936,6 +6940,7 @@ export const generatedSchema = {
     emails: { __type: "[Facultad_Contacto_emails]" },
     fieldGroupName: { __type: "String" },
     horarios: { __type: "[Facultad_Contacto_horarios]" },
+    mostrar: { __type: "Boolean" },
     telefonos: { __type: "[Facultad_Contacto_telefonos]" },
     whatsapp: { __type: "[Facultad_Contacto_whatsapp]" },
   },
@@ -8274,6 +8279,7 @@ export const generatedSchema = {
     emails: { __type: "[Page_Contacto_emails]" },
     fieldGroupName: { __type: "String" },
     horarios: { __type: "[Page_Contacto_horarios]" },
+    mostrar: { __type: "Boolean" },
     telefonos: { __type: "[Page_Contacto_telefonos]" },
     whatsapp: { __type: "[Page_Contacto_whatsapp]" },
   },
@@ -8312,12 +8318,7 @@ export const generatedSchema = {
   Page_Datosrecursos: {
     __typename: { __type: "String!" },
     fieldGroupName: { __type: "String" },
-    recursos: { __type: "[Page_Datosrecursos_Recursos]" },
     relacion: { __type: "[Page_Datosrecursos_Relacion]" },
-  },
-  Page_Datosrecursos_Recursos: {
-    __typename: { __type: "String!" },
-    $on: { __type: "$Page_Datosrecursos_Recursos!" },
   },
   Page_Datosrecursos_Relacion: {
     __typename: { __type: "String!" },
@@ -12430,7 +12431,6 @@ export const generatedSchema = {
     NodeWithContentEditor: ["Page", "Post"],
     NodeWithPageAttributes: ["Page"],
     NodeWithRevisions: ["Page", "Post"],
-    Page_Datosrecursos_Recursos: ["Recurso"],
     Page_Datosrecursos_Relacion: ["Recurso"],
     NodeWithExcerpt: ["Post"],
     NodeWithTrackbacks: ["Post"],
@@ -13046,6 +13046,7 @@ export interface Carrera_Contacto {
    */
   fieldGroupName?: Maybe<ScalarsEnums["String"]>;
   horarios?: Maybe<Array<Maybe<Carrera_Contacto_horarios>>>;
+  mostrar?: Maybe<ScalarsEnums["Boolean"]>;
   telefonos?: Maybe<Array<Maybe<Carrera_Contacto_telefonos>>>;
   whatsapp?: Maybe<Array<Maybe<Carrera_Contacto_whatsapp>>>;
 }
@@ -15498,6 +15499,7 @@ export interface Departamento_Contacto {
    */
   fieldGroupName?: Maybe<ScalarsEnums["String"]>;
   horarios?: Maybe<Array<Maybe<Departamento_Contacto_horarios>>>;
+  mostrar?: Maybe<ScalarsEnums["Boolean"]>;
   telefonos?: Maybe<Array<Maybe<Departamento_Contacto_telefonos>>>;
   whatsapp?: Maybe<Array<Maybe<Departamento_Contacto_whatsapp>>>;
 }
@@ -16041,6 +16043,7 @@ export interface Facultad_Contacto {
    */
   fieldGroupName?: Maybe<ScalarsEnums["String"]>;
   horarios?: Maybe<Array<Maybe<Facultad_Contacto_horarios>>>;
+  mostrar?: Maybe<ScalarsEnums["Boolean"]>;
   telefonos?: Maybe<Array<Maybe<Facultad_Contacto_telefonos>>>;
   whatsapp?: Maybe<Array<Maybe<Facultad_Contacto_whatsapp>>>;
 }
@@ -19604,6 +19607,7 @@ export interface Page_Contacto {
    */
   fieldGroupName?: Maybe<ScalarsEnums["String"]>;
   horarios?: Maybe<Array<Maybe<Page_Contacto_horarios>>>;
+  mostrar?: Maybe<ScalarsEnums["Boolean"]>;
   telefonos?: Maybe<Array<Maybe<Page_Contacto_telefonos>>>;
   whatsapp?: Maybe<Array<Maybe<Page_Contacto_whatsapp>>>;
 }
@@ -19691,13 +19695,7 @@ export interface Page_Datosrecursos {
    * The name of the ACF Field Group
    */
   fieldGroupName?: Maybe<ScalarsEnums["String"]>;
-  recursos?: Maybe<Array<Maybe<Page_Datosrecursos_Recursos>>>;
   relacion?: Maybe<Array<Maybe<Page_Datosrecursos_Relacion>>>;
-}
-
-export interface Page_Datosrecursos_Recursos {
-  __typename?: "Recurso";
-  $on: $Page_Datosrecursos_Recursos;
 }
 
 export interface Page_Datosrecursos_Relacion {
@@ -26539,10 +26537,6 @@ export interface $NodeWithTitle {
 
 export interface $NodeWithTrackbacks {
   Post?: Post;
-}
-
-export interface $Page_Datosrecursos_Recursos {
-  Recurso?: Recurso;
 }
 
 export interface $Page_Datosrecursos_Relacion {

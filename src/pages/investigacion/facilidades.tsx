@@ -18,8 +18,9 @@ import rstudio from '../../../public/images/investigacion/facilidades/rstudio.sv
 import sas from '../../../public/images/investigacion/facilidades/sas.jpg'
 import turnitin from '../../../public/images/investigacion/facilidades/turnitin.jpg'
 import blur from 'styles/blur'
+import PageMeta from 'components/PageMeta'
 
-const ProjectLines = (props) => {
+const ProjectLines = () => {
   const title = 'Facilidades y Recursos de Investigación'
   const facilities = [
     {
@@ -95,83 +96,85 @@ const ProjectLines = (props) => {
   }
 
   return (
-    <Layout uri="/investigacion/facilidades" {...props} {...metaData}>
-      <Section as="article">
-        <Cover>
-          <Container>
-            <Title color={colors.shadow.base}>{title}</Title>
-          </Container>
-        </Cover>
-        <Facilidades>
-          <List>
+    <PageMeta uri="/investigacion/facilidades">
+      <Layout>
+        <Section as="article">
+          <Cover>
             <Container>
-              <STitle>Facilidades</STitle>
+              <Title color={colors.shadow.base}>{title}</Title>
+            </Container>
+          </Cover>
+          <Facilidades>
+            <List>
+              <Container>
+                <STitle>Facilidades</STitle>
 
-              <ContainerFacilidades>
-                {facilities.map((facility, index) => {
+                <ContainerFacilidades>
+                  {facilities.map((facility, index) => {
+                    return (
+                      <SLink
+                        href={facility.url}
+                        target={facility.target}
+                        rel="noopener"
+                        key={index}
+                      >
+                        <Line>
+                          <span>{facility.title}</span>
+                        </Line>
+                      </SLink>
+                    )
+                  })}
+                </ContainerFacilidades>
+              </Container>
+            </List>
+          </Facilidades>
+          <Recursos>
+            <List>
+              <Container>
+                <STitle>Recursos</STitle>
+
+                {resources.map((item, index) => {
                   return (
-                    <SLink
-                      href={facility.url}
-                      target={facility.target}
-                      rel="noopener"
-                      key={index}
-                    >
-                      <Line>
-                        <span>{facility.title}</span>
-                      </Line>
-                    </SLink>
+                    <div key={index}>
+                      <SubTitle>{item.category}</SubTitle>
+                      <ContainerRecursos>
+                        {item.list.map((resource, index) => {
+                          return (
+                            <SLink
+                              key={index}
+                              href={resource.url}
+                              target={resource.target}
+                              rel="noopener"
+                            >
+                              <Line>
+                                <ContainerSub>
+                                  <InlineImage>
+                                    <Image
+                                      src={resource.image ?? blur}
+                                      width={1920}
+                                      height={960}
+                                      objectFit="contain"
+                                      alt="Facilidades"
+                                      blurDataURL={blur.src}
+                                      placeholder="blur"
+                                    />
+                                  </InlineImage>
+                                  <span>{resource.title}</span>
+                                </ContainerSub>
+                              </Line>
+                            </SLink>
+                          )
+                        })}
+                      </ContainerRecursos>
+                    </div>
                   )
                 })}
-              </ContainerFacilidades>
-            </Container>
-          </List>
-        </Facilidades>
-        <Recursos>
-          <List>
-            <Container>
-              <STitle>Recursos</STitle>
-
-              {resources.map((item, index) => {
-                return (
-                  <div key={index}>
-                    <SubTitle>{item.category}</SubTitle>
-                    <ContainerRecursos>
-                      {item.list.map((resource, index) => {
-                        return (
-                          <SLink
-                            key={index}
-                            href={resource.url}
-                            target={resource.target}
-                            rel="noopener"
-                          >
-                            <Line>
-                              <ContainerSub>
-                                <InlineImage>
-                                  <Image
-                                    src={resource.image ?? blur}
-                                    width={1920}
-                                    height={960}
-                                    objectFit="contain"
-                                    alt="Facilidades"
-                                    blurDataURL={blur.src}
-                                    placeholder="blur"
-                                  />
-                                </InlineImage>
-                                <span>{resource.title}</span>
-                              </ContainerSub>
-                            </Line>
-                          </SLink>
-                        )
-                      })}
-                    </ContainerRecursos>
-                  </div>
-                )
-              })}
-            </Container>
-          </List>
-        </Recursos>
-      </Section>
-    </Layout>
+              </Container>
+            </List>
+          </Recursos>
+        </Section>
+      </Layout>
+    </PageMeta>
   )
 }
 

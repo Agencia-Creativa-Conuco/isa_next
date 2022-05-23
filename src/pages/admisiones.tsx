@@ -14,8 +14,10 @@ import AdmisionesServicios from 'templates/admisiones/admisiones-servicios'
 import Calendar from 'components/calendar'
 import colors from 'components/colors'
 
+import PageMeta from 'components/PageMeta'
+
 // markup
-const Admissions = (props) => {
+const Admissions = () => {
   const data = [
     {
       name: 'Períodos de admisión',
@@ -46,18 +48,20 @@ const Admissions = (props) => {
   }
 
   return (
-    <Layout uri="/admisiones" {...{ data }}>
-      <Container>
-        <AdmisionesCover />
-        <CalendarSection id="section_1">
-          <Calendar />
-        </CalendarSection>
-        <AdmisionesInfo />
-        <AdmisionesForm />
-        <AdmisionesCredito />
-        <AdmisionesServicios />
-      </Container>
-    </Layout>
+    <PageMeta uri="/admisiones">
+      <Layout>
+        <Container>
+          <AdmisionesCover />
+          <CalendarSection id="section_1">
+            <Calendar />
+          </CalendarSection>
+          <AdmisionesInfo id="section_2" name="Requisitos de admisión" />
+          <AdmisionesForm id="section_3" name="Solicitud de admisión" />
+          <AdmisionesCredito id="section_4" name="Crédito Educativo" />
+          <AdmisionesServicios id="section_5" name="Servicios Obcionales" />
+        </Container>
+      </Layout>
+    </PageMeta>
   )
 }
 export default Admissions

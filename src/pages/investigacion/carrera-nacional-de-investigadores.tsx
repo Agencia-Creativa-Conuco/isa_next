@@ -6,6 +6,7 @@ import styled from '@emotion/styled'
 import Layout from '../../components/layout'
 import colors from 'components/colors'
 import { container, mq } from 'components/grid'
+import PageMeta from 'components/PageMeta'
 
 const CarreraNacionalDeInvestigadores = (props) => {
   const { useQuery } = client
@@ -27,71 +28,73 @@ const CarreraNacionalDeInvestigadores = (props) => {
   }
 
   return (
-    <Layout uri="/carrera-nacional-de-investigacion" {...props} {...metaData}>
-      <Section as="article">
-        <Cover>
-          <Container>
-            <Title>{title}</Title>
-          </Container>
-        </Cover>
-        <Facilidades>
-          <List>
+    <PageMeta uri="/carrera-nacional-de-investigadores">
+      <Layout>
+        <Section as="article">
+          <Cover>
             <Container>
-              <STitle>Listado de miembros</STitle>
-
-              <ContainerInvestigador>
-                {investigadores.map((investigador, index) => {
-                  const {
-                    nombre,
-                    puestoTrabajo,
-                    tituloAcademico,
-                    datosInvestigador,
-                  } = investigador
-
-                  const {
-                    anoIngreso,
-                    area,
-                    areaInvestigacion,
-                    categoria,
-                  } = datosInvestigador.carreraNacionalInvestigacion
-
-                  return (
-                    <Card key={index}>
-                      <Name>{nombre}</Name>
-                      <Line>
-                        <Label>Formación académica:</Label>{' '}
-                        <Value>{tituloAcademico}</Value>
-                      </Line>
-                      <Line>
-                        <Label>Posición en UNISA:</Label>{' '}
-                        <Value>{puestoTrabajo}</Value>
-                      </Line>
-                      <Line>
-                        <Label>
-                          Área de investigación / Departamento UNISA:
-                        </Label>{' '}
-                        <Value>{area}</Value>
-                      </Line>
-                      <Line>
-                        <Label>Categoría: </Label> <Value>{categoria}</Value>
-                      </Line>
-                      <Line>
-                        <Label>Año de Ingreso:</Label>{' '}
-                        <Value>{anoIngreso}</Value>
-                      </Line>
-                      <Line>
-                        <Label>Área de Investigación:</Label>{' '}
-                        <Value>{areaInvestigacion}</Value>
-                      </Line>
-                    </Card>
-                  )
-                })}
-              </ContainerInvestigador>
+              <Title>{title}</Title>
             </Container>
-          </List>
-        </Facilidades>
-      </Section>
-    </Layout>
+          </Cover>
+          <Facilidades>
+            <List>
+              <Container>
+                <STitle>Listado de miembros</STitle>
+
+                <ContainerInvestigador>
+                  {investigadores.map((investigador, index) => {
+                    const {
+                      nombre,
+                      puestoTrabajo,
+                      tituloAcademico,
+                      datosInvestigador,
+                    } = investigador
+
+                    const {
+                      anoIngreso,
+                      area,
+                      areaInvestigacion,
+                      categoria,
+                    } = datosInvestigador.carreraNacionalInvestigacion
+
+                    return (
+                      <Card key={index}>
+                        <Name>{nombre}</Name>
+                        <Line>
+                          <Label>Formación académica:</Label>{' '}
+                          <Value>{tituloAcademico}</Value>
+                        </Line>
+                        <Line>
+                          <Label>Posición en UNISA:</Label>{' '}
+                          <Value>{puestoTrabajo}</Value>
+                        </Line>
+                        <Line>
+                          <Label>
+                            Área de investigación / Departamento UNISA:
+                          </Label>{' '}
+                          <Value>{area}</Value>
+                        </Line>
+                        <Line>
+                          <Label>Categoría: </Label> <Value>{categoria}</Value>
+                        </Line>
+                        <Line>
+                          <Label>Año de Ingreso:</Label>{' '}
+                          <Value>{anoIngreso}</Value>
+                        </Line>
+                        <Line>
+                          <Label>Área de Investigación:</Label>{' '}
+                          <Value>{areaInvestigacion}</Value>
+                        </Line>
+                      </Card>
+                    )
+                  })}
+                </ContainerInvestigador>
+              </Container>
+            </List>
+          </Facilidades>
+        </Section>
+      </Layout>
+    </PageMeta>
   )
 }
 

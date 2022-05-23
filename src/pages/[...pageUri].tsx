@@ -22,8 +22,13 @@ export function PageComponent({ page }: PageProps) {
 
   const pageCustom = pageSettings.pageCustom
 
+  const contacto = page?.contacto
+  const recursos = page?.datosRecursos?.relacion?.map(
+    (item) => item.$on.Recurso,
+  )
+
   return (
-    <Layout uri={page.uri}>
+    <Layout {...{ contacto, recursos }}>
       {/* <Global styles={css`${styles}`} /> */}
       <Article as="article">
         {/* COVER */}

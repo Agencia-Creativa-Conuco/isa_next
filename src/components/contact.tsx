@@ -10,6 +10,7 @@ import {
 import Link from 'next/link'
 import colors from 'components/colors'
 import { container, mq } from 'components/grid'
+import { ContentTypesOfCategoryEnum } from 'client'
 
 const Contact = ({ data }) => {
   const {
@@ -20,9 +21,10 @@ const Contact = ({ data }) => {
     whatsapp = [],
     horarios,
     direcciones,
+    mostrar,
   } = data
 
-  return telefonos?.length || emails?.length ? (
+  return mostrar ? (
     <Section id="section_contact">
       <SSection>
         <Container>
@@ -51,14 +53,16 @@ const Contact = ({ data }) => {
                   return (
                     <Item key={index}>
                       <Phone>
-                        <StyledLink href={`tel: ${telefono}`} target="_blank">
-                          {telefono}
-                          {extensiones?.length > 0
-                            ? (extensiones?.length > 1
-                                ? `, Exts. `
-                                : ', Ext. ') + extsFormated
-                            : ''}{' '}
-                        </StyledLink>
+                        <Link href={`tel: ${telefono}`} passHref>
+                          <StyledLink target="_blank">
+                            {telefono}
+                            {extensiones?.length > 0
+                              ? (extensiones?.length > 1
+                                  ? `, Exts. `
+                                  : ', Ext. ') + extsFormated
+                              : ''}{' '}
+                          </StyledLink>
+                        </Link>
                       </Phone>
                     </Item>
                   )
@@ -77,20 +81,23 @@ const Contact = ({ data }) => {
                   const { telefono } = item
 
                   return (
-                    <Item key={index}>
-                      <Phone>
-                        <StyledLink
-                          href={`https://wa.me/1${telefono?.replace(
-                            /[^0-9]/g,
-                            '',
-                          )}`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {telefono}
-                        </StyledLink>
-                      </Phone>
-                    </Item>
+                    item && (
+                      <Item key={index}>
+                        <Phone>
+                          <Link
+                            href={`https://wa.me/1${telefono?.replace(
+                              /[^0-9]/g,
+                              '',
+                            )}`}
+                            passHref
+                          >
+                            <StyledLink target="_blank" rel="noreferrer">
+                              {telefono}
+                            </StyledLink>
+                          </Link>
+                        </Phone>
+                      </Item>
+                    )
                   )
                 })}
               </List>
@@ -105,9 +112,11 @@ const Contact = ({ data }) => {
               <List>
                 {horarios.map((item, index) => {
                   return (
-                    <Item key={index}>
-                      <ItemFont>{`${item.dias}: ${item.horas}`} </ItemFont>
-                    </Item>
+                    item && (
+                      <Item key={index}>
+                        <ItemFont>{`${item.dias}: ${item.horas}`} </ItemFont>
+                      </Item>
+                    )
                   )
                 })}
               </List>
@@ -125,13 +134,15 @@ const Contact = ({ data }) => {
                   const { email } = item
 
                   return (
-                    <Item key={index}>
-                      <ItemFont>
-                        <StyledLink href={`mailto: ${email}`} target="_blank">
-                          {email}
-                        </StyledLink>
-                      </ItemFont>
-                    </Item>
+                    item && (
+                      <Item key={index}>
+                        <ItemFont>
+                          <Link href={`mailto: ${email}`} passHref>
+                            <StyledLink target="_blank">{email}</StyledLink>
+                          </Link>
+                        </ItemFont>
+                      </Item>
+                    )
                   )
                 })}
               </List>
@@ -148,16 +159,18 @@ const Contact = ({ data }) => {
                   const { direccion } = item
 
                   return (
-                    <Item key={index}>
-                      <ItemFont>
-                        <StyledLink
-                          href={`https://goo.gl/maps/G3r1CimBgviSPRwQ9`}
-                          target="_blank"
-                        >
-                          {direccion}
-                        </StyledLink>
-                      </ItemFont>
-                    </Item>
+                    item && (
+                      <Item key={index}>
+                        <ItemFont>
+                          <Link
+                            href={`https://goo.gl/maps/G3r1CimBgviSPRwQ9`}
+                            passHref
+                          >
+                            <StyledLink target="_blank">{direccion}</StyledLink>
+                          </Link>
+                        </ItemFont>
+                      </Item>
+                    )
                   )
                 })}
               </List>
@@ -189,7 +202,7 @@ const Container = styled.div`
   ${container}
 `
 
-const StyledLink = styled(Link)`
+const StyledLink = styled.a`
   text-decoration: none;
   color: inherit;
 `

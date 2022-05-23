@@ -39,7 +39,7 @@ export const CloseNavToggle = styled(BaseToggle)`
   align-items: center;
   justify-content: flex-end;
   width: 100%;
-  color: ${colors ? colors.gray.darker : '#555555'};
+  color: ${colors ? colors.gray.dark : '#555555'};
   font-size: 1.6rem;
   font-weight: 500;
   padding: 3.1rem 1.5rem;

@@ -17,7 +17,7 @@ import {
   OrderEnum,
 } from 'client'
 
-const AdmisionesForm = () => {
+const AdmisionesForm = (props) => {
   const { useQuery } = client
   const [active, setActive] = useState(0)
 

@@ -204,7 +204,7 @@ const Sector = styled.h3`
   font-weight: 300;
   text-transform: uppercase;
   padding: 0.5rem 0;
-  border-bottom: 0.1rem solid ${colors.primary.black};
+  border-bottom: 0.1rem solid ${colors.primary.dark};
   /* background-color: rgba(50,50,50, 0.05); */
 `
 

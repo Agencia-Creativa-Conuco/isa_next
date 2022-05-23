@@ -7,7 +7,6 @@ import NavList from './nav-list'
 import { LeftArrowMenuIcon } from '../icons'
 import colors from 'components/colors'
 import { mq } from 'components/grid'
-import { MenuItem } from 'client'
 
 interface NavItemProps {
   item?: any

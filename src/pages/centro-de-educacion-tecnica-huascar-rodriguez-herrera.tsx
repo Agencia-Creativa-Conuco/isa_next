@@ -8,6 +8,7 @@ import DatosRelevantes from 'templates/centro-de-educacion-tecnica-huascar-rodri
 import Cover from 'templates/centro-de-educacion-tecnica-huascar-rodriguez-herrera/cover'
 import Galeria from 'templates/centro-de-educacion-tecnica-huascar-rodriguez-herrera/galeria'
 import OfertaTecnica from 'templates/centro-de-educacion-tecnica-huascar-rodriguez-herrera/oferta-tecnica'
+import PageMeta from 'components/PageMeta'
 
 const CentroHuascar = (props) => {
   const metaData = {
@@ -17,17 +18,15 @@ const CentroHuascar = (props) => {
   }
 
   return (
-    <Layout
-      uri="centro-de-educacion-tecnica-huascar-rodriguez-herrera"
-      {...props}
-      {...metaData}
-    >
-      <Cover />
-      <Filosofia />
-      <Galeria />
-      <OfertaTecnica />
-      <DatosRelevantes />
-    </Layout>
+    <PageMeta uri="centro-de-educacion-tecnica-huascar-rodriguez-herrera">
+      <Layout>
+        <Cover />
+        <Filosofia />
+        <Galeria />
+        <OfertaTecnica />
+        <DatosRelevantes />
+      </Layout>
+    </PageMeta>
   )
 }
 

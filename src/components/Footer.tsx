@@ -58,8 +58,8 @@ const Footer = () => {
               items={items}
               split
               noGutters
-              itemColor={colors.text_main}
-              labelColor={colors.text_main}
+              // itemColor={colors.text.light}
+              // labelColor={colors.text.light}
               itemBg="rgba(255,255,255,0.05)"
               itemBgCurrent="rgba(255,255,255,0.05)"
               itemBorderColor="white"

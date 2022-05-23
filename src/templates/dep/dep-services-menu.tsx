@@ -105,7 +105,7 @@ const DEPServicesMenu = () => {
           {servicesMenu.map((item, index) => {
             const { title, Icon } = item
             return (
-              <ImtemUl>
+              <ImtemUl key={index}>
                 <Option
                   onClick={(e) => setView(view === index ? view : index)}
                   color={view === index ? '#A0E4F9' : colors.white}

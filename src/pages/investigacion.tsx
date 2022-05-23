@@ -9,6 +9,7 @@ import DIPCover from '../templates/dip/dip-cover'
 import DIPGeneral from '../templates/dip/dip-general'
 import DIPPhilosophy from '../templates/dip/dip-philosophy'
 import DIPTeam from '../templates/dip/dip-team'
+import PageMeta from 'components/PageMeta'
 
 const ResearchPage = () => {
   //Obtiene los datos de los Proyectos
@@ -36,14 +37,16 @@ const ResearchPage = () => {
   }
 
   return (
-    <Layout uri="liaai" {...{ data }} {...metaData}>
-      <Container>
-        <DIPCover />
-        <DIPPhilosophy />
-        <DIPTeam />
-        <DIPGeneral />
-      </Container>
-    </Layout>
+    <PageMeta uri="/investigacion">
+      <Layout>
+        <Container>
+          <DIPCover />
+          <DIPPhilosophy />
+          <DIPTeam />
+          <DIPGeneral />
+        </Container>
+      </Layout>
+    </PageMeta>
   )
 }
 

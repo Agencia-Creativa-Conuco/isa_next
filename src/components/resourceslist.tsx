@@ -48,7 +48,7 @@ const ResourcesList = ({
   items = [],
 }: ResourcesListProps) => {
   const resources = items?.filter(
-    (resource) => !exclude.includes(resource.datosRecurso.tipo),
+    (resource) => !exclude.includes(resource?.datosRecurso.tipo),
   )
 
   const { openModal, ModalUI } = useModal()
@@ -95,12 +95,10 @@ const ResourcesList = ({
           <ContainerCard>
             {resources.length ? (
               resources.map((item, index) => {
-                const { nombre } = item
-
                 return (
                   <ResourceCard
                     key={index}
-                    title={nombre}
+                    title={item?.nombre}
                     color={resourceColor}
                     item={item}
                   />

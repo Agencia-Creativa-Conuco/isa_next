@@ -16,7 +16,7 @@ const CarreraPerfil = ({ carrera }: CarreraProps) => {
 
   const tituloPerfilEgresado = 'Perfil del egresado'
 
-  const facultyColor = facultad.node.color || colors.primary.base
+  const facultyColor = facultad.node?.color || colors.primary.base
 
   return (
     <Section>

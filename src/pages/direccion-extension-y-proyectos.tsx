@@ -13,6 +13,7 @@ import DEPVeterinary from '../templates/dep/dep-veterinary'
 import DEPCede from '../templates/dep/dep-cede'
 import DEPServicesMenu from '../templates/dep/dep-services-menu'
 import DEPPymes from '../templates/dep/dep-pymes'
+import PageMeta from 'components/PageMeta'
 
 const DEPPage = (props) => {
   const data = [
@@ -53,24 +54,21 @@ const DEPPage = (props) => {
   }
 
   return (
-    <Layout
-      uri="/direccion-extension-y-proyectos"
-      {...{ data }}
-      {...props}
-      {...metaData}
-    >
-      <Container>
-        <DEPCover />
-        <DEPActivities />
-        <DEPDevelopment />
-        <DEPServices />
-        <DEPServicesMenu />
-        <DEPPymes />
-        <DEPLaboratory />
-        <DEPCede />
-        <DEPVeterinary />
-      </Container>
-    </Layout>
+    <PageMeta uri="/direccion-extension-y-proyectos">
+      <Layout>
+        <Container>
+          <DEPCover />
+          <DEPActivities />
+          <DEPDevelopment />
+          <DEPServices />
+          <DEPServicesMenu />
+          <DEPPymes />
+          <DEPLaboratory />
+          <DEPCede />
+          <DEPVeterinary />
+        </Container>
+      </Layout>
+    </PageMeta>
   )
 }
 

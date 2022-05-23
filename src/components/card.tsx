@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import Image from 'next/image'
 import Link from 'next/link'
-import { container, mq } from 'components/grid'
+import { mq } from 'components/grid'
 import ctas from 'styles/cta'
 import { css } from '@emotion/react'
 import { Recurso } from 'client'
@@ -12,24 +12,22 @@ interface CardInfoProps {
   item: Recurso
 }
 const CardInfo = ({ item }: CardInfoProps) => {
-  const { nombre, imagenPortada, descripcion, archivo } = item
-
   return (
-    <Wrapper value={imagenPortada ? '50% auto' : '100%'}>
+    <Wrapper value={item?.imagenPortada ? '50% auto' : '100%'}>
       <Content>
-        <Title>{nombre}</Title>
-        <Copy>{descripcion}</Copy>
-        <Link href={archivo.sourceUrl() ?? ''} passHref>
+        <Title>{item?.nombre}</Title>
+        <Copy>{item?.descripcion}</Copy>
+        <Link href={item?.archivo.sourceUrl() ?? ''} passHref>
           <SLink download target="_blank">
             Descargar
           </SLink>
         </Link>
       </Content>
-      {imagenPortada ? (
+      {item?.imagenPortada ? (
         <Media>
           <Image
-            src={imagenPortada.mediaItemUrl ?? blur}
-            alt={nombre}
+            src={item?.imagenPortada.mediaItemUrl ?? blur}
+            alt={item?.nombre}
             width={1920}
             height={1920}
             objectFit="contain"

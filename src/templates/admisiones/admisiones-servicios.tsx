@@ -9,14 +9,12 @@ import { container, mq } from 'components/grid'
 import { client } from 'client'
 import ctas from 'styles/cta'
 
-const AdmisionesServicios = () => {
+const AdmisionesServicios = (props) => {
   const { useQuery } = client
   const serviciosOpcionales = useQuery().acfOptionsServiciosOpcionales
     .serviciosOpcionales.servicios
 
-  // const [{ serviciosOpcionales }] = useGlobalOption()
-
-  const title = 'Servicios Opcionales',
+  let title = 'Servicios Opcionales',
     services = [
       {
         id: 'alojamiento',
@@ -32,7 +30,7 @@ const AdmisionesServicios = () => {
             <li>Para mantener el servicio, el estudiante debe respetar los estatutos establecidos en el Reglamento Estudiantil.</li>
           </ul>
         `,
-        url: '',
+        url: '/',
       },
       {
         id: 'alimentacion',
@@ -44,7 +42,7 @@ const AdmisionesServicios = () => {
           <p>Contar con los servicios de desayuno, almuerzo y cena durante su estancia en la Universidad.</p>
           <p>Contar con las facilidades necesarias que les permitan el acceso a los servicios de alimentación de acuerdo a sus necesidades.</p>
         `,
-        url: '',
+        url: '/',
       },
     ]
 
@@ -55,9 +53,6 @@ const AdmisionesServicios = () => {
       <Container>
         {services.map((service, index) => {
           serviciosOpcionales.forEach((item) => {
-            if (service.id === item.tipoServicio) {
-              service.url = item.url
-            }
             if (service.id === item.tipoServicio) {
               service.url = item.url
             }

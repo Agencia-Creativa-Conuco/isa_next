@@ -8,7 +8,7 @@ import colors from 'components/colors'
 import { container, mq } from 'components/grid'
 import { client } from 'client'
 
-const AdmisionesInfo = () => {
+const AdmisionesInfo = (props) => {
   const { useQuery } = client
   const categories = useQuery().gruposDeRequisitos({
     first: 10000,
@@ -71,7 +71,7 @@ const AdmisionesInfo = () => {
                 <animated.div style={styles}>
                   <DisplayerSection key={index} hidden={view !== index}>
                     <DisplayerSectionTitle color={colors.secondary.dark}>
-                      Requisitos de admisión {grade.title}
+                      Requisitos de admisión {grade.title()}
                     </DisplayerSectionTitle>
 
                     <Groups>

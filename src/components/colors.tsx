@@ -20,6 +20,9 @@ const colors = {
     lighter: '#DFF6E9',
     dark: '#004A25',
   },
+  red: {
+    base: 'red',
+  },
   blue: {
     base: '#6AB0CA',
     light: '#E6F6FD',

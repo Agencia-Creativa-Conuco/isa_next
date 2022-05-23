@@ -8,6 +8,7 @@ import BibliotecaServicios from 'templates/biblioteca/biblioteca-servicios'
 import BibliotecaRecursos from 'templates/biblioteca/biblioteca-recursos'
 import BibliotecaHorario from 'templates/biblioteca/biblioteca-horario'
 import Layout from 'components/layout'
+import PageMeta from 'components/PageMeta'
 
 const Biblioteca = (props) => {
   const data = [
@@ -32,19 +33,16 @@ const Biblioteca = (props) => {
   }
 
   return (
-    <Layout
-      uri="centro-de-educacion-tecnica-huascar-rodriguez-herrera"
-      {...{ data }}
-      {...props}
-      {...metaData}
-    >
-      <Container>
-        <BibliotecaCover />
-        <BibliotecaServicios />
-        <BibliotecaRecursos />
-        <BibliotecaHorario />
-      </Container>
-    </Layout>
+    <PageMeta uri="/biblioteca">
+      <Layout>
+        <Container>
+          <BibliotecaCover />
+          <BibliotecaServicios />
+          <BibliotecaRecursos />
+          <BibliotecaHorario />
+        </Container>
+      </Layout>
+    </PageMeta>
   )
 }
 

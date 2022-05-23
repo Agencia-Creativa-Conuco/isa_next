@@ -21,8 +21,8 @@ const MenuModal = ({ items = [] }: MenuModalProps) => {
         <Navigation
           items={list}
           noGutters
-          itemColor={colors.text_main}
-          labelColor={colors.text_main}
+          // itemColor={colors.text.base}
+          // labelColor={colors.text.base}
           itemBg="rgba(255,255,255,0.05)"
           itemBgCurrent="rgba(255,255,255,0.05)"
           itemBorderColor="white"

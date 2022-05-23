@@ -39,7 +39,7 @@ const CarreraCover = ({ carrera }: CarreraProps) => {
     },
   ]
 
-  const facultyColor = facultad.node.color || colors.primary.base
+  const facultyColor = facultad.node?.color || colors.primary.base
 
   return (
     <Section bgColor={facultyColor} decoBgColor={darken(0.15, facultyColor)}>
@@ -62,7 +62,7 @@ const CarreraCover = ({ carrera }: CarreraProps) => {
             <Container>
               <Content>
                 <Faculty color="#FFFFFF">
-                  {facultad?.node.nombre || grado.node.nombre}
+                  {facultad?.node?.nombre || grado.node.nombre}
                 </Faculty>
                 <Title>{nombre}</Title>
                 <Copy dangerouslySetInnerHTML={{ __html: copy }} />

@@ -7,7 +7,7 @@ import bancoAdopen from '../../../public/images/admisiones/banco_adopem.png'
 import banfondesa from '../../../public/images/admisiones/banfondesa.jpg'
 import fundapec from '../../../public/images/admisiones/fundapec.png'
 
-const AdmisionesCredito = () => {
+const AdmisionesCredito = (props) => {
   const data = [
     {
       url: 'https://bancoadopem.com.do/',

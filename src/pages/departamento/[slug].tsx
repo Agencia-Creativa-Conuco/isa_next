@@ -18,7 +18,7 @@ const Page = ({ slug }) => {
   })
 
   return (
-    <Layout>
+    <Layout contacto={departamento.contacto}>
       <Article>
         <DepartamentoCover {...{ departamento }} />
         <DepartamentoCarreras {...{ departamento }} />
