@@ -77,7 +77,7 @@ const AdmisionesForm = (props) => {
   )
 
   return forms?.length > 1 ? (
-    <Section id="form" style={{ overflow: 'hidden' }}>
+    <Section {...props} style={{ overflow: 'hidden' }}>
       <Container fluid id="section_3">
         <Media>
           <Image

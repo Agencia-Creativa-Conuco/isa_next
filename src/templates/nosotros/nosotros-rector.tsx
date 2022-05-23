@@ -5,7 +5,7 @@ import colors from 'components/colors'
 import { container, mq } from 'components/grid'
 import rector from '../../../public/images/nosotros/rector.jpg'
 
-const NosotrosRector = () => {
+const NosotrosRector = (props) => {
   const name = 'Benito A. Ferreiras',
     jobtitle = 'Rector',
     content = `
@@ -17,8 +17,8 @@ const NosotrosRector = () => {
         `
 
   return (
-    <Section id="rector">
-      <Container id="section_2">
+    <Section {...props}>
+      <Container>
         <CubeRector>
           <Media>
             <Image

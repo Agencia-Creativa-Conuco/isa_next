@@ -1,3 +1,5 @@
+import slug from 'url-slug'
+
 const getHierarchicalItems = (
   data = [],
   { idKey = 'id', parentKey = 'parentId', childrenKey = 'children' } = {},
@@ -17,3 +19,8 @@ const getHierarchicalItems = (
 }
 
 export { getHierarchicalItems }
+
+export const idxModelGenerator = (name: string) => ({
+  id: slug(name),
+  name,
+})

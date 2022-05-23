@@ -11,29 +11,11 @@ import NosotrosCampus from 'templates/nosotros/nosotros-campus'
 import NosotrosPhilosophy from 'templates/nosotros/nosotros-philosophy'
 import { PageIdType } from '@faustjs/core/client'
 import Page from 'components/PageMeta'
+import { idxModelGenerator } from 'lib/auxiliar'
 
 // import PageIndexes from '../../../components/page-indexes'
 
 const Nosotros = (props) => {
-  const data = [
-    {
-      name: 'Nuestra Historia',
-      id: '#section_1',
-    },
-    {
-      name: 'Nuestro Rector',
-      id: '#section_2',
-    },
-    {
-      name: 'Filosofía Nosotros',
-      id: '#section_3',
-    },
-    {
-      name: 'Nuestro campus',
-      id: '#section_4',
-    },
-  ]
-
   const metaData = {
     title: 'NOSOTROS',
     description:
@@ -46,10 +28,10 @@ const Nosotros = (props) => {
       <Layout>
         <Container>
           <NosotrosCover />
-          <NosotrosHistory />
-          <NosotrosRector />
-          <NosotrosPhilosophy />
-          <NosotrosCampus />
+          <NosotrosHistory {...idxModelGenerator('Nuestra Historia')} />
+          <NosotrosRector {...idxModelGenerator('Nuestro Rector')} />
+          <NosotrosPhilosophy {...idxModelGenerator('Filosofía Nosotros')} />
+          <NosotrosCampus {...idxModelGenerator('Nuestro campus')} />
         </Container>
       </Layout>
     </Page>

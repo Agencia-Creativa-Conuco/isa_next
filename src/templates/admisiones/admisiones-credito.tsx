@@ -27,7 +27,7 @@ const AdmisionesCredito = (props) => {
   ]
 
   return (
-    <Section id="section_4">
+    <Section {...props}>
       <Title>Asistencia para la gestión del crédito educativo</Title>
       <Copy>Financiamiento disponible a través de:</Copy>
       <Container>

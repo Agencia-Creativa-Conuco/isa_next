@@ -39,7 +39,7 @@ const Arrows = (props) => {
   return <Arrow {...props} />
 }
 
-const NosotrosHistory = () => {
+const NosotrosHistory = (props) => {
   const history = [
     {
       title: 'Fundación de la Institución',
@@ -85,7 +85,7 @@ const NosotrosHistory = () => {
   ]
 
   return (
-    <Section fluid id="section_1">
+    <Section fluid {...props}>
       <SectionTitle>Nuestra Historia</SectionTitle>
 
       <Carousel

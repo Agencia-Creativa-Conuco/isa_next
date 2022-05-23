@@ -5,8 +5,14 @@ import colors from 'components/colors'
 import { ListIcon, CloseIcon } from './icons'
 import { Global } from '@emotion/react'
 import { fadeIn, slideUp } from 'styles/animations'
+import { useRouter } from 'next/router'
+import { SITE_URL } from 'lib/constants'
+import Link from 'next/link'
 
-const PageIndexes = ({ data = [] }) => {
+const PageIndexes = ({ items = [] }) => {
+  const router = useRouter()
+  const path = new URL(router.asPath, SITE_URL).pathname
+
   const [isVisible, setIsVisible] = useState(false)
 
   return (
@@ -16,11 +22,13 @@ const PageIndexes = ({ data = [] }) => {
       {isVisible ? (
         <Card>
           <ul style={{ margin: '1rem 2rem 0 0' }}>
-            {data.map((item) => {
+            {items.map((item, key) => {
               return (
-                <StylesLink href={item.id} key={item.id}>
-                  <StylesLI>{item.name}</StylesLI>
-                </StylesLink>
+                <Link href={`${path}/#${item.id}`} key={key} passHref>
+                  <StylesLink>
+                    <StylesLI>{item.name}</StylesLI>
+                  </StylesLink>
+                </Link>
               )
             })}
           </ul>

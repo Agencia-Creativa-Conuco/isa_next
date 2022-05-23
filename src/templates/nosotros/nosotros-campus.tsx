@@ -62,7 +62,7 @@ const Arrows = (props) => {
   return <Arrow {...props} />
 }
 
-const NosotrosCampus = () => {
+const NosotrosCampus = (props) => {
   const { useQuery } = client
 
   const videoInstitucional = useQuery().acfOptionsVideoInstitucional
@@ -94,7 +94,7 @@ const NosotrosCampus = () => {
   const title = 'Nuestro campus'
 
   return Object.values(images).length ? (
-    <Section id="section_4">
+    <Section {...props}>
       <Container fluid>
         <SectionTitle>{title}</SectionTitle>
         <Carousel

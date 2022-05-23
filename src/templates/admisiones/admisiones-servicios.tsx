@@ -47,7 +47,7 @@ const AdmisionesServicios = (props) => {
     ]
 
   return (
-    <Section id="section_5">
+    <Section {...props}>
       <Title>{title}</Title>
       {/* Agrega las url de los formularios */}
       <Container>

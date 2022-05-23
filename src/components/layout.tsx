@@ -13,6 +13,20 @@ if (typeof window !== 'undefined') {
   //   require('smooth-scroll')('a[href*="#"]')
 }
 
+const findIndexes = (children: any[]) => {
+  const resultado = children.reduce((prev, curr) => {
+    if (curr?.props?.id) {
+      prev.push({ id: curr.props.id, name: curr.props.name })
+    }
+    if (curr?.props?.children?.length) {
+      return findIndexes(curr.props.children)
+    }
+    return prev
+  }, [])
+
+  return resultado
+}
+
 // interface LayoutProps {
 //   recursos?: Recurso[]
 //   contacto?: any
@@ -22,6 +36,7 @@ if (typeof window !== 'undefined') {
 const Layout = (props) => {
   const { useQuery } = client
   const settings = useQuery()?.generalSettings
+  const indexes = findIndexes([props.children])
 
   // const [resultsSearch, setResultsSearch] = useState()
 
@@ -50,7 +65,9 @@ const Layout = (props) => {
         ) : null}
         {/* Se muestra información de contacto relacionada con el tipo de dato */}
         {props.contacto?.mostrar ? <Contact data={props.contacto} /> : null}
-        {/* {data && <PageIndexes data={data} />} */}
+        {indexes.length && typeof window !== 'undefined' && (
+          <PageIndexes items={indexes} />
+        )}
       </Main>
 
       <Footer />

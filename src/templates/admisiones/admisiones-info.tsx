@@ -27,7 +27,7 @@ const AdmisionesInfo = (props) => {
   const [view, setView] = useState(0)
 
   return grades.length ? (
-    <Section fluid id="section_2">
+    <Section fluid {...props}>
       <Navigation>
         <ColumnContainer>
           <Icon>

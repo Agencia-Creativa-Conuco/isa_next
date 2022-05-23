@@ -3,7 +3,7 @@ import { GetStaticPropsContext } from 'next'
 import { getNextStaticProps } from '@faustjs/next'
 import { client, PageIdType } from 'client'
 import styled from '@emotion/styled'
-
+import { css } from '@emotion/react'
 import Layout from 'components/layout'
 
 import AdmisionesCover from 'templates/admisiones/admisiones-cover'
@@ -15,32 +15,10 @@ import Calendar from 'components/calendar'
 import colors from 'components/colors'
 
 import PageMeta from 'components/PageMeta'
+import { idxModelGenerator } from 'lib/auxiliar'
 
 // markup
 const Admissions = () => {
-  const data = [
-    {
-      name: 'Períodos de admisión',
-      id: '#section_1',
-    },
-    {
-      name: 'Requisitos de admisión',
-      id: '#section_2',
-    },
-    {
-      name: 'Solicitud de admisión',
-      id: '#section_3',
-    },
-    {
-      name: 'Crédito Educativo',
-      id: '#section_4',
-    },
-    {
-      name: 'Servicios Opcionales',
-      id: '#section_5',
-    },
-  ]
-
   const metaData = {
     title: 'Admisiones',
     description:
@@ -52,13 +30,13 @@ const Admissions = () => {
       <Layout>
         <Container>
           <AdmisionesCover />
-          <CalendarSection id="section_1">
+          <CalendarSection {...idxModelGenerator('Calendario de Admisión')}>
             <Calendar />
           </CalendarSection>
-          <AdmisionesInfo id="section_2" name="Requisitos de admisión" />
-          <AdmisionesForm id="section_3" name="Solicitud de admisión" />
-          <AdmisionesCredito id="section_4" name="Crédito Educativo" />
-          <AdmisionesServicios id="section_5" name="Servicios Obcionales" />
+          <AdmisionesInfo {...idxModelGenerator('Requisitos de Admisión')} />
+          <AdmisionesForm {...idxModelGenerator('Solicitud de admisión')} />
+          <AdmisionesCredito {...idxModelGenerator('Crédito Educativo')} />
+          <AdmisionesServicios {...idxModelGenerator('Servicios Opcionales')} />
         </Container>
       </Layout>
     </PageMeta>
@@ -80,6 +58,8 @@ const Container = styled.div`
 `
 
 const CalendarSection = styled.section`
-  background-color: ${colors.gray.light};
-  overflow: hidden;
+  ${(props: { id?: string; name?: string }) => css`
+    background-color: ${colors.gray.light};
+    overflow: hidden;
+  `}
 `

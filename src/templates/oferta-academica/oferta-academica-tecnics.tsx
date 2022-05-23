@@ -8,7 +8,7 @@ import ctas from 'styles/cta'
 import { container, mq } from 'components/grid'
 import centroHuascar from '../../../public/images/oferta-academica/centro_huascar.jpg'
 
-const OfferTecnics = () => {
+const OfferTecnics = (props) => {
   const title = 'Centro de Educación Técnica Huáscar Rodríguez Herrera',
     content = `
             <p>El Centro Huáscar Rodríguez tiene la finalidad de potenciar el dinamismo y crecimiento socio-económico nacional, a través de las capacitaciones técnicas de recursos humanos en los sectores más productivos del país, como son: Sector Construcción, Sector Empresarial y Sector Agropecuario.</p>
@@ -16,7 +16,7 @@ const OfferTecnics = () => {
         `
 
   return (
-    <Section fluid id="section_2">
+    <Section fluid {...props}>
       <Media>
         <Image
           src={centroHuascar}

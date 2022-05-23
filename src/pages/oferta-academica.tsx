@@ -11,27 +11,9 @@ import OfertaInternacional from 'templates/oferta-academica/oferta-academica-int
 import OfertaLabs from 'templates/oferta-academica/oferta-academica-labs'
 import OfertaAcademicaList from 'templates/oferta-academica/oferta-academica-oferta'
 import Page from 'components/PageMeta'
+import { idxModelGenerator } from 'lib/auxiliar'
 
 const OfertaAcademica = (props) => {
-  const data = [
-    {
-      name: 'Oferta Académica',
-      id: '#section_1',
-    },
-    {
-      name: 'Centro de Educación Técnica Huascar Rodríguez Herrera',
-      id: '#section_2',
-    },
-    // {
-    //   name: 'Ofertas de Laboratorio',
-    //   id: '#section_3',
-    // },
-    {
-      name: 'Programas Internacionales',
-      id: '#section_4',
-    },
-  ]
-
   const metaData = {
     title: 'Oferta Académica',
     description:
@@ -44,10 +26,16 @@ const OfertaAcademica = (props) => {
       <Layout>
         <Container>
           <OfertaCover />
-          <OfertaAcademicaList />
-          <OfertaTecnics />
+          <OfertaAcademicaList {...idxModelGenerator('Oferta Académica')} />
+          <OfertaTecnics
+            {...idxModelGenerator(
+              'Centro de Educación Técnica Huascar Rodríguez Herrera',
+            )}
+          />
           <OfertaLabs />
-          <OfertaInternacional />
+          <OfertaInternacional
+            {...idxModelGenerator('Programas Internacionales')}
+          />
         </Container>
       </Layout>
     </Page>

@@ -7,7 +7,7 @@ import { css } from '@emotion/react'
 
 import { Spring, animated } from '@react-spring/web'
 
-const NosotrosPhilosophy = () => {
+const NosotrosPhilosophy = (props) => {
   const tabs = [
     {
       title: 'Perfil Universidad ISA',
@@ -74,7 +74,7 @@ const NosotrosPhilosophy = () => {
   const handlerView = (value) => setView(value)
 
   return (
-    <StyledSection fluid id="section_3">
+    <StyledSection fluid {...props}>
       <Container>
         <DecoContainer />
         <ColumnOne>

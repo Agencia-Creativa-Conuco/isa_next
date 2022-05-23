@@ -8,7 +8,7 @@ import { h5 } from 'styles/tipography'
 import { container, mq } from 'components/grid'
 import internacionalImage from '../../../public/images/oferta-academica/programas-internacionales.png'
 import ctas from 'styles/cta'
-const OfferInternational = () => {
+const OfferInternational = (props) => {
   const title = 'Programas Internacionales',
     copy =
       '<p>La Universidad ISA, ha coordinado por más de veinte (20) años, programas académicos de corta duración como parte de las vinculaciones internacionales de la institución. Actualmente, desarrolla el programa internacional “Discovering the Food, Human and Environmental Systems of the Caribbean Islands” realizado durante las dos (2) primeras semanas del mes de enero, conjuntamente con la Universidad de Illinois at Urbana Champaign. Todos los años aproximadamente veinte (20) estudiantes estadounidenses y dominicanos (1 estudiante por carrera) participan de este programa.</p>',
@@ -50,7 +50,7 @@ const OfferInternational = () => {
     }
 
   return (
-    <Section id="section_4">
+    <Section {...props}>
       <TopRow>
         <Block>
           <Title>{title}</Title>

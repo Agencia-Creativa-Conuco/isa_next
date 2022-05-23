@@ -4,7 +4,7 @@ import StyledNavigation from 'components/styled-navigation'
 import { client, MenuLocationEnum } from 'client'
 import { container } from 'components/grid'
 
-const OfertaAcademicaList = () => {
+const OfertaAcademicaList = (props) => {
   const { useQuery } = client
   const { menuItems } = useQuery()
 
@@ -14,7 +14,7 @@ const OfertaAcademicaList = () => {
   })?.nodes
 
   return items?.length ? (
-    <Section fluid id="section_1">
+    <Section fluid {...props}>
       <StyledNavigation items={items} />
     </Section>
   ) : null
