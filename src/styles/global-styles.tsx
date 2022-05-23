@@ -88,6 +88,7 @@ const documentSetup = () => css`
     color: ${colors.text.base};
     font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
       'Helvetica Neue', Helvetica, sans-serif;
+    font-display: auto;
     font-size: 1.6rem;
     line-height: 1.5;
     letter-spacing: -0.015em;
