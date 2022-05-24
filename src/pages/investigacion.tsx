@@ -27,7 +27,7 @@ const ResearchPage = () => {
   }
 
   return (
-    <PageMeta uri={router.asPath}>
+    <PageMeta uri="/investigacion">
       <Layout {...{ seo }}>
         <Container>
           <DIPCover />

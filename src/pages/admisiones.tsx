@@ -32,7 +32,7 @@ const Admissions = () => {
   }
 
   return (
-    <PageMeta uri={router.asPath}>
+    <PageMeta uri="/admisiones">
       <Layout {...{ seo }}>
         <Container>
           <AdmisionesCover />

@@ -29,7 +29,7 @@ const Nosotros = () => {
 
   // Load the post, but only if the data is ready.
   return (
-    <Page uri={router.asPath}>
+    <Page uri="/nosotros">
       <Layout {...{ seo }}>
         <Container>
           <NosotrosCover />

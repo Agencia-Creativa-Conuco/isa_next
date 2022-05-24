@@ -26,7 +26,7 @@ const EgresadosSingle = () => {
   }
 
   return (
-    <PageMeta uri={router.asPath}>
+    <PageMeta uri="/egresados">
       <Layout {...{ seo }}>
         <EgresadosCover />
         <EgresadosBody />

@@ -31,7 +31,7 @@ const DEPPage = (props) => {
   }
 
   return (
-    <PageMeta uri={router.asPath}>
+    <PageMeta uri="/direccion-extension-y-proyectos">
       <Layout {...{ seo }}>
         <Container>
           <DEPCover />

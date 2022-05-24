@@ -75,7 +75,7 @@ const LIAAI = (props) => {
   const imagesSlider = [liaai01, liaai03, liaai04, liaai05, liaai07]
 
   return (
-    <Page uri={router.asPath}>
+    <Page uri="/liaai">
       <Layout {...{ seo }}>
         <Section>
           <Container>

@@ -31,7 +31,7 @@ const ServiciosEstudiantilesPage = (props) => {
 
   // Load the post, but only if the data is ready.
   return (
-    <PageMeta uri={router.asPath}>
+    <PageMeta uri="/decanato-estudiantes">
       <Layout {...{ seo }}>
         <Container>
           <ServiciosEstudiantilesCover />

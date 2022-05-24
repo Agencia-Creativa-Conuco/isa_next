@@ -24,7 +24,7 @@ const Biblioteca = () => {
   }
 
   return (
-    <PageMeta uri={router.asPath}>
+    <PageMeta uri="/biblioteca">
       <Layout {...{ seo }}>
         <Container>
           <BibliotecaCover />

@@ -25,7 +25,7 @@ const OfertaAcademica = () => {
   }
   // Load the post, but only if the data is ready.
   return (
-    <Page uri={router.asPath}>
+    <Page uri="/oferta-academica">
       <Layout seo={seo}>
         <Container>
           <OfertaCover />

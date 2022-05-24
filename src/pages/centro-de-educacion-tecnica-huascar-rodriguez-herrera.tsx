@@ -25,7 +25,7 @@ const CentroHuascar = (props) => {
   }
 
   return (
-    <PageMeta uri={router.asPath}>
+    <PageMeta uri="/centro-de-educacion-tecnica-huascar-rodriguez-herrera">
       <Layout {...{ seo }}>
         <Cover />
         <Filosofia />
