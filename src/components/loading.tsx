@@ -49,8 +49,10 @@ const wrapper = (width, height, color) =>
     background-color: ${addAlpha(color, 0.2)};
     background-clip: padding-box;
   `
-
-const Loading = ({ height }) => (
+interface LoadingProps {
+  height?: string
+}
+const Loading = ({ height }: LoadingProps) => (
   <Container height={height}>
     <Deco1>
       <Deco2 />

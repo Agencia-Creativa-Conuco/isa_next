@@ -29,7 +29,7 @@ export function PostComponent({ post }: PostProps) {
       // type: post.seo.opengraphType,
       images: [
         {
-          url: `${SITE_URL}/_next/image?url=${post.featuredImage.node.mediaItemUrl}&w=1920&q=75`,
+          url: `${SITE_URL}/_next/image?url=${post.featuredImage?.node?.mediaItemUrl}&w=1920&q=75`,
         },
       ],
     },

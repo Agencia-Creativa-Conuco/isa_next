@@ -40,7 +40,7 @@ const Item = ({ item, level = 1 }: ItemProps) => {
           </Title>
         </Etiqueta>
       ) : (
-        <Link href={item?.uri ?? ''} passHref>
+        <Link href={item?.uri ?? '/'} passHref>
           <StyledLink aria-label="Click para abrir el...">
             <Title
               color={
@@ -244,7 +244,7 @@ const Navigation = ({ items }: NavigationProps) => {
             return item?.children?.length ? (
               <NavItem key={index} {...{ item, isActive, setView }} />
             ) : (
-              <Link href={item?.uri ?? ''} key={index} passHref>
+              <Link href={item?.uri ?? '/'} key={index} passHref>
                 <StyledLink
                   rel="noopener"
                   aria-label="Click para abrir el..."

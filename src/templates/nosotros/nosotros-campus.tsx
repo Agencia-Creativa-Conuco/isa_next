@@ -115,10 +115,9 @@ const NosotrosCampus = (props) => {
             <ContainerVideo>
               <Playing onClick={() => setIsPlaying(!isPlaying)} />
               <DivVideo>
-                <ReactPlayer
+                <SReactPlayer
                   width="100%"
                   height="100%"
-                  css={reactPlayer}
                   controls
                   url={videoInstitucional}
                   playing={isPlaying}
@@ -236,7 +235,7 @@ const SMedia = styled.div`
   font-size: 0;
 `
 
-const reactPlayer = css`
+const SReactPlayer = styled(ReactPlayer)`
   position: absolute;
   top: 0;
   left: 0;

@@ -15,9 +15,9 @@ const CardInfo = ({ item }: CardInfoProps) => {
   return (
     <Wrapper value={item?.imagenPortada ? '50% auto' : '100%'}>
       <Content>
-        <Title>{item?.nombre}</Title>
+        <Title>{item?.title()}</Title>
         <Copy>{item?.descripcion}</Copy>
-        <Link href={item?.archivo.sourceUrl() ?? ''} passHref>
+        <Link href={item?.archivo?.sourceUrl() ?? ''} passHref>
           <SLink download target="_blank">
             Descargar
           </SLink>

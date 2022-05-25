@@ -1,15 +1,18 @@
 import React, { useEffect, useRef } from 'react'
 import { mq } from 'components/grid'
-import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Input from 'styles/input'
 import { SearchIcon } from '../icons'
 import { BaseToggle } from '../navigation/nav-toggle'
-// import { useQueryParam, StringParam } from 'use-query-params'
+import { useRouter } from 'next/router'
+import urlSlug from 'url-slug'
 
-const SearchForm = ({ searchButton = true }) => {
-  // const [query] = useQueryParam('s', StringParam)
-
+interface SearchFormProps {
+  slug?: string
+}
+const SearchForm = ({ slug = '' }: SearchFormProps) => {
+  const router = useRouter()
+  const query = slug.replace('-', ' ')
   const ref = useRef(null)
 
   useEffect(() => {
@@ -24,19 +27,18 @@ const SearchForm = ({ searchButton = true }) => {
       aria-label="Buscar:"
       onSubmit={(e) => {
         e.preventDefault()
-        // navigate(`/search/?s=${ref.current.value}`)
+        router.push(`/search/${urlSlug(ref.current.value)}`)
       }}
     >
       <Input
-        // defaultValue={query}
-        // css={inputStyles(searchButton)}
+        defaultValue={query}
         type="search"
         placeholder="Buscar:"
         name="search"
         ref={ref}
       />
 
-      {searchButton ? (
+      {true ? (
         <HeaderToggle>
           <BaseToggle>
             <Icon>
@@ -75,48 +77,3 @@ const HeaderToggle = styled.div`
 `
 
 const Icon = styled.div``
-
-const inputStyles = (searchButton) => css`
-  background: none;
-  border: none;
-  border-radius: 0;
-  color: inherit;
-  display: block;
-  font-size: 2rem;
-  letter-spacing: -0.0277em;
-  margin: 0 0 0 -2rem;
-  max-width: calc(100% + 2rem);
-  padding: 0 0 0 2rem;
-  width: calc(100% + 2rem);
-  height: 4rem;
-  appearance: none;
-
-  &::-webkit-search-decoration,
-  &::-webkit-search-cancel-button,
-  &::-webkit-search-results-button,
-  &::-webkit-search-results-decoration {
-    display: none;
-  }
-
-  ${mq.md} {
-    border: none;
-    height: 4.5rem;
-  }
-
-  &:focus {
-    outline: thin dotted;
-    outline-offset: -4px;
-  }
-  ${searchButton
-    ? css`
-        background: white;
-        border-radius: 4rem;
-        padding: 1rem 1.8rem;
-        border: none;
-      `
-    : css``}
-`
-
-// const inputResults = css`
-//
-// `

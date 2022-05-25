@@ -1,20 +1,20 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import colors from 'components/colors'
-// import SearchForm from './search-form'
-import useSearch from '../hooks/useSearch'
-import { container, mq } from '../layout/new'
+import SearchForm from 'components/search/search-form'
+import { container, mq } from 'components/grid'
 
-const ResultsHeader = (props) => {
-  const { SearchForm } = useSearch()
-
+interface ResultsHeaderProps {
+  slug?: string
+}
+const ResultsHeader = ({ slug }: ResultsHeaderProps) => {
   return (
     <Section>
       <Background />
       <Container>
         <Header>
           <Label>
-            <SearchForm isResults={true} {...props} />
+            <SearchForm slug={slug} />
           </Label>
         </Header>
       </Container>

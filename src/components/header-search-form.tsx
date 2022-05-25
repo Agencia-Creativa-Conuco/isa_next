@@ -45,7 +45,7 @@ const SearchInput = ({
         />
         <ModalInner role="dialog" aria-modal="true">
           <SectionInner>
-            <SearchForm searchButton={false} />
+            <SearchForm />
             <CloseButton onClick={closeSearchModal}>
               <ScreenReaderText>Cerrar búsqueda</ScreenReaderText>
               <CloseIcon />

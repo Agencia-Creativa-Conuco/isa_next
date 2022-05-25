@@ -15,6 +15,6 @@ export default coreConfig({
   apiClientSecret: process.env.FAUSTWP_SECRET_KEY,
 })
 
-// nextConfig({
-//   revalidate: 60,
-// })
+nextConfig({
+  revalidate: 60,
+})
