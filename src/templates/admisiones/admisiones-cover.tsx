@@ -12,7 +12,7 @@ const AdmisionesCover = () => {
     copy =
       'Sigue estos pasos y estudia con nosotros, aplica para vivir una experiencia educativa de calidad que marcará un antes y un después en tu carrera profesional. ¿Estás listo?',
     cta = {
-      url: '#form',
+      url: '#solicitud-de-admision',
       title: 'Aplicar',
     }
   return (
