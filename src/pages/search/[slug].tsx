@@ -101,8 +101,8 @@ const Page = ({ slug }) => {
     title: 'Búsqueda',
     description: 'Resultados de búsqueda',
     canonical: SITE_URL + '/search/' + slug,
-    // noFollow: carrera.seo.metaRobotsNofollow,
-    // noIndex: carrera.seo.metaRobotsNoindex,
+    noindex: true,
+    nofollow: true,
   }
   return (
     <Layout {...{ seo }}>
