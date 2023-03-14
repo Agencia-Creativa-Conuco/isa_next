@@ -102,6 +102,8 @@ export interface CategoryToCategoryConnectionWhereArgs {
   slug?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
   updateTermMetaCache?: InputMaybe<Scalars["Boolean"]>;
 }
@@ -114,7 +116,7 @@ export interface CategoryToContentNodeConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -168,7 +170,7 @@ export interface CategoryToPostConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -204,12 +206,32 @@ export interface CategoryToPostConnectionWhereArgs {
   tagIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Array of tag IDs, used to display objects from one tag OR another */
   tagNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Array of tag slugs, used to display objects from one tag OR another */
+  /** Array of tag slugs, used to display objects from one tag AND another */
   tagSlugAnd?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  /** Array of tag slugs, used to exclude objects in specified tags */
+  /** Array of tag slugs, used to include objects in ANY specified tags */
   tagSlugIn?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
   /** Title of the object */
   title?: InputMaybe<Scalars["String"]>;
+}
+
+/** The Type of Identifier used to fetch a single comment node. Default is "ID". To be used along with the "id" field. */
+export enum CommentNodeIdTypeEnum {
+  /** Identify a resource by the Database ID. */
+  DATABASE_ID = "DATABASE_ID",
+  /** Identify a resource by the (hashed) Global ID. */
+  ID = "ID",
+}
+
+/** The status of the comment object. */
+export enum CommentStatusEnum {
+  /** Comments with the Approved status */
+  APPROVE = "APPROVE",
+  /** Comments with the Unapproved status */
+  HOLD = "HOLD",
+  /** Comments with the Spam status */
+  SPAM = "SPAM",
+  /** Comments with the Trash status */
+  TRASH = "TRASH",
 }
 
 /** Arguments for filtering the CommentToCommentConnection connection */
@@ -244,7 +266,7 @@ export interface CommentToCommentConnectionWhereArgs {
   contentIdIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Array of content object IDs to exclude affiliated comments for. */
   contentIdNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Content object name to retrieve affiliated comments for. */
+  /** Content object name (i.e. slug ) to retrieve affiliated comments for. */
   contentName?: InputMaybe<Scalars["String"]>;
   /** Content Object parent ID to retrieve affiliated comments for. */
   contentParent?: InputMaybe<Scalars["Int"]>;
@@ -306,7 +328,7 @@ export interface CommentToParentCommentConnectionWhereArgs {
   contentIdIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Array of content object IDs to exclude affiliated comments for. */
   contentIdNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Content object name to retrieve affiliated comments for. */
+  /** Content object name (i.e. slug ) to retrieve affiliated comments for. */
   contentName?: InputMaybe<Scalars["String"]>;
   /** Content Object parent ID to retrieve affiliated comments for. */
   contentParent?: InputMaybe<Scalars["Int"]>;
@@ -340,7 +362,7 @@ export interface CommentToParentCommentConnectionWhereArgs {
 export enum CommentsConnectionOrderbyEnum {
   /** Order by browser user agent of the commenter. */
   COMMENT_AGENT = "COMMENT_AGENT",
-  /** Order by true/false approval of the comment. */
+  /** Order by approval status of the comment. */
   COMMENT_APPROVED = "COMMENT_APPROVED",
   /** Order by name of the comment author. */
   COMMENT_AUTHOR = "COMMENT_AUTHOR",
@@ -428,7 +450,7 @@ export interface ContentTypeToContentNodeConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -484,7 +506,7 @@ export enum ContentTypesOfTagEnum {
   POST = "POST",
 }
 
-/** Input for the createCarrera mutation */
+/** Input for the createCarrera mutation. */
 export interface CreateCarreraInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -510,7 +532,7 @@ export interface CreateCarreraInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the createCategory mutation */
+/** Input for the createCategory mutation. */
 export interface CreateCategoryInput {
   /** The slug that the category will be an alias of */
   aliasOf?: InputMaybe<Scalars["String"]>;
@@ -526,7 +548,7 @@ export interface CreateCategoryInput {
   slug?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the createComment mutation */
+/** Input for the createComment mutation. */
 export interface CreateCommentInput {
   /** The approval status of the comment. */
   approved?: InputMaybe<Scalars["String"]>;
@@ -546,11 +568,13 @@ export interface CreateCommentInput {
   date?: InputMaybe<Scalars["String"]>;
   /** Parent comment ID of current comment. */
   parent?: InputMaybe<Scalars["ID"]>;
+  /** The approval status of the comment */
+  status?: InputMaybe<CommentStatusEnum>;
   /** Type of comment. */
   type?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the createDepartamento mutation */
+/** Input for the createDepartamento mutation. */
 export interface CreateDepartamentoInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -572,7 +596,7 @@ export interface CreateDepartamentoInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the createFacultad mutation */
+/** Input for the createFacultad mutation. */
 export interface CreateFacultadInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -599,7 +623,7 @@ export interface CreateFacultadInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the createGrado mutation */
+/** Input for the createGrado mutation. */
 export interface CreateGradoInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -623,7 +647,7 @@ export interface CreateGradoInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the createGrupoDeRequisitos mutation */
+/** Input for the createGrupoDeRequisitos mutation. */
 export interface CreateGrupoDeRequisitosInput {
   /** The slug that the gruposderequisitos will be an alias of */
   aliasOf?: InputMaybe<Scalars["String"]>;
@@ -637,7 +661,7 @@ export interface CreateGrupoDeRequisitosInput {
   slug?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the createInvestigacion mutation */
+/** Input for the createInvestigacion mutation. */
 export interface CreateInvestigacionInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -662,7 +686,7 @@ export interface CreateInvestigacionInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the createInvestigador mutation */
+/** Input for the createInvestigador mutation. */
 export interface CreateInvestigadorInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -688,7 +712,7 @@ export interface CreateInvestigadorInput {
   tituloAcademicoAbreviado: Scalars["String"];
 }
 
-/** Input for the createLineaDeInvestigacion mutation */
+/** Input for the createLineaDeInvestigacion mutation. */
 export interface CreateLineaDeInvestigacionInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -709,7 +733,7 @@ export interface CreateLineaDeInvestigacionInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the createMediaItem mutation */
+/** Input for the createMediaItem mutation. */
 export interface CreateMediaItemInput {
   /** Alternative text to display when mediaItem is not displayed */
   altText?: InputMaybe<Scalars["String"]>;
@@ -743,7 +767,7 @@ export interface CreateMediaItemInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the createPage mutation */
+/** Input for the createPage mutation. */
 export interface CreatePageInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -769,7 +793,7 @@ export interface CreatePageInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the createPeriodoDeAdmision mutation */
+/** Input for the createPeriodoDeAdmision mutation. */
 export interface CreatePeriodoDeAdmisionInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -790,7 +814,7 @@ export interface CreatePeriodoDeAdmisionInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the createPostFormat mutation */
+/** Input for the createPostFormat mutation. */
 export interface CreatePostFormatInput {
   /** The slug that the post_format will be an alias of */
   aliasOf?: InputMaybe<Scalars["String"]>;
@@ -804,7 +828,7 @@ export interface CreatePostFormatInput {
   slug?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the createPost mutation */
+/** Input for the createPost mutation. */
 export interface CreatePostInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -842,7 +866,7 @@ export interface CreatePostInput {
   toPing?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
 }
 
-/** Input for the createRecurso mutation */
+/** Input for the createRecurso mutation. */
 export interface CreateRecursoInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -865,7 +889,7 @@ export interface CreateRecursoInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the createSlide mutation */
+/** Input for the createSlide mutation. */
 export interface CreateSlideInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -887,7 +911,7 @@ export interface CreateSlideInput {
   titulo: Scalars["String"];
 }
 
-/** Input for the createTag mutation */
+/** Input for the createTag mutation. */
 export interface CreateTagInput {
   /** The slug that the post_tag will be an alias of */
   aliasOf?: InputMaybe<Scalars["String"]>;
@@ -901,7 +925,7 @@ export interface CreateTagInput {
   slug?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the createUser mutation */
+/** Input for the createUser mutation. */
 export interface CreateUserInput {
   /** User's AOL IM account. */
   aim?: InputMaybe<Scalars["String"]>;
@@ -981,7 +1005,7 @@ export interface DateQueryInput {
   year?: InputMaybe<Scalars["Int"]>;
 }
 
-/** Input for the deleteCarrera mutation */
+/** Input for the deleteCarrera mutation. */
 export interface DeleteCarreraInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -989,9 +1013,11 @@ export interface DeleteCarreraInput {
   forceDelete?: InputMaybe<Scalars["Boolean"]>;
   /** The ID of the carrera to delete */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
 }
 
-/** Input for the deleteCategory mutation */
+/** Input for the deleteCategory mutation. */
 export interface DeleteCategoryInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -999,7 +1025,7 @@ export interface DeleteCategoryInput {
   id: Scalars["ID"];
 }
 
-/** Input for the deleteComment mutation */
+/** Input for the deleteComment mutation. */
 export interface DeleteCommentInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -1009,7 +1035,7 @@ export interface DeleteCommentInput {
   id: Scalars["ID"];
 }
 
-/** Input for the deleteDepartamento mutation */
+/** Input for the deleteDepartamento mutation. */
 export interface DeleteDepartamentoInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -1017,9 +1043,11 @@ export interface DeleteDepartamentoInput {
   forceDelete?: InputMaybe<Scalars["Boolean"]>;
   /** The ID of the departamento to delete */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
 }
 
-/** Input for the deleteFacultad mutation */
+/** Input for the deleteFacultad mutation. */
 export interface DeleteFacultadInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -1027,9 +1055,11 @@ export interface DeleteFacultadInput {
   forceDelete?: InputMaybe<Scalars["Boolean"]>;
   /** The ID of the facultad to delete */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
 }
 
-/** Input for the deleteGrado mutation */
+/** Input for the deleteGrado mutation. */
 export interface DeleteGradoInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -1037,9 +1067,11 @@ export interface DeleteGradoInput {
   forceDelete?: InputMaybe<Scalars["Boolean"]>;
   /** The ID of the grado to delete */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
 }
 
-/** Input for the deleteGrupoDeRequisitos mutation */
+/** Input for the deleteGrupoDeRequisitos mutation. */
 export interface DeleteGrupoDeRequisitosInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -1047,7 +1079,7 @@ export interface DeleteGrupoDeRequisitosInput {
   id: Scalars["ID"];
 }
 
-/** Input for the deleteInvestigacion mutation */
+/** Input for the deleteInvestigacion mutation. */
 export interface DeleteInvestigacionInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -1055,9 +1087,11 @@ export interface DeleteInvestigacionInput {
   forceDelete?: InputMaybe<Scalars["Boolean"]>;
   /** The ID of the investigacion to delete */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
 }
 
-/** Input for the deleteInvestigador mutation */
+/** Input for the deleteInvestigador mutation. */
 export interface DeleteInvestigadorInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -1065,9 +1099,11 @@ export interface DeleteInvestigadorInput {
   forceDelete?: InputMaybe<Scalars["Boolean"]>;
   /** The ID of the investigador to delete */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
 }
 
-/** Input for the deleteLineaDeInvestigacion mutation */
+/** Input for the deleteLineaDeInvestigacion mutation. */
 export interface DeleteLineaDeInvestigacionInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -1075,9 +1111,11 @@ export interface DeleteLineaDeInvestigacionInput {
   forceDelete?: InputMaybe<Scalars["Boolean"]>;
   /** The ID of the lineaDeInvestigacion to delete */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
 }
 
-/** Input for the deleteMediaItem mutation */
+/** Input for the deleteMediaItem mutation. */
 export interface DeleteMediaItemInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -1087,7 +1125,7 @@ export interface DeleteMediaItemInput {
   id: Scalars["ID"];
 }
 
-/** Input for the deletePage mutation */
+/** Input for the deletePage mutation. */
 export interface DeletePageInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -1095,9 +1133,11 @@ export interface DeletePageInput {
   forceDelete?: InputMaybe<Scalars["Boolean"]>;
   /** The ID of the page to delete */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
 }
 
-/** Input for the deletePeriodoDeAdmision mutation */
+/** Input for the deletePeriodoDeAdmision mutation. */
 export interface DeletePeriodoDeAdmisionInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -1105,9 +1145,11 @@ export interface DeletePeriodoDeAdmisionInput {
   forceDelete?: InputMaybe<Scalars["Boolean"]>;
   /** The ID of the periodoDeAdmision to delete */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
 }
 
-/** Input for the deletePostFormat mutation */
+/** Input for the deletePostFormat mutation. */
 export interface DeletePostFormatInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -1115,7 +1157,7 @@ export interface DeletePostFormatInput {
   id: Scalars["ID"];
 }
 
-/** Input for the deletePost mutation */
+/** Input for the deletePost mutation. */
 export interface DeletePostInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -1123,9 +1165,11 @@ export interface DeletePostInput {
   forceDelete?: InputMaybe<Scalars["Boolean"]>;
   /** The ID of the post to delete */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
 }
 
-/** Input for the deleteRecurso mutation */
+/** Input for the deleteRecurso mutation. */
 export interface DeleteRecursoInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -1133,9 +1177,11 @@ export interface DeleteRecursoInput {
   forceDelete?: InputMaybe<Scalars["Boolean"]>;
   /** The ID of the recurso to delete */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
 }
 
-/** Input for the deleteSlide mutation */
+/** Input for the deleteSlide mutation. */
 export interface DeleteSlideInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -1143,9 +1189,11 @@ export interface DeleteSlideInput {
   forceDelete?: InputMaybe<Scalars["Boolean"]>;
   /** The ID of the slide to delete */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
 }
 
-/** Input for the deleteTag mutation */
+/** Input for the deleteTag mutation. */
 export interface DeleteTagInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -1153,7 +1201,7 @@ export interface DeleteTagInput {
   id: Scalars["ID"];
 }
 
-/** Input for the deleteUser mutation */
+/** Input for the deleteUser mutation. */
 export interface DeleteUserInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -1187,7 +1235,7 @@ export enum FacultadIdType {
   URI = "URI",
 }
 
-/** Input for the generateAuthorizationCode mutation */
+/** Input for the generateAuthorizationCode mutation. */
 export interface GenerateAuthorizationCodeInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -1271,6 +1319,8 @@ export interface GradoToGrupoDeRequisitosConnectionWhereArgs {
   slug?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
   updateTermMetaCache?: InputMaybe<Scalars["Boolean"]>;
 }
@@ -1317,6 +1367,8 @@ export interface GradoToTermNodeConnectionWhereArgs {
   taxonomies?: InputMaybe<Array<InputMaybe<TaxonomyEnum>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
   updateTermMetaCache?: InputMaybe<Scalars["Boolean"]>;
 }
@@ -1345,7 +1397,7 @@ export interface GrupoDeRequisitosToContentNodeConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -1391,7 +1443,7 @@ export interface GrupoDeRequisitosToGradoConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -1431,7 +1483,7 @@ export interface HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArg
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -1471,7 +1523,7 @@ export interface HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -1613,7 +1665,7 @@ export interface MediaItemToCommentConnectionWhereArgs {
   contentIdIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Array of content object IDs to exclude affiliated comments for. */
   contentIdNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Content object name to retrieve affiliated comments for. */
+  /** Content object name (i.e. slug ) to retrieve affiliated comments for. */
   contentName?: InputMaybe<Scalars["String"]>;
   /** Content Object parent ID to retrieve affiliated comments for. */
   contentParent?: InputMaybe<Scalars["Int"]>;
@@ -1653,7 +1705,7 @@ export enum MenuItemNodeIdTypeEnum {
 
 /** Arguments for filtering the MenuItemToMenuItemConnection connection */
 export interface MenuItemToMenuItemConnectionWhereArgs {
-  /** The ID of the object */
+  /** The database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** The menu location for the menu being queried */
   location?: InputMaybe<MenuLocationEnum>;
@@ -1683,13 +1735,17 @@ export enum MenuNodeIdTypeEnum {
   DATABASE_ID = "DATABASE_ID",
   /** Identify a menu node by the (hashed) Global ID. */
   ID = "ID",
-  /** Identify a menu node by it's name */
+  /** Identify a menu node by the slug of menu location to which it is assigned */
+  LOCATION = "LOCATION",
+  /** Identify a menu node by its name */
   NAME = "NAME",
+  /** Identify a menu node by its slug */
+  SLUG = "SLUG",
 }
 
 /** Arguments for filtering the MenuToMenuItemConnection connection */
 export interface MenuToMenuItemConnectionWhereArgs {
-  /** The ID of the object */
+  /** The database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** The menu location for the menu being queried */
   location?: InputMaybe<MenuLocationEnum>;
@@ -1931,7 +1987,7 @@ export interface PageToCommentConnectionWhereArgs {
   contentIdIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Array of content object IDs to exclude affiliated comments for. */
   contentIdNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Content object name to retrieve affiliated comments for. */
+  /** Content object name (i.e. slug ) to retrieve affiliated comments for. */
   contentName?: InputMaybe<Scalars["String"]>;
   /** Content Object parent ID to retrieve affiliated comments for. */
   contentParent?: InputMaybe<Scalars["Int"]>;
@@ -1961,7 +2017,7 @@ export interface PageToCommentConnectionWhereArgs {
   userId?: InputMaybe<Scalars["ID"]>;
 }
 
-/** Arguments for filtering the pageToRevisionConnection connection */
+/** Arguments for filtering the PageToRevisionConnection connection */
 export interface PageToRevisionConnectionWhereArgs {
   /** The user that's connected as the author of the object. Use the userId for the author object. */
   author?: InputMaybe<Scalars["Int"]>;
@@ -1975,7 +2031,7 @@ export interface PageToRevisionConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -2079,7 +2135,7 @@ export interface PostFormatToContentNodeConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -2133,7 +2189,7 @@ export interface PostFormatToPostConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -2169,9 +2225,9 @@ export interface PostFormatToPostConnectionWhereArgs {
   tagIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Array of tag IDs, used to display objects from one tag OR another */
   tagNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Array of tag slugs, used to display objects from one tag OR another */
+  /** Array of tag slugs, used to display objects from one tag AND another */
   tagSlugAnd?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  /** Array of tag slugs, used to exclude objects in specified tags */
+  /** Array of tag slugs, used to include objects in ANY specified tags */
   tagSlugIn?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
   /** Title of the object */
   title?: InputMaybe<Scalars["String"]>;
@@ -2347,6 +2403,8 @@ export interface PostToCategoryConnectionWhereArgs {
   slug?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
   updateTermMetaCache?: InputMaybe<Scalars["Boolean"]>;
 }
@@ -2383,7 +2441,7 @@ export interface PostToCommentConnectionWhereArgs {
   contentIdIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Array of content object IDs to exclude affiliated comments for. */
   contentIdNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Content object name to retrieve affiliated comments for. */
+  /** Content object name (i.e. slug ) to retrieve affiliated comments for. */
   contentName?: InputMaybe<Scalars["String"]>;
   /** Content Object parent ID to retrieve affiliated comments for. */
   contentParent?: InputMaybe<Scalars["Int"]>;
@@ -2453,11 +2511,13 @@ export interface PostToPostFormatConnectionWhereArgs {
   slug?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
   updateTermMetaCache?: InputMaybe<Scalars["Boolean"]>;
 }
 
-/** Arguments for filtering the postToRevisionConnection connection */
+/** Arguments for filtering the PostToRevisionConnection connection */
 export interface PostToRevisionConnectionWhereArgs {
   /** The user that's connected as the author of the object. Use the userId for the author object. */
   author?: InputMaybe<Scalars["Int"]>;
@@ -2479,7 +2539,7 @@ export interface PostToRevisionConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -2515,9 +2575,9 @@ export interface PostToRevisionConnectionWhereArgs {
   tagIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Array of tag IDs, used to display objects from one tag OR another */
   tagNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Array of tag slugs, used to display objects from one tag OR another */
+  /** Array of tag slugs, used to display objects from one tag AND another */
   tagSlugAnd?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  /** Array of tag slugs, used to exclude objects in specified tags */
+  /** Array of tag slugs, used to include objects in ANY specified tags */
   tagSlugIn?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
   /** Title of the object */
   title?: InputMaybe<Scalars["String"]>;
@@ -2563,6 +2623,8 @@ export interface PostToTagConnectionWhereArgs {
   slug?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
   updateTermMetaCache?: InputMaybe<Scalars["Boolean"]>;
 }
@@ -2609,6 +2671,8 @@ export interface PostToTermNodeConnectionWhereArgs {
   taxonomies?: InputMaybe<Array<InputMaybe<TaxonomyEnum>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
   updateTermMetaCache?: InputMaybe<Scalars["Boolean"]>;
 }
@@ -2625,7 +2689,7 @@ export enum RecursoIdType {
   URI = "URI",
 }
 
-/** Input for the registerUser mutation */
+/** Input for the registerUser mutation. */
 export interface RegisterUserInput {
   /** User's AOL IM account. */
   aim?: InputMaybe<Scalars["String"]>;
@@ -2671,7 +2735,7 @@ export enum RelationEnum {
   OR = "OR",
 }
 
-/** Input for the resetUserPassword mutation */
+/** Input for the resetUserPassword mutation. */
 export interface ResetUserPasswordInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -2683,7 +2747,7 @@ export interface ResetUserPasswordInput {
   password?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the restoreComment mutation */
+/** Input for the restoreComment mutation. */
 export interface RestoreCommentInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -2705,7 +2769,7 @@ export interface RootQueryToCarreraConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -2777,6 +2841,8 @@ export interface RootQueryToCategoryConnectionWhereArgs {
   slug?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
   updateTermMetaCache?: InputMaybe<Scalars["Boolean"]>;
 }
@@ -2813,7 +2879,7 @@ export interface RootQueryToCommentConnectionWhereArgs {
   contentIdIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Array of content object IDs to exclude affiliated comments for. */
   contentIdNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Content object name to retrieve affiliated comments for. */
+  /** Content object name (i.e. slug ) to retrieve affiliated comments for. */
   contentName?: InputMaybe<Scalars["String"]>;
   /** Content Object parent ID to retrieve affiliated comments for. */
   contentParent?: InputMaybe<Scalars["Int"]>;
@@ -2851,47 +2917,7 @@ export interface RootQueryToContentNodeConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
-  id?: InputMaybe<Scalars["Int"]>;
-  /** Array of IDs for the objects to retrieve */
-  in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Get objects with a specific mimeType property */
-  mimeType?: InputMaybe<MimeTypeEnum>;
-  /** Slug / post_name of the object */
-  name?: InputMaybe<Scalars["String"]>;
-  /** Specify objects to retrieve. Use slugs */
-  nameIn?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
-  notIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** What paramater to use to order the objects by. */
-  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
-  /** Use ID to return only children. Use 0 to return only top-level items */
-  parent?: InputMaybe<Scalars["ID"]>;
-  /** Specify objects whose parent is in an array */
-  parentIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Specify posts whose parent is not in an array */
-  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Show posts with a specific password. */
-  password?: InputMaybe<Scalars["String"]>;
-  /** Show Posts based on a keyword search */
-  search?: InputMaybe<Scalars["String"]>;
-  /** Retrieve posts where post status is in an array. */
-  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
-  /** Show posts with a specific status. */
-  status?: InputMaybe<PostStatusEnum>;
-  /** Title of the object */
-  title?: InputMaybe<Scalars["String"]>;
-}
-
-/** Arguments for filtering the RootQueryToContentRevisionUnionConnection connection */
-export interface RootQueryToContentRevisionUnionConnectionWhereArgs {
-  /** The Types of content to filter */
-  contentTypes?: InputMaybe<Array<InputMaybe<ContentTypeEnum>>>;
-  /** Filter the connection based on dates */
-  dateQuery?: InputMaybe<DateQueryInput>;
-  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
-  hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -2937,7 +2963,7 @@ export interface RootQueryToDepartamentoConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -2983,7 +3009,7 @@ export interface RootQueryToFacultadConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -3029,7 +3055,7 @@ export interface RootQueryToGradoConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -3101,6 +3127,8 @@ export interface RootQueryToGrupoDeRequisitosConnectionWhereArgs {
   slug?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
   updateTermMetaCache?: InputMaybe<Scalars["Boolean"]>;
 }
@@ -3119,7 +3147,7 @@ export interface RootQueryToInvestigacionConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -3165,7 +3193,7 @@ export interface RootQueryToInvestigadorConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -3211,7 +3239,7 @@ export interface RootQueryToLineaDeInvestigacionConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -3257,7 +3285,7 @@ export interface RootQueryToMediaItemConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -3291,7 +3319,7 @@ export interface RootQueryToMediaItemConnectionWhereArgs {
 
 /** Arguments for filtering the RootQueryToMenuConnection connection */
 export interface RootQueryToMenuConnectionWhereArgs {
-  /** The ID of the object */
+  /** The database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** The menu location for the menu being queried */
   location?: InputMaybe<MenuLocationEnum>;
@@ -3301,7 +3329,7 @@ export interface RootQueryToMenuConnectionWhereArgs {
 
 /** Arguments for filtering the RootQueryToMenuItemConnection connection */
 export interface RootQueryToMenuItemConnectionWhereArgs {
-  /** The ID of the object */
+  /** The database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** The menu location for the menu being queried */
   location?: InputMaybe<MenuLocationEnum>;
@@ -3325,7 +3353,7 @@ export interface RootQueryToPageConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -3371,7 +3399,7 @@ export interface RootQueryToPeriodoDeAdmisionConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -3435,7 +3463,7 @@ export interface RootQueryToPostConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -3471,9 +3499,9 @@ export interface RootQueryToPostConnectionWhereArgs {
   tagIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Array of tag IDs, used to display objects from one tag OR another */
   tagNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Array of tag slugs, used to display objects from one tag OR another */
+  /** Array of tag slugs, used to display objects from one tag AND another */
   tagSlugAnd?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  /** Array of tag slugs, used to exclude objects in specified tags */
+  /** Array of tag slugs, used to include objects in ANY specified tags */
   tagSlugIn?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
   /** Title of the object */
   title?: InputMaybe<Scalars["String"]>;
@@ -3519,6 +3547,8 @@ export interface RootQueryToPostFormatConnectionWhereArgs {
   slug?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
   updateTermMetaCache?: InputMaybe<Scalars["Boolean"]>;
 }
@@ -3537,7 +3567,47 @@ export interface RootQueryToRecursoConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
+  id?: InputMaybe<Scalars["Int"]>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars["String"]>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** What paramater to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars["ID"]>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars["String"]>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars["String"]>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars["String"]>;
+}
+
+/** Arguments for filtering the RootQueryToRevisionsConnection connection */
+export interface RootQueryToRevisionsConnectionWhereArgs {
+  /** The Types of content to filter */
+  contentTypes?: InputMaybe<Array<InputMaybe<ContentTypeEnum>>>;
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars["Boolean"]>;
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -3583,7 +3653,7 @@ export interface RootQueryToSlideConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -3655,6 +3725,8 @@ export interface RootQueryToTagConnectionWhereArgs {
   slug?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
   updateTermMetaCache?: InputMaybe<Scalars["Boolean"]>;
 }
@@ -3701,6 +3773,8 @@ export interface RootQueryToTermNodeConnectionWhereArgs {
   taxonomies?: InputMaybe<Array<InputMaybe<TaxonomyEnum>>>;
   /** Array of term taxonomy IDs, to match when querying terms. */
   termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomyId?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Whether to prime meta caches for matched terms. Default true. */
   updateTermMetaCache?: InputMaybe<Scalars["Boolean"]>;
 }
@@ -3747,7 +3821,7 @@ export enum SEOCardType {
   summary_large_image = "summary_large_image",
 }
 
-/** Input for the sendPasswordResetEmail mutation */
+/** Input for the sendPasswordResetEmail mutation. */
 export interface SendPasswordResetEmailInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars["String"]>;
@@ -3789,7 +3863,7 @@ export interface TagToContentNodeConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -3843,7 +3917,7 @@ export interface TagToPostConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -3879,9 +3953,9 @@ export interface TagToPostConnectionWhereArgs {
   tagIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Array of tag IDs, used to display objects from one tag OR another */
   tagNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Array of tag slugs, used to display objects from one tag OR another */
+  /** Array of tag slugs, used to display objects from one tag AND another */
   tagSlugAnd?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  /** Array of tag slugs, used to exclude objects in specified tags */
+  /** Array of tag slugs, used to include objects in ANY specified tags */
   tagSlugIn?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
   /** Title of the object */
   title?: InputMaybe<Scalars["String"]>;
@@ -3939,7 +4013,7 @@ export enum TermObjectsConnectionOrderbyEnum {
   TERM_ORDER = "TERM_ORDER",
 }
 
-/** Input for the updateCarrera mutation */
+/** Input for the updateCarrera mutation. */
 export interface UpdateCarreraInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -3954,6 +4028,8 @@ export interface UpdateCarreraInput {
   duracionPasantia?: InputMaybe<Scalars["String"]>;
   /** The ID of the carrera object */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars["Int"]>;
   nombre?: InputMaybe<Scalars["String"]>;
@@ -3967,7 +4043,7 @@ export interface UpdateCarreraInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the UpdateCategory mutation */
+/** Input for the updateCategory mutation. */
 export interface UpdateCategoryInput {
   /** The slug that the category will be an alias of */
   aliasOf?: InputMaybe<Scalars["String"]>;
@@ -3985,7 +4061,7 @@ export interface UpdateCategoryInput {
   slug?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the updateComment mutation */
+/** Input for the updateComment mutation. */
 export interface UpdateCommentInput {
   /** The approval status of the comment. */
   approved?: InputMaybe<Scalars["String"]>;
@@ -4007,11 +4083,13 @@ export interface UpdateCommentInput {
   id: Scalars["ID"];
   /** Parent comment ID of current comment. */
   parent?: InputMaybe<Scalars["ID"]>;
+  /** The approval status of the comment */
+  status?: InputMaybe<CommentStatusEnum>;
   /** Type of comment. */
   type?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the updateDepartamento mutation */
+/** Input for the updateDepartamento mutation. */
 export interface UpdateDepartamentoInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -4022,6 +4100,8 @@ export interface UpdateDepartamentoInput {
   date?: InputMaybe<Scalars["String"]>;
   /** The ID of the departamento object */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars["Int"]>;
   nombre?: InputMaybe<Scalars["String"]>;
@@ -4035,7 +4115,7 @@ export interface UpdateDepartamentoInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the updateFacultad mutation */
+/** Input for the updateFacultad mutation. */
 export interface UpdateFacultadInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -4048,6 +4128,8 @@ export interface UpdateFacultadInput {
   date?: InputMaybe<Scalars["String"]>;
   /** The ID of the facultad object */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars["Int"]>;
   mision?: InputMaybe<Scalars["String"]>;
@@ -4064,7 +4146,7 @@ export interface UpdateFacultadInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the updateGrado mutation */
+/** Input for the updateGrado mutation. */
 export interface UpdateGradoInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -4076,6 +4158,8 @@ export interface UpdateGradoInput {
   gruposDeRequisitos?: InputMaybe<GradoGruposDeRequisitosInput>;
   /** The ID of the grado object */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars["Int"]>;
   nombre?: InputMaybe<Scalars["String"]>;
@@ -4090,7 +4174,7 @@ export interface UpdateGradoInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the UpdateGrupoDeRequisitos mutation */
+/** Input for the updateGrupoDeRequisitos mutation. */
 export interface UpdateGrupoDeRequisitosInput {
   /** The slug that the gruposderequisitos will be an alias of */
   aliasOf?: InputMaybe<Scalars["String"]>;
@@ -4106,7 +4190,7 @@ export interface UpdateGrupoDeRequisitosInput {
   slug?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the updateInvestigacion mutation */
+/** Input for the updateInvestigacion mutation. */
 export interface UpdateInvestigacionInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -4119,6 +4203,8 @@ export interface UpdateInvestigacionInput {
   descripcionCorta?: InputMaybe<Scalars["String"]>;
   /** The ID of the investigacion object */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars["Int"]>;
   nombre?: InputMaybe<Scalars["String"]>;
@@ -4133,7 +4219,7 @@ export interface UpdateInvestigacionInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the updateInvestigador mutation */
+/** Input for the updateInvestigador mutation. */
 export interface UpdateInvestigadorInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -4144,6 +4230,8 @@ export interface UpdateInvestigadorInput {
   esEquipo?: InputMaybe<Scalars["Boolean"]>;
   /** The ID of the investigador object */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
   inicialesTituloAcademico?: InputMaybe<Scalars["String"]>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars["Int"]>;
@@ -4161,7 +4249,7 @@ export interface UpdateInvestigadorInput {
   tituloAcademicoAbreviado?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the updateLineaDeInvestigacion mutation */
+/** Input for the updateLineaDeInvestigacion mutation. */
 export interface UpdateLineaDeInvestigacionInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -4171,6 +4259,8 @@ export interface UpdateLineaDeInvestigacionInput {
   date?: InputMaybe<Scalars["String"]>;
   /** The ID of the lineaDeInvestigacion object */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars["Int"]>;
   nombre?: InputMaybe<Scalars["String"]>;
@@ -4184,7 +4274,7 @@ export interface UpdateLineaDeInvestigacionInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the updateMediaItem mutation */
+/** Input for the updateMediaItem mutation. */
 export interface UpdateMediaItemInput {
   /** Alternative text to display when mediaItem is not displayed */
   altText?: InputMaybe<Scalars["String"]>;
@@ -4220,7 +4310,7 @@ export interface UpdateMediaItemInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the updatePage mutation */
+/** Input for the updatePage mutation. */
 export interface UpdatePageInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -4234,6 +4324,8 @@ export interface UpdatePageInput {
   date?: InputMaybe<Scalars["String"]>;
   /** The ID of the page object */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars["Int"]>;
   /** The ID of the parent object */
@@ -4248,7 +4340,7 @@ export interface UpdatePageInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the updatePeriodoDeAdmision mutation */
+/** Input for the updatePeriodoDeAdmision mutation. */
 export interface UpdatePeriodoDeAdmisionInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -4258,6 +4350,8 @@ export interface UpdatePeriodoDeAdmisionInput {
   date?: InputMaybe<Scalars["String"]>;
   /** The ID of the periodoDeAdmision object */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars["Int"]>;
   nombre?: InputMaybe<Scalars["String"]>;
@@ -4271,7 +4365,7 @@ export interface UpdatePeriodoDeAdmisionInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the UpdatePostFormat mutation */
+/** Input for the updatePostFormat mutation. */
 export interface UpdatePostFormatInput {
   /** The slug that the post_format will be an alias of */
   aliasOf?: InputMaybe<Scalars["String"]>;
@@ -4287,7 +4381,7 @@ export interface UpdatePostFormatInput {
   slug?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the updatePost mutation */
+/** Input for the updatePost mutation. */
 export interface UpdatePostInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -4305,6 +4399,8 @@ export interface UpdatePostInput {
   excerpt?: InputMaybe<Scalars["String"]>;
   /** The ID of the post object */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars["Int"]>;
   /** The password used to protect the content of the object */
@@ -4327,7 +4423,7 @@ export interface UpdatePostInput {
   toPing?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
 }
 
-/** Input for the updateRecurso mutation */
+/** Input for the updateRecurso mutation. */
 export interface UpdateRecursoInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -4338,6 +4434,8 @@ export interface UpdateRecursoInput {
   descripcion?: InputMaybe<Scalars["String"]>;
   /** The ID of the recurso object */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars["Int"]>;
   nombre?: InputMaybe<Scalars["String"]>;
@@ -4352,8 +4450,9 @@ export interface UpdateRecursoInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the updateSettings mutation */
+/** Input for the updateSettings mutation. */
 export interface UpdateSettingsInput {
+  /** Opt into anonymous usage tracking to help us make Atlas Content Modeler better. */
   atlasContentModelerSettingsSettingsAtlasContentModelerUsageTracking?: InputMaybe<
     Scalars["String"]
   >;
@@ -4381,8 +4480,14 @@ export interface UpdateSettingsInput {
   generalSettingsTitle?: InputMaybe<Scalars["String"]>;
   /** Site URL. */
   generalSettingsUrl?: InputMaybe<Scalars["String"]>;
+  /** The ID of the page that should display the latest posts */
+  readingSettingsPageForPosts?: InputMaybe<Scalars["Int"]>;
+  /** The ID of the page that should be displayed on the front page */
+  readingSettingsPageOnFront?: InputMaybe<Scalars["Int"]>;
   /** Blog pages show at most. */
   readingSettingsPostsPerPage?: InputMaybe<Scalars["Int"]>;
+  /** What to show on the front page */
+  readingSettingsShowOnFront?: InputMaybe<Scalars["String"]>;
   /** Default post category. */
   writingSettingsDefaultCategory?: InputMaybe<Scalars["Int"]>;
   /** Default post format. */
@@ -4391,7 +4496,7 @@ export interface UpdateSettingsInput {
   writingSettingsUseSmilies?: InputMaybe<Scalars["Boolean"]>;
 }
 
-/** Input for the updateSlide mutation */
+/** Input for the updateSlide mutation. */
 export interface UpdateSlideInput {
   /** The userId to assign as the author of the object */
   authorId?: InputMaybe<Scalars["ID"]>;
@@ -4402,6 +4507,8 @@ export interface UpdateSlideInput {
   date?: InputMaybe<Scalars["String"]>;
   /** The ID of the slide object */
   id: Scalars["ID"];
+  /** Override the edit lock when another user is editing the post */
+  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars["Int"]>;
   /** The password used to protect the content of the object */
@@ -4415,7 +4522,7 @@ export interface UpdateSlideInput {
   titulo?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the UpdateTag mutation */
+/** Input for the updateTag mutation. */
 export interface UpdateTagInput {
   /** The slug that the post_tag will be an alias of */
   aliasOf?: InputMaybe<Scalars["String"]>;
@@ -4431,7 +4538,7 @@ export interface UpdateTagInput {
   slug?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the updateUser mutation */
+/** Input for the updateUser mutation. */
 export interface UpdateUserInput {
   /** User's AOL IM account. */
   aim?: InputMaybe<Scalars["String"]>;
@@ -4498,6 +4605,10 @@ export enum UserRoleEnum {
   /** User role with specific capabilities */
   EDITOR = "EDITOR",
   /** User role with specific capabilities */
+  SEO_EDITOR = "SEO_EDITOR",
+  /** User role with specific capabilities */
+  SEO_MANAGER = "SEO_MANAGER",
+  /** User role with specific capabilities */
   SUBSCRIBER = "SUBSCRIBER",
 }
 
@@ -4515,7 +4626,7 @@ export interface UserToCarreraConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -4579,7 +4690,7 @@ export interface UserToCommentConnectionWhereArgs {
   contentIdIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Array of content object IDs to exclude affiliated comments for. */
   contentIdNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Content object name to retrieve affiliated comments for. */
+  /** Content object name (i.e. slug ) to retrieve affiliated comments for. */
   contentName?: InputMaybe<Scalars["String"]>;
   /** Content Object parent ID to retrieve affiliated comments for. */
   contentParent?: InputMaybe<Scalars["Int"]>;
@@ -4609,46 +4720,6 @@ export interface UserToCommentConnectionWhereArgs {
   userId?: InputMaybe<Scalars["ID"]>;
 }
 
-/** Arguments for filtering the UserToContentRevisionUnionConnection connection */
-export interface UserToContentRevisionUnionConnectionWhereArgs {
-  /** The Types of content to filter */
-  contentTypes?: InputMaybe<Array<InputMaybe<ContentTypeEnum>>>;
-  /** Filter the connection based on dates */
-  dateQuery?: InputMaybe<DateQueryInput>;
-  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
-  hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
-  id?: InputMaybe<Scalars["Int"]>;
-  /** Array of IDs for the objects to retrieve */
-  in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Get objects with a specific mimeType property */
-  mimeType?: InputMaybe<MimeTypeEnum>;
-  /** Slug / post_name of the object */
-  name?: InputMaybe<Scalars["String"]>;
-  /** Specify objects to retrieve. Use slugs */
-  nameIn?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
-  notIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** What paramater to use to order the objects by. */
-  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
-  /** Use ID to return only children. Use 0 to return only top-level items */
-  parent?: InputMaybe<Scalars["ID"]>;
-  /** Specify objects whose parent is in an array */
-  parentIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Specify posts whose parent is not in an array */
-  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Show posts with a specific password. */
-  password?: InputMaybe<Scalars["String"]>;
-  /** Show Posts based on a keyword search */
-  search?: InputMaybe<Scalars["String"]>;
-  /** Retrieve posts where post status is in an array. */
-  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
-  /** Show posts with a specific status. */
-  status?: InputMaybe<PostStatusEnum>;
-  /** Title of the object */
-  title?: InputMaybe<Scalars["String"]>;
-}
-
 /** Arguments for filtering the UserToDepartamentoConnection connection */
 export interface UserToDepartamentoConnectionWhereArgs {
   /** The user that's connected as the author of the object. Use the userId for the author object. */
@@ -4663,7 +4734,7 @@ export interface UserToDepartamentoConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -4709,7 +4780,7 @@ export interface UserToFacultadConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -4755,7 +4826,7 @@ export interface UserToGradoConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -4801,7 +4872,7 @@ export interface UserToInvestigacionConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -4847,7 +4918,7 @@ export interface UserToInvestigadorConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -4893,7 +4964,7 @@ export interface UserToLineaDeInvestigacionConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -4939,7 +5010,7 @@ export interface UserToMediaItemConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -4985,7 +5056,7 @@ export interface UserToPageConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -5031,7 +5102,7 @@ export interface UserToPeriodoDeAdmisionConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -5085,7 +5156,7 @@ export interface UserToPostConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -5121,9 +5192,9 @@ export interface UserToPostConnectionWhereArgs {
   tagIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
   /** Array of tag IDs, used to display objects from one tag OR another */
   tagNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Array of tag slugs, used to display objects from one tag OR another */
+  /** Array of tag slugs, used to display objects from one tag AND another */
   tagSlugAnd?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  /** Array of tag slugs, used to exclude objects in specified tags */
+  /** Array of tag slugs, used to include objects in ANY specified tags */
   tagSlugIn?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
   /** Title of the object */
   title?: InputMaybe<Scalars["String"]>;
@@ -5143,7 +5214,47 @@ export interface UserToRecursoConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
+  id?: InputMaybe<Scalars["Int"]>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars["String"]>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** What paramater to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars["ID"]>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars["String"]>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars["String"]>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars["String"]>;
+}
+
+/** Arguments for filtering the UserToRevisionsConnection connection */
+export interface UserToRevisionsConnectionWhereArgs {
+  /** The Types of content to filter */
+  contentTypes?: InputMaybe<Array<InputMaybe<ContentTypeEnum>>>;
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars["Boolean"]>;
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -5189,7 +5300,7 @@ export interface UserToSlideConnectionWhereArgs {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars["Int"]>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
@@ -5259,7 +5370,7 @@ export enum UsersConnectionSearchColumnEnum {
   LOGIN = "LOGIN",
   /** A URL-friendly name for the user. The default is the user's username. */
   NICENAME = "NICENAME",
-  /** The URL of the user\s website. */
+  /** The URL of the user's website. */
   URL = "URL",
 }
 
@@ -5268,6 +5379,8 @@ export const scalarsEnumsHash: import("gqty").ScalarsEnumsHash = {
   Boolean: true,
   CarreraIdType: true,
   CategoryIdType: true,
+  CommentNodeIdTypeEnum: true,
+  CommentStatusEnum: true,
   CommentsConnectionOrderbyEnum: true,
   ContentNodeIdTypeEnum: true,
   ContentTypeEnum: true,
@@ -5481,70 +5594,110 @@ export const generatedSchema = {
     },
     uri: { __type: "String" },
   },
+  CarreraConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[CarreraConnectionEdge!]!" },
+    nodes: { __type: "[Carrera!]!" },
+    pageInfo: { __type: "CarreraConnectionPageInfo!" },
+    $on: { __type: "$CarreraConnection!" },
+  },
+  CarreraConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Carrera!" },
+    $on: { __type: "$CarreraConnectionEdge!" },
+  },
+  CarreraConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$CarreraConnectionPageInfo!" },
+  },
   CarreraToDepartamentoConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Departamento" },
+    cursor: { __type: "String" },
+    node: { __type: "Departamento!" },
   },
   CarreraToFacultadConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Facultad" },
+    cursor: { __type: "String" },
+    node: { __type: "Facultad!" },
   },
   CarreraToGradoConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Grado" },
+    cursor: { __type: "String" },
+    node: { __type: "Grado!" },
   },
   CarreraToPreviewConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Carrera" },
+    cursor: { __type: "String" },
+    node: { __type: "Carrera!" },
   },
   CarreraToRecursoConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[CarreraToRecursoConnectionEdge]" },
-    nodes: { __type: "[Recurso]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[CarreraToRecursoConnectionEdge!]!" },
+    nodes: { __type: "[Recurso!]!" },
+    pageInfo: { __type: "CarreraToRecursoConnectionPageInfo!" },
   },
   CarreraToRecursoConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Recurso" },
+    node: { __type: "Recurso!" },
+  },
+  CarreraToRecursoConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   Carrera_Contacto: {
     __typename: { __type: "String!" },
-    direcciones: { __type: "[Carrera_Contacto_direcciones]" },
-    emails: { __type: "[Carrera_Contacto_emails]" },
     fieldGroupName: { __type: "String" },
-    horarios: { __type: "[Carrera_Contacto_horarios]" },
-    telefonos: { __type: "[Carrera_Contacto_telefonos]" },
-    whatsapp: { __type: "[Carrera_Contacto_whatsapp]" },
+    unidad: { __type: "[Carrera_Contacto_unidad]" },
   },
-  Carrera_Contacto_direcciones: {
+  Carrera_Contacto_unidad: {
+    __typename: { __type: "String!" },
+    direcciones: { __type: "[Carrera_Contacto_unidad_direcciones]" },
+    emails: { __type: "[Carrera_Contacto_unidad_emails]" },
+    fieldGroupName: { __type: "String" },
+    horarios: { __type: "[Carrera_Contacto_unidad_horarios]" },
+    nombre: { __type: "String" },
+    telefonos: { __type: "[Carrera_Contacto_unidad_telefonos]" },
+    whatsapp: { __type: "[Carrera_Contacto_unidad_whatsapp]" },
+  },
+  Carrera_Contacto_unidad_direcciones: {
     __typename: { __type: "String!" },
     direccion: { __type: "String" },
     fieldGroupName: { __type: "String" },
   },
-  Carrera_Contacto_emails: {
+  Carrera_Contacto_unidad_emails: {
     __typename: { __type: "String!" },
     email: { __type: "String" },
     fieldGroupName: { __type: "String" },
   },
-  Carrera_Contacto_horarios: {
+  Carrera_Contacto_unidad_horarios: {
     __typename: { __type: "String!" },
     dias: { __type: "String" },
     fieldGroupName: { __type: "String" },
     horas: { __type: "String" },
   },
-  Carrera_Contacto_telefonos: {
+  Carrera_Contacto_unidad_telefonos: {
     __typename: { __type: "String!" },
-    extensiones: { __type: "[Carrera_Contacto_telefonos_extensiones]" },
+    extensiones: { __type: "[Carrera_Contacto_unidad_telefonos_extensiones]" },
     fieldGroupName: { __type: "String" },
     telefono: { __type: "String" },
   },
-  Carrera_Contacto_telefonos_extensiones: {
+  Carrera_Contacto_unidad_telefonos_extensiones: {
     __typename: { __type: "String!" },
     extension: { __type: "String" },
     fieldGroupName: { __type: "String" },
   },
-  Carrera_Contacto_whatsapp: {
+  Carrera_Contacto_unidad_whatsapp: {
     __typename: { __type: "String!" },
     fieldGroupName: { __type: "String" },
     telefono: { __type: "String" },
@@ -5627,27 +5780,65 @@ export const generatedSchema = {
     termTaxonomyId: { __type: "Int" },
     uri: { __type: "String" },
   },
+  CategoryConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[CategoryConnectionEdge!]!" },
+    nodes: { __type: "[Category!]!" },
+    pageInfo: { __type: "CategoryConnectionPageInfo!" },
+    $on: { __type: "$CategoryConnection!" },
+  },
+  CategoryConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Category!" },
+    $on: { __type: "$CategoryConnectionEdge!" },
+  },
+  CategoryConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$CategoryConnectionPageInfo!" },
+  },
   CategoryToAncestorsCategoryConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[CategoryToAncestorsCategoryConnectionEdge]" },
-    nodes: { __type: "[Category]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[CategoryToAncestorsCategoryConnectionEdge!]!" },
+    nodes: { __type: "[Category!]!" },
+    pageInfo: { __type: "CategoryToAncestorsCategoryConnectionPageInfo!" },
   },
   CategoryToAncestorsCategoryConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Category" },
+    node: { __type: "Category!" },
+  },
+  CategoryToAncestorsCategoryConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   CategoryToCategoryConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[CategoryToCategoryConnectionEdge]" },
-    nodes: { __type: "[Category]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[CategoryToCategoryConnectionEdge!]!" },
+    nodes: { __type: "[Category!]!" },
+    pageInfo: { __type: "CategoryToCategoryConnectionPageInfo!" },
   },
   CategoryToCategoryConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Category" },
+    node: { __type: "Category!" },
+  },
+  CategoryToCategoryConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   CategoryToCategoryConnectionWhereArgs: {
     cacheDomain: { __type: "String" },
@@ -5669,18 +5860,27 @@ export const generatedSchema = {
     search: { __type: "String" },
     slug: { __type: "[String]" },
     termTaxonomId: { __type: "[ID]" },
+    termTaxonomyId: { __type: "[ID]" },
     updateTermMetaCache: { __type: "Boolean" },
   },
   CategoryToContentNodeConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[CategoryToContentNodeConnectionEdge]" },
-    nodes: { __type: "[ContentNode]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[CategoryToContentNodeConnectionEdge!]!" },
+    nodes: { __type: "[ContentNode!]!" },
+    pageInfo: { __type: "CategoryToContentNodeConnectionPageInfo!" },
   },
   CategoryToContentNodeConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "ContentNode" },
+    node: { __type: "ContentNode!" },
+  },
+  CategoryToContentNodeConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   CategoryToContentNodeConnectionWhereArgs: {
     contentTypes: { __type: "[ContentTypesOfCategoryEnum]" },
@@ -5704,18 +5904,27 @@ export const generatedSchema = {
   },
   CategoryToParentCategoryConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Category" },
+    cursor: { __type: "String" },
+    node: { __type: "Category!" },
   },
   CategoryToPostConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[CategoryToPostConnectionEdge]" },
-    nodes: { __type: "[Post]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[CategoryToPostConnectionEdge!]!" },
+    nodes: { __type: "[Post!]!" },
+    pageInfo: { __type: "CategoryToPostConnectionPageInfo!" },
   },
   CategoryToPostConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Post" },
+    node: { __type: "Post!" },
+  },
+  CategoryToPostConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   CategoryToPostConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -5752,7 +5961,8 @@ export const generatedSchema = {
   },
   CategoryToTaxonomyConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Taxonomy" },
+    cursor: { __type: "String" },
+    node: { __type: "Taxonomy!" },
   },
   Comment: {
     __typename: { __type: "String!" },
@@ -5788,6 +5998,7 @@ export const generatedSchema = {
         where: "CommentToCommentConnectionWhereArgs",
       },
     },
+    status: { __type: "CommentStatusEnum" },
     type: { __type: "String" },
   },
   CommentAuthor: {
@@ -5807,16 +6018,46 @@ export const generatedSchema = {
     name: { __type: "String" },
     url: { __type: "String" },
   },
+  CommentConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[CommentConnectionEdge!]!" },
+    nodes: { __type: "[Comment!]!" },
+    pageInfo: { __type: "CommentConnectionPageInfo!" },
+    $on: { __type: "$CommentConnection!" },
+  },
+  CommentConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Comment!" },
+    $on: { __type: "$CommentConnectionEdge!" },
+  },
+  CommentConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$CommentConnectionPageInfo!" },
+  },
   CommentToCommentConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[CommentToCommentConnectionEdge]" },
-    nodes: { __type: "[Comment]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[CommentToCommentConnectionEdge!]!" },
+    nodes: { __type: "[Comment!]!" },
+    pageInfo: { __type: "CommentToCommentConnectionPageInfo!" },
   },
   CommentToCommentConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Comment" },
+    node: { __type: "Comment!" },
+  },
+  CommentToCommentConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   CommentToCommentConnectionWhereArgs: {
     authorEmail: { __type: "String" },
@@ -5851,15 +6092,18 @@ export const generatedSchema = {
   },
   CommentToCommenterConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Commenter" },
+    cursor: { __type: "String" },
+    node: { __type: "Commenter!" },
   },
   CommentToContentNodeConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "ContentNode" },
+    cursor: { __type: "String" },
+    node: { __type: "ContentNode!" },
   },
   CommentToParentCommentConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Comment" },
+    cursor: { __type: "String" },
+    node: { __type: "Comment!" },
   },
   CommentToParentCommentConnectionWhereArgs: {
     authorEmail: { __type: "String" },
@@ -5903,6 +6147,12 @@ export const generatedSchema = {
     url: { __type: "String" },
     $on: { __type: "$Commenter!" },
   },
+  CommenterConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Commenter!" },
+    $on: { __type: "$CommenterConnectionEdge!" },
+  },
   ConditionalTags: {
     __typename: { __type: "String!" },
     isArchive: { __type: "Boolean" },
@@ -5927,6 +6177,13 @@ export const generatedSchema = {
     isTag: { __type: "Boolean" },
     isTax: { __type: "Boolean" },
     isYear: { __type: "Boolean" },
+  },
+  Connection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[Edge!]!" },
+    nodes: { __type: "[Node!]!" },
+    pageInfo: { __type: "PageInfo!" },
+    $on: { __type: "$Connection!" },
   },
   ContentNode: {
     __typename: { __type: "String!" },
@@ -5959,6 +6216,7 @@ export const generatedSchema = {
     modifiedGmt: { __type: "String" },
     previewRevisionDatabaseId: { __type: "Int" },
     previewRevisionId: { __type: "ID" },
+    seo: { __type: "PostTypeSEO" },
     slug: { __type: "String" },
     status: { __type: "String" },
     styles: { __type: "String" },
@@ -5967,44 +6225,81 @@ export const generatedSchema = {
     uri: { __type: "String" },
     $on: { __type: "$ContentNode!" },
   },
+  ContentNodeConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[ContentNodeConnectionEdge!]!" },
+    nodes: { __type: "[ContentNode!]!" },
+    pageInfo: { __type: "ContentNodeConnectionPageInfo!" },
+    $on: { __type: "$ContentNodeConnection!" },
+  },
+  ContentNodeConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "ContentNode!" },
+    $on: { __type: "$ContentNodeConnectionEdge!" },
+  },
+  ContentNodeConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$ContentNodeConnectionPageInfo!" },
+  },
   ContentNodeToContentTypeConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "ContentType" },
+    cursor: { __type: "String" },
+    node: { __type: "ContentType!" },
   },
   ContentNodeToEditLastConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "User" },
+    cursor: { __type: "String" },
+    node: { __type: "User!" },
   },
   ContentNodeToEditLockConnectionEdge: {
     __typename: { __type: "String!" },
+    cursor: { __type: "String" },
     lockTimestamp: { __type: "String" },
-    node: { __type: "User" },
+    node: { __type: "User!" },
   },
   ContentNodeToEnqueuedScriptConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[ContentNodeToEnqueuedScriptConnectionEdge]" },
-    nodes: { __type: "[EnqueuedScript]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[ContentNodeToEnqueuedScriptConnectionEdge!]!" },
+    nodes: { __type: "[EnqueuedScript!]!" },
+    pageInfo: { __type: "ContentNodeToEnqueuedScriptConnectionPageInfo!" },
   },
   ContentNodeToEnqueuedScriptConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "EnqueuedScript" },
+    node: { __type: "EnqueuedScript!" },
+  },
+  ContentNodeToEnqueuedScriptConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   ContentNodeToEnqueuedStylesheetConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[ContentNodeToEnqueuedStylesheetConnectionEdge]" },
-    nodes: { __type: "[EnqueuedStylesheet]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[ContentNodeToEnqueuedStylesheetConnectionEdge!]!" },
+    nodes: { __type: "[EnqueuedStylesheet!]!" },
+    pageInfo: { __type: "ContentNodeToEnqueuedStylesheetConnectionPageInfo!" },
   },
   ContentNodeToEnqueuedStylesheetConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "EnqueuedStylesheet" },
+    node: { __type: "EnqueuedStylesheet!" },
   },
-  ContentRevisionUnion: {
+  ContentNodeToEnqueuedStylesheetConnectionPageInfo: {
     __typename: { __type: "String!" },
-    $on: { __type: "$ContentRevisionUnion!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   ContentTemplate: {
     __typename: { __type: "String!" },
@@ -6060,16 +6355,46 @@ export const generatedSchema = {
     templates: { __type: "[String]" },
     uri: { __type: "String" },
   },
+  ContentTypeConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[ContentTypeConnectionEdge!]!" },
+    nodes: { __type: "[ContentType!]!" },
+    pageInfo: { __type: "ContentTypeConnectionPageInfo!" },
+    $on: { __type: "$ContentTypeConnection!" },
+  },
+  ContentTypeConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "ContentType!" },
+    $on: { __type: "$ContentTypeConnectionEdge!" },
+  },
+  ContentTypeConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$ContentTypeConnectionPageInfo!" },
+  },
   ContentTypeToContentNodeConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[ContentTypeToContentNodeConnectionEdge]" },
-    nodes: { __type: "[ContentNode]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[ContentTypeToContentNodeConnectionEdge!]!" },
+    nodes: { __type: "[ContentNode!]!" },
+    pageInfo: { __type: "ContentTypeToContentNodeConnectionPageInfo!" },
   },
   ContentTypeToContentNodeConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "ContentNode" },
+    node: { __type: "ContentNode!" },
+  },
+  ContentTypeToContentNodeConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   ContentTypeToContentNodeConnectionWhereArgs: {
     contentTypes: { __type: "[ContentTypeEnum]" },
@@ -6093,14 +6418,22 @@ export const generatedSchema = {
   },
   ContentTypeToTaxonomyConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[ContentTypeToTaxonomyConnectionEdge]" },
-    nodes: { __type: "[Taxonomy]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[ContentTypeToTaxonomyConnectionEdge!]!" },
+    nodes: { __type: "[Taxonomy!]!" },
+    pageInfo: { __type: "ContentTypeToTaxonomyConnectionPageInfo!" },
   },
   ContentTypeToTaxonomyConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Taxonomy" },
+    node: { __type: "Taxonomy!" },
+  },
+  ContentTypeToTaxonomyConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   CreateCarreraInput: {
     authorId: { __type: "ID" },
@@ -6146,6 +6479,7 @@ export const generatedSchema = {
     content: { __type: "String" },
     date: { __type: "String" },
     parent: { __type: "ID" },
+    status: { __type: "CommentStatusEnum" },
     type: { __type: "String" },
   },
   CreateCommentPayload: {
@@ -6476,6 +6810,7 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     forceDelete: { __type: "Boolean" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
   },
   DeleteCarreraPayload: {
     __typename: { __type: "String!" },
@@ -6508,6 +6843,7 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     forceDelete: { __type: "Boolean" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
   },
   DeleteDepartamentoPayload: {
     __typename: { __type: "String!" },
@@ -6519,6 +6855,7 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     forceDelete: { __type: "Boolean" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
   },
   DeleteFacultadPayload: {
     __typename: { __type: "String!" },
@@ -6530,6 +6867,7 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     forceDelete: { __type: "Boolean" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
   },
   DeleteGradoPayload: {
     __typename: { __type: "String!" },
@@ -6551,6 +6889,7 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     forceDelete: { __type: "Boolean" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
   },
   DeleteInvestigacionPayload: {
     __typename: { __type: "String!" },
@@ -6562,6 +6901,7 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     forceDelete: { __type: "Boolean" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
   },
   DeleteInvestigadorPayload: {
     __typename: { __type: "String!" },
@@ -6573,6 +6913,7 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     forceDelete: { __type: "Boolean" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
   },
   DeleteLineaDeInvestigacionPayload: {
     __typename: { __type: "String!" },
@@ -6595,6 +6936,7 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     forceDelete: { __type: "Boolean" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
   },
   DeletePagePayload: {
     __typename: { __type: "String!" },
@@ -6606,6 +6948,7 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     forceDelete: { __type: "Boolean" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
   },
   DeletePeriodoDeAdmisionPayload: {
     __typename: { __type: "String!" },
@@ -6627,6 +6970,7 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     forceDelete: { __type: "Boolean" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
   },
   DeletePostPayload: {
     __typename: { __type: "String!" },
@@ -6638,6 +6982,7 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     forceDelete: { __type: "Boolean" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
   },
   DeleteRecursoPayload: {
     __typename: { __type: "String!" },
@@ -6649,6 +6994,7 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     forceDelete: { __type: "Boolean" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
   },
   DeleteSlidePayload: {
     __typename: { __type: "String!" },
@@ -6741,73 +7087,123 @@ export const generatedSchema = {
     },
     uri: { __type: "String" },
   },
+  DepartamentoConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[DepartamentoConnectionEdge!]!" },
+    nodes: { __type: "[Departamento!]!" },
+    pageInfo: { __type: "DepartamentoConnectionPageInfo!" },
+    $on: { __type: "$DepartamentoConnection!" },
+  },
+  DepartamentoConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Departamento!" },
+    $on: { __type: "$DepartamentoConnectionEdge!" },
+  },
+  DepartamentoConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$DepartamentoConnectionPageInfo!" },
+  },
   DepartamentoToCarreraConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[DepartamentoToCarreraConnectionEdge]" },
-    nodes: { __type: "[Carrera]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[DepartamentoToCarreraConnectionEdge!]!" },
+    nodes: { __type: "[Carrera!]!" },
+    pageInfo: { __type: "DepartamentoToCarreraConnectionPageInfo!" },
   },
   DepartamentoToCarreraConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Carrera" },
+    node: { __type: "Carrera!" },
+  },
+  DepartamentoToCarreraConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   DepartamentoToFacultadConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Facultad" },
+    cursor: { __type: "String" },
+    node: { __type: "Facultad!" },
   },
   DepartamentoToLineaDeInvestigacionConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[DepartamentoToLineaDeInvestigacionConnectionEdge]" },
-    nodes: { __type: "[LineaDeInvestigacion]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[DepartamentoToLineaDeInvestigacionConnectionEdge!]!" },
+    nodes: { __type: "[LineaDeInvestigacion!]!" },
+    pageInfo: {
+      __type: "DepartamentoToLineaDeInvestigacionConnectionPageInfo!",
+    },
   },
   DepartamentoToLineaDeInvestigacionConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "LineaDeInvestigacion" },
+    node: { __type: "LineaDeInvestigacion!" },
+  },
+  DepartamentoToLineaDeInvestigacionConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   DepartamentoToPreviewConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Departamento" },
+    cursor: { __type: "String" },
+    node: { __type: "Departamento!" },
   },
   Departamento_Contacto: {
     __typename: { __type: "String!" },
-    direcciones: { __type: "[Departamento_Contacto_direcciones]" },
-    emails: { __type: "[Departamento_Contacto_emails]" },
     fieldGroupName: { __type: "String" },
-    horarios: { __type: "[Departamento_Contacto_horarios]" },
-    telefonos: { __type: "[Departamento_Contacto_telefonos]" },
-    whatsapp: { __type: "[Departamento_Contacto_whatsapp]" },
+    unidad: { __type: "[Departamento_Contacto_unidad]" },
   },
-  Departamento_Contacto_direcciones: {
+  Departamento_Contacto_unidad: {
+    __typename: { __type: "String!" },
+    direcciones: { __type: "[Departamento_Contacto_unidad_direcciones]" },
+    emails: { __type: "[Departamento_Contacto_unidad_emails]" },
+    fieldGroupName: { __type: "String" },
+    horarios: { __type: "[Departamento_Contacto_unidad_horarios]" },
+    nombre: { __type: "String" },
+    telefonos: { __type: "[Departamento_Contacto_unidad_telefonos]" },
+    whatsapp: { __type: "[Departamento_Contacto_unidad_whatsapp]" },
+  },
+  Departamento_Contacto_unidad_direcciones: {
     __typename: { __type: "String!" },
     direccion: { __type: "String" },
     fieldGroupName: { __type: "String" },
   },
-  Departamento_Contacto_emails: {
+  Departamento_Contacto_unidad_emails: {
     __typename: { __type: "String!" },
     email: { __type: "String" },
     fieldGroupName: { __type: "String" },
   },
-  Departamento_Contacto_horarios: {
+  Departamento_Contacto_unidad_horarios: {
     __typename: { __type: "String!" },
     dias: { __type: "String" },
     fieldGroupName: { __type: "String" },
     horas: { __type: "String" },
   },
-  Departamento_Contacto_telefonos: {
+  Departamento_Contacto_unidad_telefonos: {
     __typename: { __type: "String!" },
-    extensiones: { __type: "[Departamento_Contacto_telefonos_extensiones]" },
+    extensiones: {
+      __type: "[Departamento_Contacto_unidad_telefonos_extensiones]",
+    },
     fieldGroupName: { __type: "String" },
     telefono: { __type: "String" },
   },
-  Departamento_Contacto_telefonos_extensiones: {
+  Departamento_Contacto_unidad_telefonos_extensiones: {
     __typename: { __type: "String!" },
     extension: { __type: "String" },
     fieldGroupName: { __type: "String" },
   },
-  Departamento_Contacto_whatsapp: {
+  Departamento_Contacto_unidad_whatsapp: {
     __typename: { __type: "String!" },
     fieldGroupName: { __type: "String" },
     telefono: { __type: "String" },
@@ -6816,6 +7212,12 @@ export const generatedSchema = {
     __typename: { __type: "String!" },
     defaultCommentStatus: { __type: "String" },
     defaultPingStatus: { __type: "String" },
+  },
+  Edge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Node!" },
+    $on: { __type: "$Edge!" },
   },
   EnqueuedAsset: {
     __typename: { __type: "String!" },
@@ -6838,6 +7240,28 @@ export const generatedSchema = {
     src: { __type: "String" },
     version: { __type: "String" },
   },
+  EnqueuedScriptConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[EnqueuedScriptConnectionEdge!]!" },
+    nodes: { __type: "[EnqueuedScript!]!" },
+    pageInfo: { __type: "EnqueuedScriptConnectionPageInfo!" },
+    $on: { __type: "$EnqueuedScriptConnection!" },
+  },
+  EnqueuedScriptConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "EnqueuedScript!" },
+    $on: { __type: "$EnqueuedScriptConnectionEdge!" },
+  },
+  EnqueuedScriptConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$EnqueuedScriptConnectionPageInfo!" },
+  },
   EnqueuedStylesheet: {
     __typename: { __type: "String!" },
     args: { __type: "Boolean" },
@@ -6847,6 +7271,28 @@ export const generatedSchema = {
     id: { __type: "ID!" },
     src: { __type: "String" },
     version: { __type: "String" },
+  },
+  EnqueuedStylesheetConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[EnqueuedStylesheetConnectionEdge!]!" },
+    nodes: { __type: "[EnqueuedStylesheet!]!" },
+    pageInfo: { __type: "EnqueuedStylesheetConnectionPageInfo!" },
+    $on: { __type: "$EnqueuedStylesheetConnection!" },
+  },
+  EnqueuedStylesheetConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "EnqueuedStylesheet!" },
+    $on: { __type: "$EnqueuedStylesheetConnectionEdge!" },
+  },
+  EnqueuedStylesheetConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$EnqueuedStylesheetConnectionPageInfo!" },
   },
   Facultad: {
     __typename: { __type: "String!" },
@@ -6917,69 +7363,114 @@ export const generatedSchema = {
     },
     uri: { __type: "String" },
   },
+  FacultadConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[FacultadConnectionEdge!]!" },
+    nodes: { __type: "[Facultad!]!" },
+    pageInfo: { __type: "FacultadConnectionPageInfo!" },
+    $on: { __type: "$FacultadConnection!" },
+  },
+  FacultadConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Facultad!" },
+    $on: { __type: "$FacultadConnectionEdge!" },
+  },
+  FacultadConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$FacultadConnectionPageInfo!" },
+  },
   FacultadToCarreraConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[FacultadToCarreraConnectionEdge]" },
-    nodes: { __type: "[Carrera]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[FacultadToCarreraConnectionEdge!]!" },
+    nodes: { __type: "[Carrera!]!" },
+    pageInfo: { __type: "FacultadToCarreraConnectionPageInfo!" },
   },
   FacultadToCarreraConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Carrera" },
+    node: { __type: "Carrera!" },
+  },
+  FacultadToCarreraConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   FacultadToDepartamentoConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[FacultadToDepartamentoConnectionEdge]" },
-    nodes: { __type: "[Departamento]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[FacultadToDepartamentoConnectionEdge!]!" },
+    nodes: { __type: "[Departamento!]!" },
+    pageInfo: { __type: "FacultadToDepartamentoConnectionPageInfo!" },
   },
   FacultadToDepartamentoConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Departamento" },
+    node: { __type: "Departamento!" },
+  },
+  FacultadToDepartamentoConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   FacultadToPreviewConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Facultad" },
+    cursor: { __type: "String" },
+    node: { __type: "Facultad!" },
   },
   Facultad_Contacto: {
     __typename: { __type: "String!" },
-    direcciones: { __type: "[Facultad_Contacto_direcciones]" },
-    emails: { __type: "[Facultad_Contacto_emails]" },
     fieldGroupName: { __type: "String" },
-    horarios: { __type: "[Facultad_Contacto_horarios]" },
-    telefonos: { __type: "[Facultad_Contacto_telefonos]" },
-    whatsapp: { __type: "[Facultad_Contacto_whatsapp]" },
+    unidad: { __type: "[Facultad_Contacto_unidad]" },
   },
-  Facultad_Contacto_direcciones: {
+  Facultad_Contacto_unidad: {
+    __typename: { __type: "String!" },
+    direcciones: { __type: "[Facultad_Contacto_unidad_direcciones]" },
+    emails: { __type: "[Facultad_Contacto_unidad_emails]" },
+    fieldGroupName: { __type: "String" },
+    horarios: { __type: "[Facultad_Contacto_unidad_horarios]" },
+    nombre: { __type: "String" },
+    telefonos: { __type: "[Facultad_Contacto_unidad_telefonos]" },
+    whatsapp: { __type: "[Facultad_Contacto_unidad_whatsapp]" },
+  },
+  Facultad_Contacto_unidad_direcciones: {
     __typename: { __type: "String!" },
     direccion: { __type: "String" },
     fieldGroupName: { __type: "String" },
   },
-  Facultad_Contacto_emails: {
+  Facultad_Contacto_unidad_emails: {
     __typename: { __type: "String!" },
     email: { __type: "String" },
     fieldGroupName: { __type: "String" },
   },
-  Facultad_Contacto_horarios: {
+  Facultad_Contacto_unidad_horarios: {
     __typename: { __type: "String!" },
     dias: { __type: "String" },
     fieldGroupName: { __type: "String" },
     horas: { __type: "String" },
   },
-  Facultad_Contacto_telefonos: {
+  Facultad_Contacto_unidad_telefonos: {
     __typename: { __type: "String!" },
-    extensiones: { __type: "[Facultad_Contacto_telefonos_extensiones]" },
+    extensiones: { __type: "[Facultad_Contacto_unidad_telefonos_extensiones]" },
     fieldGroupName: { __type: "String" },
     telefono: { __type: "String" },
   },
-  Facultad_Contacto_telefonos_extensiones: {
+  Facultad_Contacto_unidad_telefonos_extensiones: {
     __typename: { __type: "String!" },
     extension: { __type: "String" },
     fieldGroupName: { __type: "String" },
   },
-  Facultad_Contacto_whatsapp: {
+  Facultad_Contacto_unidad_whatsapp: {
     __typename: { __type: "String!" },
     fieldGroupName: { __type: "String" },
     telefono: { __type: "String" },
@@ -7084,6 +7575,28 @@ export const generatedSchema = {
     },
     uri: { __type: "String" },
   },
+  GradoConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[GradoConnectionEdge!]!" },
+    nodes: { __type: "[Grado!]!" },
+    pageInfo: { __type: "GradoConnectionPageInfo!" },
+    $on: { __type: "$GradoConnection!" },
+  },
+  GradoConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Grado!" },
+    $on: { __type: "$GradoConnectionEdge!" },
+  },
+  GradoConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$GradoConnectionPageInfo!" },
+  },
   GradoGruposDeRequisitosInput: {
     append: { __type: "Boolean" },
     nodes: { __type: "[GradoGruposDeRequisitosNodeInput]" },
@@ -7096,26 +7609,42 @@ export const generatedSchema = {
   },
   GradoToCarreraConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[GradoToCarreraConnectionEdge]" },
-    nodes: { __type: "[Carrera]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[GradoToCarreraConnectionEdge!]!" },
+    nodes: { __type: "[Carrera!]!" },
+    pageInfo: { __type: "GradoToCarreraConnectionPageInfo!" },
   },
   GradoToCarreraConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Carrera" },
+    node: { __type: "Carrera!" },
+  },
+  GradoToCarreraConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   GradoToGrupoDeRequisitosConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[GradoToGrupoDeRequisitosConnectionEdge]" },
-    nodes: { __type: "[GrupoDeRequisitos]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[GradoToGrupoDeRequisitosConnectionEdge!]!" },
+    nodes: { __type: "[GrupoDeRequisitos!]!" },
+    pageInfo: { __type: "GradoToGrupoDeRequisitosConnectionPageInfo!" },
   },
   GradoToGrupoDeRequisitosConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
     isPrimary: { __type: "Boolean" },
-    node: { __type: "GrupoDeRequisitos" },
+    node: { __type: "GrupoDeRequisitos!" },
+  },
+  GradoToGrupoDeRequisitosConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   GradoToGrupoDeRequisitosConnectionWhereArgs: {
     cacheDomain: { __type: "String" },
@@ -7137,22 +7666,32 @@ export const generatedSchema = {
     search: { __type: "String" },
     slug: { __type: "[String]" },
     termTaxonomId: { __type: "[ID]" },
+    termTaxonomyId: { __type: "[ID]" },
     updateTermMetaCache: { __type: "Boolean" },
   },
   GradoToPreviewConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Grado" },
+    cursor: { __type: "String" },
+    node: { __type: "Grado!" },
   },
   GradoToTermNodeConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[GradoToTermNodeConnectionEdge]" },
-    nodes: { __type: "[TermNode]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[GradoToTermNodeConnectionEdge!]!" },
+    nodes: { __type: "[TermNode!]!" },
+    pageInfo: { __type: "GradoToTermNodeConnectionPageInfo!" },
   },
   GradoToTermNodeConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "TermNode" },
+    node: { __type: "TermNode!" },
+  },
+  GradoToTermNodeConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   GradoToTermNodeConnectionWhereArgs: {
     cacheDomain: { __type: "String" },
@@ -7175,6 +7714,7 @@ export const generatedSchema = {
     slug: { __type: "[String]" },
     taxonomies: { __type: "[TaxonomyEnum]" },
     termTaxonomId: { __type: "[ID]" },
+    termTaxonomyId: { __type: "[ID]" },
     updateTermMetaCache: { __type: "Boolean" },
   },
   Grado_Datosrequisitos: {
@@ -7250,16 +7790,46 @@ export const generatedSchema = {
     termTaxonomyId: { __type: "Int" },
     uri: { __type: "String" },
   },
+  GrupoDeRequisitosConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[GrupoDeRequisitosConnectionEdge!]!" },
+    nodes: { __type: "[GrupoDeRequisitos!]!" },
+    pageInfo: { __type: "GrupoDeRequisitosConnectionPageInfo!" },
+    $on: { __type: "$GrupoDeRequisitosConnection!" },
+  },
+  GrupoDeRequisitosConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "GrupoDeRequisitos!" },
+    $on: { __type: "$GrupoDeRequisitosConnectionEdge!" },
+  },
+  GrupoDeRequisitosConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$GrupoDeRequisitosConnectionPageInfo!" },
+  },
   GrupoDeRequisitosToContentNodeConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[GrupoDeRequisitosToContentNodeConnectionEdge]" },
-    nodes: { __type: "[ContentNode]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[GrupoDeRequisitosToContentNodeConnectionEdge!]!" },
+    nodes: { __type: "[ContentNode!]!" },
+    pageInfo: { __type: "GrupoDeRequisitosToContentNodeConnectionPageInfo!" },
   },
   GrupoDeRequisitosToContentNodeConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "ContentNode" },
+    node: { __type: "ContentNode!" },
+  },
+  GrupoDeRequisitosToContentNodeConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   GrupoDeRequisitosToContentNodeConnectionWhereArgs: {
     contentTypes: { __type: "[ContentTypesOfGrupoDeRequisitosEnum]" },
@@ -7283,14 +7853,22 @@ export const generatedSchema = {
   },
   GrupoDeRequisitosToGradoConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[GrupoDeRequisitosToGradoConnectionEdge]" },
-    nodes: { __type: "[Grado]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[GrupoDeRequisitosToGradoConnectionEdge!]!" },
+    nodes: { __type: "[Grado!]!" },
+    pageInfo: { __type: "GrupoDeRequisitosToGradoConnectionPageInfo!" },
   },
   GrupoDeRequisitosToGradoConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Grado" },
+    node: { __type: "Grado!" },
+  },
+  GrupoDeRequisitosToGradoConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   GrupoDeRequisitosToGradoConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -7317,7 +7895,8 @@ export const generatedSchema = {
   },
   GrupoDeRequisitosToTaxonomyConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Taxonomy" },
+    cursor: { __type: "String" },
+    node: { __type: "Taxonomy!" },
   },
   HierarchicalContentNode: {
     __typename: { __type: "String!" },
@@ -7343,25 +7922,72 @@ export const generatedSchema = {
           "HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs",
       },
     },
+    conditionalTags: { __type: "ConditionalTags" },
+    contentType: { __type: "ContentNodeToContentTypeConnectionEdge" },
+    contentTypeName: { __type: "String!" },
+    databaseId: { __type: "Int!" },
+    date: { __type: "String" },
+    dateGmt: { __type: "String" },
+    desiredSlug: { __type: "String" },
+    editingLockedBy: { __type: "ContentNodeToEditLockConnectionEdge" },
+    enclosure: { __type: "String" },
+    enqueuedScripts: {
+      __type: "ContentNodeToEnqueuedScriptConnection",
+      __args: { after: "String", before: "String", first: "Int", last: "Int" },
+    },
+    enqueuedStylesheets: {
+      __type: "ContentNodeToEnqueuedStylesheetConnection",
+      __args: { after: "String", before: "String", first: "Int", last: "Int" },
+    },
+    guid: { __type: "String" },
+    id: { __type: "ID!" },
+    isContentNode: { __type: "Boolean!" },
+    isPreview: { __type: "Boolean" },
+    isRestricted: { __type: "Boolean" },
+    isTermNode: { __type: "Boolean!" },
+    lastEditedBy: { __type: "ContentNodeToEditLastConnectionEdge" },
+    link: { __type: "String" },
+    modified: { __type: "String" },
+    modifiedGmt: { __type: "String" },
     parent: {
       __type: "HierarchicalContentNodeToParentContentNodeConnectionEdge",
     },
     parentDatabaseId: { __type: "Int" },
     parentId: { __type: "ID" },
+    previewRevisionDatabaseId: { __type: "Int" },
+    previewRevisionId: { __type: "ID" },
+    seo: { __type: "PostTypeSEO" },
+    slug: { __type: "String" },
+    status: { __type: "String" },
+    styles: { __type: "String" },
+    template: { __type: "ContentTemplate" },
+    templates: { __type: "[String]" },
+    uri: { __type: "String" },
     $on: { __type: "$HierarchicalContentNode!" },
   },
   HierarchicalContentNodeToContentNodeAncestorsConnection: {
     __typename: { __type: "String!" },
     edges: {
-      __type: "[HierarchicalContentNodeToContentNodeAncestorsConnectionEdge]",
+      __type: "[HierarchicalContentNodeToContentNodeAncestorsConnectionEdge!]!",
     },
-    nodes: { __type: "[ContentNode]" },
-    pageInfo: { __type: "WPPageInfo" },
+    nodes: { __type: "[ContentNode!]!" },
+    pageInfo: {
+      __type:
+        "HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo!",
+    },
   },
   HierarchicalContentNodeToContentNodeAncestorsConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "ContentNode" },
+    node: { __type: "ContentNode!" },
+  },
+  HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArgs: {
     contentTypes: { __type: "[ContentTypeEnum]" },
@@ -7386,15 +8012,25 @@ export const generatedSchema = {
   HierarchicalContentNodeToContentNodeChildrenConnection: {
     __typename: { __type: "String!" },
     edges: {
-      __type: "[HierarchicalContentNodeToContentNodeChildrenConnectionEdge]",
+      __type: "[HierarchicalContentNodeToContentNodeChildrenConnectionEdge!]!",
     },
-    nodes: { __type: "[ContentNode]" },
-    pageInfo: { __type: "WPPageInfo" },
+    nodes: { __type: "[ContentNode!]!" },
+    pageInfo: {
+      __type: "HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo!",
+    },
   },
   HierarchicalContentNodeToContentNodeChildrenConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "ContentNode" },
+    node: { __type: "ContentNode!" },
+  },
+  HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs: {
     contentTypes: { __type: "[ContentTypeEnum]" },
@@ -7418,12 +8054,45 @@ export const generatedSchema = {
   },
   HierarchicalContentNodeToParentContentNodeConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "ContentNode" },
+    cursor: { __type: "String" },
+    node: { __type: "ContentNode!" },
+  },
+  HierarchicalNode: {
+    __typename: { __type: "String!" },
+    databaseId: { __type: "Int!" },
+    id: { __type: "ID!" },
+    parentDatabaseId: { __type: "Int" },
+    parentId: { __type: "ID" },
+    $on: { __type: "$HierarchicalNode!" },
   },
   HierarchicalTermNode: {
     __typename: { __type: "String!" },
+    conditionalTags: { __type: "ConditionalTags" },
+    count: { __type: "Int" },
+    databaseId: { __type: "Int!" },
+    description: { __type: "String" },
+    enqueuedScripts: {
+      __type: "TermNodeToEnqueuedScriptConnection",
+      __args: { after: "String", before: "String", first: "Int", last: "Int" },
+    },
+    enqueuedStylesheets: {
+      __type: "TermNodeToEnqueuedStylesheetConnection",
+      __args: { after: "String", before: "String", first: "Int", last: "Int" },
+    },
+    id: { __type: "ID!" },
+    isContentNode: { __type: "Boolean!" },
+    isRestricted: { __type: "Boolean" },
+    isTermNode: { __type: "Boolean!" },
+    link: { __type: "String" },
+    name: { __type: "String" },
     parentDatabaseId: { __type: "Int" },
     parentId: { __type: "ID" },
+    slug: { __type: "String" },
+    taxonomyName: { __type: "String" },
+    templates: { __type: "[String]" },
+    termGroupId: { __type: "Int" },
+    termTaxonomyId: { __type: "Int" },
+    uri: { __type: "String" },
     $on: { __type: "$HierarchicalTermNode!" },
   },
   Investigacion: {
@@ -7490,24 +8159,56 @@ export const generatedSchema = {
     },
     uri: { __type: "String" },
   },
+  InvestigacionConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[InvestigacionConnectionEdge!]!" },
+    nodes: { __type: "[Investigacion!]!" },
+    pageInfo: { __type: "InvestigacionConnectionPageInfo!" },
+    $on: { __type: "$InvestigacionConnection!" },
+  },
+  InvestigacionConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Investigacion!" },
+    $on: { __type: "$InvestigacionConnectionEdge!" },
+  },
+  InvestigacionConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$InvestigacionConnectionPageInfo!" },
+  },
   InvestigacionToInvestigadorConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[InvestigacionToInvestigadorConnectionEdge]" },
-    nodes: { __type: "[Investigador]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[InvestigacionToInvestigadorConnectionEdge!]!" },
+    nodes: { __type: "[Investigador!]!" },
+    pageInfo: { __type: "InvestigacionToInvestigadorConnectionPageInfo!" },
   },
   InvestigacionToInvestigadorConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Investigador" },
+    node: { __type: "Investigador!" },
+  },
+  InvestigacionToInvestigadorConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   InvestigacionToLineaDeInvestigacionConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "LineaDeInvestigacion" },
+    cursor: { __type: "String" },
+    node: { __type: "LineaDeInvestigacion!" },
   },
   InvestigacionToPreviewConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Investigacion" },
+    cursor: { __type: "String" },
+    node: { __type: "Investigacion!" },
   },
   Investigacion_Datosinvestigacion: {
     __typename: { __type: "String!" },
@@ -7577,20 +8278,51 @@ export const generatedSchema = {
     tituloAcademicoAbreviado: { __type: "String" },
     uri: { __type: "String" },
   },
+  InvestigadorConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[InvestigadorConnectionEdge!]!" },
+    nodes: { __type: "[Investigador!]!" },
+    pageInfo: { __type: "InvestigadorConnectionPageInfo!" },
+    $on: { __type: "$InvestigadorConnection!" },
+  },
+  InvestigadorConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Investigador!" },
+    $on: { __type: "$InvestigadorConnectionEdge!" },
+  },
+  InvestigadorConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$InvestigadorConnectionPageInfo!" },
+  },
   InvestigadorToInvestigacionConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[InvestigadorToInvestigacionConnectionEdge]" },
-    nodes: { __type: "[Investigacion]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[InvestigadorToInvestigacionConnectionEdge!]!" },
+    nodes: { __type: "[Investigacion!]!" },
+    pageInfo: { __type: "InvestigadorToInvestigacionConnectionPageInfo!" },
   },
   InvestigadorToInvestigacionConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Investigacion" },
+    node: { __type: "Investigacion!" },
+  },
+  InvestigadorToInvestigacionConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   InvestigadorToPreviewConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Investigador" },
+    cursor: { __type: "String" },
+    node: { __type: "Investigador!" },
   },
   Investigador_Datosinvestigador: {
     __typename: { __type: "String!" },
@@ -7665,31 +8397,71 @@ export const generatedSchema = {
     },
     uri: { __type: "String" },
   },
+  LineaDeInvestigacionConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[LineaDeInvestigacionConnectionEdge!]!" },
+    nodes: { __type: "[LineaDeInvestigacion!]!" },
+    pageInfo: { __type: "LineaDeInvestigacionConnectionPageInfo!" },
+    $on: { __type: "$LineaDeInvestigacionConnection!" },
+  },
+  LineaDeInvestigacionConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "LineaDeInvestigacion!" },
+    $on: { __type: "$LineaDeInvestigacionConnectionEdge!" },
+  },
+  LineaDeInvestigacionConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$LineaDeInvestigacionConnectionPageInfo!" },
+  },
   LineaDeInvestigacionToDepartamentoConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Departamento" },
+    cursor: { __type: "String" },
+    node: { __type: "Departamento!" },
   },
   LineaDeInvestigacionToInvestigacionConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[LineaDeInvestigacionToInvestigacionConnectionEdge]" },
-    nodes: { __type: "[Investigacion]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[LineaDeInvestigacionToInvestigacionConnectionEdge!]!" },
+    nodes: { __type: "[Investigacion!]!" },
+    pageInfo: {
+      __type: "LineaDeInvestigacionToInvestigacionConnectionPageInfo!",
+    },
   },
   LineaDeInvestigacionToInvestigacionConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Investigacion" },
+    node: { __type: "Investigacion!" },
+  },
+  LineaDeInvestigacionToInvestigacionConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   LineaDeInvestigacionToPreviewConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "LineaDeInvestigacion" },
+    cursor: { __type: "String" },
+    node: { __type: "LineaDeInvestigacion!" },
   },
   MediaDetails: {
     __typename: { __type: "String!" },
     file: { __type: "String" },
     height: { __type: "Int" },
     meta: { __type: "MediaItemMeta" },
-    sizes: { __type: "[MediaSize]" },
+    sizes: {
+      __type: "[MediaSize]",
+      __args: {
+        exclude: "[MediaItemSizeEnum]",
+        include: "[MediaItemSizeEnum]",
+      },
+    },
     width: { __type: "Int" },
   },
   MediaItem: {
@@ -7795,6 +8567,28 @@ export const generatedSchema = {
     },
     uri: { __type: "String" },
   },
+  MediaItemConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[MediaItemConnectionEdge!]!" },
+    nodes: { __type: "[MediaItem!]!" },
+    pageInfo: { __type: "MediaItemConnectionPageInfo!" },
+    $on: { __type: "$MediaItemConnection!" },
+  },
+  MediaItemConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "MediaItem!" },
+    $on: { __type: "$MediaItemConnectionEdge!" },
+  },
+  MediaItemConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$MediaItemConnectionPageInfo!" },
+  },
   MediaItemMeta: {
     __typename: { __type: "String!" },
     aperture: { __type: "Float" },
@@ -7812,14 +8606,22 @@ export const generatedSchema = {
   },
   MediaItemToCommentConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[MediaItemToCommentConnectionEdge]" },
-    nodes: { __type: "[Comment]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[MediaItemToCommentConnectionEdge!]!" },
+    nodes: { __type: "[Comment!]!" },
+    pageInfo: { __type: "MediaItemToCommentConnectionPageInfo!" },
   },
   MediaItemToCommentConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Comment" },
+    node: { __type: "Comment!" },
+  },
+  MediaItemToCommentConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   MediaItemToCommentConnectionWhereArgs: {
     authorEmail: { __type: "String" },
@@ -7883,6 +8685,28 @@ export const generatedSchema = {
     name: { __type: "String" },
     slug: { __type: "String" },
   },
+  MenuConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[MenuConnectionEdge!]!" },
+    nodes: { __type: "[Menu!]!" },
+    pageInfo: { __type: "MenuConnectionPageInfo!" },
+    $on: { __type: "$MenuConnection!" },
+  },
+  MenuConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Menu!" },
+    $on: { __type: "$MenuConnectionEdge!" },
+  },
+  MenuConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$MenuConnectionPageInfo!" },
+  },
   MenuItem: {
     __typename: { __type: "String!" },
     childItems: {
@@ -7917,12 +8741,44 @@ export const generatedSchema = {
     uri: { __type: "String" },
     url: { __type: "String" },
   },
+  MenuItemConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[MenuItemConnectionEdge!]!" },
+    nodes: { __type: "[MenuItem!]!" },
+    pageInfo: { __type: "MenuItemConnectionPageInfo!" },
+    $on: { __type: "$MenuItemConnection!" },
+  },
+  MenuItemConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "MenuItem!" },
+    $on: { __type: "$MenuItemConnectionEdge!" },
+  },
+  MenuItemConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$MenuItemConnectionPageInfo!" },
+  },
   MenuItemLinkable: {
     __typename: { __type: "String!" },
+    conditionalTags: { __type: "ConditionalTags" },
     databaseId: { __type: "Int!" },
     id: { __type: "ID!" },
+    isContentNode: { __type: "Boolean!" },
+    isTermNode: { __type: "Boolean!" },
+    templates: { __type: "[String]" },
     uri: { __type: "String" },
     $on: { __type: "$MenuItemLinkable!" },
+  },
+  MenuItemLinkableConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "MenuItemLinkable!" },
+    $on: { __type: "$MenuItemLinkableConnectionEdge!" },
   },
   MenuItemObjectUnion: {
     __typename: { __type: "String!" },
@@ -7930,18 +8786,27 @@ export const generatedSchema = {
   },
   MenuItemToMenuConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Menu" },
+    cursor: { __type: "String" },
+    node: { __type: "Menu!" },
   },
   MenuItemToMenuItemConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[MenuItemToMenuItemConnectionEdge]" },
-    nodes: { __type: "[MenuItem]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[MenuItemToMenuItemConnectionEdge!]!" },
+    nodes: { __type: "[MenuItem!]!" },
+    pageInfo: { __type: "MenuItemToMenuItemConnectionPageInfo!" },
   },
   MenuItemToMenuItemConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "MenuItem" },
+    node: { __type: "MenuItem!" },
+  },
+  MenuItemToMenuItemConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   MenuItemToMenuItemConnectionWhereArgs: {
     id: { __type: "Int" },
@@ -7951,7 +8816,8 @@ export const generatedSchema = {
   },
   MenuItemToMenuItemLinkableConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "MenuItemLinkable" },
+    cursor: { __type: "String" },
+    node: { __type: "MenuItemLinkable!" },
   },
   MenuItem_Datosmenu: {
     __typename: { __type: "String!" },
@@ -7962,14 +8828,22 @@ export const generatedSchema = {
   },
   MenuToMenuItemConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[MenuToMenuItemConnectionEdge]" },
-    nodes: { __type: "[MenuItem]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[MenuToMenuItemConnectionEdge!]!" },
+    nodes: { __type: "[MenuItem!]!" },
+    pageInfo: { __type: "MenuToMenuItemConnectionPageInfo!" },
   },
   MenuToMenuItemConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "MenuItem" },
+    node: { __type: "MenuItem!" },
+  },
+  MenuToMenuItemConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   MenuToMenuItemConnectionWhereArgs: {
     id: { __type: "Int" },
@@ -7987,16 +8861,19 @@ export const generatedSchema = {
     author: { __type: "NodeWithAuthorToUserConnectionEdge" },
     authorDatabaseId: { __type: "Int" },
     authorId: { __type: "ID" },
+    id: { __type: "ID!" },
     $on: { __type: "$NodeWithAuthor!" },
   },
   NodeWithAuthorToUserConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "User" },
+    cursor: { __type: "String" },
+    node: { __type: "User!" },
   },
   NodeWithComments: {
     __typename: { __type: "String!" },
     commentCount: { __type: "Int" },
     commentStatus: { __type: "String" },
+    id: { __type: "ID!" },
     $on: { __type: "$NodeWithComments!" },
   },
   NodeWithContentEditor: {
@@ -8005,6 +8882,7 @@ export const generatedSchema = {
       __type: "String",
       __args: { format: "PostObjectFieldFormatEnum" },
     },
+    id: { __type: "ID!" },
     $on: { __type: "$NodeWithContentEditor!" },
   },
   NodeWithExcerpt: {
@@ -8013,76 +8891,50 @@ export const generatedSchema = {
       __type: "String",
       __args: { format: "PostObjectFieldFormatEnum" },
     },
+    id: { __type: "ID!" },
     $on: { __type: "$NodeWithExcerpt!" },
   },
   NodeWithFeaturedImage: {
     __typename: { __type: "String!" },
-    conditionalTags: { __type: "ConditionalTags" },
-    contentType: { __type: "ContentNodeToContentTypeConnectionEdge" },
-    contentTypeName: { __type: "String!" },
-    databaseId: { __type: "Int!" },
-    date: { __type: "String" },
-    dateGmt: { __type: "String" },
-    desiredSlug: { __type: "String" },
-    editingLockedBy: { __type: "ContentNodeToEditLockConnectionEdge" },
-    enclosure: { __type: "String" },
-    enqueuedScripts: {
-      __type: "ContentNodeToEnqueuedScriptConnection",
-      __args: { after: "String", before: "String", first: "Int", last: "Int" },
-    },
-    enqueuedStylesheets: {
-      __type: "ContentNodeToEnqueuedStylesheetConnection",
-      __args: { after: "String", before: "String", first: "Int", last: "Int" },
-    },
     featuredImage: { __type: "NodeWithFeaturedImageToMediaItemConnectionEdge" },
     featuredImageDatabaseId: { __type: "Int" },
     featuredImageId: { __type: "ID" },
-    guid: { __type: "String" },
     id: { __type: "ID!" },
-    isContentNode: { __type: "Boolean!" },
-    isPreview: { __type: "Boolean" },
-    isRestricted: { __type: "Boolean" },
-    isTermNode: { __type: "Boolean!" },
-    lastEditedBy: { __type: "ContentNodeToEditLastConnectionEdge" },
-    link: { __type: "String" },
-    modified: { __type: "String" },
-    modifiedGmt: { __type: "String" },
-    previewRevisionDatabaseId: { __type: "Int" },
-    previewRevisionId: { __type: "ID" },
-    slug: { __type: "String" },
-    status: { __type: "String" },
-    styles: { __type: "String" },
-    template: { __type: "ContentTemplate" },
-    templates: { __type: "[String]" },
-    uri: { __type: "String" },
     $on: { __type: "$NodeWithFeaturedImage!" },
   },
   NodeWithFeaturedImageToMediaItemConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "MediaItem" },
+    cursor: { __type: "String" },
+    node: { __type: "MediaItem!" },
   },
   NodeWithPageAttributes: {
     __typename: { __type: "String!" },
+    id: { __type: "ID!" },
     menuOrder: { __type: "Int" },
     $on: { __type: "$NodeWithPageAttributes!" },
   },
   NodeWithRevisions: {
     __typename: { __type: "String!" },
+    id: { __type: "ID!" },
     isRevision: { __type: "Boolean" },
     revisionOf: { __type: "NodeWithRevisionsToContentNodeConnectionEdge" },
     $on: { __type: "$NodeWithRevisions!" },
   },
   NodeWithRevisionsToContentNodeConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "ContentNode" },
+    cursor: { __type: "String" },
+    node: { __type: "ContentNode!" },
   },
   NodeWithTemplate: {
     __typename: { __type: "String!" },
+    id: { __type: "ID!" },
     template: { __type: "ContentTemplate" },
     $on: { __type: "$NodeWithTemplate!" },
   },
   NodeWithTitle: {
     __typename: { __type: "String!" },
+    id: { __type: "ID!" },
+    seo: { __type: "PostTypeSEO" },
     title: {
       __type: "String",
       __args: { format: "PostObjectFieldFormatEnum" },
@@ -8091,10 +8943,17 @@ export const generatedSchema = {
   },
   NodeWithTrackbacks: {
     __typename: { __type: "String!" },
+    id: { __type: "ID!" },
     pingStatus: { __type: "String" },
     pinged: { __type: "[String]" },
     toPing: { __type: "[String]" },
     $on: { __type: "$NodeWithTrackbacks!" },
+  },
+  OneToOneConnection: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Node!" },
+    $on: { __type: "$OneToOneConnection!" },
   },
   Page: {
     __typename: { __type: "String!" },
@@ -8209,16 +9068,54 @@ export const generatedSchema = {
     },
     uri: { __type: "String" },
   },
+  PageConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[PageConnectionEdge!]!" },
+    nodes: { __type: "[Page!]!" },
+    pageInfo: { __type: "PageConnectionPageInfo!" },
+    $on: { __type: "$PageConnection!" },
+  },
+  PageConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Page!" },
+    $on: { __type: "$PageConnectionEdge!" },
+  },
+  PageConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$PageConnectionPageInfo!" },
+  },
+  PageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$PageInfo!" },
+  },
   PageToCommentConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[PageToCommentConnectionEdge]" },
-    nodes: { __type: "[Comment]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[PageToCommentConnectionEdge!]!" },
+    nodes: { __type: "[Comment!]!" },
+    pageInfo: { __type: "PageToCommentConnectionPageInfo!" },
   },
   PageToCommentConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Comment" },
+    node: { __type: "Comment!" },
+  },
+  PageToCommentConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   PageToCommentConnectionWhereArgs: {
     authorEmail: { __type: "String" },
@@ -8253,18 +9150,27 @@ export const generatedSchema = {
   },
   PageToPreviewConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Page" },
+    cursor: { __type: "String" },
+    node: { __type: "Page!" },
   },
   PageToRevisionConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[PageToRevisionConnectionEdge]" },
-    nodes: { __type: "[Page]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[PageToRevisionConnectionEdge!]!" },
+    nodes: { __type: "[Page!]!" },
+    pageInfo: { __type: "PageToRevisionConnectionPageInfo!" },
   },
   PageToRevisionConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Page" },
+    node: { __type: "Page!" },
+  },
+  PageToRevisionConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   PageToRevisionConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -8291,41 +9197,47 @@ export const generatedSchema = {
   },
   Page_Contacto: {
     __typename: { __type: "String!" },
-    direcciones: { __type: "[Page_Contacto_direcciones]" },
-    emails: { __type: "[Page_Contacto_emails]" },
     fieldGroupName: { __type: "String" },
-    horarios: { __type: "[Page_Contacto_horarios]" },
-    telefonos: { __type: "[Page_Contacto_telefonos]" },
-    whatsapp: { __type: "[Page_Contacto_whatsapp]" },
+    unidad: { __type: "[Page_Contacto_unidad]" },
   },
-  Page_Contacto_direcciones: {
+  Page_Contacto_unidad: {
+    __typename: { __type: "String!" },
+    direcciones: { __type: "[Page_Contacto_unidad_direcciones]" },
+    emails: { __type: "[Page_Contacto_unidad_emails]" },
+    fieldGroupName: { __type: "String" },
+    horarios: { __type: "[Page_Contacto_unidad_horarios]" },
+    nombre: { __type: "String" },
+    telefonos: { __type: "[Page_Contacto_unidad_telefonos]" },
+    whatsapp: { __type: "[Page_Contacto_unidad_whatsapp]" },
+  },
+  Page_Contacto_unidad_direcciones: {
     __typename: { __type: "String!" },
     direccion: { __type: "String" },
     fieldGroupName: { __type: "String" },
   },
-  Page_Contacto_emails: {
+  Page_Contacto_unidad_emails: {
     __typename: { __type: "String!" },
     email: { __type: "String" },
     fieldGroupName: { __type: "String" },
   },
-  Page_Contacto_horarios: {
+  Page_Contacto_unidad_horarios: {
     __typename: { __type: "String!" },
     dias: { __type: "String" },
     fieldGroupName: { __type: "String" },
     horas: { __type: "String" },
   },
-  Page_Contacto_telefonos: {
+  Page_Contacto_unidad_telefonos: {
     __typename: { __type: "String!" },
-    extensiones: { __type: "[Page_Contacto_telefonos_extensiones]" },
+    extensiones: { __type: "[Page_Contacto_unidad_telefonos_extensiones]" },
     fieldGroupName: { __type: "String" },
     telefono: { __type: "String" },
   },
-  Page_Contacto_telefonos_extensiones: {
+  Page_Contacto_unidad_telefonos_extensiones: {
     __typename: { __type: "String!" },
     extension: { __type: "String" },
     fieldGroupName: { __type: "String" },
   },
-  Page_Contacto_whatsapp: {
+  Page_Contacto_unidad_whatsapp: {
     __typename: { __type: "String!" },
     fieldGroupName: { __type: "String" },
     telefono: { __type: "String" },
@@ -8396,9 +9308,32 @@ export const generatedSchema = {
     },
     uri: { __type: "String" },
   },
+  PeriodoDeAdmisionConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[PeriodoDeAdmisionConnectionEdge!]!" },
+    nodes: { __type: "[PeriodoDeAdmision!]!" },
+    pageInfo: { __type: "PeriodoDeAdmisionConnectionPageInfo!" },
+    $on: { __type: "$PeriodoDeAdmisionConnection!" },
+  },
+  PeriodoDeAdmisionConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "PeriodoDeAdmision!" },
+    $on: { __type: "$PeriodoDeAdmisionConnectionEdge!" },
+  },
+  PeriodoDeAdmisionConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$PeriodoDeAdmisionConnectionPageInfo!" },
+  },
   PeriodoDeAdmisionToPreviewConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "PeriodoDeAdmision" },
+    cursor: { __type: "String" },
+    node: { __type: "PeriodoDeAdmision!" },
   },
   PeriodoDeAdmision_Datosperiodosdeadmision: {
     __typename: { __type: "String!" },
@@ -8407,6 +9342,7 @@ export const generatedSchema = {
         "[PeriodoDeAdmision_Datosperiodosdeadmision_fechasExamenesAdmision]",
     },
     fieldGroupName: { __type: "String" },
+    urlFormulario: { __type: "String" },
   },
   PeriodoDeAdmision_Datosperiodosdeadmision_fechasExamenesAdmision: {
     __typename: { __type: "String!" },
@@ -8424,6 +9360,28 @@ export const generatedSchema = {
     path: { __type: "String" },
     pluginUri: { __type: "String" },
     version: { __type: "String" },
+  },
+  PluginConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[PluginConnectionEdge!]!" },
+    nodes: { __type: "[Plugin!]!" },
+    pageInfo: { __type: "PluginConnectionPageInfo!" },
+    $on: { __type: "$PluginConnection!" },
+  },
+  PluginConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Plugin!" },
+    $on: { __type: "$PluginConnectionEdge!" },
+  },
+  PluginConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$PluginConnectionPageInfo!" },
   },
   Post: {
     __typename: { __type: "String!" },
@@ -8563,6 +9521,28 @@ export const generatedSchema = {
     name: { __type: "String" },
     slug: { __type: "String" },
   },
+  PostConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[PostConnectionEdge!]!" },
+    nodes: { __type: "[Post!]!" },
+    pageInfo: { __type: "PostConnectionPageInfo!" },
+    $on: { __type: "$PostConnection!" },
+  },
+  PostConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Post!" },
+    $on: { __type: "$PostConnectionEdge!" },
+  },
+  PostConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$PostConnectionPageInfo!" },
+  },
   PostFormat: {
     __typename: { __type: "String!" },
     conditionalTags: { __type: "ConditionalTags" },
@@ -8613,16 +9593,46 @@ export const generatedSchema = {
     termTaxonomyId: { __type: "Int" },
     uri: { __type: "String" },
   },
+  PostFormatConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[PostFormatConnectionEdge!]!" },
+    nodes: { __type: "[PostFormat!]!" },
+    pageInfo: { __type: "PostFormatConnectionPageInfo!" },
+    $on: { __type: "$PostFormatConnection!" },
+  },
+  PostFormatConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "PostFormat!" },
+    $on: { __type: "$PostFormatConnectionEdge!" },
+  },
+  PostFormatConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$PostFormatConnectionPageInfo!" },
+  },
   PostFormatToContentNodeConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[PostFormatToContentNodeConnectionEdge]" },
-    nodes: { __type: "[ContentNode]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[PostFormatToContentNodeConnectionEdge!]!" },
+    nodes: { __type: "[ContentNode!]!" },
+    pageInfo: { __type: "PostFormatToContentNodeConnectionPageInfo!" },
   },
   PostFormatToContentNodeConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "ContentNode" },
+    node: { __type: "ContentNode!" },
+  },
+  PostFormatToContentNodeConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   PostFormatToContentNodeConnectionWhereArgs: {
     contentTypes: { __type: "[ContentTypesOfPostFormatEnum]" },
@@ -8646,14 +9656,22 @@ export const generatedSchema = {
   },
   PostFormatToPostConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[PostFormatToPostConnectionEdge]" },
-    nodes: { __type: "[Post]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[PostFormatToPostConnectionEdge!]!" },
+    nodes: { __type: "[Post!]!" },
+    pageInfo: { __type: "PostFormatToPostConnectionPageInfo!" },
   },
   PostFormatToPostConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Post" },
+    node: { __type: "Post!" },
+  },
+  PostFormatToPostConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   PostFormatToPostConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -8690,7 +9708,8 @@ export const generatedSchema = {
   },
   PostFormatToTaxonomyConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Taxonomy" },
+    cursor: { __type: "String" },
+    node: { __type: "Taxonomy!" },
   },
   PostObjectsConnectionOrderbyInput: {
     field: { __type: "PostObjectsConnectionOrderbyEnum!" },
@@ -8718,15 +9737,23 @@ export const generatedSchema = {
   },
   PostToCategoryConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[PostToCategoryConnectionEdge]" },
-    nodes: { __type: "[Category]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[PostToCategoryConnectionEdge!]!" },
+    nodes: { __type: "[Category!]!" },
+    pageInfo: { __type: "PostToCategoryConnectionPageInfo!" },
   },
   PostToCategoryConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
     isPrimary: { __type: "Boolean" },
-    node: { __type: "Category" },
+    node: { __type: "Category!" },
+  },
+  PostToCategoryConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   PostToCategoryConnectionWhereArgs: {
     cacheDomain: { __type: "String" },
@@ -8748,18 +9775,27 @@ export const generatedSchema = {
     search: { __type: "String" },
     slug: { __type: "[String]" },
     termTaxonomId: { __type: "[ID]" },
+    termTaxonomyId: { __type: "[ID]" },
     updateTermMetaCache: { __type: "Boolean" },
   },
   PostToCommentConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[PostToCommentConnectionEdge]" },
-    nodes: { __type: "[Comment]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[PostToCommentConnectionEdge!]!" },
+    nodes: { __type: "[Comment!]!" },
+    pageInfo: { __type: "PostToCommentConnectionPageInfo!" },
   },
   PostToCommentConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Comment" },
+    node: { __type: "Comment!" },
+  },
+  PostToCommentConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   PostToCommentConnectionWhereArgs: {
     authorEmail: { __type: "String" },
@@ -8794,15 +9830,23 @@ export const generatedSchema = {
   },
   PostToPostFormatConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[PostToPostFormatConnectionEdge]" },
-    nodes: { __type: "[PostFormat]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[PostToPostFormatConnectionEdge!]!" },
+    nodes: { __type: "[PostFormat!]!" },
+    pageInfo: { __type: "PostToPostFormatConnectionPageInfo!" },
   },
   PostToPostFormatConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
     isPrimary: { __type: "Boolean" },
-    node: { __type: "PostFormat" },
+    node: { __type: "PostFormat!" },
+  },
+  PostToPostFormatConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   PostToPostFormatConnectionWhereArgs: {
     cacheDomain: { __type: "String" },
@@ -8824,22 +9868,32 @@ export const generatedSchema = {
     search: { __type: "String" },
     slug: { __type: "[String]" },
     termTaxonomId: { __type: "[ID]" },
+    termTaxonomyId: { __type: "[ID]" },
     updateTermMetaCache: { __type: "Boolean" },
   },
   PostToPreviewConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Post" },
+    cursor: { __type: "String" },
+    node: { __type: "Post!" },
   },
   PostToRevisionConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[PostToRevisionConnectionEdge]" },
-    nodes: { __type: "[Post]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[PostToRevisionConnectionEdge!]!" },
+    nodes: { __type: "[Post!]!" },
+    pageInfo: { __type: "PostToRevisionConnectionPageInfo!" },
   },
   PostToRevisionConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Post" },
+    node: { __type: "Post!" },
+  },
+  PostToRevisionConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   PostToRevisionConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -8876,15 +9930,23 @@ export const generatedSchema = {
   },
   PostToTagConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[PostToTagConnectionEdge]" },
-    nodes: { __type: "[Tag]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[PostToTagConnectionEdge!]!" },
+    nodes: { __type: "[Tag!]!" },
+    pageInfo: { __type: "PostToTagConnectionPageInfo!" },
   },
   PostToTagConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
     isPrimary: { __type: "Boolean" },
-    node: { __type: "Tag" },
+    node: { __type: "Tag!" },
+  },
+  PostToTagConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   PostToTagConnectionWhereArgs: {
     cacheDomain: { __type: "String" },
@@ -8906,18 +9968,27 @@ export const generatedSchema = {
     search: { __type: "String" },
     slug: { __type: "[String]" },
     termTaxonomId: { __type: "[ID]" },
+    termTaxonomyId: { __type: "[ID]" },
     updateTermMetaCache: { __type: "Boolean" },
   },
   PostToTermNodeConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[PostToTermNodeConnectionEdge]" },
-    nodes: { __type: "[TermNode]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[PostToTermNodeConnectionEdge!]!" },
+    nodes: { __type: "[TermNode!]!" },
+    pageInfo: { __type: "PostToTermNodeConnectionPageInfo!" },
   },
   PostToTermNodeConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "TermNode" },
+    node: { __type: "TermNode!" },
+  },
+  PostToTermNodeConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   PostToTermNodeConnectionWhereArgs: {
     cacheDomain: { __type: "String" },
@@ -8940,6 +10011,7 @@ export const generatedSchema = {
     slug: { __type: "[String]" },
     taxonomies: { __type: "[TaxonomyEnum]" },
     termTaxonomId: { __type: "[ID]" },
+    termTaxonomyId: { __type: "[ID]" },
     updateTermMetaCache: { __type: "Boolean" },
   },
   PostTypeLabelDetails: {
@@ -9013,9 +10085,19 @@ export const generatedSchema = {
     lugar: { __type: "String" },
     modalidad: { __type: "String" },
   },
+  Previewable: {
+    __typename: { __type: "String!" },
+    isPreview: { __type: "Boolean" },
+    previewRevisionDatabaseId: { __type: "Int" },
+    previewRevisionId: { __type: "ID" },
+    $on: { __type: "$Previewable!" },
+  },
   ReadingSettings: {
     __typename: { __type: "String!" },
+    pageForPosts: { __type: "Int" },
+    pageOnFront: { __type: "Int" },
     postsPerPage: { __type: "Int" },
+    showOnFront: { __type: "String" },
   },
   Recurso: {
     __typename: { __type: "String!" },
@@ -9078,20 +10160,51 @@ export const generatedSchema = {
     },
     uri: { __type: "String" },
   },
+  RecursoConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[RecursoConnectionEdge!]!" },
+    nodes: { __type: "[Recurso!]!" },
+    pageInfo: { __type: "RecursoConnectionPageInfo!" },
+    $on: { __type: "$RecursoConnection!" },
+  },
+  RecursoConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Recurso!" },
+    $on: { __type: "$RecursoConnectionEdge!" },
+  },
+  RecursoConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$RecursoConnectionPageInfo!" },
+  },
   RecursoToCarreraConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RecursoToCarreraConnectionEdge]" },
-    nodes: { __type: "[Carrera]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RecursoToCarreraConnectionEdge!]!" },
+    nodes: { __type: "[Carrera!]!" },
+    pageInfo: { __type: "RecursoToCarreraConnectionPageInfo!" },
   },
   RecursoToCarreraConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Carrera" },
+    node: { __type: "Carrera!" },
+  },
+  RecursoToCarreraConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RecursoToPreviewConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Recurso" },
+    cursor: { __type: "String" },
+    node: { __type: "Recurso!" },
   },
   Recurso_Datosrecurso: {
     __typename: { __type: "String!" },
@@ -9145,14 +10258,22 @@ export const generatedSchema = {
   },
   RootQueryToCarreraConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToCarreraConnectionEdge]" },
-    nodes: { __type: "[Carrera]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToCarreraConnectionEdge!]!" },
+    nodes: { __type: "[Carrera!]!" },
+    pageInfo: { __type: "RootQueryToCarreraConnectionPageInfo!" },
   },
   RootQueryToCarreraConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Carrera" },
+    node: { __type: "Carrera!" },
+  },
+  RootQueryToCarreraConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToCarreraConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -9179,14 +10300,22 @@ export const generatedSchema = {
   },
   RootQueryToCategoryConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToCategoryConnectionEdge]" },
-    nodes: { __type: "[Category]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToCategoryConnectionEdge!]!" },
+    nodes: { __type: "[Category!]!" },
+    pageInfo: { __type: "RootQueryToCategoryConnectionPageInfo!" },
   },
   RootQueryToCategoryConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Category" },
+    node: { __type: "Category!" },
+  },
+  RootQueryToCategoryConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToCategoryConnectionWhereArgs: {
     cacheDomain: { __type: "String" },
@@ -9208,18 +10337,27 @@ export const generatedSchema = {
     search: { __type: "String" },
     slug: { __type: "[String]" },
     termTaxonomId: { __type: "[ID]" },
+    termTaxonomyId: { __type: "[ID]" },
     updateTermMetaCache: { __type: "Boolean" },
   },
   RootQueryToCommentConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToCommentConnectionEdge]" },
-    nodes: { __type: "[Comment]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToCommentConnectionEdge!]!" },
+    nodes: { __type: "[Comment!]!" },
+    pageInfo: { __type: "RootQueryToCommentConnectionPageInfo!" },
   },
   RootQueryToCommentConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Comment" },
+    node: { __type: "Comment!" },
+  },
+  RootQueryToCommentConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToCommentConnectionWhereArgs: {
     authorEmail: { __type: "String" },
@@ -9254,14 +10392,22 @@ export const generatedSchema = {
   },
   RootQueryToContentNodeConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToContentNodeConnectionEdge]" },
-    nodes: { __type: "[ContentNode]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToContentNodeConnectionEdge!]!" },
+    nodes: { __type: "[ContentNode!]!" },
+    pageInfo: { __type: "RootQueryToContentNodeConnectionPageInfo!" },
   },
   RootQueryToContentNodeConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "ContentNode" },
+    node: { __type: "ContentNode!" },
+  },
+  RootQueryToContentNodeConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToContentNodeConnectionWhereArgs: {
     contentTypes: { __type: "[ContentTypeEnum]" },
@@ -9283,58 +10429,43 @@ export const generatedSchema = {
     status: { __type: "PostStatusEnum" },
     title: { __type: "String" },
   },
-  RootQueryToContentRevisionUnionConnection: {
-    __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToContentRevisionUnionConnectionEdge]" },
-    nodes: { __type: "[ContentRevisionUnion]" },
-    pageInfo: { __type: "WPPageInfo" },
-  },
-  RootQueryToContentRevisionUnionConnectionEdge: {
-    __typename: { __type: "String!" },
-    cursor: { __type: "String" },
-    node: { __type: "ContentRevisionUnion" },
-  },
-  RootQueryToContentRevisionUnionConnectionWhereArgs: {
-    contentTypes: { __type: "[ContentTypeEnum]" },
-    dateQuery: { __type: "DateQueryInput" },
-    hasPassword: { __type: "Boolean" },
-    id: { __type: "Int" },
-    in: { __type: "[ID]" },
-    mimeType: { __type: "MimeTypeEnum" },
-    name: { __type: "String" },
-    nameIn: { __type: "[String]" },
-    notIn: { __type: "[ID]" },
-    orderby: { __type: "[PostObjectsConnectionOrderbyInput]" },
-    parent: { __type: "ID" },
-    parentIn: { __type: "[ID]" },
-    parentNotIn: { __type: "[ID]" },
-    password: { __type: "String" },
-    search: { __type: "String" },
-    stati: { __type: "[PostStatusEnum]" },
-    status: { __type: "PostStatusEnum" },
-    title: { __type: "String" },
-  },
   RootQueryToContentTypeConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToContentTypeConnectionEdge]" },
-    nodes: { __type: "[ContentType]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToContentTypeConnectionEdge!]!" },
+    nodes: { __type: "[ContentType!]!" },
+    pageInfo: { __type: "RootQueryToContentTypeConnectionPageInfo!" },
   },
   RootQueryToContentTypeConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "ContentType" },
+    node: { __type: "ContentType!" },
+  },
+  RootQueryToContentTypeConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToDepartamentoConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToDepartamentoConnectionEdge]" },
-    nodes: { __type: "[Departamento]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToDepartamentoConnectionEdge!]!" },
+    nodes: { __type: "[Departamento!]!" },
+    pageInfo: { __type: "RootQueryToDepartamentoConnectionPageInfo!" },
   },
   RootQueryToDepartamentoConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Departamento" },
+    node: { __type: "Departamento!" },
+  },
+  RootQueryToDepartamentoConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToDepartamentoConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -9361,36 +10492,60 @@ export const generatedSchema = {
   },
   RootQueryToEnqueuedScriptConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToEnqueuedScriptConnectionEdge]" },
-    nodes: { __type: "[EnqueuedScript]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToEnqueuedScriptConnectionEdge!]!" },
+    nodes: { __type: "[EnqueuedScript!]!" },
+    pageInfo: { __type: "RootQueryToEnqueuedScriptConnectionPageInfo!" },
   },
   RootQueryToEnqueuedScriptConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "EnqueuedScript" },
+    node: { __type: "EnqueuedScript!" },
+  },
+  RootQueryToEnqueuedScriptConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToEnqueuedStylesheetConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToEnqueuedStylesheetConnectionEdge]" },
-    nodes: { __type: "[EnqueuedStylesheet]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToEnqueuedStylesheetConnectionEdge!]!" },
+    nodes: { __type: "[EnqueuedStylesheet!]!" },
+    pageInfo: { __type: "RootQueryToEnqueuedStylesheetConnectionPageInfo!" },
   },
   RootQueryToEnqueuedStylesheetConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "EnqueuedStylesheet" },
+    node: { __type: "EnqueuedStylesheet!" },
+  },
+  RootQueryToEnqueuedStylesheetConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToFacultadConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToFacultadConnectionEdge]" },
-    nodes: { __type: "[Facultad]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToFacultadConnectionEdge!]!" },
+    nodes: { __type: "[Facultad!]!" },
+    pageInfo: { __type: "RootQueryToFacultadConnectionPageInfo!" },
   },
   RootQueryToFacultadConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Facultad" },
+    node: { __type: "Facultad!" },
+  },
+  RootQueryToFacultadConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToFacultadConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -9417,14 +10572,22 @@ export const generatedSchema = {
   },
   RootQueryToGradoConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToGradoConnectionEdge]" },
-    nodes: { __type: "[Grado]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToGradoConnectionEdge!]!" },
+    nodes: { __type: "[Grado!]!" },
+    pageInfo: { __type: "RootQueryToGradoConnectionPageInfo!" },
   },
   RootQueryToGradoConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Grado" },
+    node: { __type: "Grado!" },
+  },
+  RootQueryToGradoConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToGradoConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -9451,14 +10614,22 @@ export const generatedSchema = {
   },
   RootQueryToGrupoDeRequisitosConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToGrupoDeRequisitosConnectionEdge]" },
-    nodes: { __type: "[GrupoDeRequisitos]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToGrupoDeRequisitosConnectionEdge!]!" },
+    nodes: { __type: "[GrupoDeRequisitos!]!" },
+    pageInfo: { __type: "RootQueryToGrupoDeRequisitosConnectionPageInfo!" },
   },
   RootQueryToGrupoDeRequisitosConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "GrupoDeRequisitos" },
+    node: { __type: "GrupoDeRequisitos!" },
+  },
+  RootQueryToGrupoDeRequisitosConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToGrupoDeRequisitosConnectionWhereArgs: {
     cacheDomain: { __type: "String" },
@@ -9480,18 +10651,27 @@ export const generatedSchema = {
     search: { __type: "String" },
     slug: { __type: "[String]" },
     termTaxonomId: { __type: "[ID]" },
+    termTaxonomyId: { __type: "[ID]" },
     updateTermMetaCache: { __type: "Boolean" },
   },
   RootQueryToInvestigacionConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToInvestigacionConnectionEdge]" },
-    nodes: { __type: "[Investigacion]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToInvestigacionConnectionEdge!]!" },
+    nodes: { __type: "[Investigacion!]!" },
+    pageInfo: { __type: "RootQueryToInvestigacionConnectionPageInfo!" },
   },
   RootQueryToInvestigacionConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Investigacion" },
+    node: { __type: "Investigacion!" },
+  },
+  RootQueryToInvestigacionConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToInvestigacionConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -9518,14 +10698,22 @@ export const generatedSchema = {
   },
   RootQueryToInvestigadorConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToInvestigadorConnectionEdge]" },
-    nodes: { __type: "[Investigador]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToInvestigadorConnectionEdge!]!" },
+    nodes: { __type: "[Investigador!]!" },
+    pageInfo: { __type: "RootQueryToInvestigadorConnectionPageInfo!" },
   },
   RootQueryToInvestigadorConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Investigador" },
+    node: { __type: "Investigador!" },
+  },
+  RootQueryToInvestigadorConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToInvestigadorConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -9552,14 +10740,22 @@ export const generatedSchema = {
   },
   RootQueryToLineaDeInvestigacionConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToLineaDeInvestigacionConnectionEdge]" },
-    nodes: { __type: "[LineaDeInvestigacion]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToLineaDeInvestigacionConnectionEdge!]!" },
+    nodes: { __type: "[LineaDeInvestigacion!]!" },
+    pageInfo: { __type: "RootQueryToLineaDeInvestigacionConnectionPageInfo!" },
   },
   RootQueryToLineaDeInvestigacionConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "LineaDeInvestigacion" },
+    node: { __type: "LineaDeInvestigacion!" },
+  },
+  RootQueryToLineaDeInvestigacionConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToLineaDeInvestigacionConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -9586,14 +10782,22 @@ export const generatedSchema = {
   },
   RootQueryToMediaItemConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToMediaItemConnectionEdge]" },
-    nodes: { __type: "[MediaItem]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToMediaItemConnectionEdge!]!" },
+    nodes: { __type: "[MediaItem!]!" },
+    pageInfo: { __type: "RootQueryToMediaItemConnectionPageInfo!" },
   },
   RootQueryToMediaItemConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "MediaItem" },
+    node: { __type: "MediaItem!" },
+  },
+  RootQueryToMediaItemConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToMediaItemConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -9620,14 +10824,22 @@ export const generatedSchema = {
   },
   RootQueryToMenuConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToMenuConnectionEdge]" },
-    nodes: { __type: "[Menu]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToMenuConnectionEdge!]!" },
+    nodes: { __type: "[Menu!]!" },
+    pageInfo: { __type: "RootQueryToMenuConnectionPageInfo!" },
   },
   RootQueryToMenuConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Menu" },
+    node: { __type: "Menu!" },
+  },
+  RootQueryToMenuConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToMenuConnectionWhereArgs: {
     id: { __type: "Int" },
@@ -9636,14 +10848,22 @@ export const generatedSchema = {
   },
   RootQueryToMenuItemConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToMenuItemConnectionEdge]" },
-    nodes: { __type: "[MenuItem]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToMenuItemConnectionEdge!]!" },
+    nodes: { __type: "[MenuItem!]!" },
+    pageInfo: { __type: "RootQueryToMenuItemConnectionPageInfo!" },
   },
   RootQueryToMenuItemConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "MenuItem" },
+    node: { __type: "MenuItem!" },
+  },
+  RootQueryToMenuItemConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToMenuItemConnectionWhereArgs: {
     id: { __type: "Int" },
@@ -9653,14 +10873,22 @@ export const generatedSchema = {
   },
   RootQueryToPageConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToPageConnectionEdge]" },
-    nodes: { __type: "[Page]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToPageConnectionEdge!]!" },
+    nodes: { __type: "[Page!]!" },
+    pageInfo: { __type: "RootQueryToPageConnectionPageInfo!" },
   },
   RootQueryToPageConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Page" },
+    node: { __type: "Page!" },
+  },
+  RootQueryToPageConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToPageConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -9687,14 +10915,22 @@ export const generatedSchema = {
   },
   RootQueryToPeriodoDeAdmisionConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToPeriodoDeAdmisionConnectionEdge]" },
-    nodes: { __type: "[PeriodoDeAdmision]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToPeriodoDeAdmisionConnectionEdge!]!" },
+    nodes: { __type: "[PeriodoDeAdmision!]!" },
+    pageInfo: { __type: "RootQueryToPeriodoDeAdmisionConnectionPageInfo!" },
   },
   RootQueryToPeriodoDeAdmisionConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "PeriodoDeAdmision" },
+    node: { __type: "PeriodoDeAdmision!" },
+  },
+  RootQueryToPeriodoDeAdmisionConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToPeriodoDeAdmisionConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -9721,14 +10957,22 @@ export const generatedSchema = {
   },
   RootQueryToPluginConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToPluginConnectionEdge]" },
-    nodes: { __type: "[Plugin]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToPluginConnectionEdge!]!" },
+    nodes: { __type: "[Plugin!]!" },
+    pageInfo: { __type: "RootQueryToPluginConnectionPageInfo!" },
   },
   RootQueryToPluginConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Plugin" },
+    node: { __type: "Plugin!" },
+  },
+  RootQueryToPluginConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToPluginConnectionWhereArgs: {
     search: { __type: "String" },
@@ -9737,14 +10981,22 @@ export const generatedSchema = {
   },
   RootQueryToPostConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToPostConnectionEdge]" },
-    nodes: { __type: "[Post]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToPostConnectionEdge!]!" },
+    nodes: { __type: "[Post!]!" },
+    pageInfo: { __type: "RootQueryToPostConnectionPageInfo!" },
   },
   RootQueryToPostConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Post" },
+    node: { __type: "Post!" },
+  },
+  RootQueryToPostConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToPostConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -9781,14 +11033,22 @@ export const generatedSchema = {
   },
   RootQueryToPostFormatConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToPostFormatConnectionEdge]" },
-    nodes: { __type: "[PostFormat]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToPostFormatConnectionEdge!]!" },
+    nodes: { __type: "[PostFormat!]!" },
+    pageInfo: { __type: "RootQueryToPostFormatConnectionPageInfo!" },
   },
   RootQueryToPostFormatConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "PostFormat" },
+    node: { __type: "PostFormat!" },
+  },
+  RootQueryToPostFormatConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToPostFormatConnectionWhereArgs: {
     cacheDomain: { __type: "String" },
@@ -9810,18 +11070,27 @@ export const generatedSchema = {
     search: { __type: "String" },
     slug: { __type: "[String]" },
     termTaxonomId: { __type: "[ID]" },
+    termTaxonomyId: { __type: "[ID]" },
     updateTermMetaCache: { __type: "Boolean" },
   },
   RootQueryToRecursoConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToRecursoConnectionEdge]" },
-    nodes: { __type: "[Recurso]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToRecursoConnectionEdge!]!" },
+    nodes: { __type: "[Recurso!]!" },
+    pageInfo: { __type: "RootQueryToRecursoConnectionPageInfo!" },
   },
   RootQueryToRecursoConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Recurso" },
+    node: { __type: "Recurso!" },
+  },
+  RootQueryToRecursoConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToRecursoConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -9846,16 +11115,63 @@ export const generatedSchema = {
     status: { __type: "PostStatusEnum" },
     title: { __type: "String" },
   },
+  RootQueryToRevisionsConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[RootQueryToRevisionsConnectionEdge!]!" },
+    nodes: { __type: "[ContentNode!]!" },
+    pageInfo: { __type: "RootQueryToRevisionsConnectionPageInfo!" },
+  },
+  RootQueryToRevisionsConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "ContentNode!" },
+  },
+  RootQueryToRevisionsConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+  },
+  RootQueryToRevisionsConnectionWhereArgs: {
+    contentTypes: { __type: "[ContentTypeEnum]" },
+    dateQuery: { __type: "DateQueryInput" },
+    hasPassword: { __type: "Boolean" },
+    id: { __type: "Int" },
+    in: { __type: "[ID]" },
+    mimeType: { __type: "MimeTypeEnum" },
+    name: { __type: "String" },
+    nameIn: { __type: "[String]" },
+    notIn: { __type: "[ID]" },
+    orderby: { __type: "[PostObjectsConnectionOrderbyInput]" },
+    parent: { __type: "ID" },
+    parentIn: { __type: "[ID]" },
+    parentNotIn: { __type: "[ID]" },
+    password: { __type: "String" },
+    search: { __type: "String" },
+    stati: { __type: "[PostStatusEnum]" },
+    status: { __type: "PostStatusEnum" },
+    title: { __type: "String" },
+  },
   RootQueryToSlideConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToSlideConnectionEdge]" },
-    nodes: { __type: "[Slide]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToSlideConnectionEdge!]!" },
+    nodes: { __type: "[Slide!]!" },
+    pageInfo: { __type: "RootQueryToSlideConnectionPageInfo!" },
   },
   RootQueryToSlideConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Slide" },
+    node: { __type: "Slide!" },
+  },
+  RootQueryToSlideConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToSlideConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -9882,14 +11198,22 @@ export const generatedSchema = {
   },
   RootQueryToTagConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToTagConnectionEdge]" },
-    nodes: { __type: "[Tag]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToTagConnectionEdge!]!" },
+    nodes: { __type: "[Tag!]!" },
+    pageInfo: { __type: "RootQueryToTagConnectionPageInfo!" },
   },
   RootQueryToTagConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Tag" },
+    node: { __type: "Tag!" },
+  },
+  RootQueryToTagConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToTagConnectionWhereArgs: {
     cacheDomain: { __type: "String" },
@@ -9911,29 +11235,46 @@ export const generatedSchema = {
     search: { __type: "String" },
     slug: { __type: "[String]" },
     termTaxonomId: { __type: "[ID]" },
+    termTaxonomyId: { __type: "[ID]" },
     updateTermMetaCache: { __type: "Boolean" },
   },
   RootQueryToTaxonomyConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToTaxonomyConnectionEdge]" },
-    nodes: { __type: "[Taxonomy]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToTaxonomyConnectionEdge!]!" },
+    nodes: { __type: "[Taxonomy!]!" },
+    pageInfo: { __type: "RootQueryToTaxonomyConnectionPageInfo!" },
   },
   RootQueryToTaxonomyConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Taxonomy" },
+    node: { __type: "Taxonomy!" },
+  },
+  RootQueryToTaxonomyConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToTermNodeConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToTermNodeConnectionEdge]" },
-    nodes: { __type: "[TermNode]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToTermNodeConnectionEdge!]!" },
+    nodes: { __type: "[TermNode!]!" },
+    pageInfo: { __type: "RootQueryToTermNodeConnectionPageInfo!" },
   },
   RootQueryToTermNodeConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "TermNode" },
+    node: { __type: "TermNode!" },
+  },
+  RootQueryToTermNodeConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToTermNodeConnectionWhereArgs: {
     cacheDomain: { __type: "String" },
@@ -9956,29 +11297,46 @@ export const generatedSchema = {
     slug: { __type: "[String]" },
     taxonomies: { __type: "[TaxonomyEnum]" },
     termTaxonomId: { __type: "[ID]" },
+    termTaxonomyId: { __type: "[ID]" },
     updateTermMetaCache: { __type: "Boolean" },
   },
   RootQueryToThemeConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToThemeConnectionEdge]" },
-    nodes: { __type: "[Theme]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToThemeConnectionEdge!]!" },
+    nodes: { __type: "[Theme!]!" },
+    pageInfo: { __type: "RootQueryToThemeConnectionPageInfo!" },
   },
   RootQueryToThemeConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Theme" },
+    node: { __type: "Theme!" },
+  },
+  RootQueryToThemeConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToUserConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToUserConnectionEdge]" },
-    nodes: { __type: "[User]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToUserConnectionEdge!]!" },
+    nodes: { __type: "[User!]!" },
+    pageInfo: { __type: "RootQueryToUserConnectionPageInfo!" },
   },
   RootQueryToUserConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "User" },
+    node: { __type: "User!" },
+  },
+  RootQueryToUserConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   RootQueryToUserConnectionWhereArgs: {
     exclude: { __type: "[Int]" },
@@ -9999,14 +11357,22 @@ export const generatedSchema = {
   },
   RootQueryToUserRoleConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToUserRoleConnectionEdge]" },
-    nodes: { __type: "[UserRole]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[RootQueryToUserRoleConnectionEdge!]!" },
+    nodes: { __type: "[UserRole!]!" },
+    pageInfo: { __type: "RootQueryToUserRoleConnectionPageInfo!" },
   },
   RootQueryToUserRoleConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "UserRole" },
+    node: { __type: "UserRole!" },
+  },
+  RootQueryToUserRoleConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   SEOBreadcrumbs: {
     __typename: { __type: "String!" },
@@ -10024,6 +11390,7 @@ export const generatedSchema = {
     __typename: { __type: "String!" },
     breadcrumbs: { __type: "SEOBreadcrumbs" },
     contentTypes: { __type: "SEOContentTypes" },
+    meta: { __type: "SEOGlobalMeta" },
     openGraph: { __type: "SEOOpenGraph" },
     redirects: { __type: "[SEORedirect]" },
     schema: { __type: "SEOSchema" },
@@ -10046,6 +11413,9 @@ export const generatedSchema = {
     fullHead: { __type: "String" },
     hasArchive: { __type: "Boolean" },
     metaDesc: { __type: "String" },
+    metaRobotsFollow: { __type: "String" },
+    metaRobotsIndex: { __type: "String" },
+    metaRobotsNofollow: { __type: "Boolean" },
     metaRobotsNoindex: { __type: "Boolean" },
     title: { __type: "String" },
   },
@@ -10064,6 +11434,38 @@ export const generatedSchema = {
     post: { __type: "SEOContentType" },
     recurso: { __type: "SEOContentType" },
     slide: { __type: "SEOContentType" },
+  },
+  SEOGlobalMeta: {
+    __typename: { __type: "String!" },
+    author: { __type: "SEOGlobalMetaAuthor" },
+    config: { __type: "SEOGlobalMetaConfig" },
+    date: { __type: "SEOGlobalMetaDate" },
+    homepage: { __type: "SEOGlobalMetaHome" },
+    notFound: { __type: "SEOGlobalMeta404" },
+  },
+  SEOGlobalMeta404: {
+    __typename: { __type: "String!" },
+    breadcrumb: { __type: "String" },
+    title: { __type: "String" },
+  },
+  SEOGlobalMetaAuthor: {
+    __typename: { __type: "String!" },
+    description: { __type: "String" },
+    title: { __type: "String" },
+  },
+  SEOGlobalMetaConfig: {
+    __typename: { __type: "String!" },
+    separator: { __type: "String" },
+  },
+  SEOGlobalMetaDate: {
+    __typename: { __type: "String!" },
+    description: { __type: "String" },
+    title: { __type: "String" },
+  },
+  SEOGlobalMetaHome: {
+    __typename: { __type: "String!" },
+    description: { __type: "String" },
+    title: { __type: "String" },
   },
   SEOOpenGraph: {
     __typename: { __type: "String!" },
@@ -10122,6 +11524,7 @@ export const generatedSchema = {
     instagram: { __type: "SEOSocialInstagram" },
     linkedIn: { __type: "SEOSocialLinkedIn" },
     mySpace: { __type: "SEOSocialMySpace" },
+    otherSocials: { __type: "[String]" },
     pinterest: { __type: "SEOSocialPinterest" },
     twitter: { __type: "SEOSocialTwitter" },
     wikipedia: { __type: "SEOSocialWikipedia" },
@@ -10218,6 +11621,7 @@ export const generatedSchema = {
   SendPasswordResetEmailPayload: {
     __typename: { __type: "String!" },
     clientMutationId: { __type: "String" },
+    success: { __type: "Boolean" },
     user: { __type: "User" },
   },
   Settings: {
@@ -10236,7 +11640,10 @@ export const generatedSchema = {
     generalSettingsTimezone: { __type: "String" },
     generalSettingsTitle: { __type: "String" },
     generalSettingsUrl: { __type: "String" },
+    readingSettingsPageForPosts: { __type: "Int" },
+    readingSettingsPageOnFront: { __type: "Int" },
     readingSettingsPostsPerPage: { __type: "Int" },
+    readingSettingsShowOnFront: { __type: "String" },
     writingSettingsDefaultCategory: { __type: "Int" },
     writingSettingsDefaultPostFormat: { __type: "String" },
     writingSettingsUseSmilies: { __type: "Boolean" },
@@ -10296,9 +11703,32 @@ export const generatedSchema = {
     titulo: { __type: "String" },
     uri: { __type: "String" },
   },
+  SlideConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[SlideConnectionEdge!]!" },
+    nodes: { __type: "[Slide!]!" },
+    pageInfo: { __type: "SlideConnectionPageInfo!" },
+    $on: { __type: "$SlideConnection!" },
+  },
+  SlideConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Slide!" },
+    $on: { __type: "$SlideConnectionEdge!" },
+  },
+  SlideConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$SlideConnectionPageInfo!" },
+  },
   SlideToPreviewConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Slide" },
+    cursor: { __type: "String" },
+    node: { __type: "Slide!" },
   },
   Slide_Datoscta: {
     __typename: { __type: "String!" },
@@ -10355,16 +11785,46 @@ export const generatedSchema = {
     termTaxonomyId: { __type: "Int" },
     uri: { __type: "String" },
   },
+  TagConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[TagConnectionEdge!]!" },
+    nodes: { __type: "[Tag!]!" },
+    pageInfo: { __type: "TagConnectionPageInfo!" },
+    $on: { __type: "$TagConnection!" },
+  },
+  TagConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Tag!" },
+    $on: { __type: "$TagConnectionEdge!" },
+  },
+  TagConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$TagConnectionPageInfo!" },
+  },
   TagToContentNodeConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[TagToContentNodeConnectionEdge]" },
-    nodes: { __type: "[ContentNode]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[TagToContentNodeConnectionEdge!]!" },
+    nodes: { __type: "[ContentNode!]!" },
+    pageInfo: { __type: "TagToContentNodeConnectionPageInfo!" },
   },
   TagToContentNodeConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "ContentNode" },
+    node: { __type: "ContentNode!" },
+  },
+  TagToContentNodeConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   TagToContentNodeConnectionWhereArgs: {
     contentTypes: { __type: "[ContentTypesOfTagEnum]" },
@@ -10388,14 +11848,22 @@ export const generatedSchema = {
   },
   TagToPostConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[TagToPostConnectionEdge]" },
-    nodes: { __type: "[Post]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[TagToPostConnectionEdge!]!" },
+    nodes: { __type: "[Post!]!" },
+    pageInfo: { __type: "TagToPostConnectionPageInfo!" },
   },
   TagToPostConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Post" },
+    node: { __type: "Post!" },
+  },
+  TagToPostConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   TagToPostConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -10432,7 +11900,8 @@ export const generatedSchema = {
   },
   TagToTaxonomyConnectionEdge: {
     __typename: { __type: "String!" },
-    node: { __type: "Taxonomy" },
+    cursor: { __type: "String" },
+    node: { __type: "Taxonomy!" },
   },
   Taxonomy: {
     __typename: { __type: "String!" },
@@ -10459,6 +11928,28 @@ export const generatedSchema = {
     showInQuickEdit: { __type: "Boolean" },
     showInRest: { __type: "Boolean" },
     showUi: { __type: "Boolean" },
+  },
+  TaxonomyConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[TaxonomyConnectionEdge!]!" },
+    nodes: { __type: "[Taxonomy!]!" },
+    pageInfo: { __type: "TaxonomyConnectionPageInfo!" },
+    $on: { __type: "$TaxonomyConnection!" },
+  },
+  TaxonomyConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Taxonomy!" },
+    $on: { __type: "$TaxonomyConnectionEdge!" },
+  },
+  TaxonomyConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$TaxonomyConnectionPageInfo!" },
   },
   TaxonomySEO: {
     __typename: { __type: "String!" },
@@ -10489,14 +11980,22 @@ export const generatedSchema = {
   },
   TaxonomyToContentTypeConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[TaxonomyToContentTypeConnectionEdge]" },
-    nodes: { __type: "[ContentType]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[TaxonomyToContentTypeConnectionEdge!]!" },
+    nodes: { __type: "[ContentType!]!" },
+    pageInfo: { __type: "TaxonomyToContentTypeConnectionPageInfo!" },
   },
   TaxonomyToContentTypeConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "ContentType" },
+    node: { __type: "ContentType!" },
+  },
+  TaxonomyToContentTypeConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   TermNode: {
     __typename: { __type: "String!" },
@@ -10526,27 +12025,65 @@ export const generatedSchema = {
     uri: { __type: "String" },
     $on: { __type: "$TermNode!" },
   },
+  TermNodeConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[TermNodeConnectionEdge!]!" },
+    nodes: { __type: "[TermNode!]!" },
+    pageInfo: { __type: "TermNodeConnectionPageInfo!" },
+    $on: { __type: "$TermNodeConnection!" },
+  },
+  TermNodeConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "TermNode!" },
+    $on: { __type: "$TermNodeConnectionEdge!" },
+  },
+  TermNodeConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$TermNodeConnectionPageInfo!" },
+  },
   TermNodeToEnqueuedScriptConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[TermNodeToEnqueuedScriptConnectionEdge]" },
-    nodes: { __type: "[EnqueuedScript]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[TermNodeToEnqueuedScriptConnectionEdge!]!" },
+    nodes: { __type: "[EnqueuedScript!]!" },
+    pageInfo: { __type: "TermNodeToEnqueuedScriptConnectionPageInfo!" },
   },
   TermNodeToEnqueuedScriptConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "EnqueuedScript" },
+    node: { __type: "EnqueuedScript!" },
+  },
+  TermNodeToEnqueuedScriptConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   TermNodeToEnqueuedStylesheetConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[TermNodeToEnqueuedStylesheetConnectionEdge]" },
-    nodes: { __type: "[EnqueuedStylesheet]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[TermNodeToEnqueuedStylesheetConnectionEdge!]!" },
+    nodes: { __type: "[EnqueuedStylesheet!]!" },
+    pageInfo: { __type: "TermNodeToEnqueuedStylesheetConnectionPageInfo!" },
   },
   TermNodeToEnqueuedStylesheetConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "EnqueuedStylesheet" },
+    node: { __type: "EnqueuedStylesheet!" },
+  },
+  TermNodeToEnqueuedStylesheetConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   Theme: {
     __typename: { __type: "String!" },
@@ -10561,6 +12098,28 @@ export const generatedSchema = {
     tags: { __type: "[String]" },
     themeUri: { __type: "String" },
     version: { __type: "String" },
+  },
+  ThemeConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[ThemeConnectionEdge!]!" },
+    nodes: { __type: "[Theme!]!" },
+    pageInfo: { __type: "ThemeConnectionPageInfo!" },
+    $on: { __type: "$ThemeConnection!" },
+  },
+  ThemeConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "Theme!" },
+    $on: { __type: "$ThemeConnectionEdge!" },
+  },
+  ThemeConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$ThemeConnectionPageInfo!" },
   },
   UniformResourceIdentifiable: {
     __typename: { __type: "String!" },
@@ -10582,6 +12141,7 @@ export const generatedSchema = {
     duracion: { __type: "String" },
     duracionPasantia: { __type: "String" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
     menuOrder: { __type: "Int" },
     nombre: { __type: "String" },
     password: { __type: "String" },
@@ -10619,6 +12179,7 @@ export const generatedSchema = {
     date: { __type: "String" },
     id: { __type: "ID!" },
     parent: { __type: "ID" },
+    status: { __type: "CommentStatusEnum" },
     type: { __type: "String" },
   },
   UpdateCommentPayload: {
@@ -10633,6 +12194,7 @@ export const generatedSchema = {
     copy: { __type: "String" },
     date: { __type: "String" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
     menuOrder: { __type: "Int" },
     nombre: { __type: "String" },
     password: { __type: "String" },
@@ -10653,6 +12215,7 @@ export const generatedSchema = {
     copy: { __type: "String" },
     date: { __type: "String" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
     menuOrder: { __type: "Int" },
     mision: { __type: "String" },
     nombre: { __type: "String" },
@@ -10674,6 +12237,7 @@ export const generatedSchema = {
     date: { __type: "String" },
     gruposDeRequisitos: { __type: "GradoGruposDeRequisitosInput" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
     menuOrder: { __type: "Int" },
     nombre: { __type: "String" },
     orden: { __type: "Float" },
@@ -10707,6 +12271,7 @@ export const generatedSchema = {
     descripcion: { __type: "String" },
     descripcionCorta: { __type: "String" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
     menuOrder: { __type: "Int" },
     nombre: { __type: "String" },
     password: { __type: "String" },
@@ -10726,6 +12291,7 @@ export const generatedSchema = {
     date: { __type: "String" },
     esEquipo: { __type: "Boolean" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
     inicialesTituloAcademico: { __type: "String" },
     menuOrder: { __type: "Int" },
     nombre: { __type: "String" },
@@ -10747,6 +12313,7 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     date: { __type: "String" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
     menuOrder: { __type: "Int" },
     nombre: { __type: "String" },
     password: { __type: "String" },
@@ -10789,6 +12356,7 @@ export const generatedSchema = {
     content: { __type: "String" },
     date: { __type: "String" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
     menuOrder: { __type: "Int" },
     parentId: { __type: "ID" },
     password: { __type: "String" },
@@ -10806,6 +12374,7 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     date: { __type: "String" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
     menuOrder: { __type: "Int" },
     nombre: { __type: "String" },
     password: { __type: "String" },
@@ -10840,6 +12409,7 @@ export const generatedSchema = {
     date: { __type: "String" },
     excerpt: { __type: "String" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
     menuOrder: { __type: "Int" },
     password: { __type: "String" },
     pingStatus: { __type: "String" },
@@ -10862,6 +12432,7 @@ export const generatedSchema = {
     date: { __type: "String" },
     descripcion: { __type: "String" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
     menuOrder: { __type: "Int" },
     nombre: { __type: "String" },
     password: { __type: "String" },
@@ -10891,7 +12462,10 @@ export const generatedSchema = {
     generalSettingsTimezone: { __type: "String" },
     generalSettingsTitle: { __type: "String" },
     generalSettingsUrl: { __type: "String" },
+    readingSettingsPageForPosts: { __type: "Int" },
+    readingSettingsPageOnFront: { __type: "Int" },
     readingSettingsPostsPerPage: { __type: "Int" },
+    readingSettingsShowOnFront: { __type: "String" },
     writingSettingsDefaultCategory: { __type: "Int" },
     writingSettingsDefaultPostFormat: { __type: "String" },
     writingSettingsUseSmilies: { __type: "Boolean" },
@@ -10914,6 +12488,7 @@ export const generatedSchema = {
     copy: { __type: "String" },
     date: { __type: "String" },
     id: { __type: "ID!" },
+    ignoreEditLock: { __type: "Boolean" },
     menuOrder: { __type: "Int" },
     password: { __type: "String" },
     slug: { __type: "String" },
@@ -11131,13 +12706,13 @@ export const generatedSchema = {
     },
     registeredDate: { __type: "String" },
     revisions: {
-      __type: "UserToContentRevisionUnionConnection",
+      __type: "UserToRevisionsConnection",
       __args: {
         after: "String",
         before: "String",
         first: "Int",
         last: "Int",
-        where: "UserToContentRevisionUnionConnectionWhereArgs",
+        where: "UserToRevisionsConnectionWhereArgs",
       },
     },
     roles: {
@@ -11162,6 +12737,28 @@ export const generatedSchema = {
     userId: { __type: "Int" },
     username: { __type: "String" },
   },
+  UserConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[UserConnectionEdge!]!" },
+    nodes: { __type: "[User!]!" },
+    pageInfo: { __type: "UserConnectionPageInfo!" },
+    $on: { __type: "$UserConnection!" },
+  },
+  UserConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "User!" },
+    $on: { __type: "$UserConnectionEdge!" },
+  },
+  UserConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$UserConnectionPageInfo!" },
+  },
   UserRole: {
     __typename: { __type: "String!" },
     capabilities: { __type: "[String]" },
@@ -11170,16 +12767,46 @@ export const generatedSchema = {
     isRestricted: { __type: "Boolean" },
     name: { __type: "String" },
   },
+  UserRoleConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[UserRoleConnectionEdge!]!" },
+    nodes: { __type: "[UserRole!]!" },
+    pageInfo: { __type: "UserRoleConnectionPageInfo!" },
+    $on: { __type: "$UserRoleConnection!" },
+  },
+  UserRoleConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "UserRole!" },
+    $on: { __type: "$UserRoleConnectionEdge!" },
+  },
+  UserRoleConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+    $on: { __type: "$UserRoleConnectionPageInfo!" },
+  },
   UserToCarreraConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[UserToCarreraConnectionEdge]" },
-    nodes: { __type: "[Carrera]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[UserToCarreraConnectionEdge!]!" },
+    nodes: { __type: "[Carrera!]!" },
+    pageInfo: { __type: "UserToCarreraConnectionPageInfo!" },
   },
   UserToCarreraConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Carrera" },
+    node: { __type: "Carrera!" },
+  },
+  UserToCarreraConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   UserToCarreraConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -11206,14 +12833,22 @@ export const generatedSchema = {
   },
   UserToCommentConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[UserToCommentConnectionEdge]" },
-    nodes: { __type: "[Comment]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[UserToCommentConnectionEdge!]!" },
+    nodes: { __type: "[Comment!]!" },
+    pageInfo: { __type: "UserToCommentConnectionPageInfo!" },
   },
   UserToCommentConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Comment" },
+    node: { __type: "Comment!" },
+  },
+  UserToCommentConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   UserToCommentConnectionWhereArgs: {
     authorEmail: { __type: "String" },
@@ -11246,47 +12881,24 @@ export const generatedSchema = {
     status: { __type: "String" },
     userId: { __type: "ID" },
   },
-  UserToContentRevisionUnionConnection: {
-    __typename: { __type: "String!" },
-    edges: { __type: "[UserToContentRevisionUnionConnectionEdge]" },
-    nodes: { __type: "[ContentRevisionUnion]" },
-    pageInfo: { __type: "WPPageInfo" },
-  },
-  UserToContentRevisionUnionConnectionEdge: {
-    __typename: { __type: "String!" },
-    cursor: { __type: "String" },
-    node: { __type: "ContentRevisionUnion" },
-  },
-  UserToContentRevisionUnionConnectionWhereArgs: {
-    contentTypes: { __type: "[ContentTypeEnum]" },
-    dateQuery: { __type: "DateQueryInput" },
-    hasPassword: { __type: "Boolean" },
-    id: { __type: "Int" },
-    in: { __type: "[ID]" },
-    mimeType: { __type: "MimeTypeEnum" },
-    name: { __type: "String" },
-    nameIn: { __type: "[String]" },
-    notIn: { __type: "[ID]" },
-    orderby: { __type: "[PostObjectsConnectionOrderbyInput]" },
-    parent: { __type: "ID" },
-    parentIn: { __type: "[ID]" },
-    parentNotIn: { __type: "[ID]" },
-    password: { __type: "String" },
-    search: { __type: "String" },
-    stati: { __type: "[PostStatusEnum]" },
-    status: { __type: "PostStatusEnum" },
-    title: { __type: "String" },
-  },
   UserToDepartamentoConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[UserToDepartamentoConnectionEdge]" },
-    nodes: { __type: "[Departamento]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[UserToDepartamentoConnectionEdge!]!" },
+    nodes: { __type: "[Departamento!]!" },
+    pageInfo: { __type: "UserToDepartamentoConnectionPageInfo!" },
   },
   UserToDepartamentoConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Departamento" },
+    node: { __type: "Departamento!" },
+  },
+  UserToDepartamentoConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   UserToDepartamentoConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -11313,36 +12925,60 @@ export const generatedSchema = {
   },
   UserToEnqueuedScriptConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[UserToEnqueuedScriptConnectionEdge]" },
-    nodes: { __type: "[EnqueuedScript]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[UserToEnqueuedScriptConnectionEdge!]!" },
+    nodes: { __type: "[EnqueuedScript!]!" },
+    pageInfo: { __type: "UserToEnqueuedScriptConnectionPageInfo!" },
   },
   UserToEnqueuedScriptConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "EnqueuedScript" },
+    node: { __type: "EnqueuedScript!" },
+  },
+  UserToEnqueuedScriptConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   UserToEnqueuedStylesheetConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[UserToEnqueuedStylesheetConnectionEdge]" },
-    nodes: { __type: "[EnqueuedStylesheet]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[UserToEnqueuedStylesheetConnectionEdge!]!" },
+    nodes: { __type: "[EnqueuedStylesheet!]!" },
+    pageInfo: { __type: "UserToEnqueuedStylesheetConnectionPageInfo!" },
   },
   UserToEnqueuedStylesheetConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "EnqueuedStylesheet" },
+    node: { __type: "EnqueuedStylesheet!" },
+  },
+  UserToEnqueuedStylesheetConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   UserToFacultadConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[UserToFacultadConnectionEdge]" },
-    nodes: { __type: "[Facultad]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[UserToFacultadConnectionEdge!]!" },
+    nodes: { __type: "[Facultad!]!" },
+    pageInfo: { __type: "UserToFacultadConnectionPageInfo!" },
   },
   UserToFacultadConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Facultad" },
+    node: { __type: "Facultad!" },
+  },
+  UserToFacultadConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   UserToFacultadConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -11369,14 +13005,22 @@ export const generatedSchema = {
   },
   UserToGradoConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[UserToGradoConnectionEdge]" },
-    nodes: { __type: "[Grado]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[UserToGradoConnectionEdge!]!" },
+    nodes: { __type: "[Grado!]!" },
+    pageInfo: { __type: "UserToGradoConnectionPageInfo!" },
   },
   UserToGradoConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Grado" },
+    node: { __type: "Grado!" },
+  },
+  UserToGradoConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   UserToGradoConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -11403,14 +13047,22 @@ export const generatedSchema = {
   },
   UserToInvestigacionConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[UserToInvestigacionConnectionEdge]" },
-    nodes: { __type: "[Investigacion]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[UserToInvestigacionConnectionEdge!]!" },
+    nodes: { __type: "[Investigacion!]!" },
+    pageInfo: { __type: "UserToInvestigacionConnectionPageInfo!" },
   },
   UserToInvestigacionConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Investigacion" },
+    node: { __type: "Investigacion!" },
+  },
+  UserToInvestigacionConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   UserToInvestigacionConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -11437,14 +13089,22 @@ export const generatedSchema = {
   },
   UserToInvestigadorConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[UserToInvestigadorConnectionEdge]" },
-    nodes: { __type: "[Investigador]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[UserToInvestigadorConnectionEdge!]!" },
+    nodes: { __type: "[Investigador!]!" },
+    pageInfo: { __type: "UserToInvestigadorConnectionPageInfo!" },
   },
   UserToInvestigadorConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Investigador" },
+    node: { __type: "Investigador!" },
+  },
+  UserToInvestigadorConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   UserToInvestigadorConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -11471,14 +13131,22 @@ export const generatedSchema = {
   },
   UserToLineaDeInvestigacionConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[UserToLineaDeInvestigacionConnectionEdge]" },
-    nodes: { __type: "[LineaDeInvestigacion]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[UserToLineaDeInvestigacionConnectionEdge!]!" },
+    nodes: { __type: "[LineaDeInvestigacion!]!" },
+    pageInfo: { __type: "UserToLineaDeInvestigacionConnectionPageInfo!" },
   },
   UserToLineaDeInvestigacionConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "LineaDeInvestigacion" },
+    node: { __type: "LineaDeInvestigacion!" },
+  },
+  UserToLineaDeInvestigacionConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   UserToLineaDeInvestigacionConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -11505,14 +13173,22 @@ export const generatedSchema = {
   },
   UserToMediaItemConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[UserToMediaItemConnectionEdge]" },
-    nodes: { __type: "[MediaItem]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[UserToMediaItemConnectionEdge!]!" },
+    nodes: { __type: "[MediaItem!]!" },
+    pageInfo: { __type: "UserToMediaItemConnectionPageInfo!" },
   },
   UserToMediaItemConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "MediaItem" },
+    node: { __type: "MediaItem!" },
+  },
+  UserToMediaItemConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   UserToMediaItemConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -11539,14 +13215,22 @@ export const generatedSchema = {
   },
   UserToPageConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[UserToPageConnectionEdge]" },
-    nodes: { __type: "[Page]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[UserToPageConnectionEdge!]!" },
+    nodes: { __type: "[Page!]!" },
+    pageInfo: { __type: "UserToPageConnectionPageInfo!" },
   },
   UserToPageConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Page" },
+    node: { __type: "Page!" },
+  },
+  UserToPageConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   UserToPageConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -11573,14 +13257,22 @@ export const generatedSchema = {
   },
   UserToPeriodoDeAdmisionConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[UserToPeriodoDeAdmisionConnectionEdge]" },
-    nodes: { __type: "[PeriodoDeAdmision]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[UserToPeriodoDeAdmisionConnectionEdge!]!" },
+    nodes: { __type: "[PeriodoDeAdmision!]!" },
+    pageInfo: { __type: "UserToPeriodoDeAdmisionConnectionPageInfo!" },
   },
   UserToPeriodoDeAdmisionConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "PeriodoDeAdmision" },
+    node: { __type: "PeriodoDeAdmision!" },
+  },
+  UserToPeriodoDeAdmisionConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   UserToPeriodoDeAdmisionConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -11607,14 +13299,22 @@ export const generatedSchema = {
   },
   UserToPostConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[UserToPostConnectionEdge]" },
-    nodes: { __type: "[Post]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[UserToPostConnectionEdge!]!" },
+    nodes: { __type: "[Post!]!" },
+    pageInfo: { __type: "UserToPostConnectionPageInfo!" },
   },
   UserToPostConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Post" },
+    node: { __type: "Post!" },
+  },
+  UserToPostConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   UserToPostConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -11651,14 +13351,22 @@ export const generatedSchema = {
   },
   UserToRecursoConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[UserToRecursoConnectionEdge]" },
-    nodes: { __type: "[Recurso]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[UserToRecursoConnectionEdge!]!" },
+    nodes: { __type: "[Recurso!]!" },
+    pageInfo: { __type: "UserToRecursoConnectionPageInfo!" },
   },
   UserToRecursoConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Recurso" },
+    node: { __type: "Recurso!" },
+  },
+  UserToRecursoConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   UserToRecursoConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -11683,16 +13391,63 @@ export const generatedSchema = {
     status: { __type: "PostStatusEnum" },
     title: { __type: "String" },
   },
+  UserToRevisionsConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[UserToRevisionsConnectionEdge!]!" },
+    nodes: { __type: "[ContentNode!]!" },
+    pageInfo: { __type: "UserToRevisionsConnectionPageInfo!" },
+  },
+  UserToRevisionsConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "ContentNode!" },
+  },
+  UserToRevisionsConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
+  },
+  UserToRevisionsConnectionWhereArgs: {
+    contentTypes: { __type: "[ContentTypeEnum]" },
+    dateQuery: { __type: "DateQueryInput" },
+    hasPassword: { __type: "Boolean" },
+    id: { __type: "Int" },
+    in: { __type: "[ID]" },
+    mimeType: { __type: "MimeTypeEnum" },
+    name: { __type: "String" },
+    nameIn: { __type: "[String]" },
+    notIn: { __type: "[ID]" },
+    orderby: { __type: "[PostObjectsConnectionOrderbyInput]" },
+    parent: { __type: "ID" },
+    parentIn: { __type: "[ID]" },
+    parentNotIn: { __type: "[ID]" },
+    password: { __type: "String" },
+    search: { __type: "String" },
+    stati: { __type: "[PostStatusEnum]" },
+    status: { __type: "PostStatusEnum" },
+    title: { __type: "String" },
+  },
   UserToSlideConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[UserToSlideConnectionEdge]" },
-    nodes: { __type: "[Slide]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[UserToSlideConnectionEdge!]!" },
+    nodes: { __type: "[Slide!]!" },
+    pageInfo: { __type: "UserToSlideConnectionPageInfo!" },
   },
   UserToSlideConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "Slide" },
+    node: { __type: "Slide!" },
+  },
+  UserToSlideConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   UserToSlideConnectionWhereArgs: {
     author: { __type: "Int" },
@@ -11719,14 +13474,22 @@ export const generatedSchema = {
   },
   UserToUserRoleConnection: {
     __typename: { __type: "String!" },
-    edges: { __type: "[UserToUserRoleConnectionEdge]" },
-    nodes: { __type: "[UserRole]" },
-    pageInfo: { __type: "WPPageInfo" },
+    edges: { __type: "[UserToUserRoleConnectionEdge!]!" },
+    nodes: { __type: "[UserRole!]!" },
+    pageInfo: { __type: "UserToUserRoleConnectionPageInfo!" },
   },
   UserToUserRoleConnectionEdge: {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
-    node: { __type: "UserRole" },
+    node: { __type: "UserRole!" },
+  },
+  UserToUserRoleConnectionPageInfo: {
+    __typename: { __type: "String!" },
+    endCursor: { __type: "String" },
+    hasNextPage: { __type: "Boolean!" },
+    hasPreviousPage: { __type: "Boolean!" },
+    seo: { __type: "SEOPostTypePageInfo" },
+    startCursor: { __type: "String" },
   },
   UsersConnectionOrderbyInput: {
     field: { __type: "UsersConnectionOrderbyEnum!" },
@@ -11739,6 +13502,7 @@ export const generatedSchema = {
     hasPreviousPage: { __type: "Boolean!" },
     seo: { __type: "SEOPostTypePageInfo" },
     startCursor: { __type: "String" },
+    $on: { __type: "$WPPageInfo!" },
   },
   WritingSettings: {
     __typename: { __type: "String!" },
@@ -12046,7 +13810,10 @@ export const generatedSchema = {
       __type: "Category",
       __args: { id: "ID!", idType: "CategoryIdType" },
     },
-    comment: { __type: "Comment", __args: { id: "ID!" } },
+    comment: {
+      __type: "Comment",
+      __args: { id: "ID!", idType: "CommentNodeIdTypeEnum" },
+    },
     comments: {
       __type: "RootQueryToCommentConnection",
       __args: {
@@ -12403,13 +14170,13 @@ export const generatedSchema = {
       __args: { after: "String", before: "String", first: "Int", last: "Int" },
     },
     revisions: {
-      __type: "RootQueryToContentRevisionUnionConnection",
+      __type: "RootQueryToRevisionsConnection",
       __args: {
         after: "String",
         before: "String",
         first: "Int",
         last: "Int",
-        where: "RootQueryToContentRevisionUnionConnectionWhereArgs",
+        where: "RootQueryToRevisionsConnectionWhereArgs",
       },
     },
     seo: { __type: "SEOConfig" },
@@ -12505,28 +14272,31 @@ export const generatedSchema = {
       "AcfOptionsServiciosOpcionales_Serviciosopcionales_servicios",
       "AcfOptionsVideoInstitucional_Videoinstitucional",
       "Carrera_Contacto",
-      "Carrera_Contacto_direcciones",
-      "Carrera_Contacto_emails",
-      "Carrera_Contacto_horarios",
-      "Carrera_Contacto_telefonos",
-      "Carrera_Contacto_telefonos_extensiones",
-      "Carrera_Contacto_whatsapp",
+      "Carrera_Contacto_unidad",
+      "Carrera_Contacto_unidad_direcciones",
+      "Carrera_Contacto_unidad_emails",
+      "Carrera_Contacto_unidad_horarios",
+      "Carrera_Contacto_unidad_telefonos",
+      "Carrera_Contacto_unidad_telefonos_extensiones",
+      "Carrera_Contacto_unidad_whatsapp",
       "Carrera_Datoscarrera",
       "Carrera_Datoscarrera_tabs",
       "Departamento_Contacto",
-      "Departamento_Contacto_direcciones",
-      "Departamento_Contacto_emails",
-      "Departamento_Contacto_horarios",
-      "Departamento_Contacto_telefonos",
-      "Departamento_Contacto_telefonos_extensiones",
-      "Departamento_Contacto_whatsapp",
+      "Departamento_Contacto_unidad",
+      "Departamento_Contacto_unidad_direcciones",
+      "Departamento_Contacto_unidad_emails",
+      "Departamento_Contacto_unidad_horarios",
+      "Departamento_Contacto_unidad_telefonos",
+      "Departamento_Contacto_unidad_telefonos_extensiones",
+      "Departamento_Contacto_unidad_whatsapp",
       "Facultad_Contacto",
-      "Facultad_Contacto_direcciones",
-      "Facultad_Contacto_emails",
-      "Facultad_Contacto_horarios",
-      "Facultad_Contacto_telefonos",
-      "Facultad_Contacto_telefonos_extensiones",
-      "Facultad_Contacto_whatsapp",
+      "Facultad_Contacto_unidad",
+      "Facultad_Contacto_unidad_direcciones",
+      "Facultad_Contacto_unidad_emails",
+      "Facultad_Contacto_unidad_horarios",
+      "Facultad_Contacto_unidad_telefonos",
+      "Facultad_Contacto_unidad_telefonos_extensiones",
+      "Facultad_Contacto_unidad_whatsapp",
       "Grado_Datosrequisitos",
       "Grado_Datosrequisitos_requisitos",
       "Grado_Formulariosgrado",
@@ -12536,12 +14306,13 @@ export const generatedSchema = {
       "Investigador_Datosinvestigador_CarreraNacionalInvestigacion",
       "MenuItem_Datosmenu",
       "Page_Contacto",
-      "Page_Contacto_direcciones",
-      "Page_Contacto_emails",
-      "Page_Contacto_horarios",
-      "Page_Contacto_telefonos",
-      "Page_Contacto_telefonos_extensiones",
-      "Page_Contacto_whatsapp",
+      "Page_Contacto_unidad",
+      "Page_Contacto_unidad_direcciones",
+      "Page_Contacto_unidad_emails",
+      "Page_Contacto_unidad_horarios",
+      "Page_Contacto_unidad_telefonos",
+      "Page_Contacto_unidad_telefonos_extensiones",
+      "Page_Contacto_unidad_whatsapp",
       "Page_Datosrecursos",
       "Page_Pagesettings",
       "PeriodoDeAdmision_Datosperiodosdeadmision",
@@ -12570,6 +14341,7 @@ export const generatedSchema = {
       "Carrera",
       "Category",
       "Comment",
+      "CommentAuthor",
       "Departamento",
       "Facultad",
       "Grado",
@@ -12676,6 +14448,20 @@ export const generatedSchema = {
       "Recurso",
       "Slide",
     ],
+    Previewable: [
+      "Carrera",
+      "Departamento",
+      "Facultad",
+      "Grado",
+      "Investigacion",
+      "Investigador",
+      "LineaDeInvestigacion",
+      "Page",
+      "PeriodoDeAdmision",
+      "Post",
+      "Recurso",
+      "Slide",
+    ],
     UniformResourceIdentifiable: [
       "Carrera",
       "Category",
@@ -12697,13 +14483,795 @@ export const generatedSchema = {
       "Tag",
       "User",
     ],
+    DepartamentoConnectionEdge: [
+      "CarreraToDepartamentoConnectionEdge",
+      "DepartamentoToPreviewConnectionEdge",
+      "FacultadToDepartamentoConnectionEdge",
+      "LineaDeInvestigacionToDepartamentoConnectionEdge",
+      "RootQueryToDepartamentoConnectionEdge",
+      "UserToDepartamentoConnectionEdge",
+    ],
+    Edge: [
+      "CarreraToDepartamentoConnectionEdge",
+      "CarreraToFacultadConnectionEdge",
+      "CarreraToGradoConnectionEdge",
+      "CarreraToPreviewConnectionEdge",
+      "CarreraToRecursoConnectionEdge",
+      "CategoryToAncestorsCategoryConnectionEdge",
+      "CategoryToCategoryConnectionEdge",
+      "CategoryToContentNodeConnectionEdge",
+      "CategoryToParentCategoryConnectionEdge",
+      "CategoryToPostConnectionEdge",
+      "CategoryToTaxonomyConnectionEdge",
+      "CommentToCommentConnectionEdge",
+      "CommentToCommenterConnectionEdge",
+      "CommentToContentNodeConnectionEdge",
+      "CommentToParentCommentConnectionEdge",
+      "ContentNodeToContentTypeConnectionEdge",
+      "ContentNodeToEditLastConnectionEdge",
+      "ContentNodeToEditLockConnectionEdge",
+      "ContentNodeToEnqueuedScriptConnectionEdge",
+      "ContentNodeToEnqueuedStylesheetConnectionEdge",
+      "ContentTypeToContentNodeConnectionEdge",
+      "ContentTypeToTaxonomyConnectionEdge",
+      "DepartamentoToCarreraConnectionEdge",
+      "DepartamentoToFacultadConnectionEdge",
+      "DepartamentoToLineaDeInvestigacionConnectionEdge",
+      "DepartamentoToPreviewConnectionEdge",
+      "FacultadToCarreraConnectionEdge",
+      "FacultadToDepartamentoConnectionEdge",
+      "FacultadToPreviewConnectionEdge",
+      "GradoToCarreraConnectionEdge",
+      "GradoToGrupoDeRequisitosConnectionEdge",
+      "GradoToPreviewConnectionEdge",
+      "GradoToTermNodeConnectionEdge",
+      "GrupoDeRequisitosToContentNodeConnectionEdge",
+      "GrupoDeRequisitosToGradoConnectionEdge",
+      "GrupoDeRequisitosToTaxonomyConnectionEdge",
+      "HierarchicalContentNodeToContentNodeAncestorsConnectionEdge",
+      "HierarchicalContentNodeToContentNodeChildrenConnectionEdge",
+      "HierarchicalContentNodeToParentContentNodeConnectionEdge",
+      "InvestigacionToInvestigadorConnectionEdge",
+      "InvestigacionToLineaDeInvestigacionConnectionEdge",
+      "InvestigacionToPreviewConnectionEdge",
+      "InvestigadorToInvestigacionConnectionEdge",
+      "InvestigadorToPreviewConnectionEdge",
+      "LineaDeInvestigacionToDepartamentoConnectionEdge",
+      "LineaDeInvestigacionToInvestigacionConnectionEdge",
+      "LineaDeInvestigacionToPreviewConnectionEdge",
+      "MediaItemToCommentConnectionEdge",
+      "MenuItemToMenuConnectionEdge",
+      "MenuItemToMenuItemConnectionEdge",
+      "MenuItemToMenuItemLinkableConnectionEdge",
+      "MenuToMenuItemConnectionEdge",
+      "NodeWithAuthorToUserConnectionEdge",
+      "NodeWithFeaturedImageToMediaItemConnectionEdge",
+      "NodeWithRevisionsToContentNodeConnectionEdge",
+      "PageToCommentConnectionEdge",
+      "PageToPreviewConnectionEdge",
+      "PageToRevisionConnectionEdge",
+      "PeriodoDeAdmisionToPreviewConnectionEdge",
+      "PostFormatToContentNodeConnectionEdge",
+      "PostFormatToPostConnectionEdge",
+      "PostFormatToTaxonomyConnectionEdge",
+      "PostToCategoryConnectionEdge",
+      "PostToCommentConnectionEdge",
+      "PostToPostFormatConnectionEdge",
+      "PostToPreviewConnectionEdge",
+      "PostToRevisionConnectionEdge",
+      "PostToTagConnectionEdge",
+      "PostToTermNodeConnectionEdge",
+      "RecursoToCarreraConnectionEdge",
+      "RecursoToPreviewConnectionEdge",
+      "RootQueryToCarreraConnectionEdge",
+      "RootQueryToCategoryConnectionEdge",
+      "RootQueryToCommentConnectionEdge",
+      "RootQueryToContentNodeConnectionEdge",
+      "RootQueryToContentTypeConnectionEdge",
+      "RootQueryToDepartamentoConnectionEdge",
+      "RootQueryToEnqueuedScriptConnectionEdge",
+      "RootQueryToEnqueuedStylesheetConnectionEdge",
+      "RootQueryToFacultadConnectionEdge",
+      "RootQueryToGradoConnectionEdge",
+      "RootQueryToGrupoDeRequisitosConnectionEdge",
+      "RootQueryToInvestigacionConnectionEdge",
+      "RootQueryToInvestigadorConnectionEdge",
+      "RootQueryToLineaDeInvestigacionConnectionEdge",
+      "RootQueryToMediaItemConnectionEdge",
+      "RootQueryToMenuConnectionEdge",
+      "RootQueryToMenuItemConnectionEdge",
+      "RootQueryToPageConnectionEdge",
+      "RootQueryToPeriodoDeAdmisionConnectionEdge",
+      "RootQueryToPluginConnectionEdge",
+      "RootQueryToPostConnectionEdge",
+      "RootQueryToPostFormatConnectionEdge",
+      "RootQueryToRecursoConnectionEdge",
+      "RootQueryToRevisionsConnectionEdge",
+      "RootQueryToSlideConnectionEdge",
+      "RootQueryToTagConnectionEdge",
+      "RootQueryToTaxonomyConnectionEdge",
+      "RootQueryToTermNodeConnectionEdge",
+      "RootQueryToThemeConnectionEdge",
+      "RootQueryToUserConnectionEdge",
+      "RootQueryToUserRoleConnectionEdge",
+      "SlideToPreviewConnectionEdge",
+      "TagToContentNodeConnectionEdge",
+      "TagToPostConnectionEdge",
+      "TagToTaxonomyConnectionEdge",
+      "TaxonomyToContentTypeConnectionEdge",
+      "TermNodeToEnqueuedScriptConnectionEdge",
+      "TermNodeToEnqueuedStylesheetConnectionEdge",
+      "UserToCarreraConnectionEdge",
+      "UserToCommentConnectionEdge",
+      "UserToDepartamentoConnectionEdge",
+      "UserToEnqueuedScriptConnectionEdge",
+      "UserToEnqueuedStylesheetConnectionEdge",
+      "UserToFacultadConnectionEdge",
+      "UserToGradoConnectionEdge",
+      "UserToInvestigacionConnectionEdge",
+      "UserToInvestigadorConnectionEdge",
+      "UserToLineaDeInvestigacionConnectionEdge",
+      "UserToMediaItemConnectionEdge",
+      "UserToPageConnectionEdge",
+      "UserToPeriodoDeAdmisionConnectionEdge",
+      "UserToPostConnectionEdge",
+      "UserToRecursoConnectionEdge",
+      "UserToRevisionsConnectionEdge",
+      "UserToSlideConnectionEdge",
+      "UserToUserRoleConnectionEdge",
+    ],
+    OneToOneConnection: [
+      "CarreraToDepartamentoConnectionEdge",
+      "CarreraToFacultadConnectionEdge",
+      "CarreraToGradoConnectionEdge",
+      "CarreraToPreviewConnectionEdge",
+      "CategoryToParentCategoryConnectionEdge",
+      "CategoryToTaxonomyConnectionEdge",
+      "CommentToCommenterConnectionEdge",
+      "CommentToContentNodeConnectionEdge",
+      "CommentToParentCommentConnectionEdge",
+      "ContentNodeToContentTypeConnectionEdge",
+      "ContentNodeToEditLastConnectionEdge",
+      "ContentNodeToEditLockConnectionEdge",
+      "DepartamentoToFacultadConnectionEdge",
+      "DepartamentoToPreviewConnectionEdge",
+      "FacultadToPreviewConnectionEdge",
+      "GradoToPreviewConnectionEdge",
+      "GrupoDeRequisitosToTaxonomyConnectionEdge",
+      "HierarchicalContentNodeToParentContentNodeConnectionEdge",
+      "InvestigacionToLineaDeInvestigacionConnectionEdge",
+      "InvestigacionToPreviewConnectionEdge",
+      "InvestigadorToPreviewConnectionEdge",
+      "LineaDeInvestigacionToDepartamentoConnectionEdge",
+      "LineaDeInvestigacionToPreviewConnectionEdge",
+      "MenuItemToMenuConnectionEdge",
+      "MenuItemToMenuItemLinkableConnectionEdge",
+      "NodeWithAuthorToUserConnectionEdge",
+      "NodeWithFeaturedImageToMediaItemConnectionEdge",
+      "NodeWithRevisionsToContentNodeConnectionEdge",
+      "PageToPreviewConnectionEdge",
+      "PeriodoDeAdmisionToPreviewConnectionEdge",
+      "PostFormatToTaxonomyConnectionEdge",
+      "PostToPreviewConnectionEdge",
+      "RecursoToPreviewConnectionEdge",
+      "SlideToPreviewConnectionEdge",
+      "TagToTaxonomyConnectionEdge",
+    ],
+    FacultadConnectionEdge: [
+      "CarreraToFacultadConnectionEdge",
+      "DepartamentoToFacultadConnectionEdge",
+      "FacultadToPreviewConnectionEdge",
+      "RootQueryToFacultadConnectionEdge",
+      "UserToFacultadConnectionEdge",
+    ],
+    GradoConnectionEdge: [
+      "CarreraToGradoConnectionEdge",
+      "GradoToPreviewConnectionEdge",
+      "GrupoDeRequisitosToGradoConnectionEdge",
+      "RootQueryToGradoConnectionEdge",
+      "UserToGradoConnectionEdge",
+    ],
+    CarreraConnectionEdge: [
+      "CarreraToPreviewConnectionEdge",
+      "DepartamentoToCarreraConnectionEdge",
+      "FacultadToCarreraConnectionEdge",
+      "GradoToCarreraConnectionEdge",
+      "RecursoToCarreraConnectionEdge",
+      "RootQueryToCarreraConnectionEdge",
+      "UserToCarreraConnectionEdge",
+    ],
+    Connection: [
+      "CarreraToRecursoConnection",
+      "CategoryToAncestorsCategoryConnection",
+      "CategoryToCategoryConnection",
+      "CategoryToContentNodeConnection",
+      "CategoryToPostConnection",
+      "CommentToCommentConnection",
+      "ContentNodeToEnqueuedScriptConnection",
+      "ContentNodeToEnqueuedStylesheetConnection",
+      "ContentTypeToContentNodeConnection",
+      "ContentTypeToTaxonomyConnection",
+      "DepartamentoToCarreraConnection",
+      "DepartamentoToLineaDeInvestigacionConnection",
+      "FacultadToCarreraConnection",
+      "FacultadToDepartamentoConnection",
+      "GradoToCarreraConnection",
+      "GradoToGrupoDeRequisitosConnection",
+      "GradoToTermNodeConnection",
+      "GrupoDeRequisitosToContentNodeConnection",
+      "GrupoDeRequisitosToGradoConnection",
+      "HierarchicalContentNodeToContentNodeAncestorsConnection",
+      "HierarchicalContentNodeToContentNodeChildrenConnection",
+      "InvestigacionToInvestigadorConnection",
+      "InvestigadorToInvestigacionConnection",
+      "LineaDeInvestigacionToInvestigacionConnection",
+      "MediaItemToCommentConnection",
+      "MenuItemToMenuItemConnection",
+      "MenuToMenuItemConnection",
+      "PageToCommentConnection",
+      "PageToRevisionConnection",
+      "PostFormatToContentNodeConnection",
+      "PostFormatToPostConnection",
+      "PostToCategoryConnection",
+      "PostToCommentConnection",
+      "PostToPostFormatConnection",
+      "PostToRevisionConnection",
+      "PostToTagConnection",
+      "PostToTermNodeConnection",
+      "RecursoToCarreraConnection",
+      "RootQueryToCarreraConnection",
+      "RootQueryToCategoryConnection",
+      "RootQueryToCommentConnection",
+      "RootQueryToContentNodeConnection",
+      "RootQueryToContentTypeConnection",
+      "RootQueryToDepartamentoConnection",
+      "RootQueryToEnqueuedScriptConnection",
+      "RootQueryToEnqueuedStylesheetConnection",
+      "RootQueryToFacultadConnection",
+      "RootQueryToGradoConnection",
+      "RootQueryToGrupoDeRequisitosConnection",
+      "RootQueryToInvestigacionConnection",
+      "RootQueryToInvestigadorConnection",
+      "RootQueryToLineaDeInvestigacionConnection",
+      "RootQueryToMediaItemConnection",
+      "RootQueryToMenuConnection",
+      "RootQueryToMenuItemConnection",
+      "RootQueryToPageConnection",
+      "RootQueryToPeriodoDeAdmisionConnection",
+      "RootQueryToPluginConnection",
+      "RootQueryToPostConnection",
+      "RootQueryToPostFormatConnection",
+      "RootQueryToRecursoConnection",
+      "RootQueryToRevisionsConnection",
+      "RootQueryToSlideConnection",
+      "RootQueryToTagConnection",
+      "RootQueryToTaxonomyConnection",
+      "RootQueryToTermNodeConnection",
+      "RootQueryToThemeConnection",
+      "RootQueryToUserConnection",
+      "RootQueryToUserRoleConnection",
+      "TagToContentNodeConnection",
+      "TagToPostConnection",
+      "TaxonomyToContentTypeConnection",
+      "TermNodeToEnqueuedScriptConnection",
+      "TermNodeToEnqueuedStylesheetConnection",
+      "UserToCarreraConnection",
+      "UserToCommentConnection",
+      "UserToDepartamentoConnection",
+      "UserToEnqueuedScriptConnection",
+      "UserToEnqueuedStylesheetConnection",
+      "UserToFacultadConnection",
+      "UserToGradoConnection",
+      "UserToInvestigacionConnection",
+      "UserToInvestigadorConnection",
+      "UserToLineaDeInvestigacionConnection",
+      "UserToMediaItemConnection",
+      "UserToPageConnection",
+      "UserToPeriodoDeAdmisionConnection",
+      "UserToPostConnection",
+      "UserToRecursoConnection",
+      "UserToRevisionsConnection",
+      "UserToSlideConnection",
+      "UserToUserRoleConnection",
+    ],
+    RecursoConnection: [
+      "CarreraToRecursoConnection",
+      "RootQueryToRecursoConnection",
+      "UserToRecursoConnection",
+    ],
+    RecursoConnectionEdge: [
+      "CarreraToRecursoConnectionEdge",
+      "RecursoToPreviewConnectionEdge",
+      "RootQueryToRecursoConnectionEdge",
+      "UserToRecursoConnectionEdge",
+    ],
+    PageInfo: [
+      "CarreraToRecursoConnectionPageInfo",
+      "CategoryToAncestorsCategoryConnectionPageInfo",
+      "CategoryToCategoryConnectionPageInfo",
+      "CategoryToContentNodeConnectionPageInfo",
+      "CategoryToPostConnectionPageInfo",
+      "CommentToCommentConnectionPageInfo",
+      "ContentNodeToEnqueuedScriptConnectionPageInfo",
+      "ContentNodeToEnqueuedStylesheetConnectionPageInfo",
+      "ContentTypeToContentNodeConnectionPageInfo",
+      "ContentTypeToTaxonomyConnectionPageInfo",
+      "DepartamentoToCarreraConnectionPageInfo",
+      "DepartamentoToLineaDeInvestigacionConnectionPageInfo",
+      "FacultadToCarreraConnectionPageInfo",
+      "FacultadToDepartamentoConnectionPageInfo",
+      "GradoToCarreraConnectionPageInfo",
+      "GradoToGrupoDeRequisitosConnectionPageInfo",
+      "GradoToTermNodeConnectionPageInfo",
+      "GrupoDeRequisitosToContentNodeConnectionPageInfo",
+      "GrupoDeRequisitosToGradoConnectionPageInfo",
+      "HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo",
+      "HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo",
+      "InvestigacionToInvestigadorConnectionPageInfo",
+      "InvestigadorToInvestigacionConnectionPageInfo",
+      "LineaDeInvestigacionToInvestigacionConnectionPageInfo",
+      "MediaItemToCommentConnectionPageInfo",
+      "MenuItemToMenuItemConnectionPageInfo",
+      "MenuToMenuItemConnectionPageInfo",
+      "PageToCommentConnectionPageInfo",
+      "PageToRevisionConnectionPageInfo",
+      "PostFormatToContentNodeConnectionPageInfo",
+      "PostFormatToPostConnectionPageInfo",
+      "PostToCategoryConnectionPageInfo",
+      "PostToCommentConnectionPageInfo",
+      "PostToPostFormatConnectionPageInfo",
+      "PostToRevisionConnectionPageInfo",
+      "PostToTagConnectionPageInfo",
+      "PostToTermNodeConnectionPageInfo",
+      "RecursoToCarreraConnectionPageInfo",
+      "RootQueryToCarreraConnectionPageInfo",
+      "RootQueryToCategoryConnectionPageInfo",
+      "RootQueryToCommentConnectionPageInfo",
+      "RootQueryToContentNodeConnectionPageInfo",
+      "RootQueryToContentTypeConnectionPageInfo",
+      "RootQueryToDepartamentoConnectionPageInfo",
+      "RootQueryToEnqueuedScriptConnectionPageInfo",
+      "RootQueryToEnqueuedStylesheetConnectionPageInfo",
+      "RootQueryToFacultadConnectionPageInfo",
+      "RootQueryToGradoConnectionPageInfo",
+      "RootQueryToGrupoDeRequisitosConnectionPageInfo",
+      "RootQueryToInvestigacionConnectionPageInfo",
+      "RootQueryToInvestigadorConnectionPageInfo",
+      "RootQueryToLineaDeInvestigacionConnectionPageInfo",
+      "RootQueryToMediaItemConnectionPageInfo",
+      "RootQueryToMenuConnectionPageInfo",
+      "RootQueryToMenuItemConnectionPageInfo",
+      "RootQueryToPageConnectionPageInfo",
+      "RootQueryToPeriodoDeAdmisionConnectionPageInfo",
+      "RootQueryToPluginConnectionPageInfo",
+      "RootQueryToPostConnectionPageInfo",
+      "RootQueryToPostFormatConnectionPageInfo",
+      "RootQueryToRecursoConnectionPageInfo",
+      "RootQueryToRevisionsConnectionPageInfo",
+      "RootQueryToSlideConnectionPageInfo",
+      "RootQueryToTagConnectionPageInfo",
+      "RootQueryToTaxonomyConnectionPageInfo",
+      "RootQueryToTermNodeConnectionPageInfo",
+      "RootQueryToThemeConnectionPageInfo",
+      "RootQueryToUserConnectionPageInfo",
+      "RootQueryToUserRoleConnectionPageInfo",
+      "TagToContentNodeConnectionPageInfo",
+      "TagToPostConnectionPageInfo",
+      "TaxonomyToContentTypeConnectionPageInfo",
+      "TermNodeToEnqueuedScriptConnectionPageInfo",
+      "TermNodeToEnqueuedStylesheetConnectionPageInfo",
+      "UserToCarreraConnectionPageInfo",
+      "UserToCommentConnectionPageInfo",
+      "UserToDepartamentoConnectionPageInfo",
+      "UserToEnqueuedScriptConnectionPageInfo",
+      "UserToEnqueuedStylesheetConnectionPageInfo",
+      "UserToFacultadConnectionPageInfo",
+      "UserToGradoConnectionPageInfo",
+      "UserToInvestigacionConnectionPageInfo",
+      "UserToInvestigadorConnectionPageInfo",
+      "UserToLineaDeInvestigacionConnectionPageInfo",
+      "UserToMediaItemConnectionPageInfo",
+      "UserToPageConnectionPageInfo",
+      "UserToPeriodoDeAdmisionConnectionPageInfo",
+      "UserToPostConnectionPageInfo",
+      "UserToRecursoConnectionPageInfo",
+      "UserToRevisionsConnectionPageInfo",
+      "UserToSlideConnectionPageInfo",
+      "UserToUserRoleConnectionPageInfo",
+    ],
+    RecursoConnectionPageInfo: [
+      "CarreraToRecursoConnectionPageInfo",
+      "RootQueryToRecursoConnectionPageInfo",
+      "UserToRecursoConnectionPageInfo",
+    ],
+    WPPageInfo: [
+      "CarreraToRecursoConnectionPageInfo",
+      "CategoryToAncestorsCategoryConnectionPageInfo",
+      "CategoryToCategoryConnectionPageInfo",
+      "CategoryToContentNodeConnectionPageInfo",
+      "CategoryToPostConnectionPageInfo",
+      "CommentToCommentConnectionPageInfo",
+      "ContentNodeToEnqueuedScriptConnectionPageInfo",
+      "ContentNodeToEnqueuedStylesheetConnectionPageInfo",
+      "ContentTypeToContentNodeConnectionPageInfo",
+      "ContentTypeToTaxonomyConnectionPageInfo",
+      "DepartamentoToCarreraConnectionPageInfo",
+      "DepartamentoToLineaDeInvestigacionConnectionPageInfo",
+      "FacultadToCarreraConnectionPageInfo",
+      "FacultadToDepartamentoConnectionPageInfo",
+      "GradoToCarreraConnectionPageInfo",
+      "GradoToGrupoDeRequisitosConnectionPageInfo",
+      "GradoToTermNodeConnectionPageInfo",
+      "GrupoDeRequisitosToContentNodeConnectionPageInfo",
+      "GrupoDeRequisitosToGradoConnectionPageInfo",
+      "HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo",
+      "HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo",
+      "InvestigacionToInvestigadorConnectionPageInfo",
+      "InvestigadorToInvestigacionConnectionPageInfo",
+      "LineaDeInvestigacionToInvestigacionConnectionPageInfo",
+      "MediaItemToCommentConnectionPageInfo",
+      "MenuItemToMenuItemConnectionPageInfo",
+      "MenuToMenuItemConnectionPageInfo",
+      "PageToCommentConnectionPageInfo",
+      "PageToRevisionConnectionPageInfo",
+      "PostFormatToContentNodeConnectionPageInfo",
+      "PostFormatToPostConnectionPageInfo",
+      "PostToCategoryConnectionPageInfo",
+      "PostToCommentConnectionPageInfo",
+      "PostToPostFormatConnectionPageInfo",
+      "PostToRevisionConnectionPageInfo",
+      "PostToTagConnectionPageInfo",
+      "PostToTermNodeConnectionPageInfo",
+      "RecursoToCarreraConnectionPageInfo",
+      "RootQueryToCarreraConnectionPageInfo",
+      "RootQueryToCategoryConnectionPageInfo",
+      "RootQueryToCommentConnectionPageInfo",
+      "RootQueryToContentNodeConnectionPageInfo",
+      "RootQueryToContentTypeConnectionPageInfo",
+      "RootQueryToDepartamentoConnectionPageInfo",
+      "RootQueryToEnqueuedScriptConnectionPageInfo",
+      "RootQueryToEnqueuedStylesheetConnectionPageInfo",
+      "RootQueryToFacultadConnectionPageInfo",
+      "RootQueryToGradoConnectionPageInfo",
+      "RootQueryToGrupoDeRequisitosConnectionPageInfo",
+      "RootQueryToInvestigacionConnectionPageInfo",
+      "RootQueryToInvestigadorConnectionPageInfo",
+      "RootQueryToLineaDeInvestigacionConnectionPageInfo",
+      "RootQueryToMediaItemConnectionPageInfo",
+      "RootQueryToMenuConnectionPageInfo",
+      "RootQueryToMenuItemConnectionPageInfo",
+      "RootQueryToPageConnectionPageInfo",
+      "RootQueryToPeriodoDeAdmisionConnectionPageInfo",
+      "RootQueryToPluginConnectionPageInfo",
+      "RootQueryToPostConnectionPageInfo",
+      "RootQueryToPostFormatConnectionPageInfo",
+      "RootQueryToRecursoConnectionPageInfo",
+      "RootQueryToRevisionsConnectionPageInfo",
+      "RootQueryToSlideConnectionPageInfo",
+      "RootQueryToTagConnectionPageInfo",
+      "RootQueryToTaxonomyConnectionPageInfo",
+      "RootQueryToTermNodeConnectionPageInfo",
+      "RootQueryToThemeConnectionPageInfo",
+      "RootQueryToUserConnectionPageInfo",
+      "RootQueryToUserRoleConnectionPageInfo",
+      "TagToContentNodeConnectionPageInfo",
+      "TagToPostConnectionPageInfo",
+      "TaxonomyToContentTypeConnectionPageInfo",
+      "TermNodeToEnqueuedScriptConnectionPageInfo",
+      "TermNodeToEnqueuedStylesheetConnectionPageInfo",
+      "UserToCarreraConnectionPageInfo",
+      "UserToCommentConnectionPageInfo",
+      "UserToDepartamentoConnectionPageInfo",
+      "UserToEnqueuedScriptConnectionPageInfo",
+      "UserToEnqueuedStylesheetConnectionPageInfo",
+      "UserToFacultadConnectionPageInfo",
+      "UserToGradoConnectionPageInfo",
+      "UserToInvestigacionConnectionPageInfo",
+      "UserToInvestigadorConnectionPageInfo",
+      "UserToLineaDeInvestigacionConnectionPageInfo",
+      "UserToMediaItemConnectionPageInfo",
+      "UserToPageConnectionPageInfo",
+      "UserToPeriodoDeAdmisionConnectionPageInfo",
+      "UserToPostConnectionPageInfo",
+      "UserToRecursoConnectionPageInfo",
+      "UserToRevisionsConnectionPageInfo",
+      "UserToSlideConnectionPageInfo",
+      "UserToUserRoleConnectionPageInfo",
+    ],
+    HierarchicalNode: ["Category", "MediaItem", "Page"],
     HierarchicalTermNode: ["Category"],
     MenuItemLinkable: ["Category", "GrupoDeRequisitos", "Page", "Post", "Tag"],
     TermNode: ["Category", "GrupoDeRequisitos", "PostFormat", "Tag"],
+    CategoryConnection: [
+      "CategoryToAncestorsCategoryConnection",
+      "CategoryToCategoryConnection",
+      "PostToCategoryConnection",
+      "RootQueryToCategoryConnection",
+    ],
+    CategoryConnectionEdge: [
+      "CategoryToAncestorsCategoryConnectionEdge",
+      "CategoryToCategoryConnectionEdge",
+      "CategoryToParentCategoryConnectionEdge",
+      "PostToCategoryConnectionEdge",
+      "RootQueryToCategoryConnectionEdge",
+    ],
+    CategoryConnectionPageInfo: [
+      "CategoryToAncestorsCategoryConnectionPageInfo",
+      "CategoryToCategoryConnectionPageInfo",
+      "PostToCategoryConnectionPageInfo",
+      "RootQueryToCategoryConnectionPageInfo",
+    ],
+    ContentNodeConnection: [
+      "CategoryToContentNodeConnection",
+      "ContentTypeToContentNodeConnection",
+      "GrupoDeRequisitosToContentNodeConnection",
+      "HierarchicalContentNodeToContentNodeAncestorsConnection",
+      "HierarchicalContentNodeToContentNodeChildrenConnection",
+      "PostFormatToContentNodeConnection",
+      "RootQueryToContentNodeConnection",
+      "RootQueryToRevisionsConnection",
+      "TagToContentNodeConnection",
+      "UserToRevisionsConnection",
+    ],
+    ContentNodeConnectionEdge: [
+      "CategoryToContentNodeConnectionEdge",
+      "CommentToContentNodeConnectionEdge",
+      "ContentTypeToContentNodeConnectionEdge",
+      "GrupoDeRequisitosToContentNodeConnectionEdge",
+      "HierarchicalContentNodeToContentNodeAncestorsConnectionEdge",
+      "HierarchicalContentNodeToContentNodeChildrenConnectionEdge",
+      "HierarchicalContentNodeToParentContentNodeConnectionEdge",
+      "NodeWithRevisionsToContentNodeConnectionEdge",
+      "PostFormatToContentNodeConnectionEdge",
+      "RootQueryToContentNodeConnectionEdge",
+      "RootQueryToRevisionsConnectionEdge",
+      "TagToContentNodeConnectionEdge",
+      "UserToRevisionsConnectionEdge",
+    ],
+    ContentNodeConnectionPageInfo: [
+      "CategoryToContentNodeConnectionPageInfo",
+      "ContentTypeToContentNodeConnectionPageInfo",
+      "GrupoDeRequisitosToContentNodeConnectionPageInfo",
+      "HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo",
+      "HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo",
+      "PostFormatToContentNodeConnectionPageInfo",
+      "RootQueryToContentNodeConnectionPageInfo",
+      "RootQueryToRevisionsConnectionPageInfo",
+      "TagToContentNodeConnectionPageInfo",
+      "UserToRevisionsConnectionPageInfo",
+    ],
+    PostConnection: [
+      "CategoryToPostConnection",
+      "PostFormatToPostConnection",
+      "PostToRevisionConnection",
+      "RootQueryToPostConnection",
+      "TagToPostConnection",
+      "UserToPostConnection",
+    ],
+    PostConnectionEdge: [
+      "CategoryToPostConnectionEdge",
+      "PostFormatToPostConnectionEdge",
+      "PostToPreviewConnectionEdge",
+      "PostToRevisionConnectionEdge",
+      "RootQueryToPostConnectionEdge",
+      "TagToPostConnectionEdge",
+      "UserToPostConnectionEdge",
+    ],
+    PostConnectionPageInfo: [
+      "CategoryToPostConnectionPageInfo",
+      "PostFormatToPostConnectionPageInfo",
+      "PostToRevisionConnectionPageInfo",
+      "RootQueryToPostConnectionPageInfo",
+      "TagToPostConnectionPageInfo",
+      "UserToPostConnectionPageInfo",
+    ],
+    TaxonomyConnectionEdge: [
+      "CategoryToTaxonomyConnectionEdge",
+      "ContentTypeToTaxonomyConnectionEdge",
+      "GrupoDeRequisitosToTaxonomyConnectionEdge",
+      "PostFormatToTaxonomyConnectionEdge",
+      "RootQueryToTaxonomyConnectionEdge",
+      "TagToTaxonomyConnectionEdge",
+    ],
     Commenter: ["CommentAuthor", "User"],
-    ContentRevisionUnion: ["Page", "Post"],
+    CommentConnection: [
+      "CommentToCommentConnection",
+      "MediaItemToCommentConnection",
+      "PageToCommentConnection",
+      "PostToCommentConnection",
+      "RootQueryToCommentConnection",
+      "UserToCommentConnection",
+    ],
+    CommentConnectionEdge: [
+      "CommentToCommentConnectionEdge",
+      "CommentToParentCommentConnectionEdge",
+      "MediaItemToCommentConnectionEdge",
+      "PageToCommentConnectionEdge",
+      "PostToCommentConnectionEdge",
+      "RootQueryToCommentConnectionEdge",
+      "UserToCommentConnectionEdge",
+    ],
+    CommentConnectionPageInfo: [
+      "CommentToCommentConnectionPageInfo",
+      "MediaItemToCommentConnectionPageInfo",
+      "PageToCommentConnectionPageInfo",
+      "PostToCommentConnectionPageInfo",
+      "RootQueryToCommentConnectionPageInfo",
+      "UserToCommentConnectionPageInfo",
+    ],
+    CommenterConnectionEdge: ["CommentToCommenterConnectionEdge"],
+    ContentTypeConnectionEdge: [
+      "ContentNodeToContentTypeConnectionEdge",
+      "RootQueryToContentTypeConnectionEdge",
+      "TaxonomyToContentTypeConnectionEdge",
+    ],
+    UserConnectionEdge: [
+      "ContentNodeToEditLastConnectionEdge",
+      "ContentNodeToEditLockConnectionEdge",
+      "NodeWithAuthorToUserConnectionEdge",
+      "RootQueryToUserConnectionEdge",
+    ],
+    EnqueuedScriptConnection: [
+      "ContentNodeToEnqueuedScriptConnection",
+      "RootQueryToEnqueuedScriptConnection",
+      "TermNodeToEnqueuedScriptConnection",
+      "UserToEnqueuedScriptConnection",
+    ],
+    EnqueuedScriptConnectionEdge: [
+      "ContentNodeToEnqueuedScriptConnectionEdge",
+      "RootQueryToEnqueuedScriptConnectionEdge",
+      "TermNodeToEnqueuedScriptConnectionEdge",
+      "UserToEnqueuedScriptConnectionEdge",
+    ],
+    EnqueuedScriptConnectionPageInfo: [
+      "ContentNodeToEnqueuedScriptConnectionPageInfo",
+      "RootQueryToEnqueuedScriptConnectionPageInfo",
+      "TermNodeToEnqueuedScriptConnectionPageInfo",
+      "UserToEnqueuedScriptConnectionPageInfo",
+    ],
+    EnqueuedStylesheetConnection: [
+      "ContentNodeToEnqueuedStylesheetConnection",
+      "RootQueryToEnqueuedStylesheetConnection",
+      "TermNodeToEnqueuedStylesheetConnection",
+      "UserToEnqueuedStylesheetConnection",
+    ],
+    EnqueuedStylesheetConnectionEdge: [
+      "ContentNodeToEnqueuedStylesheetConnectionEdge",
+      "RootQueryToEnqueuedStylesheetConnectionEdge",
+      "TermNodeToEnqueuedStylesheetConnectionEdge",
+      "UserToEnqueuedStylesheetConnectionEdge",
+    ],
+    EnqueuedStylesheetConnectionPageInfo: [
+      "ContentNodeToEnqueuedStylesheetConnectionPageInfo",
+      "RootQueryToEnqueuedStylesheetConnectionPageInfo",
+      "TermNodeToEnqueuedStylesheetConnectionPageInfo",
+      "UserToEnqueuedStylesheetConnectionPageInfo",
+    ],
+    TaxonomyConnection: [
+      "ContentTypeToTaxonomyConnection",
+      "RootQueryToTaxonomyConnection",
+    ],
+    TaxonomyConnectionPageInfo: [
+      "ContentTypeToTaxonomyConnectionPageInfo",
+      "RootQueryToTaxonomyConnectionPageInfo",
+    ],
     ContentTemplate: ["DefaultTemplate"],
+    CarreraConnection: [
+      "DepartamentoToCarreraConnection",
+      "FacultadToCarreraConnection",
+      "GradoToCarreraConnection",
+      "RecursoToCarreraConnection",
+      "RootQueryToCarreraConnection",
+      "UserToCarreraConnection",
+    ],
+    CarreraConnectionPageInfo: [
+      "DepartamentoToCarreraConnectionPageInfo",
+      "FacultadToCarreraConnectionPageInfo",
+      "GradoToCarreraConnectionPageInfo",
+      "RecursoToCarreraConnectionPageInfo",
+      "RootQueryToCarreraConnectionPageInfo",
+      "UserToCarreraConnectionPageInfo",
+    ],
+    LineaDeInvestigacionConnection: [
+      "DepartamentoToLineaDeInvestigacionConnection",
+      "RootQueryToLineaDeInvestigacionConnection",
+      "UserToLineaDeInvestigacionConnection",
+    ],
+    LineaDeInvestigacionConnectionEdge: [
+      "DepartamentoToLineaDeInvestigacionConnectionEdge",
+      "InvestigacionToLineaDeInvestigacionConnectionEdge",
+      "LineaDeInvestigacionToPreviewConnectionEdge",
+      "RootQueryToLineaDeInvestigacionConnectionEdge",
+      "UserToLineaDeInvestigacionConnectionEdge",
+    ],
+    LineaDeInvestigacionConnectionPageInfo: [
+      "DepartamentoToLineaDeInvestigacionConnectionPageInfo",
+      "RootQueryToLineaDeInvestigacionConnectionPageInfo",
+      "UserToLineaDeInvestigacionConnectionPageInfo",
+    ],
     EnqueuedAsset: ["EnqueuedScript", "EnqueuedStylesheet"],
+    DepartamentoConnection: [
+      "FacultadToDepartamentoConnection",
+      "RootQueryToDepartamentoConnection",
+      "UserToDepartamentoConnection",
+    ],
+    DepartamentoConnectionPageInfo: [
+      "FacultadToDepartamentoConnectionPageInfo",
+      "RootQueryToDepartamentoConnectionPageInfo",
+      "UserToDepartamentoConnectionPageInfo",
+    ],
+    GrupoDeRequisitosConnection: [
+      "GradoToGrupoDeRequisitosConnection",
+      "RootQueryToGrupoDeRequisitosConnection",
+    ],
+    GrupoDeRequisitosConnectionEdge: [
+      "GradoToGrupoDeRequisitosConnectionEdge",
+      "RootQueryToGrupoDeRequisitosConnectionEdge",
+    ],
+    GrupoDeRequisitosConnectionPageInfo: [
+      "GradoToGrupoDeRequisitosConnectionPageInfo",
+      "RootQueryToGrupoDeRequisitosConnectionPageInfo",
+    ],
+    TermNodeConnection: [
+      "GradoToTermNodeConnection",
+      "PostToTermNodeConnection",
+      "RootQueryToTermNodeConnection",
+    ],
+    TermNodeConnectionEdge: [
+      "GradoToTermNodeConnectionEdge",
+      "PostToTermNodeConnectionEdge",
+      "RootQueryToTermNodeConnectionEdge",
+    ],
+    TermNodeConnectionPageInfo: [
+      "GradoToTermNodeConnectionPageInfo",
+      "PostToTermNodeConnectionPageInfo",
+      "RootQueryToTermNodeConnectionPageInfo",
+    ],
+    GradoConnection: [
+      "GrupoDeRequisitosToGradoConnection",
+      "RootQueryToGradoConnection",
+      "UserToGradoConnection",
+    ],
+    GradoConnectionPageInfo: [
+      "GrupoDeRequisitosToGradoConnectionPageInfo",
+      "RootQueryToGradoConnectionPageInfo",
+      "UserToGradoConnectionPageInfo",
+    ],
+    InvestigadorConnection: [
+      "InvestigacionToInvestigadorConnection",
+      "RootQueryToInvestigadorConnection",
+      "UserToInvestigadorConnection",
+    ],
+    InvestigadorConnectionEdge: [
+      "InvestigacionToInvestigadorConnectionEdge",
+      "InvestigadorToPreviewConnectionEdge",
+      "RootQueryToInvestigadorConnectionEdge",
+      "UserToInvestigadorConnectionEdge",
+    ],
+    InvestigadorConnectionPageInfo: [
+      "InvestigacionToInvestigadorConnectionPageInfo",
+      "RootQueryToInvestigadorConnectionPageInfo",
+      "UserToInvestigadorConnectionPageInfo",
+    ],
+    InvestigacionConnectionEdge: [
+      "InvestigacionToPreviewConnectionEdge",
+      "InvestigadorToInvestigacionConnectionEdge",
+      "LineaDeInvestigacionToInvestigacionConnectionEdge",
+      "RootQueryToInvestigacionConnectionEdge",
+      "UserToInvestigacionConnectionEdge",
+    ],
+    InvestigacionConnection: [
+      "InvestigadorToInvestigacionConnection",
+      "LineaDeInvestigacionToInvestigacionConnection",
+      "RootQueryToInvestigacionConnection",
+      "UserToInvestigacionConnection",
+    ],
+    InvestigacionConnectionPageInfo: [
+      "InvestigadorToInvestigacionConnectionPageInfo",
+      "LineaDeInvestigacionToInvestigacionConnectionPageInfo",
+      "RootQueryToInvestigacionConnectionPageInfo",
+      "UserToInvestigacionConnectionPageInfo",
+    ],
     HierarchicalContentNode: ["MediaItem", "Page"],
     NodeWithComments: ["MediaItem", "Page", "Post"],
     MenuItemObjectUnion: [
@@ -12713,12 +15281,145 @@ export const generatedSchema = {
       "Post",
       "Tag",
     ],
+    MenuConnectionEdge: [
+      "MenuItemToMenuConnectionEdge",
+      "RootQueryToMenuConnectionEdge",
+    ],
+    MenuItemConnection: [
+      "MenuItemToMenuItemConnection",
+      "MenuToMenuItemConnection",
+      "RootQueryToMenuItemConnection",
+    ],
+    MenuItemConnectionEdge: [
+      "MenuItemToMenuItemConnectionEdge",
+      "MenuToMenuItemConnectionEdge",
+      "RootQueryToMenuItemConnectionEdge",
+    ],
+    MenuItemConnectionPageInfo: [
+      "MenuItemToMenuItemConnectionPageInfo",
+      "MenuToMenuItemConnectionPageInfo",
+      "RootQueryToMenuItemConnectionPageInfo",
+    ],
+    MenuItemLinkableConnectionEdge: [
+      "MenuItemToMenuItemLinkableConnectionEdge",
+    ],
+    MediaItemConnectionEdge: [
+      "NodeWithFeaturedImageToMediaItemConnectionEdge",
+      "RootQueryToMediaItemConnectionEdge",
+      "UserToMediaItemConnectionEdge",
+    ],
     NodeWithContentEditor: ["Page", "Post"],
     NodeWithPageAttributes: ["Page"],
     NodeWithRevisions: ["Page", "Post"],
+    PageConnectionEdge: [
+      "PageToPreviewConnectionEdge",
+      "PageToRevisionConnectionEdge",
+      "RootQueryToPageConnectionEdge",
+      "UserToPageConnectionEdge",
+    ],
+    PageConnection: [
+      "PageToRevisionConnection",
+      "RootQueryToPageConnection",
+      "UserToPageConnection",
+    ],
+    PageConnectionPageInfo: [
+      "PageToRevisionConnectionPageInfo",
+      "RootQueryToPageConnectionPageInfo",
+      "UserToPageConnectionPageInfo",
+    ],
     Page_Datosrecursos_Relacion: ["Recurso"],
+    PeriodoDeAdmisionConnectionEdge: [
+      "PeriodoDeAdmisionToPreviewConnectionEdge",
+      "RootQueryToPeriodoDeAdmisionConnectionEdge",
+      "UserToPeriodoDeAdmisionConnectionEdge",
+    ],
     NodeWithExcerpt: ["Post"],
     NodeWithTrackbacks: ["Post"],
+    PostFormatConnection: [
+      "PostToPostFormatConnection",
+      "RootQueryToPostFormatConnection",
+    ],
+    PostFormatConnectionEdge: [
+      "PostToPostFormatConnectionEdge",
+      "RootQueryToPostFormatConnectionEdge",
+    ],
+    PostFormatConnectionPageInfo: [
+      "PostToPostFormatConnectionPageInfo",
+      "RootQueryToPostFormatConnectionPageInfo",
+    ],
+    TagConnection: ["PostToTagConnection", "RootQueryToTagConnection"],
+    TagConnectionEdge: [
+      "PostToTagConnectionEdge",
+      "RootQueryToTagConnectionEdge",
+    ],
+    TagConnectionPageInfo: [
+      "PostToTagConnectionPageInfo",
+      "RootQueryToTagConnectionPageInfo",
+    ],
+    ContentTypeConnection: [
+      "RootQueryToContentTypeConnection",
+      "TaxonomyToContentTypeConnection",
+    ],
+    ContentTypeConnectionPageInfo: [
+      "RootQueryToContentTypeConnectionPageInfo",
+      "TaxonomyToContentTypeConnectionPageInfo",
+    ],
+    FacultadConnection: [
+      "RootQueryToFacultadConnection",
+      "UserToFacultadConnection",
+    ],
+    FacultadConnectionPageInfo: [
+      "RootQueryToFacultadConnectionPageInfo",
+      "UserToFacultadConnectionPageInfo",
+    ],
+    MediaItemConnection: [
+      "RootQueryToMediaItemConnection",
+      "UserToMediaItemConnection",
+    ],
+    MediaItemConnectionPageInfo: [
+      "RootQueryToMediaItemConnectionPageInfo",
+      "UserToMediaItemConnectionPageInfo",
+    ],
+    MenuConnection: ["RootQueryToMenuConnection"],
+    MenuConnectionPageInfo: ["RootQueryToMenuConnectionPageInfo"],
+    PeriodoDeAdmisionConnection: [
+      "RootQueryToPeriodoDeAdmisionConnection",
+      "UserToPeriodoDeAdmisionConnection",
+    ],
+    PeriodoDeAdmisionConnectionPageInfo: [
+      "RootQueryToPeriodoDeAdmisionConnectionPageInfo",
+      "UserToPeriodoDeAdmisionConnectionPageInfo",
+    ],
+    PluginConnection: ["RootQueryToPluginConnection"],
+    PluginConnectionEdge: ["RootQueryToPluginConnectionEdge"],
+    PluginConnectionPageInfo: ["RootQueryToPluginConnectionPageInfo"],
+    SlideConnection: ["RootQueryToSlideConnection", "UserToSlideConnection"],
+    SlideConnectionEdge: [
+      "RootQueryToSlideConnectionEdge",
+      "SlideToPreviewConnectionEdge",
+      "UserToSlideConnectionEdge",
+    ],
+    SlideConnectionPageInfo: [
+      "RootQueryToSlideConnectionPageInfo",
+      "UserToSlideConnectionPageInfo",
+    ],
+    ThemeConnection: ["RootQueryToThemeConnection"],
+    ThemeConnectionEdge: ["RootQueryToThemeConnectionEdge"],
+    ThemeConnectionPageInfo: ["RootQueryToThemeConnectionPageInfo"],
+    UserConnection: ["RootQueryToUserConnection"],
+    UserConnectionPageInfo: ["RootQueryToUserConnectionPageInfo"],
+    UserRoleConnection: [
+      "RootQueryToUserRoleConnection",
+      "UserToUserRoleConnection",
+    ],
+    UserRoleConnectionEdge: [
+      "RootQueryToUserRoleConnectionEdge",
+      "UserToUserRoleConnectionEdge",
+    ],
+    UserRoleConnectionPageInfo: [
+      "RootQueryToUserRoleConnectionPageInfo",
+      "UserToUserRoleConnectionPageInfo",
+    ],
   },
 } as const;
 
@@ -12734,28 +15435,31 @@ export interface AcfFieldGroup {
     | "AcfOptionsServiciosOpcionales_Serviciosopcionales_servicios"
     | "AcfOptionsVideoInstitucional_Videoinstitucional"
     | "Carrera_Contacto"
-    | "Carrera_Contacto_direcciones"
-    | "Carrera_Contacto_emails"
-    | "Carrera_Contacto_horarios"
-    | "Carrera_Contacto_telefonos"
-    | "Carrera_Contacto_telefonos_extensiones"
-    | "Carrera_Contacto_whatsapp"
+    | "Carrera_Contacto_unidad"
+    | "Carrera_Contacto_unidad_direcciones"
+    | "Carrera_Contacto_unidad_emails"
+    | "Carrera_Contacto_unidad_horarios"
+    | "Carrera_Contacto_unidad_telefonos"
+    | "Carrera_Contacto_unidad_telefonos_extensiones"
+    | "Carrera_Contacto_unidad_whatsapp"
     | "Carrera_Datoscarrera"
     | "Carrera_Datoscarrera_tabs"
     | "Departamento_Contacto"
-    | "Departamento_Contacto_direcciones"
-    | "Departamento_Contacto_emails"
-    | "Departamento_Contacto_horarios"
-    | "Departamento_Contacto_telefonos"
-    | "Departamento_Contacto_telefonos_extensiones"
-    | "Departamento_Contacto_whatsapp"
+    | "Departamento_Contacto_unidad"
+    | "Departamento_Contacto_unidad_direcciones"
+    | "Departamento_Contacto_unidad_emails"
+    | "Departamento_Contacto_unidad_horarios"
+    | "Departamento_Contacto_unidad_telefonos"
+    | "Departamento_Contacto_unidad_telefonos_extensiones"
+    | "Departamento_Contacto_unidad_whatsapp"
     | "Facultad_Contacto"
-    | "Facultad_Contacto_direcciones"
-    | "Facultad_Contacto_emails"
-    | "Facultad_Contacto_horarios"
-    | "Facultad_Contacto_telefonos"
-    | "Facultad_Contacto_telefonos_extensiones"
-    | "Facultad_Contacto_whatsapp"
+    | "Facultad_Contacto_unidad"
+    | "Facultad_Contacto_unidad_direcciones"
+    | "Facultad_Contacto_unidad_emails"
+    | "Facultad_Contacto_unidad_horarios"
+    | "Facultad_Contacto_unidad_telefonos"
+    | "Facultad_Contacto_unidad_telefonos_extensiones"
+    | "Facultad_Contacto_unidad_whatsapp"
     | "Grado_Datosrequisitos"
     | "Grado_Datosrequisitos_requisitos"
     | "Grado_Formulariosgrado"
@@ -12765,12 +15469,13 @@ export interface AcfFieldGroup {
     | "Investigador_Datosinvestigador_CarreraNacionalInvestigacion"
     | "MenuItem_Datosmenu"
     | "Page_Contacto"
-    | "Page_Contacto_direcciones"
-    | "Page_Contacto_emails"
-    | "Page_Contacto_horarios"
-    | "Page_Contacto_telefonos"
-    | "Page_Contacto_telefonos_extensiones"
-    | "Page_Contacto_whatsapp"
+    | "Page_Contacto_unidad"
+    | "Page_Contacto_unidad_direcciones"
+    | "Page_Contacto_unidad_emails"
+    | "Page_Contacto_unidad_horarios"
+    | "Page_Contacto_unidad_telefonos"
+    | "Page_Contacto_unidad_telefonos_extensiones"
+    | "Page_Contacto_unidad_whatsapp"
     | "Page_Datosrecursos"
     | "Page_Pagesettings"
     | "PeriodoDeAdmision_Datosperiodosdeadmision"
@@ -12939,7 +15644,7 @@ export interface AcfOptionsVideoInstitucional_Videoinstitucional {
 export interface AtlasContentModelerSettingsSettings {
   __typename?: "AtlasContentModelerSettingsSettings";
   /**
-   * The string Settings Group
+   * Opt into anonymous usage tracking to help us make Atlas Content Modeler better.
    */
   atlasContentModelerUsageTracking?: Maybe<ScalarsEnums["String"]>;
 }
@@ -13177,7 +15882,7 @@ export interface Carrera {
   modifiedGmt?: Maybe<ScalarsEnums["String"]>;
   nombre?: Maybe<ScalarsEnums["String"]>;
   /**
-   * Connection between the carrera type and the carrera type
+   * Connection between the Carrera type and the carrera type
    */
   preview?: Maybe<CarreraToPreviewConnectionEdge>;
   /**
@@ -13210,7 +15915,7 @@ export interface Carrera {
     last?: Maybe<Scalars["Int"]>;
   }) => Maybe<CarreraToRecursoConnection>;
   /**
-   * The Yoast SEO data of the carrera
+   * The Yoast SEO data of the ContentNode
    */
   seo?: Maybe<PostTypeSEO>;
   /**
@@ -13226,7 +15931,7 @@ export interface Carrera {
    */
   styles?: Maybe<ScalarsEnums["String"]>;
   /**
-   * The template assigned to a node of content
+   * The template assigned to the node
    */
   template?: Maybe<ContentTemplate>;
   templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
@@ -13246,14 +15951,101 @@ export interface Carrera {
 }
 
 /**
+ * Connection to carrera Nodes
+ */
+export interface CarreraConnection {
+  __typename?:
+    | "DepartamentoToCarreraConnection"
+    | "FacultadToCarreraConnection"
+    | "GradoToCarreraConnection"
+    | "RecursoToCarreraConnection"
+    | "RootQueryToCarreraConnection"
+    | "UserToCarreraConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected carrera Nodes
+   */
+  edges: Array<CarreraConnectionEdge>;
+  /**
+   * A list of connected carrera Nodes
+   */
+  nodes: Array<Carrera>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: CarreraConnectionPageInfo;
+  $on: $CarreraConnection;
+}
+
+/**
+ * Edge between a Node and a connected carrera
+ */
+export interface CarreraConnectionEdge {
+  __typename?:
+    | "CarreraToPreviewConnectionEdge"
+    | "DepartamentoToCarreraConnectionEdge"
+    | "FacultadToCarreraConnectionEdge"
+    | "GradoToCarreraConnectionEdge"
+    | "RecursoToCarreraConnectionEdge"
+    | "RootQueryToCarreraConnectionEdge"
+    | "UserToCarreraConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected carrera Node
+   */
+  node: Carrera;
+  $on: $CarreraConnectionEdge;
+}
+
+/**
+ * Page Info on the connected CarreraConnectionEdge
+ */
+export interface CarreraConnectionPageInfo {
+  __typename?:
+    | "DepartamentoToCarreraConnectionPageInfo"
+    | "FacultadToCarreraConnectionPageInfo"
+    | "GradoToCarreraConnectionPageInfo"
+    | "RecursoToCarreraConnectionPageInfo"
+    | "RootQueryToCarreraConnectionPageInfo"
+    | "UserToCarreraConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $CarreraConnectionPageInfo;
+}
+
+/**
  * Connection between the carrera type and the departamento type
  */
 export interface CarreraToDepartamentoConnectionEdge {
   __typename?: "CarreraToDepartamentoConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Departamento>;
+  node: Departamento;
 }
 
 /**
@@ -13262,9 +16054,13 @@ export interface CarreraToDepartamentoConnectionEdge {
 export interface CarreraToFacultadConnectionEdge {
   __typename?: "CarreraToFacultadConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Facultad>;
+  node: Facultad;
 }
 
 /**
@@ -13273,20 +16069,28 @@ export interface CarreraToFacultadConnectionEdge {
 export interface CarreraToGradoConnectionEdge {
   __typename?: "CarreraToGradoConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Grado>;
+  node: Grado;
 }
 
 /**
- * Connection between the carrera type and the carrera type
+ * Connection between the Carrera type and the carrera type
  */
 export interface CarreraToPreviewConnectionEdge {
   __typename?: "CarreraToPreviewConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Carrera>;
+  node: Carrera;
 }
 
 /**
@@ -13297,15 +16101,15 @@ export interface CarreraToRecursoConnection {
   /**
    * Edges for the CarreraToRecursoConnection connection
    */
-  edges?: Maybe<Array<Maybe<CarreraToRecursoConnectionEdge>>>;
+  edges: Array<CarreraToRecursoConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Recurso>>>;
+  nodes: Array<Recurso>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: CarreraToRecursoConnectionPageInfo;
 }
 
 /**
@@ -13320,7 +16124,34 @@ export interface CarreraToRecursoConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Recurso>;
+  node: Recurso;
+}
+
+/**
+ * Page Info on the &quot;CarreraToRecursoConnection&quot;
+ */
+export interface CarreraToRecursoConnectionPageInfo {
+  __typename?: "CarreraToRecursoConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -13328,22 +16159,35 @@ export interface CarreraToRecursoConnectionEdge {
  */
 export interface Carrera_Contacto {
   __typename?: "Carrera_Contacto";
-  direcciones?: Maybe<Array<Maybe<Carrera_Contacto_direcciones>>>;
-  emails?: Maybe<Array<Maybe<Carrera_Contacto_emails>>>;
   /**
    * The name of the ACF Field Group
    */
   fieldGroupName?: Maybe<ScalarsEnums["String"]>;
-  horarios?: Maybe<Array<Maybe<Carrera_Contacto_horarios>>>;
-  telefonos?: Maybe<Array<Maybe<Carrera_Contacto_telefonos>>>;
-  whatsapp?: Maybe<Array<Maybe<Carrera_Contacto_whatsapp>>>;
+  unidad?: Maybe<Array<Maybe<Carrera_Contacto_unidad>>>;
 }
 
 /**
  * Field Group
  */
-export interface Carrera_Contacto_direcciones {
-  __typename?: "Carrera_Contacto_direcciones";
+export interface Carrera_Contacto_unidad {
+  __typename?: "Carrera_Contacto_unidad";
+  direcciones?: Maybe<Array<Maybe<Carrera_Contacto_unidad_direcciones>>>;
+  emails?: Maybe<Array<Maybe<Carrera_Contacto_unidad_emails>>>;
+  /**
+   * The name of the ACF Field Group
+   */
+  fieldGroupName?: Maybe<ScalarsEnums["String"]>;
+  horarios?: Maybe<Array<Maybe<Carrera_Contacto_unidad_horarios>>>;
+  nombre?: Maybe<ScalarsEnums["String"]>;
+  telefonos?: Maybe<Array<Maybe<Carrera_Contacto_unidad_telefonos>>>;
+  whatsapp?: Maybe<Array<Maybe<Carrera_Contacto_unidad_whatsapp>>>;
+}
+
+/**
+ * Field Group
+ */
+export interface Carrera_Contacto_unidad_direcciones {
+  __typename?: "Carrera_Contacto_unidad_direcciones";
   direccion?: Maybe<ScalarsEnums["String"]>;
   /**
    * The name of the ACF Field Group
@@ -13354,8 +16198,8 @@ export interface Carrera_Contacto_direcciones {
 /**
  * Field Group
  */
-export interface Carrera_Contacto_emails {
-  __typename?: "Carrera_Contacto_emails";
+export interface Carrera_Contacto_unidad_emails {
+  __typename?: "Carrera_Contacto_unidad_emails";
   email?: Maybe<ScalarsEnums["String"]>;
   /**
    * The name of the ACF Field Group
@@ -13366,8 +16210,8 @@ export interface Carrera_Contacto_emails {
 /**
  * Field Group
  */
-export interface Carrera_Contacto_horarios {
-  __typename?: "Carrera_Contacto_horarios";
+export interface Carrera_Contacto_unidad_horarios {
+  __typename?: "Carrera_Contacto_unidad_horarios";
   dias?: Maybe<ScalarsEnums["String"]>;
   /**
    * The name of the ACF Field Group
@@ -13379,9 +16223,11 @@ export interface Carrera_Contacto_horarios {
 /**
  * Field Group
  */
-export interface Carrera_Contacto_telefonos {
-  __typename?: "Carrera_Contacto_telefonos";
-  extensiones?: Maybe<Array<Maybe<Carrera_Contacto_telefonos_extensiones>>>;
+export interface Carrera_Contacto_unidad_telefonos {
+  __typename?: "Carrera_Contacto_unidad_telefonos";
+  extensiones?: Maybe<
+    Array<Maybe<Carrera_Contacto_unidad_telefonos_extensiones>>
+  >;
   /**
    * The name of the ACF Field Group
    */
@@ -13392,8 +16238,8 @@ export interface Carrera_Contacto_telefonos {
 /**
  * Field Group
  */
-export interface Carrera_Contacto_telefonos_extensiones {
-  __typename?: "Carrera_Contacto_telefonos_extensiones";
+export interface Carrera_Contacto_unidad_telefonos_extensiones {
+  __typename?: "Carrera_Contacto_unidad_telefonos_extensiones";
   extension?: Maybe<ScalarsEnums["String"]>;
   /**
    * The name of the ACF Field Group
@@ -13404,8 +16250,8 @@ export interface Carrera_Contacto_telefonos_extensiones {
 /**
  * Field Group
  */
-export interface Carrera_Contacto_whatsapp {
-  __typename?: "Carrera_Contacto_whatsapp";
+export interface Carrera_Contacto_unidad_whatsapp {
+  __typename?: "Carrera_Contacto_unidad_whatsapp";
   /**
    * The name of the ACF Field Group
    */
@@ -13470,7 +16316,7 @@ export interface Category {
    */
   categoryId?: Maybe<ScalarsEnums["Int"]>;
   /**
-   * Connection between the category type and the category type
+   * Connection between the category type and its children categories.
    */
   children: (args?: {
     /**
@@ -13499,7 +16345,7 @@ export interface Category {
    */
   conditionalTags?: Maybe<ConditionalTags>;
   /**
-   * Connection between the category type and the ContentNode type
+   * Connection between the Category type and the ContentNode type
    */
   contentNodes: (args?: {
     /**
@@ -13528,7 +16374,7 @@ export interface Category {
    */
   count?: Maybe<ScalarsEnums["Int"]>;
   /**
-   * The unique resource identifier path
+   * The unique identifier stored in the database
    */
   databaseId: ScalarsEnums["Int"];
   /**
@@ -13602,7 +16448,7 @@ export interface Category {
    */
   name?: Maybe<ScalarsEnums["String"]>;
   /**
-   * Connection between the category type and the category type
+   * Connection between the category type and its parent category.
    */
   parent?: Maybe<CategoryToParentCategoryConnectionEdge>;
   /**
@@ -13614,7 +16460,7 @@ export interface Category {
    */
   parentId?: Maybe<ScalarsEnums["ID"]>;
   /**
-   * Connection between the category type and the post type
+   * Connection between the Category type and the post type
    */
   posts: (args?: {
     /**
@@ -13647,7 +16493,7 @@ export interface Category {
    */
   slug?: Maybe<ScalarsEnums["String"]>;
   /**
-   * Connection between the category type and the Taxonomy type
+   * Connection between the Category type and the Taxonomy type
    */
   taxonomy?: Maybe<CategoryToTaxonomyConnectionEdge>;
   /**
@@ -13670,22 +16516,99 @@ export interface Category {
 }
 
 /**
- * Connection between the category type and the category type
+ * Connection to category Nodes
+ */
+export interface CategoryConnection {
+  __typename?:
+    | "CategoryToAncestorsCategoryConnection"
+    | "CategoryToCategoryConnection"
+    | "PostToCategoryConnection"
+    | "RootQueryToCategoryConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected category Nodes
+   */
+  edges: Array<CategoryConnectionEdge>;
+  /**
+   * A list of connected category Nodes
+   */
+  nodes: Array<Category>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: CategoryConnectionPageInfo;
+  $on: $CategoryConnection;
+}
+
+/**
+ * Edge between a Node and a connected category
+ */
+export interface CategoryConnectionEdge {
+  __typename?:
+    | "CategoryToAncestorsCategoryConnectionEdge"
+    | "CategoryToCategoryConnectionEdge"
+    | "CategoryToParentCategoryConnectionEdge"
+    | "PostToCategoryConnectionEdge"
+    | "RootQueryToCategoryConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected category Node
+   */
+  node: Category;
+  $on: $CategoryConnectionEdge;
+}
+
+/**
+ * Page Info on the connected CategoryConnectionEdge
+ */
+export interface CategoryConnectionPageInfo {
+  __typename?:
+    | "CategoryToAncestorsCategoryConnectionPageInfo"
+    | "CategoryToCategoryConnectionPageInfo"
+    | "PostToCategoryConnectionPageInfo"
+    | "RootQueryToCategoryConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $CategoryConnectionPageInfo;
+}
+
+/**
+ * Connection between the Category type and the category type
  */
 export interface CategoryToAncestorsCategoryConnection {
   __typename?: "CategoryToAncestorsCategoryConnection";
   /**
    * Edges for the CategoryToAncestorsCategoryConnection connection
    */
-  edges?: Maybe<Array<Maybe<CategoryToAncestorsCategoryConnectionEdge>>>;
+  edges: Array<CategoryToAncestorsCategoryConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Category>>>;
+  nodes: Array<Category>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: CategoryToAncestorsCategoryConnectionPageInfo;
 }
 
 /**
@@ -13700,26 +16623,53 @@ export interface CategoryToAncestorsCategoryConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Category>;
+  node: Category;
 }
 
 /**
- * Connection between the category type and the category type
+ * Page Info on the &quot;CategoryToAncestorsCategoryConnection&quot;
+ */
+export interface CategoryToAncestorsCategoryConnectionPageInfo {
+  __typename?: "CategoryToAncestorsCategoryConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the Category type and the category type
  */
 export interface CategoryToCategoryConnection {
   __typename?: "CategoryToCategoryConnection";
   /**
    * Edges for the CategoryToCategoryConnection connection
    */
-  edges?: Maybe<Array<Maybe<CategoryToCategoryConnectionEdge>>>;
+  edges: Array<CategoryToCategoryConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Category>>>;
+  nodes: Array<Category>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: CategoryToCategoryConnectionPageInfo;
 }
 
 /**
@@ -13734,26 +16684,53 @@ export interface CategoryToCategoryConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Category>;
+  node: Category;
 }
 
 /**
- * Connection between the category type and the ContentNode type
+ * Page Info on the &quot;CategoryToCategoryConnection&quot;
+ */
+export interface CategoryToCategoryConnectionPageInfo {
+  __typename?: "CategoryToCategoryConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the Category type and the ContentNode type
  */
 export interface CategoryToContentNodeConnection {
   __typename?: "CategoryToContentNodeConnection";
   /**
    * Edges for the CategoryToContentNodeConnection connection
    */
-  edges?: Maybe<Array<Maybe<CategoryToContentNodeConnectionEdge>>>;
+  edges: Array<CategoryToContentNodeConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<ContentNode>>>;
+  nodes: Array<ContentNode>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: CategoryToContentNodeConnectionPageInfo;
 }
 
 /**
@@ -13768,37 +16745,68 @@ export interface CategoryToContentNodeConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<ContentNode>;
+  node: ContentNode;
 }
 
 /**
- * Connection between the category type and the category type
+ * Page Info on the &quot;CategoryToContentNodeConnection&quot;
+ */
+export interface CategoryToContentNodeConnectionPageInfo {
+  __typename?: "CategoryToContentNodeConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the Category type and the category type
  */
 export interface CategoryToParentCategoryConnectionEdge {
   __typename?: "CategoryToParentCategoryConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Category>;
+  node: Category;
 }
 
 /**
- * Connection between the category type and the post type
+ * Connection between the Category type and the post type
  */
 export interface CategoryToPostConnection {
   __typename?: "CategoryToPostConnection";
   /**
    * Edges for the CategoryToPostConnection connection
    */
-  edges?: Maybe<Array<Maybe<CategoryToPostConnectionEdge>>>;
+  edges: Array<CategoryToPostConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Post>>>;
+  nodes: Array<Post>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: CategoryToPostConnectionPageInfo;
 }
 
 /**
@@ -13813,18 +16821,49 @@ export interface CategoryToPostConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Post>;
+  node: Post;
 }
 
 /**
- * Connection between the category type and the Taxonomy type
+ * Page Info on the &quot;CategoryToPostConnection&quot;
+ */
+export interface CategoryToPostConnectionPageInfo {
+  __typename?: "CategoryToPostConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the Category type and the Taxonomy type
  */
 export interface CategoryToTaxonomyConnectionEdge {
   __typename?: "CategoryToTaxonomyConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Taxonomy>;
+  node: Taxonomy;
 }
 
 /**
@@ -13838,6 +16877,7 @@ export interface Comment {
   agent?: Maybe<ScalarsEnums["String"]>;
   /**
    * The approval status of the comment. This field is equivalent to WP_Comment-&gt;comment_approved and the value matching the &quot;comment_approved&quot; column in SQL.
+   * @deprecated Deprecated in favor of the `status` field
    */
   approved?: Maybe<ScalarsEnums["Boolean"]>;
   /**
@@ -13933,6 +16973,10 @@ export interface Comment {
     where?: Maybe<CommentToCommentConnectionWhereArgs>;
   }) => Maybe<CommentToCommentConnection>;
   /**
+   * The approval status of the comment. This field is equivalent to WP_Comment-&gt;comment_approved and the value matching the &quot;comment_approved&quot; column in SQL.
+   */
+  status?: Maybe<ScalarsEnums["CommentStatusEnum"]>;
+  /**
    * Type of comment. This field is equivalent to WP_Comment-&gt;comment_type and the value matching the &quot;comment_type&quot; column in SQL.
    */
   type?: Maybe<ScalarsEnums["String"]>;
@@ -13962,7 +17006,7 @@ export interface CommentAuthor {
     size?: Maybe<Scalars["Int"]>;
   }) => Maybe<Avatar>;
   /**
-   * Identifies the primary key from the database.
+   * The unique identifier stored in the database
    */
   databaseId: ScalarsEnums["Int"];
   /**
@@ -13988,6 +17032,89 @@ export interface CommentAuthor {
 }
 
 /**
+ * Connection to Comment Nodes
+ */
+export interface CommentConnection {
+  __typename?:
+    | "CommentToCommentConnection"
+    | "MediaItemToCommentConnection"
+    | "PageToCommentConnection"
+    | "PostToCommentConnection"
+    | "RootQueryToCommentConnection"
+    | "UserToCommentConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected Comment Nodes
+   */
+  edges: Array<CommentConnectionEdge>;
+  /**
+   * A list of connected Comment Nodes
+   */
+  nodes: Array<Comment>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: CommentConnectionPageInfo;
+  $on: $CommentConnection;
+}
+
+/**
+ * Edge between a Node and a connected Comment
+ */
+export interface CommentConnectionEdge {
+  __typename?:
+    | "CommentToCommentConnectionEdge"
+    | "CommentToParentCommentConnectionEdge"
+    | "MediaItemToCommentConnectionEdge"
+    | "PageToCommentConnectionEdge"
+    | "PostToCommentConnectionEdge"
+    | "RootQueryToCommentConnectionEdge"
+    | "UserToCommentConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected Comment Node
+   */
+  node: Comment;
+  $on: $CommentConnectionEdge;
+}
+
+/**
+ * Page Info on the connected CommentConnectionEdge
+ */
+export interface CommentConnectionPageInfo {
+  __typename?:
+    | "CommentToCommentConnectionPageInfo"
+    | "MediaItemToCommentConnectionPageInfo"
+    | "PageToCommentConnectionPageInfo"
+    | "PostToCommentConnectionPageInfo"
+    | "RootQueryToCommentConnectionPageInfo"
+    | "UserToCommentConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $CommentConnectionPageInfo;
+}
+
+/**
  * Connection between the Comment type and the Comment type
  */
 export interface CommentToCommentConnection {
@@ -13995,15 +17122,15 @@ export interface CommentToCommentConnection {
   /**
    * Edges for the CommentToCommentConnection connection
    */
-  edges?: Maybe<Array<Maybe<CommentToCommentConnectionEdge>>>;
+  edges: Array<CommentToCommentConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Comment>>>;
+  nodes: Array<Comment>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: CommentToCommentConnectionPageInfo;
 }
 
 /**
@@ -14018,7 +17145,34 @@ export interface CommentToCommentConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Comment>;
+  node: Comment;
+}
+
+/**
+ * Page Info on the &quot;CommentToCommentConnection&quot;
+ */
+export interface CommentToCommentConnectionPageInfo {
+  __typename?: "CommentToCommentConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -14027,9 +17181,13 @@ export interface CommentToCommentConnectionEdge {
 export interface CommentToCommenterConnectionEdge {
   __typename?: "CommentToCommenterConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Commenter>;
+  node: Commenter;
 }
 
 /**
@@ -14038,9 +17196,13 @@ export interface CommentToCommenterConnectionEdge {
 export interface CommentToContentNodeConnectionEdge {
   __typename?: "CommentToContentNodeConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<ContentNode>;
+  node: ContentNode;
 }
 
 /**
@@ -14049,9 +17211,13 @@ export interface CommentToContentNodeConnectionEdge {
 export interface CommentToParentCommentConnectionEdge {
   __typename?: "CommentToParentCommentConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Comment>;
+  node: Comment;
 }
 
 /**
@@ -14088,6 +17254,22 @@ export interface Commenter {
    */
   url?: Maybe<ScalarsEnums["String"]>;
   $on: $Commenter;
+}
+
+/**
+ * Edge between a Node and a connected Commenter
+ */
+export interface CommenterConnectionEdge {
+  __typename?: "CommentToCommenterConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected Commenter Node
+   */
+  node: Commenter;
+  $on: $CommenterConnectionEdge;
 }
 
 /**
@@ -14205,6 +17387,118 @@ export interface ConditionalTags {
    * @deprecated Deprecated in favor of using Next.js pages
    */
   isYear?: Maybe<ScalarsEnums["Boolean"]>;
+}
+
+/**
+ * A plural connection from one Node Type in the Graph to another Node Type, with support for relational data via &quot;edges&quot;.
+ */
+export interface Connection {
+  __typename?:
+    | "CarreraToRecursoConnection"
+    | "CategoryToAncestorsCategoryConnection"
+    | "CategoryToCategoryConnection"
+    | "CategoryToContentNodeConnection"
+    | "CategoryToPostConnection"
+    | "CommentToCommentConnection"
+    | "ContentNodeToEnqueuedScriptConnection"
+    | "ContentNodeToEnqueuedStylesheetConnection"
+    | "ContentTypeToContentNodeConnection"
+    | "ContentTypeToTaxonomyConnection"
+    | "DepartamentoToCarreraConnection"
+    | "DepartamentoToLineaDeInvestigacionConnection"
+    | "FacultadToCarreraConnection"
+    | "FacultadToDepartamentoConnection"
+    | "GradoToCarreraConnection"
+    | "GradoToGrupoDeRequisitosConnection"
+    | "GradoToTermNodeConnection"
+    | "GrupoDeRequisitosToContentNodeConnection"
+    | "GrupoDeRequisitosToGradoConnection"
+    | "HierarchicalContentNodeToContentNodeAncestorsConnection"
+    | "HierarchicalContentNodeToContentNodeChildrenConnection"
+    | "InvestigacionToInvestigadorConnection"
+    | "InvestigadorToInvestigacionConnection"
+    | "LineaDeInvestigacionToInvestigacionConnection"
+    | "MediaItemToCommentConnection"
+    | "MenuItemToMenuItemConnection"
+    | "MenuToMenuItemConnection"
+    | "PageToCommentConnection"
+    | "PageToRevisionConnection"
+    | "PostFormatToContentNodeConnection"
+    | "PostFormatToPostConnection"
+    | "PostToCategoryConnection"
+    | "PostToCommentConnection"
+    | "PostToPostFormatConnection"
+    | "PostToRevisionConnection"
+    | "PostToTagConnection"
+    | "PostToTermNodeConnection"
+    | "RecursoToCarreraConnection"
+    | "RootQueryToCarreraConnection"
+    | "RootQueryToCategoryConnection"
+    | "RootQueryToCommentConnection"
+    | "RootQueryToContentNodeConnection"
+    | "RootQueryToContentTypeConnection"
+    | "RootQueryToDepartamentoConnection"
+    | "RootQueryToEnqueuedScriptConnection"
+    | "RootQueryToEnqueuedStylesheetConnection"
+    | "RootQueryToFacultadConnection"
+    | "RootQueryToGradoConnection"
+    | "RootQueryToGrupoDeRequisitosConnection"
+    | "RootQueryToInvestigacionConnection"
+    | "RootQueryToInvestigadorConnection"
+    | "RootQueryToLineaDeInvestigacionConnection"
+    | "RootQueryToMediaItemConnection"
+    | "RootQueryToMenuConnection"
+    | "RootQueryToMenuItemConnection"
+    | "RootQueryToPageConnection"
+    | "RootQueryToPeriodoDeAdmisionConnection"
+    | "RootQueryToPluginConnection"
+    | "RootQueryToPostConnection"
+    | "RootQueryToPostFormatConnection"
+    | "RootQueryToRecursoConnection"
+    | "RootQueryToRevisionsConnection"
+    | "RootQueryToSlideConnection"
+    | "RootQueryToTagConnection"
+    | "RootQueryToTaxonomyConnection"
+    | "RootQueryToTermNodeConnection"
+    | "RootQueryToThemeConnection"
+    | "RootQueryToUserConnection"
+    | "RootQueryToUserRoleConnection"
+    | "TagToContentNodeConnection"
+    | "TagToPostConnection"
+    | "TaxonomyToContentTypeConnection"
+    | "TermNodeToEnqueuedScriptConnection"
+    | "TermNodeToEnqueuedStylesheetConnection"
+    | "UserToCarreraConnection"
+    | "UserToCommentConnection"
+    | "UserToDepartamentoConnection"
+    | "UserToEnqueuedScriptConnection"
+    | "UserToEnqueuedStylesheetConnection"
+    | "UserToFacultadConnection"
+    | "UserToGradoConnection"
+    | "UserToInvestigacionConnection"
+    | "UserToInvestigadorConnection"
+    | "UserToLineaDeInvestigacionConnection"
+    | "UserToMediaItemConnection"
+    | "UserToPageConnection"
+    | "UserToPeriodoDeAdmisionConnection"
+    | "UserToPostConnection"
+    | "UserToRecursoConnection"
+    | "UserToRevisionsConnection"
+    | "UserToSlideConnection"
+    | "UserToUserRoleConnection";
+  /**
+   * A list of edges (relational context) between connected nodes
+   */
+  edges: Array<Edge>;
+  /**
+   * A list of connected nodes
+   */
+  nodes: Array<Node>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: PageInfo;
+  $on: $Connection;
 }
 
 /**
@@ -14352,6 +17646,10 @@ export interface ContentNode {
    */
   previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
   /**
+   * The Yoast SEO data of the ContentNode
+   */
+  seo?: Maybe<PostTypeSEO>;
+  /**
    * The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
    */
   slug?: Maybe<ScalarsEnums["String"]>;
@@ -14376,14 +17674,115 @@ export interface ContentNode {
 }
 
 /**
+ * Connection to ContentNode Nodes
+ */
+export interface ContentNodeConnection {
+  __typename?:
+    | "CategoryToContentNodeConnection"
+    | "ContentTypeToContentNodeConnection"
+    | "GrupoDeRequisitosToContentNodeConnection"
+    | "HierarchicalContentNodeToContentNodeAncestorsConnection"
+    | "HierarchicalContentNodeToContentNodeChildrenConnection"
+    | "PostFormatToContentNodeConnection"
+    | "RootQueryToContentNodeConnection"
+    | "RootQueryToRevisionsConnection"
+    | "TagToContentNodeConnection"
+    | "UserToRevisionsConnection";
+  /**
+   * A list of edges (relational context) between ContentType and connected ContentNode Nodes
+   */
+  edges: Array<ContentNodeConnectionEdge>;
+  /**
+   * A list of connected ContentNode Nodes
+   */
+  nodes: Array<ContentNode>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: ContentNodeConnectionPageInfo;
+  $on: $ContentNodeConnection;
+}
+
+/**
+ * Edge between a Node and a connected ContentNode
+ */
+export interface ContentNodeConnectionEdge {
+  __typename?:
+    | "CategoryToContentNodeConnectionEdge"
+    | "CommentToContentNodeConnectionEdge"
+    | "ContentTypeToContentNodeConnectionEdge"
+    | "GrupoDeRequisitosToContentNodeConnectionEdge"
+    | "HierarchicalContentNodeToContentNodeAncestorsConnectionEdge"
+    | "HierarchicalContentNodeToContentNodeChildrenConnectionEdge"
+    | "HierarchicalContentNodeToParentContentNodeConnectionEdge"
+    | "NodeWithRevisionsToContentNodeConnectionEdge"
+    | "PostFormatToContentNodeConnectionEdge"
+    | "RootQueryToContentNodeConnectionEdge"
+    | "RootQueryToRevisionsConnectionEdge"
+    | "TagToContentNodeConnectionEdge"
+    | "UserToRevisionsConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected ContentNode Node
+   */
+  node: ContentNode;
+  $on: $ContentNodeConnectionEdge;
+}
+
+/**
+ * Page Info on the connected ContentNodeConnectionEdge
+ */
+export interface ContentNodeConnectionPageInfo {
+  __typename?:
+    | "CategoryToContentNodeConnectionPageInfo"
+    | "ContentTypeToContentNodeConnectionPageInfo"
+    | "GrupoDeRequisitosToContentNodeConnectionPageInfo"
+    | "HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo"
+    | "HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo"
+    | "PostFormatToContentNodeConnectionPageInfo"
+    | "RootQueryToContentNodeConnectionPageInfo"
+    | "RootQueryToRevisionsConnectionPageInfo"
+    | "TagToContentNodeConnectionPageInfo"
+    | "UserToRevisionsConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $ContentNodeConnectionPageInfo;
+}
+
+/**
  * Connection between the ContentNode type and the ContentType type
  */
 export interface ContentNodeToContentTypeConnectionEdge {
   __typename?: "ContentNodeToContentTypeConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<ContentType>;
+  node: ContentType;
 }
 
 /**
@@ -14392,9 +17791,13 @@ export interface ContentNodeToContentTypeConnectionEdge {
 export interface ContentNodeToEditLastConnectionEdge {
   __typename?: "ContentNodeToEditLastConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<User>;
+  node: User;
 }
 
 /**
@@ -14403,13 +17806,17 @@ export interface ContentNodeToEditLastConnectionEdge {
 export interface ContentNodeToEditLockConnectionEdge {
   __typename?: "ContentNodeToEditLockConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The timestamp for when the node was last edited
    */
   lockTimestamp?: Maybe<ScalarsEnums["String"]>;
   /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<User>;
+  node: User;
 }
 
 /**
@@ -14420,15 +17827,15 @@ export interface ContentNodeToEnqueuedScriptConnection {
   /**
    * Edges for the ContentNodeToEnqueuedScriptConnection connection
    */
-  edges?: Maybe<Array<Maybe<ContentNodeToEnqueuedScriptConnectionEdge>>>;
+  edges: Array<ContentNodeToEnqueuedScriptConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<EnqueuedScript>>>;
+  nodes: Array<EnqueuedScript>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: ContentNodeToEnqueuedScriptConnectionPageInfo;
 }
 
 /**
@@ -14443,7 +17850,34 @@ export interface ContentNodeToEnqueuedScriptConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<EnqueuedScript>;
+  node: EnqueuedScript;
+}
+
+/**
+ * Page Info on the &quot;ContentNodeToEnqueuedScriptConnection&quot;
+ */
+export interface ContentNodeToEnqueuedScriptConnectionPageInfo {
+  __typename?: "ContentNodeToEnqueuedScriptConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -14454,15 +17888,15 @@ export interface ContentNodeToEnqueuedStylesheetConnection {
   /**
    * Edges for the ContentNodeToEnqueuedStylesheetConnection connection
    */
-  edges?: Maybe<Array<Maybe<ContentNodeToEnqueuedStylesheetConnectionEdge>>>;
+  edges: Array<ContentNodeToEnqueuedStylesheetConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<EnqueuedStylesheet>>>;
+  nodes: Array<EnqueuedStylesheet>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: ContentNodeToEnqueuedStylesheetConnectionPageInfo;
 }
 
 /**
@@ -14477,15 +17911,34 @@ export interface ContentNodeToEnqueuedStylesheetConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<EnqueuedStylesheet>;
+  node: EnqueuedStylesheet;
 }
 
 /**
- * A union of Content Node Types that support revisions
+ * Page Info on the &quot;ContentNodeToEnqueuedStylesheetConnection&quot;
  */
-export interface ContentRevisionUnion {
-  __typename?: "Page" | "Post";
-  $on: $ContentRevisionUnion;
+export interface ContentNodeToEnqueuedStylesheetConnectionPageInfo {
+  __typename?: "ContentNodeToEnqueuedStylesheetConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -14679,6 +18132,77 @@ export interface ContentType {
 }
 
 /**
+ * Connection to ContentType Nodes
+ */
+export interface ContentTypeConnection {
+  __typename?:
+    | "RootQueryToContentTypeConnection"
+    | "TaxonomyToContentTypeConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected ContentType Nodes
+   */
+  edges: Array<ContentTypeConnectionEdge>;
+  /**
+   * A list of connected ContentType Nodes
+   */
+  nodes: Array<ContentType>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: ContentTypeConnectionPageInfo;
+  $on: $ContentTypeConnection;
+}
+
+/**
+ * Edge between a Node and a connected ContentType
+ */
+export interface ContentTypeConnectionEdge {
+  __typename?:
+    | "ContentNodeToContentTypeConnectionEdge"
+    | "RootQueryToContentTypeConnectionEdge"
+    | "TaxonomyToContentTypeConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected ContentType Node
+   */
+  node: ContentType;
+  $on: $ContentTypeConnectionEdge;
+}
+
+/**
+ * Page Info on the connected ContentTypeConnectionEdge
+ */
+export interface ContentTypeConnectionPageInfo {
+  __typename?:
+    | "RootQueryToContentTypeConnectionPageInfo"
+    | "TaxonomyToContentTypeConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $ContentTypeConnectionPageInfo;
+}
+
+/**
  * Connection between the ContentType type and the ContentNode type
  */
 export interface ContentTypeToContentNodeConnection {
@@ -14686,15 +18210,15 @@ export interface ContentTypeToContentNodeConnection {
   /**
    * Edges for the ContentTypeToContentNodeConnection connection
    */
-  edges?: Maybe<Array<Maybe<ContentTypeToContentNodeConnectionEdge>>>;
+  edges: Array<ContentTypeToContentNodeConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<ContentNode>>>;
+  nodes: Array<ContentNode>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: ContentTypeToContentNodeConnectionPageInfo;
 }
 
 /**
@@ -14709,7 +18233,34 @@ export interface ContentTypeToContentNodeConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<ContentNode>;
+  node: ContentNode;
+}
+
+/**
+ * Page Info on the &quot;ContentTypeToContentNodeConnection&quot;
+ */
+export interface ContentTypeToContentNodeConnectionPageInfo {
+  __typename?: "ContentTypeToContentNodeConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -14720,15 +18271,15 @@ export interface ContentTypeToTaxonomyConnection {
   /**
    * Edges for the ContentTypeToTaxonomyConnection connection
    */
-  edges?: Maybe<Array<Maybe<ContentTypeToTaxonomyConnectionEdge>>>;
+  edges: Array<ContentTypeToTaxonomyConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Taxonomy>>>;
+  nodes: Array<Taxonomy>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: ContentTypeToTaxonomyConnectionPageInfo;
 }
 
 /**
@@ -14743,11 +18294,38 @@ export interface ContentTypeToTaxonomyConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Taxonomy>;
+  node: Taxonomy;
 }
 
 /**
- * The payload for the createCarrera mutation
+ * Page Info on the &quot;ContentTypeToTaxonomyConnection&quot;
+ */
+export interface ContentTypeToTaxonomyConnectionPageInfo {
+  __typename?: "ContentTypeToTaxonomyConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * The payload for the createCarrera mutation.
  */
 export interface CreateCarreraPayload {
   __typename?: "CreateCarreraPayload";
@@ -14762,7 +18340,7 @@ export interface CreateCarreraPayload {
 }
 
 /**
- * The payload for the createCategory mutation
+ * The payload for the createCategory mutation.
  */
 export interface CreateCategoryPayload {
   __typename?: "CreateCategoryPayload";
@@ -14777,7 +18355,7 @@ export interface CreateCategoryPayload {
 }
 
 /**
- * The payload for the createComment mutation
+ * The payload for the createComment mutation.
  */
 export interface CreateCommentPayload {
   __typename?: "CreateCommentPayload";
@@ -14796,7 +18374,7 @@ export interface CreateCommentPayload {
 }
 
 /**
- * The payload for the createDepartamento mutation
+ * The payload for the createDepartamento mutation.
  */
 export interface CreateDepartamentoPayload {
   __typename?: "CreateDepartamentoPayload";
@@ -14811,7 +18389,7 @@ export interface CreateDepartamentoPayload {
 }
 
 /**
- * The payload for the createFacultad mutation
+ * The payload for the createFacultad mutation.
  */
 export interface CreateFacultadPayload {
   __typename?: "CreateFacultadPayload";
@@ -14826,7 +18404,7 @@ export interface CreateFacultadPayload {
 }
 
 /**
- * The payload for the createGrado mutation
+ * The payload for the createGrado mutation.
  */
 export interface CreateGradoPayload {
   __typename?: "CreateGradoPayload";
@@ -14841,7 +18419,7 @@ export interface CreateGradoPayload {
 }
 
 /**
- * The payload for the createGrupoDeRequisitos mutation
+ * The payload for the createGrupoDeRequisitos mutation.
  */
 export interface CreateGrupoDeRequisitosPayload {
   __typename?: "CreateGrupoDeRequisitosPayload";
@@ -14856,7 +18434,7 @@ export interface CreateGrupoDeRequisitosPayload {
 }
 
 /**
- * The payload for the createInvestigacion mutation
+ * The payload for the createInvestigacion mutation.
  */
 export interface CreateInvestigacionPayload {
   __typename?: "CreateInvestigacionPayload";
@@ -14871,7 +18449,7 @@ export interface CreateInvestigacionPayload {
 }
 
 /**
- * The payload for the createInvestigador mutation
+ * The payload for the createInvestigador mutation.
  */
 export interface CreateInvestigadorPayload {
   __typename?: "CreateInvestigadorPayload";
@@ -14886,7 +18464,7 @@ export interface CreateInvestigadorPayload {
 }
 
 /**
- * The payload for the createLineaDeInvestigacion mutation
+ * The payload for the createLineaDeInvestigacion mutation.
  */
 export interface CreateLineaDeInvestigacionPayload {
   __typename?: "CreateLineaDeInvestigacionPayload";
@@ -14901,7 +18479,7 @@ export interface CreateLineaDeInvestigacionPayload {
 }
 
 /**
- * The payload for the createMediaItem mutation
+ * The payload for the createMediaItem mutation.
  */
 export interface CreateMediaItemPayload {
   __typename?: "CreateMediaItemPayload";
@@ -14916,7 +18494,7 @@ export interface CreateMediaItemPayload {
 }
 
 /**
- * The payload for the createPage mutation
+ * The payload for the createPage mutation.
  */
 export interface CreatePagePayload {
   __typename?: "CreatePagePayload";
@@ -14931,7 +18509,7 @@ export interface CreatePagePayload {
 }
 
 /**
- * The payload for the createPeriodoDeAdmision mutation
+ * The payload for the createPeriodoDeAdmision mutation.
  */
 export interface CreatePeriodoDeAdmisionPayload {
   __typename?: "CreatePeriodoDeAdmisionPayload";
@@ -14946,7 +18524,7 @@ export interface CreatePeriodoDeAdmisionPayload {
 }
 
 /**
- * The payload for the createPostFormat mutation
+ * The payload for the createPostFormat mutation.
  */
 export interface CreatePostFormatPayload {
   __typename?: "CreatePostFormatPayload";
@@ -14961,7 +18539,7 @@ export interface CreatePostFormatPayload {
 }
 
 /**
- * The payload for the createPost mutation
+ * The payload for the createPost mutation.
  */
 export interface CreatePostPayload {
   __typename?: "CreatePostPayload";
@@ -14976,7 +18554,7 @@ export interface CreatePostPayload {
 }
 
 /**
- * The payload for the createRecurso mutation
+ * The payload for the createRecurso mutation.
  */
 export interface CreateRecursoPayload {
   __typename?: "CreateRecursoPayload";
@@ -14991,7 +18569,7 @@ export interface CreateRecursoPayload {
 }
 
 /**
- * The payload for the createSlide mutation
+ * The payload for the createSlide mutation.
  */
 export interface CreateSlidePayload {
   __typename?: "CreateSlidePayload";
@@ -15006,7 +18584,7 @@ export interface CreateSlidePayload {
 }
 
 /**
- * The payload for the createTag mutation
+ * The payload for the createTag mutation.
  */
 export interface CreateTagPayload {
   __typename?: "CreateTagPayload";
@@ -15021,7 +18599,7 @@ export interface CreateTagPayload {
 }
 
 /**
- * The payload for the createUser mutation
+ * The payload for the createUser mutation.
  */
 export interface CreateUserPayload {
   __typename?: "CreateUserPayload";
@@ -15043,6 +18621,7 @@ export interface DatabaseIdentifier {
     | "Carrera"
     | "Category"
     | "Comment"
+    | "CommentAuthor"
     | "Departamento"
     | "Facultad"
     | "Grado"
@@ -15080,7 +18659,7 @@ export interface DefaultTemplate {
 }
 
 /**
- * The payload for the deleteCarrera mutation
+ * The payload for the deleteCarrera mutation.
  */
 export interface DeleteCarreraPayload {
   __typename?: "DeleteCarreraPayload";
@@ -15099,7 +18678,7 @@ export interface DeleteCarreraPayload {
 }
 
 /**
- * The payload for the deleteCategory mutation
+ * The payload for the deleteCategory mutation.
  */
 export interface DeleteCategoryPayload {
   __typename?: "DeleteCategoryPayload";
@@ -15118,7 +18697,7 @@ export interface DeleteCategoryPayload {
 }
 
 /**
- * The payload for the deleteComment mutation
+ * The payload for the deleteComment mutation.
  */
 export interface DeleteCommentPayload {
   __typename?: "DeleteCommentPayload";
@@ -15137,7 +18716,7 @@ export interface DeleteCommentPayload {
 }
 
 /**
- * The payload for the deleteDepartamento mutation
+ * The payload for the deleteDepartamento mutation.
  */
 export interface DeleteDepartamentoPayload {
   __typename?: "DeleteDepartamentoPayload";
@@ -15156,7 +18735,7 @@ export interface DeleteDepartamentoPayload {
 }
 
 /**
- * The payload for the deleteFacultad mutation
+ * The payload for the deleteFacultad mutation.
  */
 export interface DeleteFacultadPayload {
   __typename?: "DeleteFacultadPayload";
@@ -15175,7 +18754,7 @@ export interface DeleteFacultadPayload {
 }
 
 /**
- * The payload for the deleteGrado mutation
+ * The payload for the deleteGrado mutation.
  */
 export interface DeleteGradoPayload {
   __typename?: "DeleteGradoPayload";
@@ -15194,7 +18773,7 @@ export interface DeleteGradoPayload {
 }
 
 /**
- * The payload for the deleteGrupoDeRequisitos mutation
+ * The payload for the deleteGrupoDeRequisitos mutation.
  */
 export interface DeleteGrupoDeRequisitosPayload {
   __typename?: "DeleteGrupoDeRequisitosPayload";
@@ -15213,7 +18792,7 @@ export interface DeleteGrupoDeRequisitosPayload {
 }
 
 /**
- * The payload for the deleteInvestigacion mutation
+ * The payload for the deleteInvestigacion mutation.
  */
 export interface DeleteInvestigacionPayload {
   __typename?: "DeleteInvestigacionPayload";
@@ -15232,7 +18811,7 @@ export interface DeleteInvestigacionPayload {
 }
 
 /**
- * The payload for the deleteInvestigador mutation
+ * The payload for the deleteInvestigador mutation.
  */
 export interface DeleteInvestigadorPayload {
   __typename?: "DeleteInvestigadorPayload";
@@ -15251,7 +18830,7 @@ export interface DeleteInvestigadorPayload {
 }
 
 /**
- * The payload for the deleteLineaDeInvestigacion mutation
+ * The payload for the deleteLineaDeInvestigacion mutation.
  */
 export interface DeleteLineaDeInvestigacionPayload {
   __typename?: "DeleteLineaDeInvestigacionPayload";
@@ -15270,7 +18849,7 @@ export interface DeleteLineaDeInvestigacionPayload {
 }
 
 /**
- * The payload for the deleteMediaItem mutation
+ * The payload for the deleteMediaItem mutation.
  */
 export interface DeleteMediaItemPayload {
   __typename?: "DeleteMediaItemPayload";
@@ -15289,7 +18868,7 @@ export interface DeleteMediaItemPayload {
 }
 
 /**
- * The payload for the deletePage mutation
+ * The payload for the deletePage mutation.
  */
 export interface DeletePagePayload {
   __typename?: "DeletePagePayload";
@@ -15308,7 +18887,7 @@ export interface DeletePagePayload {
 }
 
 /**
- * The payload for the deletePeriodoDeAdmision mutation
+ * The payload for the deletePeriodoDeAdmision mutation.
  */
 export interface DeletePeriodoDeAdmisionPayload {
   __typename?: "DeletePeriodoDeAdmisionPayload";
@@ -15327,7 +18906,7 @@ export interface DeletePeriodoDeAdmisionPayload {
 }
 
 /**
- * The payload for the deletePostFormat mutation
+ * The payload for the deletePostFormat mutation.
  */
 export interface DeletePostFormatPayload {
   __typename?: "DeletePostFormatPayload";
@@ -15346,7 +18925,7 @@ export interface DeletePostFormatPayload {
 }
 
 /**
- * The payload for the deletePost mutation
+ * The payload for the deletePost mutation.
  */
 export interface DeletePostPayload {
   __typename?: "DeletePostPayload";
@@ -15365,7 +18944,7 @@ export interface DeletePostPayload {
 }
 
 /**
- * The payload for the deleteRecurso mutation
+ * The payload for the deleteRecurso mutation.
  */
 export interface DeleteRecursoPayload {
   __typename?: "DeleteRecursoPayload";
@@ -15384,7 +18963,7 @@ export interface DeleteRecursoPayload {
 }
 
 /**
- * The payload for the deleteSlide mutation
+ * The payload for the deleteSlide mutation.
  */
 export interface DeleteSlidePayload {
   __typename?: "DeleteSlidePayload";
@@ -15403,7 +18982,7 @@ export interface DeleteSlidePayload {
 }
 
 /**
- * The payload for the deleteTag mutation
+ * The payload for the deleteTag mutation.
  */
 export interface DeleteTagPayload {
   __typename?: "DeleteTagPayload";
@@ -15422,7 +19001,7 @@ export interface DeleteTagPayload {
 }
 
 /**
- * The payload for the deleteUser mutation
+ * The payload for the deleteUser mutation.
  */
 export interface DeleteUserPayload {
   __typename?: "DeleteUserPayload";
@@ -15646,7 +19225,7 @@ export interface Departamento {
   modifiedGmt?: Maybe<ScalarsEnums["String"]>;
   nombre?: Maybe<ScalarsEnums["String"]>;
   /**
-   * Connection between the departamento type and the departamento type
+   * Connection between the Departamento type and the departamento type
    */
   preview?: Maybe<DepartamentoToPreviewConnectionEdge>;
   /**
@@ -15658,7 +19237,7 @@ export interface Departamento {
    */
   previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
   /**
-   * The Yoast SEO data of the departamento
+   * The Yoast SEO data of the ContentNode
    */
   seo?: Maybe<PostTypeSEO>;
   /**
@@ -15674,7 +19253,7 @@ export interface Departamento {
    */
   styles?: Maybe<ScalarsEnums["String"]>;
   /**
-   * The template assigned to a node of content
+   * The template assigned to the node
    */
   template?: Maybe<ContentTemplate>;
   templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
@@ -15694,6 +19273,82 @@ export interface Departamento {
 }
 
 /**
+ * Connection to departamento Nodes
+ */
+export interface DepartamentoConnection {
+  __typename?:
+    | "FacultadToDepartamentoConnection"
+    | "RootQueryToDepartamentoConnection"
+    | "UserToDepartamentoConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected departamento Nodes
+   */
+  edges: Array<DepartamentoConnectionEdge>;
+  /**
+   * A list of connected departamento Nodes
+   */
+  nodes: Array<Departamento>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: DepartamentoConnectionPageInfo;
+  $on: $DepartamentoConnection;
+}
+
+/**
+ * Edge between a Node and a connected departamento
+ */
+export interface DepartamentoConnectionEdge {
+  __typename?:
+    | "CarreraToDepartamentoConnectionEdge"
+    | "DepartamentoToPreviewConnectionEdge"
+    | "FacultadToDepartamentoConnectionEdge"
+    | "LineaDeInvestigacionToDepartamentoConnectionEdge"
+    | "RootQueryToDepartamentoConnectionEdge"
+    | "UserToDepartamentoConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected departamento Node
+   */
+  node: Departamento;
+  $on: $DepartamentoConnectionEdge;
+}
+
+/**
+ * Page Info on the connected DepartamentoConnectionEdge
+ */
+export interface DepartamentoConnectionPageInfo {
+  __typename?:
+    | "FacultadToDepartamentoConnectionPageInfo"
+    | "RootQueryToDepartamentoConnectionPageInfo"
+    | "UserToDepartamentoConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $DepartamentoConnectionPageInfo;
+}
+
+/**
  * Connection between the departamento type and the carrera type
  */
 export interface DepartamentoToCarreraConnection {
@@ -15701,15 +19356,15 @@ export interface DepartamentoToCarreraConnection {
   /**
    * Edges for the DepartamentoToCarreraConnection connection
    */
-  edges?: Maybe<Array<Maybe<DepartamentoToCarreraConnectionEdge>>>;
+  edges: Array<DepartamentoToCarreraConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Carrera>>>;
+  nodes: Array<Carrera>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: DepartamentoToCarreraConnectionPageInfo;
 }
 
 /**
@@ -15724,7 +19379,34 @@ export interface DepartamentoToCarreraConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Carrera>;
+  node: Carrera;
+}
+
+/**
+ * Page Info on the &quot;DepartamentoToCarreraConnection&quot;
+ */
+export interface DepartamentoToCarreraConnectionPageInfo {
+  __typename?: "DepartamentoToCarreraConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -15733,9 +19415,13 @@ export interface DepartamentoToCarreraConnectionEdge {
 export interface DepartamentoToFacultadConnectionEdge {
   __typename?: "DepartamentoToFacultadConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Facultad>;
+  node: Facultad;
 }
 
 /**
@@ -15746,15 +19432,15 @@ export interface DepartamentoToLineaDeInvestigacionConnection {
   /**
    * Edges for the DepartamentoToLineaDeInvestigacionConnection connection
    */
-  edges?: Maybe<Array<Maybe<DepartamentoToLineaDeInvestigacionConnectionEdge>>>;
+  edges: Array<DepartamentoToLineaDeInvestigacionConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<LineaDeInvestigacion>>>;
+  nodes: Array<LineaDeInvestigacion>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: DepartamentoToLineaDeInvestigacionConnectionPageInfo;
 }
 
 /**
@@ -15769,18 +19455,49 @@ export interface DepartamentoToLineaDeInvestigacionConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<LineaDeInvestigacion>;
+  node: LineaDeInvestigacion;
 }
 
 /**
- * Connection between the departamento type and the departamento type
+ * Page Info on the &quot;DepartamentoToLineaDeInvestigacionConnection&quot;
+ */
+export interface DepartamentoToLineaDeInvestigacionConnectionPageInfo {
+  __typename?: "DepartamentoToLineaDeInvestigacionConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the Departamento type and the departamento type
  */
 export interface DepartamentoToPreviewConnectionEdge {
   __typename?: "DepartamentoToPreviewConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Departamento>;
+  node: Departamento;
 }
 
 /**
@@ -15788,22 +19505,35 @@ export interface DepartamentoToPreviewConnectionEdge {
  */
 export interface Departamento_Contacto {
   __typename?: "Departamento_Contacto";
-  direcciones?: Maybe<Array<Maybe<Departamento_Contacto_direcciones>>>;
-  emails?: Maybe<Array<Maybe<Departamento_Contacto_emails>>>;
   /**
    * The name of the ACF Field Group
    */
   fieldGroupName?: Maybe<ScalarsEnums["String"]>;
-  horarios?: Maybe<Array<Maybe<Departamento_Contacto_horarios>>>;
-  telefonos?: Maybe<Array<Maybe<Departamento_Contacto_telefonos>>>;
-  whatsapp?: Maybe<Array<Maybe<Departamento_Contacto_whatsapp>>>;
+  unidad?: Maybe<Array<Maybe<Departamento_Contacto_unidad>>>;
 }
 
 /**
  * Field Group
  */
-export interface Departamento_Contacto_direcciones {
-  __typename?: "Departamento_Contacto_direcciones";
+export interface Departamento_Contacto_unidad {
+  __typename?: "Departamento_Contacto_unidad";
+  direcciones?: Maybe<Array<Maybe<Departamento_Contacto_unidad_direcciones>>>;
+  emails?: Maybe<Array<Maybe<Departamento_Contacto_unidad_emails>>>;
+  /**
+   * The name of the ACF Field Group
+   */
+  fieldGroupName?: Maybe<ScalarsEnums["String"]>;
+  horarios?: Maybe<Array<Maybe<Departamento_Contacto_unidad_horarios>>>;
+  nombre?: Maybe<ScalarsEnums["String"]>;
+  telefonos?: Maybe<Array<Maybe<Departamento_Contacto_unidad_telefonos>>>;
+  whatsapp?: Maybe<Array<Maybe<Departamento_Contacto_unidad_whatsapp>>>;
+}
+
+/**
+ * Field Group
+ */
+export interface Departamento_Contacto_unidad_direcciones {
+  __typename?: "Departamento_Contacto_unidad_direcciones";
   direccion?: Maybe<ScalarsEnums["String"]>;
   /**
    * The name of the ACF Field Group
@@ -15814,8 +19544,8 @@ export interface Departamento_Contacto_direcciones {
 /**
  * Field Group
  */
-export interface Departamento_Contacto_emails {
-  __typename?: "Departamento_Contacto_emails";
+export interface Departamento_Contacto_unidad_emails {
+  __typename?: "Departamento_Contacto_unidad_emails";
   email?: Maybe<ScalarsEnums["String"]>;
   /**
    * The name of the ACF Field Group
@@ -15826,8 +19556,8 @@ export interface Departamento_Contacto_emails {
 /**
  * Field Group
  */
-export interface Departamento_Contacto_horarios {
-  __typename?: "Departamento_Contacto_horarios";
+export interface Departamento_Contacto_unidad_horarios {
+  __typename?: "Departamento_Contacto_unidad_horarios";
   dias?: Maybe<ScalarsEnums["String"]>;
   /**
    * The name of the ACF Field Group
@@ -15839,10 +19569,10 @@ export interface Departamento_Contacto_horarios {
 /**
  * Field Group
  */
-export interface Departamento_Contacto_telefonos {
-  __typename?: "Departamento_Contacto_telefonos";
+export interface Departamento_Contacto_unidad_telefonos {
+  __typename?: "Departamento_Contacto_unidad_telefonos";
   extensiones?: Maybe<
-    Array<Maybe<Departamento_Contacto_telefonos_extensiones>>
+    Array<Maybe<Departamento_Contacto_unidad_telefonos_extensiones>>
   >;
   /**
    * The name of the ACF Field Group
@@ -15854,8 +19584,8 @@ export interface Departamento_Contacto_telefonos {
 /**
  * Field Group
  */
-export interface Departamento_Contacto_telefonos_extensiones {
-  __typename?: "Departamento_Contacto_telefonos_extensiones";
+export interface Departamento_Contacto_unidad_telefonos_extensiones {
+  __typename?: "Departamento_Contacto_unidad_telefonos_extensiones";
   extension?: Maybe<ScalarsEnums["String"]>;
   /**
    * The name of the ACF Field Group
@@ -15866,8 +19596,8 @@ export interface Departamento_Contacto_telefonos_extensiones {
 /**
  * Field Group
  */
-export interface Departamento_Contacto_whatsapp {
-  __typename?: "Departamento_Contacto_whatsapp";
+export interface Departamento_Contacto_unidad_whatsapp {
+  __typename?: "Departamento_Contacto_unidad_whatsapp";
   /**
    * The name of the ACF Field Group
    */
@@ -15888,6 +19618,149 @@ export interface DiscussionSettings {
    * Allow link notifications from other blogs (pingbacks and trackbacks) on new articles.
    */
   defaultPingStatus?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Relational context between connected nodes
+ */
+export interface Edge {
+  __typename?:
+    | "CarreraToDepartamentoConnectionEdge"
+    | "CarreraToFacultadConnectionEdge"
+    | "CarreraToGradoConnectionEdge"
+    | "CarreraToPreviewConnectionEdge"
+    | "CarreraToRecursoConnectionEdge"
+    | "CategoryToAncestorsCategoryConnectionEdge"
+    | "CategoryToCategoryConnectionEdge"
+    | "CategoryToContentNodeConnectionEdge"
+    | "CategoryToParentCategoryConnectionEdge"
+    | "CategoryToPostConnectionEdge"
+    | "CategoryToTaxonomyConnectionEdge"
+    | "CommentToCommentConnectionEdge"
+    | "CommentToCommenterConnectionEdge"
+    | "CommentToContentNodeConnectionEdge"
+    | "CommentToParentCommentConnectionEdge"
+    | "ContentNodeToContentTypeConnectionEdge"
+    | "ContentNodeToEditLastConnectionEdge"
+    | "ContentNodeToEditLockConnectionEdge"
+    | "ContentNodeToEnqueuedScriptConnectionEdge"
+    | "ContentNodeToEnqueuedStylesheetConnectionEdge"
+    | "ContentTypeToContentNodeConnectionEdge"
+    | "ContentTypeToTaxonomyConnectionEdge"
+    | "DepartamentoToCarreraConnectionEdge"
+    | "DepartamentoToFacultadConnectionEdge"
+    | "DepartamentoToLineaDeInvestigacionConnectionEdge"
+    | "DepartamentoToPreviewConnectionEdge"
+    | "FacultadToCarreraConnectionEdge"
+    | "FacultadToDepartamentoConnectionEdge"
+    | "FacultadToPreviewConnectionEdge"
+    | "GradoToCarreraConnectionEdge"
+    | "GradoToGrupoDeRequisitosConnectionEdge"
+    | "GradoToPreviewConnectionEdge"
+    | "GradoToTermNodeConnectionEdge"
+    | "GrupoDeRequisitosToContentNodeConnectionEdge"
+    | "GrupoDeRequisitosToGradoConnectionEdge"
+    | "GrupoDeRequisitosToTaxonomyConnectionEdge"
+    | "HierarchicalContentNodeToContentNodeAncestorsConnectionEdge"
+    | "HierarchicalContentNodeToContentNodeChildrenConnectionEdge"
+    | "HierarchicalContentNodeToParentContentNodeConnectionEdge"
+    | "InvestigacionToInvestigadorConnectionEdge"
+    | "InvestigacionToLineaDeInvestigacionConnectionEdge"
+    | "InvestigacionToPreviewConnectionEdge"
+    | "InvestigadorToInvestigacionConnectionEdge"
+    | "InvestigadorToPreviewConnectionEdge"
+    | "LineaDeInvestigacionToDepartamentoConnectionEdge"
+    | "LineaDeInvestigacionToInvestigacionConnectionEdge"
+    | "LineaDeInvestigacionToPreviewConnectionEdge"
+    | "MediaItemToCommentConnectionEdge"
+    | "MenuItemToMenuConnectionEdge"
+    | "MenuItemToMenuItemConnectionEdge"
+    | "MenuItemToMenuItemLinkableConnectionEdge"
+    | "MenuToMenuItemConnectionEdge"
+    | "NodeWithAuthorToUserConnectionEdge"
+    | "NodeWithFeaturedImageToMediaItemConnectionEdge"
+    | "NodeWithRevisionsToContentNodeConnectionEdge"
+    | "PageToCommentConnectionEdge"
+    | "PageToPreviewConnectionEdge"
+    | "PageToRevisionConnectionEdge"
+    | "PeriodoDeAdmisionToPreviewConnectionEdge"
+    | "PostFormatToContentNodeConnectionEdge"
+    | "PostFormatToPostConnectionEdge"
+    | "PostFormatToTaxonomyConnectionEdge"
+    | "PostToCategoryConnectionEdge"
+    | "PostToCommentConnectionEdge"
+    | "PostToPostFormatConnectionEdge"
+    | "PostToPreviewConnectionEdge"
+    | "PostToRevisionConnectionEdge"
+    | "PostToTagConnectionEdge"
+    | "PostToTermNodeConnectionEdge"
+    | "RecursoToCarreraConnectionEdge"
+    | "RecursoToPreviewConnectionEdge"
+    | "RootQueryToCarreraConnectionEdge"
+    | "RootQueryToCategoryConnectionEdge"
+    | "RootQueryToCommentConnectionEdge"
+    | "RootQueryToContentNodeConnectionEdge"
+    | "RootQueryToContentTypeConnectionEdge"
+    | "RootQueryToDepartamentoConnectionEdge"
+    | "RootQueryToEnqueuedScriptConnectionEdge"
+    | "RootQueryToEnqueuedStylesheetConnectionEdge"
+    | "RootQueryToFacultadConnectionEdge"
+    | "RootQueryToGradoConnectionEdge"
+    | "RootQueryToGrupoDeRequisitosConnectionEdge"
+    | "RootQueryToInvestigacionConnectionEdge"
+    | "RootQueryToInvestigadorConnectionEdge"
+    | "RootQueryToLineaDeInvestigacionConnectionEdge"
+    | "RootQueryToMediaItemConnectionEdge"
+    | "RootQueryToMenuConnectionEdge"
+    | "RootQueryToMenuItemConnectionEdge"
+    | "RootQueryToPageConnectionEdge"
+    | "RootQueryToPeriodoDeAdmisionConnectionEdge"
+    | "RootQueryToPluginConnectionEdge"
+    | "RootQueryToPostConnectionEdge"
+    | "RootQueryToPostFormatConnectionEdge"
+    | "RootQueryToRecursoConnectionEdge"
+    | "RootQueryToRevisionsConnectionEdge"
+    | "RootQueryToSlideConnectionEdge"
+    | "RootQueryToTagConnectionEdge"
+    | "RootQueryToTaxonomyConnectionEdge"
+    | "RootQueryToTermNodeConnectionEdge"
+    | "RootQueryToThemeConnectionEdge"
+    | "RootQueryToUserConnectionEdge"
+    | "RootQueryToUserRoleConnectionEdge"
+    | "SlideToPreviewConnectionEdge"
+    | "TagToContentNodeConnectionEdge"
+    | "TagToPostConnectionEdge"
+    | "TagToTaxonomyConnectionEdge"
+    | "TaxonomyToContentTypeConnectionEdge"
+    | "TermNodeToEnqueuedScriptConnectionEdge"
+    | "TermNodeToEnqueuedStylesheetConnectionEdge"
+    | "UserToCarreraConnectionEdge"
+    | "UserToCommentConnectionEdge"
+    | "UserToDepartamentoConnectionEdge"
+    | "UserToEnqueuedScriptConnectionEdge"
+    | "UserToEnqueuedStylesheetConnectionEdge"
+    | "UserToFacultadConnectionEdge"
+    | "UserToGradoConnectionEdge"
+    | "UserToInvestigacionConnectionEdge"
+    | "UserToInvestigadorConnectionEdge"
+    | "UserToLineaDeInvestigacionConnectionEdge"
+    | "UserToMediaItemConnectionEdge"
+    | "UserToPageConnectionEdge"
+    | "UserToPeriodoDeAdmisionConnectionEdge"
+    | "UserToPostConnectionEdge"
+    | "UserToRecursoConnectionEdge"
+    | "UserToRevisionsConnectionEdge"
+    | "UserToSlideConnectionEdge"
+    | "UserToUserRoleConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected node
+   */
+  node: Node;
+  $on: $Edge;
 }
 
 /**
@@ -15962,6 +19835,82 @@ export interface EnqueuedScript {
 }
 
 /**
+ * Connection to EnqueuedScript Nodes
+ */
+export interface EnqueuedScriptConnection {
+  __typename?:
+    | "ContentNodeToEnqueuedScriptConnection"
+    | "RootQueryToEnqueuedScriptConnection"
+    | "TermNodeToEnqueuedScriptConnection"
+    | "UserToEnqueuedScriptConnection";
+  /**
+   * A list of edges (relational context) between ContentNode and connected EnqueuedScript Nodes
+   */
+  edges: Array<EnqueuedScriptConnectionEdge>;
+  /**
+   * A list of connected EnqueuedScript Nodes
+   */
+  nodes: Array<EnqueuedScript>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: EnqueuedScriptConnectionPageInfo;
+  $on: $EnqueuedScriptConnection;
+}
+
+/**
+ * Edge between a Node and a connected EnqueuedScript
+ */
+export interface EnqueuedScriptConnectionEdge {
+  __typename?:
+    | "ContentNodeToEnqueuedScriptConnectionEdge"
+    | "RootQueryToEnqueuedScriptConnectionEdge"
+    | "TermNodeToEnqueuedScriptConnectionEdge"
+    | "UserToEnqueuedScriptConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected EnqueuedScript Node
+   */
+  node: EnqueuedScript;
+  $on: $EnqueuedScriptConnectionEdge;
+}
+
+/**
+ * Page Info on the connected EnqueuedScriptConnectionEdge
+ */
+export interface EnqueuedScriptConnectionPageInfo {
+  __typename?:
+    | "ContentNodeToEnqueuedScriptConnectionPageInfo"
+    | "RootQueryToEnqueuedScriptConnectionPageInfo"
+    | "TermNodeToEnqueuedScriptConnectionPageInfo"
+    | "UserToEnqueuedScriptConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $EnqueuedScriptConnectionPageInfo;
+}
+
+/**
  * Stylesheet enqueued by the CMS
  */
 export interface EnqueuedStylesheet {
@@ -15994,6 +19943,82 @@ export interface EnqueuedStylesheet {
    * The version of the enqueued asset
    */
   version?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection to EnqueuedStylesheet Nodes
+ */
+export interface EnqueuedStylesheetConnection {
+  __typename?:
+    | "ContentNodeToEnqueuedStylesheetConnection"
+    | "RootQueryToEnqueuedStylesheetConnection"
+    | "TermNodeToEnqueuedStylesheetConnection"
+    | "UserToEnqueuedStylesheetConnection";
+  /**
+   * A list of edges (relational context) between ContentNode and connected EnqueuedStylesheet Nodes
+   */
+  edges: Array<EnqueuedStylesheetConnectionEdge>;
+  /**
+   * A list of connected EnqueuedStylesheet Nodes
+   */
+  nodes: Array<EnqueuedStylesheet>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: EnqueuedStylesheetConnectionPageInfo;
+  $on: $EnqueuedStylesheetConnection;
+}
+
+/**
+ * Edge between a Node and a connected EnqueuedStylesheet
+ */
+export interface EnqueuedStylesheetConnectionEdge {
+  __typename?:
+    | "ContentNodeToEnqueuedStylesheetConnectionEdge"
+    | "RootQueryToEnqueuedStylesheetConnectionEdge"
+    | "TermNodeToEnqueuedStylesheetConnectionEdge"
+    | "UserToEnqueuedStylesheetConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected EnqueuedStylesheet Node
+   */
+  node: EnqueuedStylesheet;
+  $on: $EnqueuedStylesheetConnectionEdge;
+}
+
+/**
+ * Page Info on the connected EnqueuedStylesheetConnectionEdge
+ */
+export interface EnqueuedStylesheetConnectionPageInfo {
+  __typename?:
+    | "ContentNodeToEnqueuedStylesheetConnectionPageInfo"
+    | "RootQueryToEnqueuedStylesheetConnectionPageInfo"
+    | "TermNodeToEnqueuedStylesheetConnectionPageInfo"
+    | "UserToEnqueuedStylesheetConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $EnqueuedStylesheetConnectionPageInfo;
 }
 
 /**
@@ -16203,7 +20228,7 @@ export interface Facultad {
   nombre?: Maybe<ScalarsEnums["String"]>;
   nombreDecano?: Maybe<ScalarsEnums["String"]>;
   /**
-   * Connection between the facultad type and the facultad type
+   * Connection between the Facultad type and the facultad type
    */
   preview?: Maybe<FacultadToPreviewConnectionEdge>;
   /**
@@ -16216,7 +20241,7 @@ export interface Facultad {
   previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
   puestoDecano?: Maybe<ScalarsEnums["String"]>;
   /**
-   * The Yoast SEO data of the facultad
+   * The Yoast SEO data of the ContentNode
    */
   seo?: Maybe<PostTypeSEO>;
   /**
@@ -16232,7 +20257,7 @@ export interface Facultad {
    */
   styles?: Maybe<ScalarsEnums["String"]>;
   /**
-   * The template assigned to a node of content
+   * The template assigned to the node
    */
   template?: Maybe<ContentTemplate>;
   templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
@@ -16252,6 +20277,77 @@ export interface Facultad {
 }
 
 /**
+ * Connection to facultad Nodes
+ */
+export interface FacultadConnection {
+  __typename?: "RootQueryToFacultadConnection" | "UserToFacultadConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected facultad Nodes
+   */
+  edges: Array<FacultadConnectionEdge>;
+  /**
+   * A list of connected facultad Nodes
+   */
+  nodes: Array<Facultad>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: FacultadConnectionPageInfo;
+  $on: $FacultadConnection;
+}
+
+/**
+ * Edge between a Node and a connected facultad
+ */
+export interface FacultadConnectionEdge {
+  __typename?:
+    | "CarreraToFacultadConnectionEdge"
+    | "DepartamentoToFacultadConnectionEdge"
+    | "FacultadToPreviewConnectionEdge"
+    | "RootQueryToFacultadConnectionEdge"
+    | "UserToFacultadConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected facultad Node
+   */
+  node: Facultad;
+  $on: $FacultadConnectionEdge;
+}
+
+/**
+ * Page Info on the connected FacultadConnectionEdge
+ */
+export interface FacultadConnectionPageInfo {
+  __typename?:
+    | "RootQueryToFacultadConnectionPageInfo"
+    | "UserToFacultadConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $FacultadConnectionPageInfo;
+}
+
+/**
  * Connection between the facultad type and the carrera type
  */
 export interface FacultadToCarreraConnection {
@@ -16259,15 +20355,15 @@ export interface FacultadToCarreraConnection {
   /**
    * Edges for the FacultadToCarreraConnection connection
    */
-  edges?: Maybe<Array<Maybe<FacultadToCarreraConnectionEdge>>>;
+  edges: Array<FacultadToCarreraConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Carrera>>>;
+  nodes: Array<Carrera>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: FacultadToCarreraConnectionPageInfo;
 }
 
 /**
@@ -16282,7 +20378,34 @@ export interface FacultadToCarreraConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Carrera>;
+  node: Carrera;
+}
+
+/**
+ * Page Info on the &quot;FacultadToCarreraConnection&quot;
+ */
+export interface FacultadToCarreraConnectionPageInfo {
+  __typename?: "FacultadToCarreraConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -16293,15 +20416,15 @@ export interface FacultadToDepartamentoConnection {
   /**
    * Edges for the FacultadToDepartamentoConnection connection
    */
-  edges?: Maybe<Array<Maybe<FacultadToDepartamentoConnectionEdge>>>;
+  edges: Array<FacultadToDepartamentoConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Departamento>>>;
+  nodes: Array<Departamento>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: FacultadToDepartamentoConnectionPageInfo;
 }
 
 /**
@@ -16316,18 +20439,49 @@ export interface FacultadToDepartamentoConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Departamento>;
+  node: Departamento;
 }
 
 /**
- * Connection between the facultad type and the facultad type
+ * Page Info on the &quot;FacultadToDepartamentoConnection&quot;
+ */
+export interface FacultadToDepartamentoConnectionPageInfo {
+  __typename?: "FacultadToDepartamentoConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the Facultad type and the facultad type
  */
 export interface FacultadToPreviewConnectionEdge {
   __typename?: "FacultadToPreviewConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Facultad>;
+  node: Facultad;
 }
 
 /**
@@ -16335,22 +20489,35 @@ export interface FacultadToPreviewConnectionEdge {
  */
 export interface Facultad_Contacto {
   __typename?: "Facultad_Contacto";
-  direcciones?: Maybe<Array<Maybe<Facultad_Contacto_direcciones>>>;
-  emails?: Maybe<Array<Maybe<Facultad_Contacto_emails>>>;
   /**
    * The name of the ACF Field Group
    */
   fieldGroupName?: Maybe<ScalarsEnums["String"]>;
-  horarios?: Maybe<Array<Maybe<Facultad_Contacto_horarios>>>;
-  telefonos?: Maybe<Array<Maybe<Facultad_Contacto_telefonos>>>;
-  whatsapp?: Maybe<Array<Maybe<Facultad_Contacto_whatsapp>>>;
+  unidad?: Maybe<Array<Maybe<Facultad_Contacto_unidad>>>;
 }
 
 /**
  * Field Group
  */
-export interface Facultad_Contacto_direcciones {
-  __typename?: "Facultad_Contacto_direcciones";
+export interface Facultad_Contacto_unidad {
+  __typename?: "Facultad_Contacto_unidad";
+  direcciones?: Maybe<Array<Maybe<Facultad_Contacto_unidad_direcciones>>>;
+  emails?: Maybe<Array<Maybe<Facultad_Contacto_unidad_emails>>>;
+  /**
+   * The name of the ACF Field Group
+   */
+  fieldGroupName?: Maybe<ScalarsEnums["String"]>;
+  horarios?: Maybe<Array<Maybe<Facultad_Contacto_unidad_horarios>>>;
+  nombre?: Maybe<ScalarsEnums["String"]>;
+  telefonos?: Maybe<Array<Maybe<Facultad_Contacto_unidad_telefonos>>>;
+  whatsapp?: Maybe<Array<Maybe<Facultad_Contacto_unidad_whatsapp>>>;
+}
+
+/**
+ * Field Group
+ */
+export interface Facultad_Contacto_unidad_direcciones {
+  __typename?: "Facultad_Contacto_unidad_direcciones";
   direccion?: Maybe<ScalarsEnums["String"]>;
   /**
    * The name of the ACF Field Group
@@ -16361,8 +20528,8 @@ export interface Facultad_Contacto_direcciones {
 /**
  * Field Group
  */
-export interface Facultad_Contacto_emails {
-  __typename?: "Facultad_Contacto_emails";
+export interface Facultad_Contacto_unidad_emails {
+  __typename?: "Facultad_Contacto_unidad_emails";
   email?: Maybe<ScalarsEnums["String"]>;
   /**
    * The name of the ACF Field Group
@@ -16373,8 +20540,8 @@ export interface Facultad_Contacto_emails {
 /**
  * Field Group
  */
-export interface Facultad_Contacto_horarios {
-  __typename?: "Facultad_Contacto_horarios";
+export interface Facultad_Contacto_unidad_horarios {
+  __typename?: "Facultad_Contacto_unidad_horarios";
   dias?: Maybe<ScalarsEnums["String"]>;
   /**
    * The name of the ACF Field Group
@@ -16386,9 +20553,11 @@ export interface Facultad_Contacto_horarios {
 /**
  * Field Group
  */
-export interface Facultad_Contacto_telefonos {
-  __typename?: "Facultad_Contacto_telefonos";
-  extensiones?: Maybe<Array<Maybe<Facultad_Contacto_telefonos_extensiones>>>;
+export interface Facultad_Contacto_unidad_telefonos {
+  __typename?: "Facultad_Contacto_unidad_telefonos";
+  extensiones?: Maybe<
+    Array<Maybe<Facultad_Contacto_unidad_telefonos_extensiones>>
+  >;
   /**
    * The name of the ACF Field Group
    */
@@ -16399,8 +20568,8 @@ export interface Facultad_Contacto_telefonos {
 /**
  * Field Group
  */
-export interface Facultad_Contacto_telefonos_extensiones {
-  __typename?: "Facultad_Contacto_telefonos_extensiones";
+export interface Facultad_Contacto_unidad_telefonos_extensiones {
+  __typename?: "Facultad_Contacto_unidad_telefonos_extensiones";
   extension?: Maybe<ScalarsEnums["String"]>;
   /**
    * The name of the ACF Field Group
@@ -16411,8 +20580,8 @@ export interface Facultad_Contacto_telefonos_extensiones {
 /**
  * Field Group
  */
-export interface Facultad_Contacto_whatsapp {
-  __typename?: "Facultad_Contacto_whatsapp";
+export interface Facultad_Contacto_unidad_whatsapp {
+  __typename?: "Facultad_Contacto_unidad_whatsapp";
   /**
    * The name of the ACF Field Group
    */
@@ -16464,7 +20633,7 @@ export interface GeneralSettings {
 }
 
 /**
- * The payload for the generateAuthorizationCode mutation
+ * The payload for the generateAuthorizationCode mutation.
  */
 export interface GenerateAuthorizationCodePayload {
   __typename?: "GenerateAuthorizationCodePayload";
@@ -16612,7 +20781,7 @@ export interface Grado {
    */
   gradoId: ScalarsEnums["Int"];
   /**
-   * Connection between the grado type and the grupoDeRequisitos type
+   * Connection between the Grado type and the grupoDeRequisitos type
    */
   gruposDeRequisitos: (args?: {
     /**
@@ -16679,7 +20848,7 @@ export interface Grado {
   nombre?: Maybe<ScalarsEnums["String"]>;
   orden?: Maybe<ScalarsEnums["Float"]>;
   /**
-   * Connection between the grado type and the grado type
+   * Connection between the Grado type and the grado type
    */
   preview?: Maybe<GradoToPreviewConnectionEdge>;
   /**
@@ -16691,7 +20860,7 @@ export interface Grado {
    */
   previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
   /**
-   * The Yoast SEO data of the grado
+   * The Yoast SEO data of the ContentNode
    */
   seo?: Maybe<PostTypeSEO>;
   /**
@@ -16712,7 +20881,7 @@ export interface Grado {
   template?: Maybe<ContentTemplate>;
   templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
   /**
-   * Connection between the grado type and the TermNode type
+   * Connection between the Grado type and the TermNode type
    */
   terms: (args?: {
     /**
@@ -16752,6 +20921,81 @@ export interface Grado {
 }
 
 /**
+ * Connection to grado Nodes
+ */
+export interface GradoConnection {
+  __typename?:
+    | "GrupoDeRequisitosToGradoConnection"
+    | "RootQueryToGradoConnection"
+    | "UserToGradoConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected grado Nodes
+   */
+  edges: Array<GradoConnectionEdge>;
+  /**
+   * A list of connected grado Nodes
+   */
+  nodes: Array<Grado>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: GradoConnectionPageInfo;
+  $on: $GradoConnection;
+}
+
+/**
+ * Edge between a Node and a connected grado
+ */
+export interface GradoConnectionEdge {
+  __typename?:
+    | "CarreraToGradoConnectionEdge"
+    | "GradoToPreviewConnectionEdge"
+    | "GrupoDeRequisitosToGradoConnectionEdge"
+    | "RootQueryToGradoConnectionEdge"
+    | "UserToGradoConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected grado Node
+   */
+  node: Grado;
+  $on: $GradoConnectionEdge;
+}
+
+/**
+ * Page Info on the connected GradoConnectionEdge
+ */
+export interface GradoConnectionPageInfo {
+  __typename?:
+    | "GrupoDeRequisitosToGradoConnectionPageInfo"
+    | "RootQueryToGradoConnectionPageInfo"
+    | "UserToGradoConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $GradoConnectionPageInfo;
+}
+
+/**
  * Connection between the grado type and the carrera type
  */
 export interface GradoToCarreraConnection {
@@ -16759,15 +21003,15 @@ export interface GradoToCarreraConnection {
   /**
    * Edges for the GradoToCarreraConnection connection
    */
-  edges?: Maybe<Array<Maybe<GradoToCarreraConnectionEdge>>>;
+  edges: Array<GradoToCarreraConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Carrera>>>;
+  nodes: Array<Carrera>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: GradoToCarreraConnectionPageInfo;
 }
 
 /**
@@ -16782,26 +21026,53 @@ export interface GradoToCarreraConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Carrera>;
+  node: Carrera;
 }
 
 /**
- * Connection between the grado type and the grupoDeRequisitos type
+ * Page Info on the &quot;GradoToCarreraConnection&quot;
+ */
+export interface GradoToCarreraConnectionPageInfo {
+  __typename?: "GradoToCarreraConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the Grado type and the grupoDeRequisitos type
  */
 export interface GradoToGrupoDeRequisitosConnection {
   __typename?: "GradoToGrupoDeRequisitosConnection";
   /**
    * Edges for the GradoToGrupoDeRequisitosConnection connection
    */
-  edges?: Maybe<Array<Maybe<GradoToGrupoDeRequisitosConnectionEdge>>>;
+  edges: Array<GradoToGrupoDeRequisitosConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<GrupoDeRequisitos>>>;
+  nodes: Array<GrupoDeRequisitos>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: GradoToGrupoDeRequisitosConnectionPageInfo;
 }
 
 /**
@@ -16820,37 +21091,68 @@ export interface GradoToGrupoDeRequisitosConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<GrupoDeRequisitos>;
+  node: GrupoDeRequisitos;
 }
 
 /**
- * Connection between the grado type and the grado type
+ * Page Info on the &quot;GradoToGrupoDeRequisitosConnection&quot;
+ */
+export interface GradoToGrupoDeRequisitosConnectionPageInfo {
+  __typename?: "GradoToGrupoDeRequisitosConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the Grado type and the grado type
  */
 export interface GradoToPreviewConnectionEdge {
   __typename?: "GradoToPreviewConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Grado>;
+  node: Grado;
 }
 
 /**
- * Connection between the grado type and the TermNode type
+ * Connection between the Grado type and the TermNode type
  */
 export interface GradoToTermNodeConnection {
   __typename?: "GradoToTermNodeConnection";
   /**
    * Edges for the GradoToTermNodeConnection connection
    */
-  edges?: Maybe<Array<Maybe<GradoToTermNodeConnectionEdge>>>;
+  edges: Array<GradoToTermNodeConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<TermNode>>>;
+  nodes: Array<TermNode>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: GradoToTermNodeConnectionPageInfo;
 }
 
 /**
@@ -16865,7 +21167,34 @@ export interface GradoToTermNodeConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<TermNode>;
+  node: TermNode;
+}
+
+/**
+ * Page Info on the &quot;GradoToTermNodeConnection&quot;
+ */
+export interface GradoToTermNodeConnectionPageInfo {
+  __typename?: "GradoToTermNodeConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -16929,7 +21258,7 @@ export interface GrupoDeRequisitos {
    */
   conditionalTags?: Maybe<ConditionalTags>;
   /**
-   * Connection between the grupoDeRequisitos type and the ContentNode type
+   * Connection between the GrupoDeRequisitos type and the ContentNode type
    */
   contentNodes: (args?: {
     /**
@@ -16958,7 +21287,7 @@ export interface GrupoDeRequisitos {
    */
   count?: Maybe<ScalarsEnums["Int"]>;
   /**
-   * The unique resource identifier path
+   * The unique identifier stored in the database
    */
   databaseId: ScalarsEnums["Int"];
   /**
@@ -17008,7 +21337,7 @@ export interface GrupoDeRequisitos {
     last?: Maybe<Scalars["Int"]>;
   }) => Maybe<TermNodeToEnqueuedStylesheetConnection>;
   /**
-   * Connection between the grupoDeRequisitos type and the grado type
+   * Connection between the GrupoDeRequisitos type and the grado type
    */
   grados: (args?: {
     /**
@@ -17070,7 +21399,7 @@ export interface GrupoDeRequisitos {
    */
   slug?: Maybe<ScalarsEnums["String"]>;
   /**
-   * Connection between the grupoDeRequisitos type and the Taxonomy type
+   * Connection between the GrupoDeRequisitos type and the Taxonomy type
    */
   taxonomy?: Maybe<GrupoDeRequisitosToTaxonomyConnectionEdge>;
   /**
@@ -17093,22 +21422,92 @@ export interface GrupoDeRequisitos {
 }
 
 /**
- * Connection between the grupoDeRequisitos type and the ContentNode type
+ * Connection to grupoDeRequisitos Nodes
+ */
+export interface GrupoDeRequisitosConnection {
+  __typename?:
+    | "GradoToGrupoDeRequisitosConnection"
+    | "RootQueryToGrupoDeRequisitosConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected grupoDeRequisitos Nodes
+   */
+  edges: Array<GrupoDeRequisitosConnectionEdge>;
+  /**
+   * A list of connected grupoDeRequisitos Nodes
+   */
+  nodes: Array<GrupoDeRequisitos>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: GrupoDeRequisitosConnectionPageInfo;
+  $on: $GrupoDeRequisitosConnection;
+}
+
+/**
+ * Edge between a Node and a connected grupoDeRequisitos
+ */
+export interface GrupoDeRequisitosConnectionEdge {
+  __typename?:
+    | "GradoToGrupoDeRequisitosConnectionEdge"
+    | "RootQueryToGrupoDeRequisitosConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected grupoDeRequisitos Node
+   */
+  node: GrupoDeRequisitos;
+  $on: $GrupoDeRequisitosConnectionEdge;
+}
+
+/**
+ * Page Info on the connected GrupoDeRequisitosConnectionEdge
+ */
+export interface GrupoDeRequisitosConnectionPageInfo {
+  __typename?:
+    | "GradoToGrupoDeRequisitosConnectionPageInfo"
+    | "RootQueryToGrupoDeRequisitosConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $GrupoDeRequisitosConnectionPageInfo;
+}
+
+/**
+ * Connection between the GrupoDeRequisitos type and the ContentNode type
  */
 export interface GrupoDeRequisitosToContentNodeConnection {
   __typename?: "GrupoDeRequisitosToContentNodeConnection";
   /**
    * Edges for the GrupoDeRequisitosToContentNodeConnection connection
    */
-  edges?: Maybe<Array<Maybe<GrupoDeRequisitosToContentNodeConnectionEdge>>>;
+  edges: Array<GrupoDeRequisitosToContentNodeConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<ContentNode>>>;
+  nodes: Array<ContentNode>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: GrupoDeRequisitosToContentNodeConnectionPageInfo;
 }
 
 /**
@@ -17123,26 +21522,53 @@ export interface GrupoDeRequisitosToContentNodeConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<ContentNode>;
+  node: ContentNode;
 }
 
 /**
- * Connection between the grupoDeRequisitos type and the grado type
+ * Page Info on the &quot;GrupoDeRequisitosToContentNodeConnection&quot;
+ */
+export interface GrupoDeRequisitosToContentNodeConnectionPageInfo {
+  __typename?: "GrupoDeRequisitosToContentNodeConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the GrupoDeRequisitos type and the grado type
  */
 export interface GrupoDeRequisitosToGradoConnection {
   __typename?: "GrupoDeRequisitosToGradoConnection";
   /**
    * Edges for the GrupoDeRequisitosToGradoConnection connection
    */
-  edges?: Maybe<Array<Maybe<GrupoDeRequisitosToGradoConnectionEdge>>>;
+  edges: Array<GrupoDeRequisitosToGradoConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Grado>>>;
+  nodes: Array<Grado>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: GrupoDeRequisitosToGradoConnectionPageInfo;
 }
 
 /**
@@ -17157,18 +21583,49 @@ export interface GrupoDeRequisitosToGradoConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Grado>;
+  node: Grado;
 }
 
 /**
- * Connection between the grupoDeRequisitos type and the Taxonomy type
+ * Page Info on the &quot;GrupoDeRequisitosToGradoConnection&quot;
+ */
+export interface GrupoDeRequisitosToGradoConnectionPageInfo {
+  __typename?: "GrupoDeRequisitosToGradoConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the GrupoDeRequisitos type and the Taxonomy type
  */
 export interface GrupoDeRequisitosToTaxonomyConnectionEdge {
   __typename?: "GrupoDeRequisitosToTaxonomyConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Taxonomy>;
+  node: Taxonomy;
 }
 
 /**
@@ -17227,6 +21684,124 @@ export interface HierarchicalContentNode {
     where?: Maybe<HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs>;
   }) => Maybe<HierarchicalContentNodeToContentNodeChildrenConnection>;
   /**
+   * @deprecated Deprecated in favor of using Next.js pages
+   */
+  conditionalTags?: Maybe<ConditionalTags>;
+  /**
+   * Connection between the ContentNode type and the ContentType type
+   */
+  contentType?: Maybe<ContentNodeToContentTypeConnectionEdge>;
+  /**
+   * The name of the Content Type the node belongs to
+   */
+  contentTypeName: ScalarsEnums["String"];
+  /**
+   * The unique identifier stored in the database
+   */
+  databaseId: ScalarsEnums["Int"];
+  /**
+   * Post publishing date.
+   */
+  date?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The publishing date set in GMT.
+   */
+  dateGmt?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The desired slug of the post
+   */
+  desiredSlug?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * If a user has edited the node within the past 15 seconds, this will return the user that last edited. Null if the edit lock doesn&#039;t exist or is greater than 15 seconds
+   */
+  editingLockedBy?: Maybe<ContentNodeToEditLockConnectionEdge>;
+  /**
+   * The RSS enclosure for the object
+   */
+  enclosure?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * Connection between the ContentNode type and the EnqueuedScript type
+   */
+  enqueuedScripts: (args?: {
+    /**
+     * Cursor used along with the "first" argument to reference where in the dataset to get data
+     */
+    after?: Maybe<Scalars["String"]>;
+    /**
+     * Cursor used along with the "last" argument to reference where in the dataset to get data
+     */
+    before?: Maybe<Scalars["String"]>;
+    /**
+     * The number of items to return after the referenced "after" cursor
+     */
+    first?: Maybe<Scalars["Int"]>;
+    /**
+     * The number of items to return before the referenced "before" cursor
+     */
+    last?: Maybe<Scalars["Int"]>;
+  }) => Maybe<ContentNodeToEnqueuedScriptConnection>;
+  /**
+   * Connection between the ContentNode type and the EnqueuedStylesheet type
+   */
+  enqueuedStylesheets: (args?: {
+    /**
+     * Cursor used along with the "first" argument to reference where in the dataset to get data
+     */
+    after?: Maybe<Scalars["String"]>;
+    /**
+     * Cursor used along with the "last" argument to reference where in the dataset to get data
+     */
+    before?: Maybe<Scalars["String"]>;
+    /**
+     * The number of items to return after the referenced "after" cursor
+     */
+    first?: Maybe<Scalars["Int"]>;
+    /**
+     * The number of items to return before the referenced "before" cursor
+     */
+    last?: Maybe<Scalars["Int"]>;
+  }) => Maybe<ContentNodeToEnqueuedStylesheetConnection>;
+  /**
+   * The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table.
+   */
+  guid?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The globally unique ID for the object
+   */
+  id: ScalarsEnums["ID"];
+  /**
+   * Whether the node is a Content Node
+   */
+  isContentNode: ScalarsEnums["Boolean"];
+  /**
+   * Whether the object is a node in the preview state
+   */
+  isPreview?: Maybe<ScalarsEnums["Boolean"]>;
+  /**
+   * Whether the object is restricted from the current viewer
+   */
+  isRestricted?: Maybe<ScalarsEnums["Boolean"]>;
+  /**
+   * Whether the node is a Term
+   */
+  isTermNode: ScalarsEnums["Boolean"];
+  /**
+   * The user that most recently edited the node
+   */
+  lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
+  /**
+   * The permalink of the post
+   */
+  link?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The local modified time for a post. If a post was recently updated the modified field will change to match the corresponding time.
+   */
+  modified?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT.
+   */
+  modifiedGmt?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The parent of the node. The parent object can be of various types
    */
   parent?: Maybe<HierarchicalContentNodeToParentContentNodeConnectionEdge>;
@@ -17238,6 +21813,39 @@ export interface HierarchicalContentNode {
    * The globally unique identifier of the parent node.
    */
   parentId?: Maybe<ScalarsEnums["ID"]>;
+  /**
+   * The database id of the preview node
+   */
+  previewRevisionDatabaseId?: Maybe<ScalarsEnums["Int"]>;
+  /**
+   * Whether the object is a node in the preview state
+   */
+  previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
+  /**
+   * The Yoast SEO data of the ContentNode
+   */
+  seo?: Maybe<PostTypeSEO>;
+  /**
+   * The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
+   */
+  slug?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The current status of the object
+   */
+  status?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * Link to edit the content
+   */
+  styles?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The template assigned to a node of content
+   */
+  template?: Maybe<ContentTemplate>;
+  templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
+  /**
+   * The unique resource identifier path
+   */
+  uri?: Maybe<ScalarsEnums["String"]>;
   $on: $HierarchicalContentNode;
 }
 
@@ -17249,17 +21857,15 @@ export interface HierarchicalContentNodeToContentNodeAncestorsConnection {
   /**
    * Edges for the HierarchicalContentNodeToContentNodeAncestorsConnection connection
    */
-  edges?: Maybe<
-    Array<Maybe<HierarchicalContentNodeToContentNodeAncestorsConnectionEdge>>
-  >;
+  edges: Array<HierarchicalContentNodeToContentNodeAncestorsConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<ContentNode>>>;
+  nodes: Array<ContentNode>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo;
 }
 
 /**
@@ -17274,7 +21880,34 @@ export interface HierarchicalContentNodeToContentNodeAncestorsConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<ContentNode>;
+  node: ContentNode;
+}
+
+/**
+ * Page Info on the &quot;HierarchicalContentNodeToContentNodeAncestorsConnection&quot;
+ */
+export interface HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo {
+  __typename?: "HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -17285,17 +21918,15 @@ export interface HierarchicalContentNodeToContentNodeChildrenConnection {
   /**
    * Edges for the HierarchicalContentNodeToContentNodeChildrenConnection connection
    */
-  edges?: Maybe<
-    Array<Maybe<HierarchicalContentNodeToContentNodeChildrenConnectionEdge>>
-  >;
+  edges: Array<HierarchicalContentNodeToContentNodeChildrenConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<ContentNode>>>;
+  nodes: Array<ContentNode>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo;
 }
 
 /**
@@ -17310,7 +21941,34 @@ export interface HierarchicalContentNodeToContentNodeChildrenConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<ContentNode>;
+  node: ContentNode;
+}
+
+/**
+ * Page Info on the &quot;HierarchicalContentNodeToContentNodeChildrenConnection&quot;
+ */
+export interface HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo {
+  __typename?: "HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -17319,16 +21977,28 @@ export interface HierarchicalContentNodeToContentNodeChildrenConnectionEdge {
 export interface HierarchicalContentNodeToParentContentNodeConnectionEdge {
   __typename?: "HierarchicalContentNodeToParentContentNodeConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<ContentNode>;
+  node: ContentNode;
 }
 
 /**
- * Term node with hierarchical (parent/child) relationships
+ * Node with hierarchical (parent/child) relationships
  */
-export interface HierarchicalTermNode {
-  __typename?: "Category";
+export interface HierarchicalNode {
+  __typename?: "Category" | "MediaItem" | "Page";
+  /**
+   * The unique identifier stored in the database
+   */
+  databaseId: ScalarsEnums["Int"];
+  /**
+   * The globally unique ID for the object
+   */
+  id: ScalarsEnums["ID"];
   /**
    * Database id of the parent node
    */
@@ -17337,6 +22007,125 @@ export interface HierarchicalTermNode {
    * The globally unique identifier of the parent node.
    */
   parentId?: Maybe<ScalarsEnums["ID"]>;
+  $on: $HierarchicalNode;
+}
+
+/**
+ * Term node with hierarchical (parent/child) relationships
+ */
+export interface HierarchicalTermNode {
+  __typename?: "Category";
+  /**
+   * @deprecated Deprecated in favor of using Next.js pages
+   */
+  conditionalTags?: Maybe<ConditionalTags>;
+  /**
+   * The number of objects connected to the object
+   */
+  count?: Maybe<ScalarsEnums["Int"]>;
+  /**
+   * The unique identifier stored in the database
+   */
+  databaseId: ScalarsEnums["Int"];
+  /**
+   * The description of the object
+   */
+  description?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * Connection between the TermNode type and the EnqueuedScript type
+   */
+  enqueuedScripts: (args?: {
+    /**
+     * Cursor used along with the "first" argument to reference where in the dataset to get data
+     */
+    after?: Maybe<Scalars["String"]>;
+    /**
+     * Cursor used along with the "last" argument to reference where in the dataset to get data
+     */
+    before?: Maybe<Scalars["String"]>;
+    /**
+     * The number of items to return after the referenced "after" cursor
+     */
+    first?: Maybe<Scalars["Int"]>;
+    /**
+     * The number of items to return before the referenced "before" cursor
+     */
+    last?: Maybe<Scalars["Int"]>;
+  }) => Maybe<TermNodeToEnqueuedScriptConnection>;
+  /**
+   * Connection between the TermNode type and the EnqueuedStylesheet type
+   */
+  enqueuedStylesheets: (args?: {
+    /**
+     * Cursor used along with the "first" argument to reference where in the dataset to get data
+     */
+    after?: Maybe<Scalars["String"]>;
+    /**
+     * Cursor used along with the "last" argument to reference where in the dataset to get data
+     */
+    before?: Maybe<Scalars["String"]>;
+    /**
+     * The number of items to return after the referenced "after" cursor
+     */
+    first?: Maybe<Scalars["Int"]>;
+    /**
+     * The number of items to return before the referenced "before" cursor
+     */
+    last?: Maybe<Scalars["Int"]>;
+  }) => Maybe<TermNodeToEnqueuedStylesheetConnection>;
+  /**
+   * The globally unique ID for the object
+   */
+  id: ScalarsEnums["ID"];
+  /**
+   * Whether the node is a Content Node
+   */
+  isContentNode: ScalarsEnums["Boolean"];
+  /**
+   * Whether the object is restricted from the current viewer
+   */
+  isRestricted?: Maybe<ScalarsEnums["Boolean"]>;
+  /**
+   * Whether the node is a Term
+   */
+  isTermNode: ScalarsEnums["Boolean"];
+  /**
+   * The link to the term
+   */
+  link?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The human friendly name of the object.
+   */
+  name?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * Database id of the parent node
+   */
+  parentDatabaseId?: Maybe<ScalarsEnums["Int"]>;
+  /**
+   * The globally unique identifier of the parent node.
+   */
+  parentId?: Maybe<ScalarsEnums["ID"]>;
+  /**
+   * An alphanumeric identifier for the object unique to its type.
+   */
+  slug?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The name of the taxonomy that the object is associated with
+   */
+  taxonomyName?: Maybe<ScalarsEnums["String"]>;
+  templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
+  /**
+   * The ID of the term group that this term object belongs to
+   */
+  termGroupId?: Maybe<ScalarsEnums["Int"]>;
+  /**
+   * The taxonomy ID that the object is associated with
+   */
+  termTaxonomyId?: Maybe<ScalarsEnums["Int"]>;
+  /**
+   * The unique resource identifier path
+   */
+  uri?: Maybe<ScalarsEnums["String"]>;
   $on: $HierarchicalTermNode;
 }
 
@@ -17529,7 +22318,7 @@ export interface Investigacion {
   modifiedGmt?: Maybe<ScalarsEnums["String"]>;
   nombre?: Maybe<ScalarsEnums["String"]>;
   /**
-   * Connection between the investigacion type and the investigacion type
+   * Connection between the Investigacion type and the investigacion type
    */
   preview?: Maybe<InvestigacionToPreviewConnectionEdge>;
   /**
@@ -17542,7 +22331,7 @@ export interface Investigacion {
   previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
   resumen?: Maybe<ScalarsEnums["String"]>;
   /**
-   * The Yoast SEO data of the investigacion
+   * The Yoast SEO data of the ContentNode
    */
   seo?: Maybe<PostTypeSEO>;
   /**
@@ -17558,7 +22347,7 @@ export interface Investigacion {
    */
   styles?: Maybe<ScalarsEnums["String"]>;
   /**
-   * The template assigned to a node of content
+   * The template assigned to the node
    */
   template?: Maybe<ContentTemplate>;
   templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
@@ -17578,6 +22367,83 @@ export interface Investigacion {
 }
 
 /**
+ * Connection to investigacion Nodes
+ */
+export interface InvestigacionConnection {
+  __typename?:
+    | "InvestigadorToInvestigacionConnection"
+    | "LineaDeInvestigacionToInvestigacionConnection"
+    | "RootQueryToInvestigacionConnection"
+    | "UserToInvestigacionConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected investigacion Nodes
+   */
+  edges: Array<InvestigacionConnectionEdge>;
+  /**
+   * A list of connected investigacion Nodes
+   */
+  nodes: Array<Investigacion>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: InvestigacionConnectionPageInfo;
+  $on: $InvestigacionConnection;
+}
+
+/**
+ * Edge between a Node and a connected investigacion
+ */
+export interface InvestigacionConnectionEdge {
+  __typename?:
+    | "InvestigacionToPreviewConnectionEdge"
+    | "InvestigadorToInvestigacionConnectionEdge"
+    | "LineaDeInvestigacionToInvestigacionConnectionEdge"
+    | "RootQueryToInvestigacionConnectionEdge"
+    | "UserToInvestigacionConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected investigacion Node
+   */
+  node: Investigacion;
+  $on: $InvestigacionConnectionEdge;
+}
+
+/**
+ * Page Info on the connected InvestigacionConnectionEdge
+ */
+export interface InvestigacionConnectionPageInfo {
+  __typename?:
+    | "InvestigadorToInvestigacionConnectionPageInfo"
+    | "LineaDeInvestigacionToInvestigacionConnectionPageInfo"
+    | "RootQueryToInvestigacionConnectionPageInfo"
+    | "UserToInvestigacionConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $InvestigacionConnectionPageInfo;
+}
+
+/**
  * Connection between the investigacion type and the investigador type
  */
 export interface InvestigacionToInvestigadorConnection {
@@ -17585,15 +22451,15 @@ export interface InvestigacionToInvestigadorConnection {
   /**
    * Edges for the InvestigacionToInvestigadorConnection connection
    */
-  edges?: Maybe<Array<Maybe<InvestigacionToInvestigadorConnectionEdge>>>;
+  edges: Array<InvestigacionToInvestigadorConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Investigador>>>;
+  nodes: Array<Investigador>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: InvestigacionToInvestigadorConnectionPageInfo;
 }
 
 /**
@@ -17608,7 +22474,34 @@ export interface InvestigacionToInvestigadorConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Investigador>;
+  node: Investigador;
+}
+
+/**
+ * Page Info on the &quot;InvestigacionToInvestigadorConnection&quot;
+ */
+export interface InvestigacionToInvestigadorConnectionPageInfo {
+  __typename?: "InvestigacionToInvestigadorConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -17617,20 +22510,28 @@ export interface InvestigacionToInvestigadorConnectionEdge {
 export interface InvestigacionToLineaDeInvestigacionConnectionEdge {
   __typename?: "InvestigacionToLineaDeInvestigacionConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<LineaDeInvestigacion>;
+  node: LineaDeInvestigacion;
 }
 
 /**
- * Connection between the investigacion type and the investigacion type
+ * Connection between the Investigacion type and the investigacion type
  */
 export interface InvestigacionToPreviewConnectionEdge {
   __typename?: "InvestigacionToPreviewConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Investigacion>;
+  node: Investigacion;
 }
 
 /**
@@ -17827,7 +22728,7 @@ export interface Investigador {
   modifiedGmt?: Maybe<ScalarsEnums["String"]>;
   nombre?: Maybe<ScalarsEnums["String"]>;
   /**
-   * Connection between the investigador type and the investigador type
+   * Connection between the Investigador type and the investigador type
    */
   preview?: Maybe<InvestigadorToPreviewConnectionEdge>;
   /**
@@ -17840,7 +22741,7 @@ export interface Investigador {
   previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
   puestoTrabajo?: Maybe<ScalarsEnums["String"]>;
   /**
-   * The Yoast SEO data of the investigador
+   * The Yoast SEO data of the ContentNode
    */
   seo?: Maybe<PostTypeSEO>;
   /**
@@ -17856,7 +22757,7 @@ export interface Investigador {
    */
   styles?: Maybe<ScalarsEnums["String"]>;
   /**
-   * The template assigned to a node of content
+   * The template assigned to the node
    */
   template?: Maybe<ContentTemplate>;
   templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
@@ -17878,6 +22779,80 @@ export interface Investigador {
 }
 
 /**
+ * Connection to investigador Nodes
+ */
+export interface InvestigadorConnection {
+  __typename?:
+    | "InvestigacionToInvestigadorConnection"
+    | "RootQueryToInvestigadorConnection"
+    | "UserToInvestigadorConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected investigador Nodes
+   */
+  edges: Array<InvestigadorConnectionEdge>;
+  /**
+   * A list of connected investigador Nodes
+   */
+  nodes: Array<Investigador>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: InvestigadorConnectionPageInfo;
+  $on: $InvestigadorConnection;
+}
+
+/**
+ * Edge between a Node and a connected investigador
+ */
+export interface InvestigadorConnectionEdge {
+  __typename?:
+    | "InvestigacionToInvestigadorConnectionEdge"
+    | "InvestigadorToPreviewConnectionEdge"
+    | "RootQueryToInvestigadorConnectionEdge"
+    | "UserToInvestigadorConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected investigador Node
+   */
+  node: Investigador;
+  $on: $InvestigadorConnectionEdge;
+}
+
+/**
+ * Page Info on the connected InvestigadorConnectionEdge
+ */
+export interface InvestigadorConnectionPageInfo {
+  __typename?:
+    | "InvestigacionToInvestigadorConnectionPageInfo"
+    | "RootQueryToInvestigadorConnectionPageInfo"
+    | "UserToInvestigadorConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $InvestigadorConnectionPageInfo;
+}
+
+/**
  * Connection between the investigador type and the investigacion type
  */
 export interface InvestigadorToInvestigacionConnection {
@@ -17885,15 +22860,15 @@ export interface InvestigadorToInvestigacionConnection {
   /**
    * Edges for the InvestigadorToInvestigacionConnection connection
    */
-  edges?: Maybe<Array<Maybe<InvestigadorToInvestigacionConnectionEdge>>>;
+  edges: Array<InvestigadorToInvestigacionConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Investigacion>>>;
+  nodes: Array<Investigacion>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: InvestigadorToInvestigacionConnectionPageInfo;
 }
 
 /**
@@ -17908,18 +22883,49 @@ export interface InvestigadorToInvestigacionConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Investigacion>;
+  node: Investigacion;
 }
 
 /**
- * Connection between the investigador type and the investigador type
+ * Page Info on the &quot;InvestigadorToInvestigacionConnection&quot;
+ */
+export interface InvestigadorToInvestigacionConnectionPageInfo {
+  __typename?: "InvestigadorToInvestigacionConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the Investigador type and the investigador type
  */
 export interface InvestigadorToPreviewConnectionEdge {
   __typename?: "InvestigadorToPreviewConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Investigador>;
+  node: Investigador;
 }
 
 /**
@@ -18118,7 +23124,7 @@ export interface LineaDeInvestigacion {
   modifiedGmt?: Maybe<ScalarsEnums["String"]>;
   nombre?: Maybe<ScalarsEnums["String"]>;
   /**
-   * Connection between the lineaDeInvestigacion type and the lineaDeInvestigacion type
+   * Connection between the LineaDeInvestigacion type and the lineaDeInvestigacion type
    */
   preview?: Maybe<LineaDeInvestigacionToPreviewConnectionEdge>;
   /**
@@ -18130,7 +23136,7 @@ export interface LineaDeInvestigacion {
    */
   previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
   /**
-   * The Yoast SEO data of the lineaDeInvestigacion
+   * The Yoast SEO data of the ContentNode
    */
   seo?: Maybe<PostTypeSEO>;
   /**
@@ -18166,14 +23172,93 @@ export interface LineaDeInvestigacion {
 }
 
 /**
+ * Connection to lineaDeInvestigacion Nodes
+ */
+export interface LineaDeInvestigacionConnection {
+  __typename?:
+    | "DepartamentoToLineaDeInvestigacionConnection"
+    | "RootQueryToLineaDeInvestigacionConnection"
+    | "UserToLineaDeInvestigacionConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected lineaDeInvestigacion Nodes
+   */
+  edges: Array<LineaDeInvestigacionConnectionEdge>;
+  /**
+   * A list of connected lineaDeInvestigacion Nodes
+   */
+  nodes: Array<LineaDeInvestigacion>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: LineaDeInvestigacionConnectionPageInfo;
+  $on: $LineaDeInvestigacionConnection;
+}
+
+/**
+ * Edge between a Node and a connected lineaDeInvestigacion
+ */
+export interface LineaDeInvestigacionConnectionEdge {
+  __typename?:
+    | "DepartamentoToLineaDeInvestigacionConnectionEdge"
+    | "InvestigacionToLineaDeInvestigacionConnectionEdge"
+    | "LineaDeInvestigacionToPreviewConnectionEdge"
+    | "RootQueryToLineaDeInvestigacionConnectionEdge"
+    | "UserToLineaDeInvestigacionConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected lineaDeInvestigacion Node
+   */
+  node: LineaDeInvestigacion;
+  $on: $LineaDeInvestigacionConnectionEdge;
+}
+
+/**
+ * Page Info on the connected LineaDeInvestigacionConnectionEdge
+ */
+export interface LineaDeInvestigacionConnectionPageInfo {
+  __typename?:
+    | "DepartamentoToLineaDeInvestigacionConnectionPageInfo"
+    | "RootQueryToLineaDeInvestigacionConnectionPageInfo"
+    | "UserToLineaDeInvestigacionConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $LineaDeInvestigacionConnectionPageInfo;
+}
+
+/**
  * Connection between the lineaDeInvestigacion type and the departamento type
  */
 export interface LineaDeInvestigacionToDepartamentoConnectionEdge {
   __typename?: "LineaDeInvestigacionToDepartamentoConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Departamento>;
+  node: Departamento;
 }
 
 /**
@@ -18184,17 +23269,15 @@ export interface LineaDeInvestigacionToInvestigacionConnection {
   /**
    * Edges for the LineaDeInvestigacionToInvestigacionConnection connection
    */
-  edges?: Maybe<
-    Array<Maybe<LineaDeInvestigacionToInvestigacionConnectionEdge>>
-  >;
+  edges: Array<LineaDeInvestigacionToInvestigacionConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Investigacion>>>;
+  nodes: Array<Investigacion>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: LineaDeInvestigacionToInvestigacionConnectionPageInfo;
 }
 
 /**
@@ -18209,18 +23292,49 @@ export interface LineaDeInvestigacionToInvestigacionConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Investigacion>;
+  node: Investigacion;
 }
 
 /**
- * Connection between the lineaDeInvestigacion type and the lineaDeInvestigacion type
+ * Page Info on the &quot;LineaDeInvestigacionToInvestigacionConnection&quot;
+ */
+export interface LineaDeInvestigacionToInvestigacionConnectionPageInfo {
+  __typename?: "LineaDeInvestigacionToInvestigacionConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the LineaDeInvestigacion type and the lineaDeInvestigacion type
  */
 export interface LineaDeInvestigacionToPreviewConnectionEdge {
   __typename?: "LineaDeInvestigacionToPreviewConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<LineaDeInvestigacion>;
+  node: LineaDeInvestigacion;
 }
 
 /**
@@ -18243,7 +23357,16 @@ export interface MediaDetails {
   /**
    * The available sizes of the mediaItem
    */
-  sizes?: Maybe<Array<Maybe<MediaSize>>>;
+  sizes: (args?: {
+    /**
+     * The sizes to exclude. Will take precedence over `include`.
+     */
+    exclude?: Maybe<Array<Maybe<MediaItemSizeEnum>>>;
+    /**
+     * The sizes to include. Can be overridden by `exclude`.
+     */
+    include?: Maybe<Array<Maybe<MediaItemSizeEnum>>>;
+  }) => Maybe<Array<Maybe<MediaSize>>>;
   /**
    * The width of the mediaItem
    */
@@ -18339,7 +23462,7 @@ export interface MediaItem {
    */
   commentStatus?: Maybe<ScalarsEnums["String"]>;
   /**
-   * Connection between the mediaItem type and the Comment type
+   * Connection between the MediaItem type and the Comment type
    */
   comments: (args?: {
     /**
@@ -18541,7 +23664,7 @@ export interface MediaItem {
    */
   previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
   /**
-   * The Yoast SEO data of the mediaItem
+   * The Yoast SEO data of the ContentNode
    */
   seo?: Maybe<PostTypeSEO>;
   /**
@@ -18584,7 +23707,7 @@ export interface MediaItem {
    */
   styles?: Maybe<ScalarsEnums["String"]>;
   /**
-   * The template assigned to the node
+   * The template assigned to a node of content
    */
   template?: Maybe<ContentTemplate>;
   templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
@@ -18601,6 +23724,75 @@ export interface MediaItem {
    * The unique resource identifier path
    */
   uri?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection to mediaItem Nodes
+ */
+export interface MediaItemConnection {
+  __typename?: "RootQueryToMediaItemConnection" | "UserToMediaItemConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected mediaItem Nodes
+   */
+  edges: Array<MediaItemConnectionEdge>;
+  /**
+   * A list of connected mediaItem Nodes
+   */
+  nodes: Array<MediaItem>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: MediaItemConnectionPageInfo;
+  $on: $MediaItemConnection;
+}
+
+/**
+ * Edge between a Node and a connected mediaItem
+ */
+export interface MediaItemConnectionEdge {
+  __typename?:
+    | "NodeWithFeaturedImageToMediaItemConnectionEdge"
+    | "RootQueryToMediaItemConnectionEdge"
+    | "UserToMediaItemConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected mediaItem Node
+   */
+  node: MediaItem;
+  $on: $MediaItemConnectionEdge;
+}
+
+/**
+ * Page Info on the connected MediaItemConnectionEdge
+ */
+export interface MediaItemConnectionPageInfo {
+  __typename?:
+    | "RootQueryToMediaItemConnectionPageInfo"
+    | "UserToMediaItemConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $MediaItemConnectionPageInfo;
 }
 
 /**
@@ -18659,22 +23851,22 @@ export interface MediaItemMeta {
 }
 
 /**
- * Connection between the mediaItem type and the Comment type
+ * Connection between the MediaItem type and the Comment type
  */
 export interface MediaItemToCommentConnection {
   __typename?: "MediaItemToCommentConnection";
   /**
    * Edges for the MediaItemToCommentConnection connection
    */
-  edges?: Maybe<Array<Maybe<MediaItemToCommentConnectionEdge>>>;
+  edges: Array<MediaItemToCommentConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Comment>>>;
+  nodes: Array<Comment>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: MediaItemToCommentConnectionPageInfo;
 }
 
 /**
@@ -18689,7 +23881,34 @@ export interface MediaItemToCommentConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Comment>;
+  node: Comment;
+}
+
+/**
+ * Page Info on the &quot;MediaItemToCommentConnection&quot;
+ */
+export interface MediaItemToCommentConnectionPageInfo {
+  __typename?: "MediaItemToCommentConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -18790,6 +24009,70 @@ export interface Menu {
    * The url friendly name of the menu. Equivalent to WP_Term-&gt;slug
    */
   slug?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection to Menu Nodes
+ */
+export interface MenuConnection {
+  __typename?: "RootQueryToMenuConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected Menu Nodes
+   */
+  edges: Array<MenuConnectionEdge>;
+  /**
+   * A list of connected Menu Nodes
+   */
+  nodes: Array<Menu>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: MenuConnectionPageInfo;
+  $on: $MenuConnection;
+}
+
+/**
+ * Edge between a Node and a connected Menu
+ */
+export interface MenuConnectionEdge {
+  __typename?: "MenuItemToMenuConnectionEdge" | "RootQueryToMenuConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected Menu Node
+   */
+  node: Menu;
+  $on: $MenuConnectionEdge;
+}
+
+/**
+ * Page Info on the connected MenuConnectionEdge
+ */
+export interface MenuConnectionPageInfo {
+  __typename?: "RootQueryToMenuConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $MenuConnectionPageInfo;
 }
 
 /**
@@ -18911,12 +24194,89 @@ export interface MenuItem {
 }
 
 /**
+ * Connection to MenuItem Nodes
+ */
+export interface MenuItemConnection {
+  __typename?:
+    | "MenuItemToMenuItemConnection"
+    | "MenuToMenuItemConnection"
+    | "RootQueryToMenuItemConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected MenuItem Nodes
+   */
+  edges: Array<MenuItemConnectionEdge>;
+  /**
+   * A list of connected MenuItem Nodes
+   */
+  nodes: Array<MenuItem>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: MenuItemConnectionPageInfo;
+  $on: $MenuItemConnection;
+}
+
+/**
+ * Edge between a Node and a connected MenuItem
+ */
+export interface MenuItemConnectionEdge {
+  __typename?:
+    | "MenuItemToMenuItemConnectionEdge"
+    | "MenuToMenuItemConnectionEdge"
+    | "RootQueryToMenuItemConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected MenuItem Node
+   */
+  node: MenuItem;
+  $on: $MenuItemConnectionEdge;
+}
+
+/**
+ * Page Info on the connected MenuItemConnectionEdge
+ */
+export interface MenuItemConnectionPageInfo {
+  __typename?:
+    | "MenuItemToMenuItemConnectionPageInfo"
+    | "MenuToMenuItemConnectionPageInfo"
+    | "RootQueryToMenuItemConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $MenuItemConnectionPageInfo;
+}
+
+/**
  * Nodes that can be linked to as Menu Items
  */
 export interface MenuItemLinkable {
   __typename?: "Category" | "GrupoDeRequisitos" | "Page" | "Post" | "Tag";
   /**
-   * The unique resource identifier path
+   * @deprecated Deprecated in favor of using Next.js pages
+   */
+  conditionalTags?: Maybe<ConditionalTags>;
+  /**
+   * The unique identifier stored in the database
    */
   databaseId: ScalarsEnums["Int"];
   /**
@@ -18924,10 +24284,35 @@ export interface MenuItemLinkable {
    */
   id: ScalarsEnums["ID"];
   /**
+   * Whether the node is a Content Node
+   */
+  isContentNode: ScalarsEnums["Boolean"];
+  /**
+   * Whether the node is a Term
+   */
+  isTermNode: ScalarsEnums["Boolean"];
+  templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
+  /**
    * The unique resource identifier path
    */
   uri?: Maybe<ScalarsEnums["String"]>;
   $on: $MenuItemLinkable;
+}
+
+/**
+ * Edge between a Node and a connected MenuItemLinkable
+ */
+export interface MenuItemLinkableConnectionEdge {
+  __typename?: "MenuItemToMenuItemLinkableConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected MenuItemLinkable Node
+   */
+  node: MenuItemLinkable;
+  $on: $MenuItemLinkableConnectionEdge;
 }
 
 /**
@@ -18944,9 +24329,13 @@ export interface MenuItemObjectUnion {
 export interface MenuItemToMenuConnectionEdge {
   __typename?: "MenuItemToMenuConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Menu>;
+  node: Menu;
 }
 
 /**
@@ -18957,15 +24346,15 @@ export interface MenuItemToMenuItemConnection {
   /**
    * Edges for the MenuItemToMenuItemConnection connection
    */
-  edges?: Maybe<Array<Maybe<MenuItemToMenuItemConnectionEdge>>>;
+  edges: Array<MenuItemToMenuItemConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<MenuItem>>>;
+  nodes: Array<MenuItem>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: MenuItemToMenuItemConnectionPageInfo;
 }
 
 /**
@@ -18980,7 +24369,34 @@ export interface MenuItemToMenuItemConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<MenuItem>;
+  node: MenuItem;
+}
+
+/**
+ * Page Info on the &quot;MenuItemToMenuItemConnection&quot;
+ */
+export interface MenuItemToMenuItemConnectionPageInfo {
+  __typename?: "MenuItemToMenuItemConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -18989,9 +24405,13 @@ export interface MenuItemToMenuItemConnectionEdge {
 export interface MenuItemToMenuItemLinkableConnectionEdge {
   __typename?: "MenuItemToMenuItemLinkableConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<MenuItemLinkable>;
+  node: MenuItemLinkable;
 }
 
 /**
@@ -19019,15 +24439,15 @@ export interface MenuToMenuItemConnection {
   /**
    * Edges for the MenuToMenuItemConnection connection
    */
-  edges?: Maybe<Array<Maybe<MenuToMenuItemConnectionEdge>>>;
+  edges: Array<MenuToMenuItemConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<MenuItem>>>;
+  nodes: Array<MenuItem>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: MenuToMenuItemConnectionPageInfo;
 }
 
 /**
@@ -19042,7 +24462,34 @@ export interface MenuToMenuItemConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<MenuItem>;
+  node: MenuItem;
+}
+
+/**
+ * Page Info on the &quot;MenuToMenuItemConnection&quot;
+ */
+export interface MenuToMenuItemConnectionPageInfo {
+  __typename?: "MenuToMenuItemConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -19116,6 +24563,10 @@ export interface NodeWithAuthor {
    * The globally unique identifier of the author of the node
    */
   authorId?: Maybe<ScalarsEnums["ID"]>;
+  /**
+   * The globally unique ID for the object
+   */
+  id: ScalarsEnums["ID"];
   $on: $NodeWithAuthor;
 }
 
@@ -19125,9 +24576,13 @@ export interface NodeWithAuthor {
 export interface NodeWithAuthorToUserConnectionEdge {
   __typename?: "NodeWithAuthorToUserConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<User>;
+  node: User;
 }
 
 /**
@@ -19143,6 +24598,10 @@ export interface NodeWithComments {
    * Whether the comments are open or closed for this particular post.
    */
   commentStatus?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The globally unique ID for the object
+   */
+  id: ScalarsEnums["ID"];
   $on: $NodeWithComments;
 }
 
@@ -19160,6 +24619,10 @@ export interface NodeWithContentEditor {
      */
     format?: Maybe<PostObjectFieldFormatEnum>;
   }) => Maybe<ScalarsEnums["String"]>;
+  /**
+   * The globally unique ID for the object
+   */
+  id: ScalarsEnums["ID"];
   $on: $NodeWithContentEditor;
 }
 
@@ -19177,6 +24640,10 @@ export interface NodeWithExcerpt {
      */
     format?: Maybe<PostObjectFieldFormatEnum>;
   }) => Maybe<ScalarsEnums["String"]>;
+  /**
+   * The globally unique ID for the object
+   */
+  id: ScalarsEnums["ID"];
   $on: $NodeWithExcerpt;
 }
 
@@ -19195,84 +24662,6 @@ export interface NodeWithFeaturedImage {
     | "Recurso"
     | "Slide";
   /**
-   * @deprecated Deprecated in favor of using Next.js pages
-   */
-  conditionalTags?: Maybe<ConditionalTags>;
-  /**
-   * Connection between the ContentNode type and the ContentType type
-   */
-  contentType?: Maybe<ContentNodeToContentTypeConnectionEdge>;
-  /**
-   * The name of the Content Type the node belongs to
-   */
-  contentTypeName: ScalarsEnums["String"];
-  /**
-   * The unique identifier stored in the database
-   */
-  databaseId: ScalarsEnums["Int"];
-  /**
-   * Post publishing date.
-   */
-  date?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The publishing date set in GMT.
-   */
-  dateGmt?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The desired slug of the post
-   */
-  desiredSlug?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * If a user has edited the node within the past 15 seconds, this will return the user that last edited. Null if the edit lock doesn&#039;t exist or is greater than 15 seconds
-   */
-  editingLockedBy?: Maybe<ContentNodeToEditLockConnectionEdge>;
-  /**
-   * The RSS enclosure for the object
-   */
-  enclosure?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * Connection between the ContentNode type and the EnqueuedScript type
-   */
-  enqueuedScripts: (args?: {
-    /**
-     * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
-    /**
-     * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
-    /**
-     * The number of items to return after the referenced "after" cursor
-     */
-    first?: Maybe<Scalars["Int"]>;
-    /**
-     * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
-  }) => Maybe<ContentNodeToEnqueuedScriptConnection>;
-  /**
-   * Connection between the ContentNode type and the EnqueuedStylesheet type
-   */
-  enqueuedStylesheets: (args?: {
-    /**
-     * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
-    /**
-     * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
-    /**
-     * The number of items to return after the referenced "after" cursor
-     */
-    first?: Maybe<Scalars["Int"]>;
-    /**
-     * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
-  }) => Maybe<ContentNodeToEnqueuedStylesheetConnection>;
-  /**
    * Connection between the NodeWithFeaturedImage type and the MediaItem type
    */
   featuredImage?: Maybe<NodeWithFeaturedImageToMediaItemConnectionEdge>;
@@ -19285,74 +24674,9 @@ export interface NodeWithFeaturedImage {
    */
   featuredImageId?: Maybe<ScalarsEnums["ID"]>;
   /**
-   * The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table.
-   */
-  guid?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The unique resource identifier path
+   * The globally unique ID for the object
    */
   id: ScalarsEnums["ID"];
-  /**
-   * Whether the node is a Content Node
-   */
-  isContentNode: ScalarsEnums["Boolean"];
-  /**
-   * Whether the object is a node in the preview state
-   */
-  isPreview?: Maybe<ScalarsEnums["Boolean"]>;
-  /**
-   * Whether the object is restricted from the current viewer
-   */
-  isRestricted?: Maybe<ScalarsEnums["Boolean"]>;
-  /**
-   * Whether the node is a Term
-   */
-  isTermNode: ScalarsEnums["Boolean"];
-  /**
-   * The user that most recently edited the node
-   */
-  lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
-  /**
-   * The permalink of the post
-   */
-  link?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The local modified time for a post. If a post was recently updated the modified field will change to match the corresponding time.
-   */
-  modified?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT.
-   */
-  modifiedGmt?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The database id of the preview node
-   */
-  previewRevisionDatabaseId?: Maybe<ScalarsEnums["Int"]>;
-  /**
-   * Whether the object is a node in the preview state
-   */
-  previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
-  /**
-   * The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
-   */
-  slug?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The current status of the object
-   */
-  status?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * Link to edit the content
-   */
-  styles?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The template assigned to a node of content
-   */
-  template?: Maybe<ContentTemplate>;
-  templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
-  /**
-   * The unique resource identifier path
-   */
-  uri?: Maybe<ScalarsEnums["String"]>;
   $on: $NodeWithFeaturedImage;
 }
 
@@ -19362,9 +24686,13 @@ export interface NodeWithFeaturedImage {
 export interface NodeWithFeaturedImageToMediaItemConnectionEdge {
   __typename?: "NodeWithFeaturedImageToMediaItemConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<MediaItem>;
+  node: MediaItem;
 }
 
 /**
@@ -19372,6 +24700,10 @@ export interface NodeWithFeaturedImageToMediaItemConnectionEdge {
  */
 export interface NodeWithPageAttributes {
   __typename?: "Page";
+  /**
+   * The globally unique ID for the object
+   */
+  id: ScalarsEnums["ID"];
   /**
    * A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types.
    */
@@ -19384,6 +24716,10 @@ export interface NodeWithPageAttributes {
  */
 export interface NodeWithRevisions {
   __typename?: "Page" | "Post";
+  /**
+   * The globally unique ID for the object
+   */
+  id: ScalarsEnums["ID"];
   /**
    * True if the node is a revision of another node
    */
@@ -19401,9 +24737,13 @@ export interface NodeWithRevisions {
 export interface NodeWithRevisionsToContentNodeConnectionEdge {
   __typename?: "NodeWithRevisionsToContentNodeConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<ContentNode>;
+  node: ContentNode;
 }
 
 /**
@@ -19424,6 +24764,10 @@ export interface NodeWithTemplate {
     | "Post"
     | "Recurso"
     | "Slide";
+  /**
+   * The globally unique ID for the object
+   */
+  id: ScalarsEnums["ID"];
   /**
    * The template assigned to the node
    */
@@ -19450,6 +24794,14 @@ export interface NodeWithTitle {
     | "Recurso"
     | "Slide";
   /**
+   * The globally unique ID for the object
+   */
+  id: ScalarsEnums["ID"];
+  /**
+   * The Yoast SEO data of the ContentNode
+   */
+  seo?: Maybe<PostTypeSEO>;
+  /**
    * The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made.
    */
   title: (args?: {
@@ -19467,6 +24819,10 @@ export interface NodeWithTitle {
 export interface NodeWithTrackbacks {
   __typename?: "Post";
   /**
+   * The globally unique ID for the object
+   */
+  id: ScalarsEnums["ID"];
+  /**
    * Whether the pings are open or closed for this particular post.
    */
   pingStatus?: Maybe<ScalarsEnums["String"]>;
@@ -19479,6 +24835,57 @@ export interface NodeWithTrackbacks {
    */
   toPing?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
   $on: $NodeWithTrackbacks;
+}
+
+/**
+ * A singular connection from one Node to another, with support for relational data on the &quot;edge&quot; of the connection.
+ */
+export interface OneToOneConnection {
+  __typename?:
+    | "CarreraToDepartamentoConnectionEdge"
+    | "CarreraToFacultadConnectionEdge"
+    | "CarreraToGradoConnectionEdge"
+    | "CarreraToPreviewConnectionEdge"
+    | "CategoryToParentCategoryConnectionEdge"
+    | "CategoryToTaxonomyConnectionEdge"
+    | "CommentToCommenterConnectionEdge"
+    | "CommentToContentNodeConnectionEdge"
+    | "CommentToParentCommentConnectionEdge"
+    | "ContentNodeToContentTypeConnectionEdge"
+    | "ContentNodeToEditLastConnectionEdge"
+    | "ContentNodeToEditLockConnectionEdge"
+    | "DepartamentoToFacultadConnectionEdge"
+    | "DepartamentoToPreviewConnectionEdge"
+    | "FacultadToPreviewConnectionEdge"
+    | "GradoToPreviewConnectionEdge"
+    | "GrupoDeRequisitosToTaxonomyConnectionEdge"
+    | "HierarchicalContentNodeToParentContentNodeConnectionEdge"
+    | "InvestigacionToLineaDeInvestigacionConnectionEdge"
+    | "InvestigacionToPreviewConnectionEdge"
+    | "InvestigadorToPreviewConnectionEdge"
+    | "LineaDeInvestigacionToDepartamentoConnectionEdge"
+    | "LineaDeInvestigacionToPreviewConnectionEdge"
+    | "MenuItemToMenuConnectionEdge"
+    | "MenuItemToMenuItemLinkableConnectionEdge"
+    | "NodeWithAuthorToUserConnectionEdge"
+    | "NodeWithFeaturedImageToMediaItemConnectionEdge"
+    | "NodeWithRevisionsToContentNodeConnectionEdge"
+    | "PageToPreviewConnectionEdge"
+    | "PeriodoDeAdmisionToPreviewConnectionEdge"
+    | "PostFormatToTaxonomyConnectionEdge"
+    | "PostToPreviewConnectionEdge"
+    | "RecursoToPreviewConnectionEdge"
+    | "SlideToPreviewConnectionEdge"
+    | "TagToTaxonomyConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected node
+   */
+  node: Node;
+  $on: $OneToOneConnection;
 }
 
 /**
@@ -19557,7 +24964,7 @@ export interface Page {
    */
   commentStatus?: Maybe<ScalarsEnums["String"]>;
   /**
-   * Connection between the page type and the Comment type
+   * Connection between the Page type and the Comment type
    */
   comments: (args?: {
     /**
@@ -19607,7 +25014,7 @@ export interface Page {
    */
   contentTypeName: ScalarsEnums["String"];
   /**
-   * The unique resource identifier path
+   * The unique identifier stored in the database
    */
   databaseId: ScalarsEnums["Int"];
   /**
@@ -19770,7 +25177,7 @@ export interface Page {
    */
   parentId?: Maybe<ScalarsEnums["ID"]>;
   /**
-   * Connection between the page type and the page type
+   * Connection between the Page type and the page type
    */
   preview?: Maybe<PageToPreviewConnectionEdge>;
   /**
@@ -19786,7 +25193,7 @@ export interface Page {
    */
   revisionOf?: Maybe<NodeWithRevisionsToContentNodeConnectionEdge>;
   /**
-   * Connection between the page type and the page type
+   * Connection between the Page type and the page type
    */
   revisions: (args?: {
     /**
@@ -19811,7 +25218,7 @@ export interface Page {
     where?: Maybe<PageToRevisionConnectionWhereArgs>;
   }) => Maybe<PageToRevisionConnection>;
   /**
-   * The Yoast SEO data of the page
+   * The Yoast SEO data of the ContentNode
    */
   seo?: Maybe<PostTypeSEO>;
   /**
@@ -19847,22 +25254,212 @@ export interface Page {
 }
 
 /**
- * Connection between the page type and the Comment type
+ * Connection to page Nodes
+ */
+export interface PageConnection {
+  __typename?:
+    | "PageToRevisionConnection"
+    | "RootQueryToPageConnection"
+    | "UserToPageConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected page Nodes
+   */
+  edges: Array<PageConnectionEdge>;
+  /**
+   * A list of connected page Nodes
+   */
+  nodes: Array<Page>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: PageConnectionPageInfo;
+  $on: $PageConnection;
+}
+
+/**
+ * Edge between a Node and a connected page
+ */
+export interface PageConnectionEdge {
+  __typename?:
+    | "PageToPreviewConnectionEdge"
+    | "PageToRevisionConnectionEdge"
+    | "RootQueryToPageConnectionEdge"
+    | "UserToPageConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected page Node
+   */
+  node: Page;
+  $on: $PageConnectionEdge;
+}
+
+/**
+ * Page Info on the connected PageConnectionEdge
+ */
+export interface PageConnectionPageInfo {
+  __typename?:
+    | "PageToRevisionConnectionPageInfo"
+    | "RootQueryToPageConnectionPageInfo"
+    | "UserToPageConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $PageConnectionPageInfo;
+}
+
+/**
+ * Information about pagination in a connection.
+ */
+export interface PageInfo {
+  __typename?:
+    | "CarreraToRecursoConnectionPageInfo"
+    | "CategoryToAncestorsCategoryConnectionPageInfo"
+    | "CategoryToCategoryConnectionPageInfo"
+    | "CategoryToContentNodeConnectionPageInfo"
+    | "CategoryToPostConnectionPageInfo"
+    | "CommentToCommentConnectionPageInfo"
+    | "ContentNodeToEnqueuedScriptConnectionPageInfo"
+    | "ContentNodeToEnqueuedStylesheetConnectionPageInfo"
+    | "ContentTypeToContentNodeConnectionPageInfo"
+    | "ContentTypeToTaxonomyConnectionPageInfo"
+    | "DepartamentoToCarreraConnectionPageInfo"
+    | "DepartamentoToLineaDeInvestigacionConnectionPageInfo"
+    | "FacultadToCarreraConnectionPageInfo"
+    | "FacultadToDepartamentoConnectionPageInfo"
+    | "GradoToCarreraConnectionPageInfo"
+    | "GradoToGrupoDeRequisitosConnectionPageInfo"
+    | "GradoToTermNodeConnectionPageInfo"
+    | "GrupoDeRequisitosToContentNodeConnectionPageInfo"
+    | "GrupoDeRequisitosToGradoConnectionPageInfo"
+    | "HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo"
+    | "HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo"
+    | "InvestigacionToInvestigadorConnectionPageInfo"
+    | "InvestigadorToInvestigacionConnectionPageInfo"
+    | "LineaDeInvestigacionToInvestigacionConnectionPageInfo"
+    | "MediaItemToCommentConnectionPageInfo"
+    | "MenuItemToMenuItemConnectionPageInfo"
+    | "MenuToMenuItemConnectionPageInfo"
+    | "PageToCommentConnectionPageInfo"
+    | "PageToRevisionConnectionPageInfo"
+    | "PostFormatToContentNodeConnectionPageInfo"
+    | "PostFormatToPostConnectionPageInfo"
+    | "PostToCategoryConnectionPageInfo"
+    | "PostToCommentConnectionPageInfo"
+    | "PostToPostFormatConnectionPageInfo"
+    | "PostToRevisionConnectionPageInfo"
+    | "PostToTagConnectionPageInfo"
+    | "PostToTermNodeConnectionPageInfo"
+    | "RecursoToCarreraConnectionPageInfo"
+    | "RootQueryToCarreraConnectionPageInfo"
+    | "RootQueryToCategoryConnectionPageInfo"
+    | "RootQueryToCommentConnectionPageInfo"
+    | "RootQueryToContentNodeConnectionPageInfo"
+    | "RootQueryToContentTypeConnectionPageInfo"
+    | "RootQueryToDepartamentoConnectionPageInfo"
+    | "RootQueryToEnqueuedScriptConnectionPageInfo"
+    | "RootQueryToEnqueuedStylesheetConnectionPageInfo"
+    | "RootQueryToFacultadConnectionPageInfo"
+    | "RootQueryToGradoConnectionPageInfo"
+    | "RootQueryToGrupoDeRequisitosConnectionPageInfo"
+    | "RootQueryToInvestigacionConnectionPageInfo"
+    | "RootQueryToInvestigadorConnectionPageInfo"
+    | "RootQueryToLineaDeInvestigacionConnectionPageInfo"
+    | "RootQueryToMediaItemConnectionPageInfo"
+    | "RootQueryToMenuConnectionPageInfo"
+    | "RootQueryToMenuItemConnectionPageInfo"
+    | "RootQueryToPageConnectionPageInfo"
+    | "RootQueryToPeriodoDeAdmisionConnectionPageInfo"
+    | "RootQueryToPluginConnectionPageInfo"
+    | "RootQueryToPostConnectionPageInfo"
+    | "RootQueryToPostFormatConnectionPageInfo"
+    | "RootQueryToRecursoConnectionPageInfo"
+    | "RootQueryToRevisionsConnectionPageInfo"
+    | "RootQueryToSlideConnectionPageInfo"
+    | "RootQueryToTagConnectionPageInfo"
+    | "RootQueryToTaxonomyConnectionPageInfo"
+    | "RootQueryToTermNodeConnectionPageInfo"
+    | "RootQueryToThemeConnectionPageInfo"
+    | "RootQueryToUserConnectionPageInfo"
+    | "RootQueryToUserRoleConnectionPageInfo"
+    | "TagToContentNodeConnectionPageInfo"
+    | "TagToPostConnectionPageInfo"
+    | "TaxonomyToContentTypeConnectionPageInfo"
+    | "TermNodeToEnqueuedScriptConnectionPageInfo"
+    | "TermNodeToEnqueuedStylesheetConnectionPageInfo"
+    | "UserToCarreraConnectionPageInfo"
+    | "UserToCommentConnectionPageInfo"
+    | "UserToDepartamentoConnectionPageInfo"
+    | "UserToEnqueuedScriptConnectionPageInfo"
+    | "UserToEnqueuedStylesheetConnectionPageInfo"
+    | "UserToFacultadConnectionPageInfo"
+    | "UserToGradoConnectionPageInfo"
+    | "UserToInvestigacionConnectionPageInfo"
+    | "UserToInvestigadorConnectionPageInfo"
+    | "UserToLineaDeInvestigacionConnectionPageInfo"
+    | "UserToMediaItemConnectionPageInfo"
+    | "UserToPageConnectionPageInfo"
+    | "UserToPeriodoDeAdmisionConnectionPageInfo"
+    | "UserToPostConnectionPageInfo"
+    | "UserToRecursoConnectionPageInfo"
+    | "UserToRevisionsConnectionPageInfo"
+    | "UserToSlideConnectionPageInfo"
+    | "UserToUserRoleConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $PageInfo;
+}
+
+/**
+ * Connection between the Page type and the Comment type
  */
 export interface PageToCommentConnection {
   __typename?: "PageToCommentConnection";
   /**
    * Edges for the PageToCommentConnection connection
    */
-  edges?: Maybe<Array<Maybe<PageToCommentConnectionEdge>>>;
+  edges: Array<PageToCommentConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Comment>>>;
+  nodes: Array<Comment>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: PageToCommentConnectionPageInfo;
 }
 
 /**
@@ -19877,37 +25474,68 @@ export interface PageToCommentConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Comment>;
+  node: Comment;
 }
 
 /**
- * Connection between the page type and the page type
+ * Page Info on the &quot;PageToCommentConnection&quot;
+ */
+export interface PageToCommentConnectionPageInfo {
+  __typename?: "PageToCommentConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the Page type and the page type
  */
 export interface PageToPreviewConnectionEdge {
   __typename?: "PageToPreviewConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Page>;
+  node: Page;
 }
 
 /**
- * Connection between the page type and the page type
+ * Connection between the Page type and the page type
  */
 export interface PageToRevisionConnection {
   __typename?: "PageToRevisionConnection";
   /**
-   * Edges for the pageToRevisionConnection connection
+   * Edges for the PageToRevisionConnection connection
    */
-  edges?: Maybe<Array<Maybe<PageToRevisionConnectionEdge>>>;
+  edges: Array<PageToRevisionConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Page>>>;
+  nodes: Array<Page>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: PageToRevisionConnectionPageInfo;
 }
 
 /**
@@ -19922,7 +25550,34 @@ export interface PageToRevisionConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Page>;
+  node: Page;
+}
+
+/**
+ * Page Info on the &quot;PageToRevisionConnection&quot;
+ */
+export interface PageToRevisionConnectionPageInfo {
+  __typename?: "PageToRevisionConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -19930,22 +25585,35 @@ export interface PageToRevisionConnectionEdge {
  */
 export interface Page_Contacto {
   __typename?: "Page_Contacto";
-  direcciones?: Maybe<Array<Maybe<Page_Contacto_direcciones>>>;
-  emails?: Maybe<Array<Maybe<Page_Contacto_emails>>>;
   /**
    * The name of the ACF Field Group
    */
   fieldGroupName?: Maybe<ScalarsEnums["String"]>;
-  horarios?: Maybe<Array<Maybe<Page_Contacto_horarios>>>;
-  telefonos?: Maybe<Array<Maybe<Page_Contacto_telefonos>>>;
-  whatsapp?: Maybe<Array<Maybe<Page_Contacto_whatsapp>>>;
+  unidad?: Maybe<Array<Maybe<Page_Contacto_unidad>>>;
 }
 
 /**
  * Field Group
  */
-export interface Page_Contacto_direcciones {
-  __typename?: "Page_Contacto_direcciones";
+export interface Page_Contacto_unidad {
+  __typename?: "Page_Contacto_unidad";
+  direcciones?: Maybe<Array<Maybe<Page_Contacto_unidad_direcciones>>>;
+  emails?: Maybe<Array<Maybe<Page_Contacto_unidad_emails>>>;
+  /**
+   * The name of the ACF Field Group
+   */
+  fieldGroupName?: Maybe<ScalarsEnums["String"]>;
+  horarios?: Maybe<Array<Maybe<Page_Contacto_unidad_horarios>>>;
+  nombre?: Maybe<ScalarsEnums["String"]>;
+  telefonos?: Maybe<Array<Maybe<Page_Contacto_unidad_telefonos>>>;
+  whatsapp?: Maybe<Array<Maybe<Page_Contacto_unidad_whatsapp>>>;
+}
+
+/**
+ * Field Group
+ */
+export interface Page_Contacto_unidad_direcciones {
+  __typename?: "Page_Contacto_unidad_direcciones";
   direccion?: Maybe<ScalarsEnums["String"]>;
   /**
    * The name of the ACF Field Group
@@ -19956,8 +25624,8 @@ export interface Page_Contacto_direcciones {
 /**
  * Field Group
  */
-export interface Page_Contacto_emails {
-  __typename?: "Page_Contacto_emails";
+export interface Page_Contacto_unidad_emails {
+  __typename?: "Page_Contacto_unidad_emails";
   email?: Maybe<ScalarsEnums["String"]>;
   /**
    * The name of the ACF Field Group
@@ -19968,8 +25636,8 @@ export interface Page_Contacto_emails {
 /**
  * Field Group
  */
-export interface Page_Contacto_horarios {
-  __typename?: "Page_Contacto_horarios";
+export interface Page_Contacto_unidad_horarios {
+  __typename?: "Page_Contacto_unidad_horarios";
   dias?: Maybe<ScalarsEnums["String"]>;
   /**
    * The name of the ACF Field Group
@@ -19981,9 +25649,9 @@ export interface Page_Contacto_horarios {
 /**
  * Field Group
  */
-export interface Page_Contacto_telefonos {
-  __typename?: "Page_Contacto_telefonos";
-  extensiones?: Maybe<Array<Maybe<Page_Contacto_telefonos_extensiones>>>;
+export interface Page_Contacto_unidad_telefonos {
+  __typename?: "Page_Contacto_unidad_telefonos";
+  extensiones?: Maybe<Array<Maybe<Page_Contacto_unidad_telefonos_extensiones>>>;
   /**
    * The name of the ACF Field Group
    */
@@ -19994,8 +25662,8 @@ export interface Page_Contacto_telefonos {
 /**
  * Field Group
  */
-export interface Page_Contacto_telefonos_extensiones {
-  __typename?: "Page_Contacto_telefonos_extensiones";
+export interface Page_Contacto_unidad_telefonos_extensiones {
+  __typename?: "Page_Contacto_unidad_telefonos_extensiones";
   extension?: Maybe<ScalarsEnums["String"]>;
   /**
    * The name of the ACF Field Group
@@ -20006,8 +25674,8 @@ export interface Page_Contacto_telefonos_extensiones {
 /**
  * Field Group
  */
-export interface Page_Contacto_whatsapp {
-  __typename?: "Page_Contacto_whatsapp";
+export interface Page_Contacto_unidad_whatsapp {
+  __typename?: "Page_Contacto_unidad_whatsapp";
   /**
    * The name of the ACF Field Group
    */
@@ -20190,7 +25858,7 @@ export interface PeriodoDeAdmision {
    */
   periodoDeAdmisionId: ScalarsEnums["Int"];
   /**
-   * Connection between the periodoDeAdmision type and the periodoDeAdmision type
+   * Connection between the PeriodoDeAdmision type and the periodoDeAdmision type
    */
   preview?: Maybe<PeriodoDeAdmisionToPreviewConnectionEdge>;
   /**
@@ -20202,7 +25870,7 @@ export interface PeriodoDeAdmision {
    */
   previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
   /**
-   * The Yoast SEO data of the periodoDeAdmision
+   * The Yoast SEO data of the ContentNode
    */
   seo?: Maybe<PostTypeSEO>;
   /**
@@ -20238,14 +25906,89 @@ export interface PeriodoDeAdmision {
 }
 
 /**
- * Connection between the periodoDeAdmision type and the periodoDeAdmision type
+ * Connection to periodoDeAdmision Nodes
+ */
+export interface PeriodoDeAdmisionConnection {
+  __typename?:
+    | "RootQueryToPeriodoDeAdmisionConnection"
+    | "UserToPeriodoDeAdmisionConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected periodoDeAdmision Nodes
+   */
+  edges: Array<PeriodoDeAdmisionConnectionEdge>;
+  /**
+   * A list of connected periodoDeAdmision Nodes
+   */
+  nodes: Array<PeriodoDeAdmision>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: PeriodoDeAdmisionConnectionPageInfo;
+  $on: $PeriodoDeAdmisionConnection;
+}
+
+/**
+ * Edge between a Node and a connected periodoDeAdmision
+ */
+export interface PeriodoDeAdmisionConnectionEdge {
+  __typename?:
+    | "PeriodoDeAdmisionToPreviewConnectionEdge"
+    | "RootQueryToPeriodoDeAdmisionConnectionEdge"
+    | "UserToPeriodoDeAdmisionConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected periodoDeAdmision Node
+   */
+  node: PeriodoDeAdmision;
+  $on: $PeriodoDeAdmisionConnectionEdge;
+}
+
+/**
+ * Page Info on the connected PeriodoDeAdmisionConnectionEdge
+ */
+export interface PeriodoDeAdmisionConnectionPageInfo {
+  __typename?:
+    | "RootQueryToPeriodoDeAdmisionConnectionPageInfo"
+    | "UserToPeriodoDeAdmisionConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $PeriodoDeAdmisionConnectionPageInfo;
+}
+
+/**
+ * Connection between the PeriodoDeAdmision type and the periodoDeAdmision type
  */
 export interface PeriodoDeAdmisionToPreviewConnectionEdge {
   __typename?: "PeriodoDeAdmisionToPreviewConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<PeriodoDeAdmision>;
+  node: PeriodoDeAdmision;
 }
 
 /**
@@ -20262,6 +26005,7 @@ export interface PeriodoDeAdmision_Datosperiodosdeadmision {
    * The name of the ACF Field Group
    */
   fieldGroupName?: Maybe<ScalarsEnums["String"]>;
+  urlFormulario?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -20320,6 +26064,70 @@ export interface Plugin {
 }
 
 /**
+ * Connection to Plugin Nodes
+ */
+export interface PluginConnection {
+  __typename?: "RootQueryToPluginConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected Plugin Nodes
+   */
+  edges: Array<PluginConnectionEdge>;
+  /**
+   * A list of connected Plugin Nodes
+   */
+  nodes: Array<Plugin>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: PluginConnectionPageInfo;
+  $on: $PluginConnection;
+}
+
+/**
+ * Edge between a Node and a connected Plugin
+ */
+export interface PluginConnectionEdge {
+  __typename?: "RootQueryToPluginConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected Plugin Node
+   */
+  node: Plugin;
+  $on: $PluginConnectionEdge;
+}
+
+/**
+ * Page Info on the connected PluginConnectionEdge
+ */
+export interface PluginConnectionPageInfo {
+  __typename?: "RootQueryToPluginConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $PluginConnectionPageInfo;
+}
+
+/**
  * The post type
  */
 export interface Post {
@@ -20337,7 +26145,7 @@ export interface Post {
    */
   authorId?: Maybe<ScalarsEnums["ID"]>;
   /**
-   * Connection between the post type and the category type
+   * Connection between the Post type and the category type
    */
   categories: (args?: {
     /**
@@ -20370,7 +26178,7 @@ export interface Post {
    */
   commentStatus?: Maybe<ScalarsEnums["String"]>;
   /**
-   * Connection between the post type and the Comment type
+   * Connection between the Post type and the Comment type
    */
   comments: (args?: {
     /**
@@ -20416,7 +26224,7 @@ export interface Post {
    */
   contentTypeName: ScalarsEnums["String"];
   /**
-   * The unique resource identifier path
+   * The unique identifier stored in the database
    */
   databaseId: ScalarsEnums["Int"];
   /**
@@ -20563,7 +26371,7 @@ export interface Post {
    */
   pinged?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
   /**
-   * Connection between the post type and the postFormat type
+   * Connection between the Post type and the postFormat type
    */
   postFormats: (args?: {
     /**
@@ -20593,7 +26401,7 @@ export interface Post {
    */
   postId: ScalarsEnums["Int"];
   /**
-   * Connection between the post type and the post type
+   * Connection between the Post type and the post type
    */
   preview?: Maybe<PostToPreviewConnectionEdge>;
   /**
@@ -20609,7 +26417,7 @@ export interface Post {
    */
   revisionOf?: Maybe<NodeWithRevisionsToContentNodeConnectionEdge>;
   /**
-   * Connection between the post type and the post type
+   * Connection between the Post type and the post type
    */
   revisions: (args?: {
     /**
@@ -20634,7 +26442,7 @@ export interface Post {
     where?: Maybe<PostToRevisionConnectionWhereArgs>;
   }) => Maybe<PostToRevisionConnection>;
   /**
-   * The Yoast SEO data of the post
+   * The Yoast SEO data of the ContentNode
    */
   seo?: Maybe<PostTypeSEO>;
   /**
@@ -20650,7 +26458,7 @@ export interface Post {
    */
   styles?: Maybe<ScalarsEnums["String"]>;
   /**
-   * Connection between the post type and the tag type
+   * Connection between the Post type and the tag type
    */
   tags: (args?: {
     /**
@@ -20675,12 +26483,12 @@ export interface Post {
     where?: Maybe<PostToTagConnectionWhereArgs>;
   }) => Maybe<PostToTagConnection>;
   /**
-   * The template assigned to a node of content
+   * The template assigned to the node
    */
   template?: Maybe<ContentTemplate>;
   templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
   /**
-   * Connection between the post type and the TermNode type
+   * Connection between the Post type and the TermNode type
    */
   terms: (args?: {
     /**
@@ -20724,6 +26532,89 @@ export interface Post {
 }
 
 /**
+ * Connection to post Nodes
+ */
+export interface PostConnection {
+  __typename?:
+    | "CategoryToPostConnection"
+    | "PostFormatToPostConnection"
+    | "PostToRevisionConnection"
+    | "RootQueryToPostConnection"
+    | "TagToPostConnection"
+    | "UserToPostConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected post Nodes
+   */
+  edges: Array<PostConnectionEdge>;
+  /**
+   * A list of connected post Nodes
+   */
+  nodes: Array<Post>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: PostConnectionPageInfo;
+  $on: $PostConnection;
+}
+
+/**
+ * Edge between a Node and a connected post
+ */
+export interface PostConnectionEdge {
+  __typename?:
+    | "CategoryToPostConnectionEdge"
+    | "PostFormatToPostConnectionEdge"
+    | "PostToPreviewConnectionEdge"
+    | "PostToRevisionConnectionEdge"
+    | "RootQueryToPostConnectionEdge"
+    | "TagToPostConnectionEdge"
+    | "UserToPostConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected post Node
+   */
+  node: Post;
+  $on: $PostConnectionEdge;
+}
+
+/**
+ * Page Info on the connected PostConnectionEdge
+ */
+export interface PostConnectionPageInfo {
+  __typename?:
+    | "CategoryToPostConnectionPageInfo"
+    | "PostFormatToPostConnectionPageInfo"
+    | "PostToRevisionConnectionPageInfo"
+    | "RootQueryToPostConnectionPageInfo"
+    | "TagToPostConnectionPageInfo"
+    | "UserToPostConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $PostConnectionPageInfo;
+}
+
+/**
  * The postFormat type
  */
 export interface PostFormat {
@@ -20733,7 +26624,7 @@ export interface PostFormat {
    */
   conditionalTags?: Maybe<ConditionalTags>;
   /**
-   * Connection between the postFormat type and the ContentNode type
+   * Connection between the PostFormat type and the ContentNode type
    */
   contentNodes: (args?: {
     /**
@@ -20841,7 +26732,7 @@ export interface PostFormat {
    */
   postFormatId?: Maybe<ScalarsEnums["Int"]>;
   /**
-   * Connection between the postFormat type and the post type
+   * Connection between the PostFormat type and the post type
    */
   posts: (args?: {
     /**
@@ -20874,7 +26765,7 @@ export interface PostFormat {
    */
   slug?: Maybe<ScalarsEnums["String"]>;
   /**
-   * Connection between the postFormat type and the Taxonomy type
+   * Connection between the PostFormat type and the Taxonomy type
    */
   taxonomy?: Maybe<PostFormatToTaxonomyConnectionEdge>;
   /**
@@ -20897,22 +26788,90 @@ export interface PostFormat {
 }
 
 /**
- * Connection between the postFormat type and the ContentNode type
+ * Connection to postFormat Nodes
+ */
+export interface PostFormatConnection {
+  __typename?: "PostToPostFormatConnection" | "RootQueryToPostFormatConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected postFormat Nodes
+   */
+  edges: Array<PostFormatConnectionEdge>;
+  /**
+   * A list of connected postFormat Nodes
+   */
+  nodes: Array<PostFormat>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: PostFormatConnectionPageInfo;
+  $on: $PostFormatConnection;
+}
+
+/**
+ * Edge between a Node and a connected postFormat
+ */
+export interface PostFormatConnectionEdge {
+  __typename?:
+    | "PostToPostFormatConnectionEdge"
+    | "RootQueryToPostFormatConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected postFormat Node
+   */
+  node: PostFormat;
+  $on: $PostFormatConnectionEdge;
+}
+
+/**
+ * Page Info on the connected PostFormatConnectionEdge
+ */
+export interface PostFormatConnectionPageInfo {
+  __typename?:
+    | "PostToPostFormatConnectionPageInfo"
+    | "RootQueryToPostFormatConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $PostFormatConnectionPageInfo;
+}
+
+/**
+ * Connection between the PostFormat type and the ContentNode type
  */
 export interface PostFormatToContentNodeConnection {
   __typename?: "PostFormatToContentNodeConnection";
   /**
    * Edges for the PostFormatToContentNodeConnection connection
    */
-  edges?: Maybe<Array<Maybe<PostFormatToContentNodeConnectionEdge>>>;
+  edges: Array<PostFormatToContentNodeConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<ContentNode>>>;
+  nodes: Array<ContentNode>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: PostFormatToContentNodeConnectionPageInfo;
 }
 
 /**
@@ -20927,26 +26886,53 @@ export interface PostFormatToContentNodeConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<ContentNode>;
+  node: ContentNode;
 }
 
 /**
- * Connection between the postFormat type and the post type
+ * Page Info on the &quot;PostFormatToContentNodeConnection&quot;
+ */
+export interface PostFormatToContentNodeConnectionPageInfo {
+  __typename?: "PostFormatToContentNodeConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the PostFormat type and the post type
  */
 export interface PostFormatToPostConnection {
   __typename?: "PostFormatToPostConnection";
   /**
    * Edges for the PostFormatToPostConnection connection
    */
-  edges?: Maybe<Array<Maybe<PostFormatToPostConnectionEdge>>>;
+  edges: Array<PostFormatToPostConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Post>>>;
+  nodes: Array<Post>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: PostFormatToPostConnectionPageInfo;
 }
 
 /**
@@ -20961,37 +26947,68 @@ export interface PostFormatToPostConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Post>;
+  node: Post;
 }
 
 /**
- * Connection between the postFormat type and the Taxonomy type
+ * Page Info on the &quot;PostFormatToPostConnection&quot;
+ */
+export interface PostFormatToPostConnectionPageInfo {
+  __typename?: "PostFormatToPostConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the PostFormat type and the Taxonomy type
  */
 export interface PostFormatToTaxonomyConnectionEdge {
   __typename?: "PostFormatToTaxonomyConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Taxonomy>;
+  node: Taxonomy;
 }
 
 /**
- * Connection between the post type and the category type
+ * Connection between the Post type and the category type
  */
 export interface PostToCategoryConnection {
   __typename?: "PostToCategoryConnection";
   /**
    * Edges for the PostToCategoryConnection connection
    */
-  edges?: Maybe<Array<Maybe<PostToCategoryConnectionEdge>>>;
+  edges: Array<PostToCategoryConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Category>>>;
+  nodes: Array<Category>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: PostToCategoryConnectionPageInfo;
 }
 
 /**
@@ -21010,26 +27027,53 @@ export interface PostToCategoryConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Category>;
+  node: Category;
 }
 
 /**
- * Connection between the post type and the Comment type
+ * Page Info on the &quot;PostToCategoryConnection&quot;
+ */
+export interface PostToCategoryConnectionPageInfo {
+  __typename?: "PostToCategoryConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the Post type and the Comment type
  */
 export interface PostToCommentConnection {
   __typename?: "PostToCommentConnection";
   /**
    * Edges for the PostToCommentConnection connection
    */
-  edges?: Maybe<Array<Maybe<PostToCommentConnectionEdge>>>;
+  edges: Array<PostToCommentConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Comment>>>;
+  nodes: Array<Comment>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: PostToCommentConnectionPageInfo;
 }
 
 /**
@@ -21044,26 +27088,53 @@ export interface PostToCommentConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Comment>;
+  node: Comment;
 }
 
 /**
- * Connection between the post type and the postFormat type
+ * Page Info on the &quot;PostToCommentConnection&quot;
+ */
+export interface PostToCommentConnectionPageInfo {
+  __typename?: "PostToCommentConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the Post type and the postFormat type
  */
 export interface PostToPostFormatConnection {
   __typename?: "PostToPostFormatConnection";
   /**
    * Edges for the PostToPostFormatConnection connection
    */
-  edges?: Maybe<Array<Maybe<PostToPostFormatConnectionEdge>>>;
+  edges: Array<PostToPostFormatConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<PostFormat>>>;
+  nodes: Array<PostFormat>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: PostToPostFormatConnectionPageInfo;
 }
 
 /**
@@ -21082,37 +27153,68 @@ export interface PostToPostFormatConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<PostFormat>;
+  node: PostFormat;
 }
 
 /**
- * Connection between the post type and the post type
+ * Page Info on the &quot;PostToPostFormatConnection&quot;
+ */
+export interface PostToPostFormatConnectionPageInfo {
+  __typename?: "PostToPostFormatConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the Post type and the post type
  */
 export interface PostToPreviewConnectionEdge {
   __typename?: "PostToPreviewConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Post>;
+  node: Post;
 }
 
 /**
- * Connection between the post type and the post type
+ * Connection between the Post type and the post type
  */
 export interface PostToRevisionConnection {
   __typename?: "PostToRevisionConnection";
   /**
-   * Edges for the postToRevisionConnection connection
+   * Edges for the PostToRevisionConnection connection
    */
-  edges?: Maybe<Array<Maybe<PostToRevisionConnectionEdge>>>;
+  edges: Array<PostToRevisionConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Post>>>;
+  nodes: Array<Post>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: PostToRevisionConnectionPageInfo;
 }
 
 /**
@@ -21127,26 +27229,53 @@ export interface PostToRevisionConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Post>;
+  node: Post;
 }
 
 /**
- * Connection between the post type and the tag type
+ * Page Info on the &quot;PostToRevisionConnection&quot;
+ */
+export interface PostToRevisionConnectionPageInfo {
+  __typename?: "PostToRevisionConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the Post type and the tag type
  */
 export interface PostToTagConnection {
   __typename?: "PostToTagConnection";
   /**
    * Edges for the PostToTagConnection connection
    */
-  edges?: Maybe<Array<Maybe<PostToTagConnectionEdge>>>;
+  edges: Array<PostToTagConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Tag>>>;
+  nodes: Array<Tag>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: PostToTagConnectionPageInfo;
 }
 
 /**
@@ -21165,26 +27294,53 @@ export interface PostToTagConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Tag>;
+  node: Tag;
 }
 
 /**
- * Connection between the post type and the TermNode type
+ * Page Info on the &quot;PostToTagConnection&quot;
+ */
+export interface PostToTagConnectionPageInfo {
+  __typename?: "PostToTagConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the Post type and the TermNode type
  */
 export interface PostToTermNodeConnection {
   __typename?: "PostToTermNodeConnection";
   /**
    * Edges for the PostToTermNodeConnection connection
    */
-  edges?: Maybe<Array<Maybe<PostToTermNodeConnectionEdge>>>;
+  edges: Array<PostToTermNodeConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<TermNode>>>;
+  nodes: Array<TermNode>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: PostToTermNodeConnectionPageInfo;
 }
 
 /**
@@ -21199,7 +27355,34 @@ export interface PostToTermNodeConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<TermNode>;
+  node: TermNode;
+}
+
+/**
+ * Page Info on the &quot;PostToTermNodeConnection&quot;
+ */
+export interface PostToTermNodeConnectionPageInfo {
+  __typename?: "PostToTermNodeConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -21368,14 +27551,58 @@ export interface Post_Datospublicacion_DatosDelEvento {
 }
 
 /**
+ * Nodes that can be seen in a preview (unpublished) state.
+ */
+export interface Previewable {
+  __typename?:
+    | "Carrera"
+    | "Departamento"
+    | "Facultad"
+    | "Grado"
+    | "Investigacion"
+    | "Investigador"
+    | "LineaDeInvestigacion"
+    | "Page"
+    | "PeriodoDeAdmision"
+    | "Post"
+    | "Recurso"
+    | "Slide";
+  /**
+   * Whether the object is a node in the preview state
+   */
+  isPreview?: Maybe<ScalarsEnums["Boolean"]>;
+  /**
+   * The database id of the preview node
+   */
+  previewRevisionDatabaseId?: Maybe<ScalarsEnums["Int"]>;
+  /**
+   * Whether the object is a node in the preview state
+   */
+  previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
+  $on: $Previewable;
+}
+
+/**
  * The reading setting type
  */
 export interface ReadingSettings {
   __typename?: "ReadingSettings";
   /**
+   * The ID of the page that should display the latest posts
+   */
+  pageForPosts?: Maybe<ScalarsEnums["Int"]>;
+  /**
+   * The ID of the page that should be displayed on the front page
+   */
+  pageOnFront?: Maybe<ScalarsEnums["Int"]>;
+  /**
    * Blog pages show at most.
    */
   postsPerPage?: Maybe<ScalarsEnums["Int"]>;
+  /**
+   * What to show on the front page
+   */
+  showOnFront?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -21555,7 +27782,7 @@ export interface Recurso {
   modifiedGmt?: Maybe<ScalarsEnums["String"]>;
   nombre?: Maybe<ScalarsEnums["String"]>;
   /**
-   * Connection between the recurso type and the recurso type
+   * Connection between the Recurso type and the recurso type
    */
   preview?: Maybe<RecursoToPreviewConnectionEdge>;
   /**
@@ -21572,7 +27799,7 @@ export interface Recurso {
    */
   recursoId: ScalarsEnums["Int"];
   /**
-   * The Yoast SEO data of the recurso
+   * The Yoast SEO data of the ContentNode
    */
   seo?: Maybe<PostTypeSEO>;
   /**
@@ -21588,7 +27815,7 @@ export interface Recurso {
    */
   styles?: Maybe<ScalarsEnums["String"]>;
   /**
-   * The template assigned to a node of content
+   * The template assigned to the node
    */
   template?: Maybe<ContentTemplate>;
   templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
@@ -21609,6 +27836,80 @@ export interface Recurso {
 }
 
 /**
+ * Connection to recurso Nodes
+ */
+export interface RecursoConnection {
+  __typename?:
+    | "CarreraToRecursoConnection"
+    | "RootQueryToRecursoConnection"
+    | "UserToRecursoConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected recurso Nodes
+   */
+  edges: Array<RecursoConnectionEdge>;
+  /**
+   * A list of connected recurso Nodes
+   */
+  nodes: Array<Recurso>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: RecursoConnectionPageInfo;
+  $on: $RecursoConnection;
+}
+
+/**
+ * Edge between a Node and a connected recurso
+ */
+export interface RecursoConnectionEdge {
+  __typename?:
+    | "CarreraToRecursoConnectionEdge"
+    | "RecursoToPreviewConnectionEdge"
+    | "RootQueryToRecursoConnectionEdge"
+    | "UserToRecursoConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected recurso Node
+   */
+  node: Recurso;
+  $on: $RecursoConnectionEdge;
+}
+
+/**
+ * Page Info on the connected RecursoConnectionEdge
+ */
+export interface RecursoConnectionPageInfo {
+  __typename?:
+    | "CarreraToRecursoConnectionPageInfo"
+    | "RootQueryToRecursoConnectionPageInfo"
+    | "UserToRecursoConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $RecursoConnectionPageInfo;
+}
+
+/**
  * Connection between the recurso type and the carrera type
  */
 export interface RecursoToCarreraConnection {
@@ -21616,15 +27917,15 @@ export interface RecursoToCarreraConnection {
   /**
    * Edges for the RecursoToCarreraConnection connection
    */
-  edges?: Maybe<Array<Maybe<RecursoToCarreraConnectionEdge>>>;
+  edges: Array<RecursoToCarreraConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Carrera>>>;
+  nodes: Array<Carrera>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RecursoToCarreraConnectionPageInfo;
 }
 
 /**
@@ -21639,18 +27940,49 @@ export interface RecursoToCarreraConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Carrera>;
+  node: Carrera;
 }
 
 /**
- * Connection between the recurso type and the recurso type
+ * Page Info on the &quot;RecursoToCarreraConnection&quot;
+ */
+export interface RecursoToCarreraConnectionPageInfo {
+  __typename?: "RecursoToCarreraConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the Recurso type and the recurso type
  */
 export interface RecursoToPreviewConnectionEdge {
   __typename?: "RecursoToPreviewConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Recurso>;
+  node: Recurso;
 }
 
 /**
@@ -21666,7 +27998,7 @@ export interface Recurso_Datosrecurso {
 }
 
 /**
- * The payload for the registerUser mutation
+ * The payload for the registerUser mutation.
  */
 export interface RegisterUserPayload {
   __typename?: "RegisterUserPayload";
@@ -21681,7 +28013,7 @@ export interface RegisterUserPayload {
 }
 
 /**
- * The payload for the resetUserPassword mutation
+ * The payload for the resetUserPassword mutation.
  */
 export interface ResetUserPasswordPayload {
   __typename?: "ResetUserPasswordPayload";
@@ -21696,7 +28028,7 @@ export interface ResetUserPasswordPayload {
 }
 
 /**
- * The payload for the restoreComment mutation
+ * The payload for the restoreComment mutation.
  */
 export interface RestoreCommentPayload {
   __typename?: "RestoreCommentPayload";
@@ -21722,15 +28054,15 @@ export interface RootQueryToCarreraConnection {
   /**
    * Edges for the RootQueryToCarreraConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToCarreraConnectionEdge>>>;
+  edges: Array<RootQueryToCarreraConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Carrera>>>;
+  nodes: Array<Carrera>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToCarreraConnectionPageInfo;
 }
 
 /**
@@ -21745,7 +28077,34 @@ export interface RootQueryToCarreraConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Carrera>;
+  node: Carrera;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToCarreraConnection&quot;
+ */
+export interface RootQueryToCarreraConnectionPageInfo {
+  __typename?: "RootQueryToCarreraConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -21756,15 +28115,15 @@ export interface RootQueryToCategoryConnection {
   /**
    * Edges for the RootQueryToCategoryConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToCategoryConnectionEdge>>>;
+  edges: Array<RootQueryToCategoryConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Category>>>;
+  nodes: Array<Category>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToCategoryConnectionPageInfo;
 }
 
 /**
@@ -21779,7 +28138,34 @@ export interface RootQueryToCategoryConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Category>;
+  node: Category;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToCategoryConnection&quot;
+ */
+export interface RootQueryToCategoryConnectionPageInfo {
+  __typename?: "RootQueryToCategoryConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -21790,15 +28176,15 @@ export interface RootQueryToCommentConnection {
   /**
    * Edges for the RootQueryToCommentConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToCommentConnectionEdge>>>;
+  edges: Array<RootQueryToCommentConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Comment>>>;
+  nodes: Array<Comment>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToCommentConnectionPageInfo;
 }
 
 /**
@@ -21813,7 +28199,34 @@ export interface RootQueryToCommentConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Comment>;
+  node: Comment;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToCommentConnection&quot;
+ */
+export interface RootQueryToCommentConnectionPageInfo {
+  __typename?: "RootQueryToCommentConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -21824,15 +28237,15 @@ export interface RootQueryToContentNodeConnection {
   /**
    * Edges for the RootQueryToContentNodeConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToContentNodeConnectionEdge>>>;
+  edges: Array<RootQueryToContentNodeConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<ContentNode>>>;
+  nodes: Array<ContentNode>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToContentNodeConnectionPageInfo;
 }
 
 /**
@@ -21847,41 +28260,34 @@ export interface RootQueryToContentNodeConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<ContentNode>;
+  node: ContentNode;
 }
 
 /**
- * Connection between the RootQuery type and the ContentRevisionUnion type
+ * Page Info on the &quot;RootQueryToContentNodeConnection&quot;
  */
-export interface RootQueryToContentRevisionUnionConnection {
-  __typename?: "RootQueryToContentRevisionUnionConnection";
+export interface RootQueryToContentNodeConnectionPageInfo {
+  __typename?: "RootQueryToContentNodeConnectionPageInfo";
   /**
-   * Edges for the RootQueryToContentRevisionUnionConnection connection
+   * When paginating forwards, the cursor to continue.
    */
-  edges?: Maybe<Array<Maybe<RootQueryToContentRevisionUnionConnectionEdge>>>;
+  endCursor?: Maybe<ScalarsEnums["String"]>;
   /**
-   * The nodes of the connection, without the edges
+   * When paginating forwards, are there more items?
    */
-  nodes?: Maybe<Array<Maybe<ContentRevisionUnion>>>;
+  hasNextPage: ScalarsEnums["Boolean"];
   /**
-   * Information about pagination in a connection.
+   * When paginating backwards, are there more items?
    */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface RootQueryToContentRevisionUnionConnectionEdge {
-  __typename?: "RootQueryToContentRevisionUnionConnectionEdge";
+  hasPreviousPage: ScalarsEnums["Boolean"];
   /**
-   * A cursor for use in pagination
+   * Raw schema for page
    */
-  cursor?: Maybe<ScalarsEnums["String"]>;
+  seo?: Maybe<SEOPostTypePageInfo>;
   /**
-   * The item at the end of the edge
+   * When paginating backwards, the cursor to continue.
    */
-  node?: Maybe<ContentRevisionUnion>;
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -21892,15 +28298,15 @@ export interface RootQueryToContentTypeConnection {
   /**
    * Edges for the RootQueryToContentTypeConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToContentTypeConnectionEdge>>>;
+  edges: Array<RootQueryToContentTypeConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<ContentType>>>;
+  nodes: Array<ContentType>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToContentTypeConnectionPageInfo;
 }
 
 /**
@@ -21915,7 +28321,34 @@ export interface RootQueryToContentTypeConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<ContentType>;
+  node: ContentType;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToContentTypeConnection&quot;
+ */
+export interface RootQueryToContentTypeConnectionPageInfo {
+  __typename?: "RootQueryToContentTypeConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -21926,15 +28359,15 @@ export interface RootQueryToDepartamentoConnection {
   /**
    * Edges for the RootQueryToDepartamentoConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToDepartamentoConnectionEdge>>>;
+  edges: Array<RootQueryToDepartamentoConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Departamento>>>;
+  nodes: Array<Departamento>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToDepartamentoConnectionPageInfo;
 }
 
 /**
@@ -21949,7 +28382,34 @@ export interface RootQueryToDepartamentoConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Departamento>;
+  node: Departamento;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToDepartamentoConnection&quot;
+ */
+export interface RootQueryToDepartamentoConnectionPageInfo {
+  __typename?: "RootQueryToDepartamentoConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -21960,15 +28420,15 @@ export interface RootQueryToEnqueuedScriptConnection {
   /**
    * Edges for the RootQueryToEnqueuedScriptConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToEnqueuedScriptConnectionEdge>>>;
+  edges: Array<RootQueryToEnqueuedScriptConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<EnqueuedScript>>>;
+  nodes: Array<EnqueuedScript>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToEnqueuedScriptConnectionPageInfo;
 }
 
 /**
@@ -21983,7 +28443,34 @@ export interface RootQueryToEnqueuedScriptConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<EnqueuedScript>;
+  node: EnqueuedScript;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToEnqueuedScriptConnection&quot;
+ */
+export interface RootQueryToEnqueuedScriptConnectionPageInfo {
+  __typename?: "RootQueryToEnqueuedScriptConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -21994,15 +28481,15 @@ export interface RootQueryToEnqueuedStylesheetConnection {
   /**
    * Edges for the RootQueryToEnqueuedStylesheetConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToEnqueuedStylesheetConnectionEdge>>>;
+  edges: Array<RootQueryToEnqueuedStylesheetConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<EnqueuedStylesheet>>>;
+  nodes: Array<EnqueuedStylesheet>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToEnqueuedStylesheetConnectionPageInfo;
 }
 
 /**
@@ -22017,7 +28504,34 @@ export interface RootQueryToEnqueuedStylesheetConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<EnqueuedStylesheet>;
+  node: EnqueuedStylesheet;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToEnqueuedStylesheetConnection&quot;
+ */
+export interface RootQueryToEnqueuedStylesheetConnectionPageInfo {
+  __typename?: "RootQueryToEnqueuedStylesheetConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22028,15 +28542,15 @@ export interface RootQueryToFacultadConnection {
   /**
    * Edges for the RootQueryToFacultadConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToFacultadConnectionEdge>>>;
+  edges: Array<RootQueryToFacultadConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Facultad>>>;
+  nodes: Array<Facultad>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToFacultadConnectionPageInfo;
 }
 
 /**
@@ -22051,7 +28565,34 @@ export interface RootQueryToFacultadConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Facultad>;
+  node: Facultad;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToFacultadConnection&quot;
+ */
+export interface RootQueryToFacultadConnectionPageInfo {
+  __typename?: "RootQueryToFacultadConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22062,15 +28603,15 @@ export interface RootQueryToGradoConnection {
   /**
    * Edges for the RootQueryToGradoConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToGradoConnectionEdge>>>;
+  edges: Array<RootQueryToGradoConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Grado>>>;
+  nodes: Array<Grado>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToGradoConnectionPageInfo;
 }
 
 /**
@@ -22085,7 +28626,34 @@ export interface RootQueryToGradoConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Grado>;
+  node: Grado;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToGradoConnection&quot;
+ */
+export interface RootQueryToGradoConnectionPageInfo {
+  __typename?: "RootQueryToGradoConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22096,15 +28664,15 @@ export interface RootQueryToGrupoDeRequisitosConnection {
   /**
    * Edges for the RootQueryToGrupoDeRequisitosConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToGrupoDeRequisitosConnectionEdge>>>;
+  edges: Array<RootQueryToGrupoDeRequisitosConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<GrupoDeRequisitos>>>;
+  nodes: Array<GrupoDeRequisitos>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToGrupoDeRequisitosConnectionPageInfo;
 }
 
 /**
@@ -22119,7 +28687,34 @@ export interface RootQueryToGrupoDeRequisitosConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<GrupoDeRequisitos>;
+  node: GrupoDeRequisitos;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToGrupoDeRequisitosConnection&quot;
+ */
+export interface RootQueryToGrupoDeRequisitosConnectionPageInfo {
+  __typename?: "RootQueryToGrupoDeRequisitosConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22130,15 +28725,15 @@ export interface RootQueryToInvestigacionConnection {
   /**
    * Edges for the RootQueryToInvestigacionConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToInvestigacionConnectionEdge>>>;
+  edges: Array<RootQueryToInvestigacionConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Investigacion>>>;
+  nodes: Array<Investigacion>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToInvestigacionConnectionPageInfo;
 }
 
 /**
@@ -22153,7 +28748,34 @@ export interface RootQueryToInvestigacionConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Investigacion>;
+  node: Investigacion;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToInvestigacionConnection&quot;
+ */
+export interface RootQueryToInvestigacionConnectionPageInfo {
+  __typename?: "RootQueryToInvestigacionConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22164,15 +28786,15 @@ export interface RootQueryToInvestigadorConnection {
   /**
    * Edges for the RootQueryToInvestigadorConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToInvestigadorConnectionEdge>>>;
+  edges: Array<RootQueryToInvestigadorConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Investigador>>>;
+  nodes: Array<Investigador>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToInvestigadorConnectionPageInfo;
 }
 
 /**
@@ -22187,7 +28809,34 @@ export interface RootQueryToInvestigadorConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Investigador>;
+  node: Investigador;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToInvestigadorConnection&quot;
+ */
+export interface RootQueryToInvestigadorConnectionPageInfo {
+  __typename?: "RootQueryToInvestigadorConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22198,15 +28847,15 @@ export interface RootQueryToLineaDeInvestigacionConnection {
   /**
    * Edges for the RootQueryToLineaDeInvestigacionConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToLineaDeInvestigacionConnectionEdge>>>;
+  edges: Array<RootQueryToLineaDeInvestigacionConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<LineaDeInvestigacion>>>;
+  nodes: Array<LineaDeInvestigacion>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToLineaDeInvestigacionConnectionPageInfo;
 }
 
 /**
@@ -22221,7 +28870,34 @@ export interface RootQueryToLineaDeInvestigacionConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<LineaDeInvestigacion>;
+  node: LineaDeInvestigacion;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToLineaDeInvestigacionConnection&quot;
+ */
+export interface RootQueryToLineaDeInvestigacionConnectionPageInfo {
+  __typename?: "RootQueryToLineaDeInvestigacionConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22232,15 +28908,15 @@ export interface RootQueryToMediaItemConnection {
   /**
    * Edges for the RootQueryToMediaItemConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToMediaItemConnectionEdge>>>;
+  edges: Array<RootQueryToMediaItemConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<MediaItem>>>;
+  nodes: Array<MediaItem>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToMediaItemConnectionPageInfo;
 }
 
 /**
@@ -22255,7 +28931,34 @@ export interface RootQueryToMediaItemConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<MediaItem>;
+  node: MediaItem;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToMediaItemConnection&quot;
+ */
+export interface RootQueryToMediaItemConnectionPageInfo {
+  __typename?: "RootQueryToMediaItemConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22266,15 +28969,15 @@ export interface RootQueryToMenuConnection {
   /**
    * Edges for the RootQueryToMenuConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToMenuConnectionEdge>>>;
+  edges: Array<RootQueryToMenuConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Menu>>>;
+  nodes: Array<Menu>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToMenuConnectionPageInfo;
 }
 
 /**
@@ -22289,7 +28992,34 @@ export interface RootQueryToMenuConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Menu>;
+  node: Menu;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToMenuConnection&quot;
+ */
+export interface RootQueryToMenuConnectionPageInfo {
+  __typename?: "RootQueryToMenuConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22300,15 +29030,15 @@ export interface RootQueryToMenuItemConnection {
   /**
    * Edges for the RootQueryToMenuItemConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToMenuItemConnectionEdge>>>;
+  edges: Array<RootQueryToMenuItemConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<MenuItem>>>;
+  nodes: Array<MenuItem>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToMenuItemConnectionPageInfo;
 }
 
 /**
@@ -22323,7 +29053,34 @@ export interface RootQueryToMenuItemConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<MenuItem>;
+  node: MenuItem;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToMenuItemConnection&quot;
+ */
+export interface RootQueryToMenuItemConnectionPageInfo {
+  __typename?: "RootQueryToMenuItemConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22334,15 +29091,15 @@ export interface RootQueryToPageConnection {
   /**
    * Edges for the RootQueryToPageConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToPageConnectionEdge>>>;
+  edges: Array<RootQueryToPageConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Page>>>;
+  nodes: Array<Page>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToPageConnectionPageInfo;
 }
 
 /**
@@ -22357,7 +29114,34 @@ export interface RootQueryToPageConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Page>;
+  node: Page;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToPageConnection&quot;
+ */
+export interface RootQueryToPageConnectionPageInfo {
+  __typename?: "RootQueryToPageConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22368,15 +29152,15 @@ export interface RootQueryToPeriodoDeAdmisionConnection {
   /**
    * Edges for the RootQueryToPeriodoDeAdmisionConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToPeriodoDeAdmisionConnectionEdge>>>;
+  edges: Array<RootQueryToPeriodoDeAdmisionConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<PeriodoDeAdmision>>>;
+  nodes: Array<PeriodoDeAdmision>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToPeriodoDeAdmisionConnectionPageInfo;
 }
 
 /**
@@ -22391,7 +29175,34 @@ export interface RootQueryToPeriodoDeAdmisionConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<PeriodoDeAdmision>;
+  node: PeriodoDeAdmision;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToPeriodoDeAdmisionConnection&quot;
+ */
+export interface RootQueryToPeriodoDeAdmisionConnectionPageInfo {
+  __typename?: "RootQueryToPeriodoDeAdmisionConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22402,15 +29213,15 @@ export interface RootQueryToPluginConnection {
   /**
    * Edges for the RootQueryToPluginConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToPluginConnectionEdge>>>;
+  edges: Array<RootQueryToPluginConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Plugin>>>;
+  nodes: Array<Plugin>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToPluginConnectionPageInfo;
 }
 
 /**
@@ -22425,7 +29236,34 @@ export interface RootQueryToPluginConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Plugin>;
+  node: Plugin;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToPluginConnection&quot;
+ */
+export interface RootQueryToPluginConnectionPageInfo {
+  __typename?: "RootQueryToPluginConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22436,15 +29274,15 @@ export interface RootQueryToPostConnection {
   /**
    * Edges for the RootQueryToPostConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToPostConnectionEdge>>>;
+  edges: Array<RootQueryToPostConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Post>>>;
+  nodes: Array<Post>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToPostConnectionPageInfo;
 }
 
 /**
@@ -22459,7 +29297,34 @@ export interface RootQueryToPostConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Post>;
+  node: Post;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToPostConnection&quot;
+ */
+export interface RootQueryToPostConnectionPageInfo {
+  __typename?: "RootQueryToPostConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22470,15 +29335,15 @@ export interface RootQueryToPostFormatConnection {
   /**
    * Edges for the RootQueryToPostFormatConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToPostFormatConnectionEdge>>>;
+  edges: Array<RootQueryToPostFormatConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<PostFormat>>>;
+  nodes: Array<PostFormat>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToPostFormatConnectionPageInfo;
 }
 
 /**
@@ -22493,7 +29358,34 @@ export interface RootQueryToPostFormatConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<PostFormat>;
+  node: PostFormat;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToPostFormatConnection&quot;
+ */
+export interface RootQueryToPostFormatConnectionPageInfo {
+  __typename?: "RootQueryToPostFormatConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22504,15 +29396,15 @@ export interface RootQueryToRecursoConnection {
   /**
    * Edges for the RootQueryToRecursoConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToRecursoConnectionEdge>>>;
+  edges: Array<RootQueryToRecursoConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Recurso>>>;
+  nodes: Array<Recurso>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToRecursoConnectionPageInfo;
 }
 
 /**
@@ -22527,7 +29419,95 @@ export interface RootQueryToRecursoConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Recurso>;
+  node: Recurso;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToRecursoConnection&quot;
+ */
+export interface RootQueryToRecursoConnectionPageInfo {
+  __typename?: "RootQueryToRecursoConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the RootQuery type and the ContentNode type
+ */
+export interface RootQueryToRevisionsConnection {
+  __typename?: "RootQueryToRevisionsConnection";
+  /**
+   * Edges for the RootQueryToRevisionsConnection connection
+   */
+  edges: Array<RootQueryToRevisionsConnectionEdge>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes: Array<ContentNode>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: RootQueryToRevisionsConnectionPageInfo;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface RootQueryToRevisionsConnectionEdge {
+  __typename?: "RootQueryToRevisionsConnectionEdge";
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node: ContentNode;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToRevisionsConnection&quot;
+ */
+export interface RootQueryToRevisionsConnectionPageInfo {
+  __typename?: "RootQueryToRevisionsConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22538,15 +29518,15 @@ export interface RootQueryToSlideConnection {
   /**
    * Edges for the RootQueryToSlideConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToSlideConnectionEdge>>>;
+  edges: Array<RootQueryToSlideConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Slide>>>;
+  nodes: Array<Slide>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToSlideConnectionPageInfo;
 }
 
 /**
@@ -22561,7 +29541,34 @@ export interface RootQueryToSlideConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Slide>;
+  node: Slide;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToSlideConnection&quot;
+ */
+export interface RootQueryToSlideConnectionPageInfo {
+  __typename?: "RootQueryToSlideConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22572,15 +29579,15 @@ export interface RootQueryToTagConnection {
   /**
    * Edges for the RootQueryToTagConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToTagConnectionEdge>>>;
+  edges: Array<RootQueryToTagConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Tag>>>;
+  nodes: Array<Tag>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToTagConnectionPageInfo;
 }
 
 /**
@@ -22595,7 +29602,34 @@ export interface RootQueryToTagConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Tag>;
+  node: Tag;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToTagConnection&quot;
+ */
+export interface RootQueryToTagConnectionPageInfo {
+  __typename?: "RootQueryToTagConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22606,15 +29640,15 @@ export interface RootQueryToTaxonomyConnection {
   /**
    * Edges for the RootQueryToTaxonomyConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToTaxonomyConnectionEdge>>>;
+  edges: Array<RootQueryToTaxonomyConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Taxonomy>>>;
+  nodes: Array<Taxonomy>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToTaxonomyConnectionPageInfo;
 }
 
 /**
@@ -22629,7 +29663,34 @@ export interface RootQueryToTaxonomyConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Taxonomy>;
+  node: Taxonomy;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToTaxonomyConnection&quot;
+ */
+export interface RootQueryToTaxonomyConnectionPageInfo {
+  __typename?: "RootQueryToTaxonomyConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22640,15 +29701,15 @@ export interface RootQueryToTermNodeConnection {
   /**
    * Edges for the RootQueryToTermNodeConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToTermNodeConnectionEdge>>>;
+  edges: Array<RootQueryToTermNodeConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<TermNode>>>;
+  nodes: Array<TermNode>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToTermNodeConnectionPageInfo;
 }
 
 /**
@@ -22663,7 +29724,34 @@ export interface RootQueryToTermNodeConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<TermNode>;
+  node: TermNode;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToTermNodeConnection&quot;
+ */
+export interface RootQueryToTermNodeConnectionPageInfo {
+  __typename?: "RootQueryToTermNodeConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22674,15 +29762,15 @@ export interface RootQueryToThemeConnection {
   /**
    * Edges for the RootQueryToThemeConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToThemeConnectionEdge>>>;
+  edges: Array<RootQueryToThemeConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Theme>>>;
+  nodes: Array<Theme>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToThemeConnectionPageInfo;
 }
 
 /**
@@ -22697,7 +29785,34 @@ export interface RootQueryToThemeConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Theme>;
+  node: Theme;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToThemeConnection&quot;
+ */
+export interface RootQueryToThemeConnectionPageInfo {
+  __typename?: "RootQueryToThemeConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22708,15 +29823,15 @@ export interface RootQueryToUserConnection {
   /**
    * Edges for the RootQueryToUserConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToUserConnectionEdge>>>;
+  edges: Array<RootQueryToUserConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<User>>>;
+  nodes: Array<User>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToUserConnectionPageInfo;
 }
 
 /**
@@ -22731,7 +29846,34 @@ export interface RootQueryToUserConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<User>;
+  node: User;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToUserConnection&quot;
+ */
+export interface RootQueryToUserConnectionPageInfo {
+  __typename?: "RootQueryToUserConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22742,15 +29884,15 @@ export interface RootQueryToUserRoleConnection {
   /**
    * Edges for the RootQueryToUserRoleConnection connection
    */
-  edges?: Maybe<Array<Maybe<RootQueryToUserRoleConnectionEdge>>>;
+  edges: Array<RootQueryToUserRoleConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<UserRole>>>;
+  nodes: Array<UserRole>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: RootQueryToUserRoleConnectionPageInfo;
 }
 
 /**
@@ -22765,7 +29907,34 @@ export interface RootQueryToUserRoleConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<UserRole>;
+  node: UserRole;
+}
+
+/**
+ * Page Info on the &quot;RootQueryToUserRoleConnection&quot;
+ */
+export interface RootQueryToUserRoleConnectionPageInfo {
+  __typename?: "RootQueryToUserRoleConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22791,6 +29960,7 @@ export interface SEOConfig {
   __typename?: "SEOConfig";
   breadcrumbs?: Maybe<SEOBreadcrumbs>;
   contentTypes?: Maybe<SEOContentTypes>;
+  meta?: Maybe<SEOGlobalMeta>;
   openGraph?: Maybe<SEOOpenGraph>;
   redirects?: Maybe<Array<Maybe<SEORedirect>>>;
   schema?: Maybe<SEOSchema>;
@@ -22799,7 +29969,7 @@ export interface SEOConfig {
 }
 
 /**
- * he Yoast SEO search appearance content types fields
+ * The Yoast SEO search appearance content types fields
  */
 export interface SEOContentType {
   __typename?: "SEOContentType";
@@ -22812,7 +29982,7 @@ export interface SEOContentType {
 }
 
 /**
- * he Yoast SEO search appearance content types fields
+ * The Yoast SEO search appearance content types fields
  */
 export interface SEOContentTypeArchive {
   __typename?: "SEOContentTypeArchive";
@@ -22821,6 +29991,9 @@ export interface SEOContentTypeArchive {
   fullHead?: Maybe<ScalarsEnums["String"]>;
   hasArchive?: Maybe<ScalarsEnums["Boolean"]>;
   metaDesc?: Maybe<ScalarsEnums["String"]>;
+  metaRobotsFollow?: Maybe<ScalarsEnums["String"]>;
+  metaRobotsIndex?: Maybe<ScalarsEnums["String"]>;
+  metaRobotsNofollow?: Maybe<ScalarsEnums["Boolean"]>;
   metaRobotsNoindex?: Maybe<ScalarsEnums["Boolean"]>;
   title?: Maybe<ScalarsEnums["String"]>;
 }
@@ -22843,6 +30016,62 @@ export interface SEOContentTypes {
   post?: Maybe<SEOContentType>;
   recurso?: Maybe<SEOContentType>;
   slide?: Maybe<SEOContentType>;
+}
+
+/**
+ * The Yoast SEO meta data
+ */
+export interface SEOGlobalMeta {
+  __typename?: "SEOGlobalMeta";
+  author?: Maybe<SEOGlobalMetaAuthor>;
+  config?: Maybe<SEOGlobalMetaConfig>;
+  date?: Maybe<SEOGlobalMetaDate>;
+  homepage?: Maybe<SEOGlobalMetaHome>;
+  notFound?: Maybe<SEOGlobalMeta404>;
+}
+
+/**
+ * The Yoast SEO meta 404 data
+ */
+export interface SEOGlobalMeta404 {
+  __typename?: "SEOGlobalMeta404";
+  breadcrumb?: Maybe<ScalarsEnums["String"]>;
+  title?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * The Yoast SEO Author data
+ */
+export interface SEOGlobalMetaAuthor {
+  __typename?: "SEOGlobalMetaAuthor";
+  description?: Maybe<ScalarsEnums["String"]>;
+  title?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * The Yoast SEO meta config data
+ */
+export interface SEOGlobalMetaConfig {
+  __typename?: "SEOGlobalMetaConfig";
+  separator?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * The Yoast SEO Date data
+ */
+export interface SEOGlobalMetaDate {
+  __typename?: "SEOGlobalMetaDate";
+  description?: Maybe<ScalarsEnums["String"]>;
+  title?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * The Yoast SEO homepage data
+ */
+export interface SEOGlobalMetaHome {
+  __typename?: "SEOGlobalMetaHome";
+  description?: Maybe<ScalarsEnums["String"]>;
+  title?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -22934,6 +30163,7 @@ export interface SEOSocial {
   instagram?: Maybe<SEOSocialInstagram>;
   linkedIn?: Maybe<SEOSocialLinkedIn>;
   mySpace?: Maybe<SEOSocialMySpace>;
+  otherSocials?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
   pinterest?: Maybe<SEOSocialPinterest>;
   twitter?: Maybe<SEOSocialTwitter>;
   wikipedia?: Maybe<SEOSocialWikipedia>;
@@ -23047,7 +30277,7 @@ export interface SEOWebmaster {
 }
 
 /**
- * The payload for the sendPasswordResetEmail mutation
+ * The payload for the sendPasswordResetEmail mutation.
  */
 export interface SendPasswordResetEmailPayload {
   __typename?: "SendPasswordResetEmailPayload";
@@ -23056,7 +30286,12 @@ export interface SendPasswordResetEmailPayload {
    */
   clientMutationId?: Maybe<ScalarsEnums["String"]>;
   /**
+   * Whether the mutation completed successfully. This does NOT necessarily mean that an email was sent.
+   */
+  success?: Maybe<ScalarsEnums["Boolean"]>;
+  /**
    * The user that the password reset email was sent to
+   * @deprecated This field will be removed in a future version of WPGraphQL
    */
   user?: Maybe<User>;
 }
@@ -23119,7 +30354,19 @@ export interface Settings {
   /**
    * Settings of the the integer Settings Group
    */
+  readingSettingsPageForPosts?: Maybe<ScalarsEnums["Int"]>;
+  /**
+   * Settings of the the integer Settings Group
+   */
+  readingSettingsPageOnFront?: Maybe<ScalarsEnums["Int"]>;
+  /**
+   * Settings of the the integer Settings Group
+   */
   readingSettingsPostsPerPage?: Maybe<ScalarsEnums["Int"]>;
+  /**
+   * Settings of the the string Settings Group
+   */
+  readingSettingsShowOnFront?: Maybe<ScalarsEnums["String"]>;
   /**
    * Settings of the the integer Settings Group
    */
@@ -23288,7 +30535,7 @@ export interface Slide {
    */
   modifiedGmt?: Maybe<ScalarsEnums["String"]>;
   /**
-   * Connection between the slide type and the slide type
+   * Connection between the Slide type and the slide type
    */
   preview?: Maybe<SlideToPreviewConnectionEdge>;
   /**
@@ -23300,7 +30547,7 @@ export interface Slide {
    */
   previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
   /**
-   * The Yoast SEO data of the slide
+   * The Yoast SEO data of the ContentNode
    */
   seo?: Maybe<PostTypeSEO>;
   /**
@@ -23321,7 +30568,7 @@ export interface Slide {
    */
   styles?: Maybe<ScalarsEnums["String"]>;
   /**
-   * The template assigned to a node of content
+   * The template assigned to the node
    */
   template?: Maybe<ContentTemplate>;
   templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
@@ -23342,14 +30589,87 @@ export interface Slide {
 }
 
 /**
- * Connection between the slide type and the slide type
+ * Connection to slide Nodes
+ */
+export interface SlideConnection {
+  __typename?: "RootQueryToSlideConnection" | "UserToSlideConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected slide Nodes
+   */
+  edges: Array<SlideConnectionEdge>;
+  /**
+   * A list of connected slide Nodes
+   */
+  nodes: Array<Slide>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: SlideConnectionPageInfo;
+  $on: $SlideConnection;
+}
+
+/**
+ * Edge between a Node and a connected slide
+ */
+export interface SlideConnectionEdge {
+  __typename?:
+    | "RootQueryToSlideConnectionEdge"
+    | "SlideToPreviewConnectionEdge"
+    | "UserToSlideConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected slide Node
+   */
+  node: Slide;
+  $on: $SlideConnectionEdge;
+}
+
+/**
+ * Page Info on the connected SlideConnectionEdge
+ */
+export interface SlideConnectionPageInfo {
+  __typename?:
+    | "RootQueryToSlideConnectionPageInfo"
+    | "UserToSlideConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $SlideConnectionPageInfo;
+}
+
+/**
+ * Connection between the Slide type and the slide type
  */
 export interface SlideToPreviewConnectionEdge {
   __typename?: "SlideToPreviewConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Slide>;
+  node: Slide;
 }
 
 /**
@@ -23374,7 +30694,7 @@ export interface Tag {
    */
   conditionalTags?: Maybe<ConditionalTags>;
   /**
-   * Connection between the tag type and the ContentNode type
+   * Connection between the Tag type and the ContentNode type
    */
   contentNodes: (args?: {
     /**
@@ -23403,7 +30723,7 @@ export interface Tag {
    */
   count?: Maybe<ScalarsEnums["Int"]>;
   /**
-   * The unique resource identifier path
+   * The unique identifier stored in the database
    */
   databaseId: ScalarsEnums["Int"];
   /**
@@ -23477,7 +30797,7 @@ export interface Tag {
    */
   name?: Maybe<ScalarsEnums["String"]>;
   /**
-   * Connection between the tag type and the post type
+   * Connection between the Tag type and the post type
    */
   posts: (args?: {
     /**
@@ -23515,7 +30835,7 @@ export interface Tag {
    */
   tagId?: Maybe<ScalarsEnums["Int"]>;
   /**
-   * Connection between the tag type and the Taxonomy type
+   * Connection between the Tag type and the Taxonomy type
    */
   taxonomy?: Maybe<TagToTaxonomyConnectionEdge>;
   /**
@@ -23538,22 +30858,88 @@ export interface Tag {
 }
 
 /**
- * Connection between the tag type and the ContentNode type
+ * Connection to tag Nodes
+ */
+export interface TagConnection {
+  __typename?: "PostToTagConnection" | "RootQueryToTagConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected tag Nodes
+   */
+  edges: Array<TagConnectionEdge>;
+  /**
+   * A list of connected tag Nodes
+   */
+  nodes: Array<Tag>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: TagConnectionPageInfo;
+  $on: $TagConnection;
+}
+
+/**
+ * Edge between a Node and a connected tag
+ */
+export interface TagConnectionEdge {
+  __typename?: "PostToTagConnectionEdge" | "RootQueryToTagConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected tag Node
+   */
+  node: Tag;
+  $on: $TagConnectionEdge;
+}
+
+/**
+ * Page Info on the connected TagConnectionEdge
+ */
+export interface TagConnectionPageInfo {
+  __typename?:
+    | "PostToTagConnectionPageInfo"
+    | "RootQueryToTagConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $TagConnectionPageInfo;
+}
+
+/**
+ * Connection between the Tag type and the ContentNode type
  */
 export interface TagToContentNodeConnection {
   __typename?: "TagToContentNodeConnection";
   /**
    * Edges for the TagToContentNodeConnection connection
    */
-  edges?: Maybe<Array<Maybe<TagToContentNodeConnectionEdge>>>;
+  edges: Array<TagToContentNodeConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<ContentNode>>>;
+  nodes: Array<ContentNode>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: TagToContentNodeConnectionPageInfo;
 }
 
 /**
@@ -23568,26 +30954,53 @@ export interface TagToContentNodeConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<ContentNode>;
+  node: ContentNode;
 }
 
 /**
- * Connection between the tag type and the post type
+ * Page Info on the &quot;TagToContentNodeConnection&quot;
+ */
+export interface TagToContentNodeConnectionPageInfo {
+  __typename?: "TagToContentNodeConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the Tag type and the post type
  */
 export interface TagToPostConnection {
   __typename?: "TagToPostConnection";
   /**
    * Edges for the TagToPostConnection connection
    */
-  edges?: Maybe<Array<Maybe<TagToPostConnectionEdge>>>;
+  edges: Array<TagToPostConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<Post>>>;
+  nodes: Array<Post>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: TagToPostConnectionPageInfo;
 }
 
 /**
@@ -23602,18 +31015,49 @@ export interface TagToPostConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<Post>;
+  node: Post;
 }
 
 /**
- * Connection between the tag type and the Taxonomy type
+ * Page Info on the &quot;TagToPostConnection&quot;
+ */
+export interface TagToPostConnectionPageInfo {
+  __typename?: "TagToPostConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the Tag type and the Taxonomy type
  */
 export interface TagToTaxonomyConnectionEdge {
   __typename?: "TagToTaxonomyConnectionEdge";
   /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
    * The node of the connection, without the edges
    */
-  node?: Maybe<Taxonomy>;
+  node: Taxonomy;
 }
 
 /**
@@ -23720,6 +31164,80 @@ export interface Taxonomy {
   showUi?: Maybe<ScalarsEnums["Boolean"]>;
 }
 
+/**
+ * Connection to Taxonomy Nodes
+ */
+export interface TaxonomyConnection {
+  __typename?:
+    | "ContentTypeToTaxonomyConnection"
+    | "RootQueryToTaxonomyConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected Taxonomy Nodes
+   */
+  edges: Array<TaxonomyConnectionEdge>;
+  /**
+   * A list of connected Taxonomy Nodes
+   */
+  nodes: Array<Taxonomy>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: TaxonomyConnectionPageInfo;
+  $on: $TaxonomyConnection;
+}
+
+/**
+ * Edge between a Node and a connected Taxonomy
+ */
+export interface TaxonomyConnectionEdge {
+  __typename?:
+    | "CategoryToTaxonomyConnectionEdge"
+    | "ContentTypeToTaxonomyConnectionEdge"
+    | "GrupoDeRequisitosToTaxonomyConnectionEdge"
+    | "PostFormatToTaxonomyConnectionEdge"
+    | "RootQueryToTaxonomyConnectionEdge"
+    | "TagToTaxonomyConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected Taxonomy Node
+   */
+  node: Taxonomy;
+  $on: $TaxonomyConnectionEdge;
+}
+
+/**
+ * Page Info on the connected TaxonomyConnectionEdge
+ */
+export interface TaxonomyConnectionPageInfo {
+  __typename?:
+    | "ContentTypeToTaxonomyConnectionPageInfo"
+    | "RootQueryToTaxonomyConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $TaxonomyConnectionPageInfo;
+}
+
 export interface TaxonomySEO {
   __typename?: "TaxonomySEO";
   breadcrumbs?: Maybe<Array<Maybe<SEOPostTypeBreadcrumbs>>>;
@@ -23756,15 +31274,15 @@ export interface TaxonomyToContentTypeConnection {
   /**
    * Edges for the TaxonomyToContentTypeConnection connection
    */
-  edges?: Maybe<Array<Maybe<TaxonomyToContentTypeConnectionEdge>>>;
+  edges: Array<TaxonomyToContentTypeConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<ContentType>>>;
+  nodes: Array<ContentType>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: TaxonomyToContentTypeConnectionPageInfo;
 }
 
 /**
@@ -23779,7 +31297,34 @@ export interface TaxonomyToContentTypeConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<ContentType>;
+  node: ContentType;
+}
+
+/**
+ * Page Info on the &quot;TaxonomyToContentTypeConnection&quot;
+ */
+export interface TaxonomyToContentTypeConnectionPageInfo {
+  __typename?: "TaxonomyToContentTypeConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -23894,6 +31439,79 @@ export interface TermNode {
 }
 
 /**
+ * Connection to TermNode Nodes
+ */
+export interface TermNodeConnection {
+  __typename?:
+    | "GradoToTermNodeConnection"
+    | "PostToTermNodeConnection"
+    | "RootQueryToTermNodeConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected TermNode Nodes
+   */
+  edges: Array<TermNodeConnectionEdge>;
+  /**
+   * A list of connected TermNode Nodes
+   */
+  nodes: Array<TermNode>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: TermNodeConnectionPageInfo;
+  $on: $TermNodeConnection;
+}
+
+/**
+ * Edge between a Node and a connected TermNode
+ */
+export interface TermNodeConnectionEdge {
+  __typename?:
+    | "GradoToTermNodeConnectionEdge"
+    | "PostToTermNodeConnectionEdge"
+    | "RootQueryToTermNodeConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected TermNode Node
+   */
+  node: TermNode;
+  $on: $TermNodeConnectionEdge;
+}
+
+/**
+ * Page Info on the connected TermNodeConnectionEdge
+ */
+export interface TermNodeConnectionPageInfo {
+  __typename?:
+    | "GradoToTermNodeConnectionPageInfo"
+    | "PostToTermNodeConnectionPageInfo"
+    | "RootQueryToTermNodeConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $TermNodeConnectionPageInfo;
+}
+
+/**
  * Connection between the TermNode type and the EnqueuedScript type
  */
 export interface TermNodeToEnqueuedScriptConnection {
@@ -23901,15 +31519,15 @@ export interface TermNodeToEnqueuedScriptConnection {
   /**
    * Edges for the TermNodeToEnqueuedScriptConnection connection
    */
-  edges?: Maybe<Array<Maybe<TermNodeToEnqueuedScriptConnectionEdge>>>;
+  edges: Array<TermNodeToEnqueuedScriptConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<EnqueuedScript>>>;
+  nodes: Array<EnqueuedScript>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: TermNodeToEnqueuedScriptConnectionPageInfo;
 }
 
 /**
@@ -23924,7 +31542,34 @@ export interface TermNodeToEnqueuedScriptConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<EnqueuedScript>;
+  node: EnqueuedScript;
+}
+
+/**
+ * Page Info on the &quot;TermNodeToEnqueuedScriptConnection&quot;
+ */
+export interface TermNodeToEnqueuedScriptConnectionPageInfo {
+  __typename?: "TermNodeToEnqueuedScriptConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -23935,15 +31580,15 @@ export interface TermNodeToEnqueuedStylesheetConnection {
   /**
    * Edges for the TermNodeToEnqueuedStylesheetConnection connection
    */
-  edges?: Maybe<Array<Maybe<TermNodeToEnqueuedStylesheetConnectionEdge>>>;
+  edges: Array<TermNodeToEnqueuedStylesheetConnectionEdge>;
   /**
    * The nodes of the connection, without the edges
    */
-  nodes?: Maybe<Array<Maybe<EnqueuedStylesheet>>>;
+  nodes: Array<EnqueuedStylesheet>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: TermNodeToEnqueuedStylesheetConnectionPageInfo;
 }
 
 /**
@@ -23958,7 +31603,34 @@ export interface TermNodeToEnqueuedStylesheetConnectionEdge {
   /**
    * The item at the end of the edge
    */
-  node?: Maybe<EnqueuedStylesheet>;
+  node: EnqueuedStylesheet;
+}
+
+/**
+ * Page Info on the &quot;TermNodeToEnqueuedStylesheetConnection&quot;
+ */
+export interface TermNodeToEnqueuedStylesheetConnectionPageInfo {
+  __typename?: "TermNodeToEnqueuedStylesheetConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -24013,6 +31685,70 @@ export interface Theme {
 }
 
 /**
+ * Connection to Theme Nodes
+ */
+export interface ThemeConnection {
+  __typename?: "RootQueryToThemeConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected Theme Nodes
+   */
+  edges: Array<ThemeConnectionEdge>;
+  /**
+   * A list of connected Theme Nodes
+   */
+  nodes: Array<Theme>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: ThemeConnectionPageInfo;
+  $on: $ThemeConnection;
+}
+
+/**
+ * Edge between a Node and a connected Theme
+ */
+export interface ThemeConnectionEdge {
+  __typename?: "RootQueryToThemeConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected Theme Node
+   */
+  node: Theme;
+  $on: $ThemeConnectionEdge;
+}
+
+/**
+ * Page Info on the connected ThemeConnectionEdge
+ */
+export interface ThemeConnectionPageInfo {
+  __typename?: "RootQueryToThemeConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $ThemeConnectionPageInfo;
+}
+
+/**
  * Any node that has a URI
  */
 export interface UniformResourceIdentifiable {
@@ -24061,7 +31797,7 @@ export interface UniformResourceIdentifiable {
 }
 
 /**
- * The payload for the updateCarrera mutation
+ * The payload for the updateCarrera mutation.
  */
 export interface UpdateCarreraPayload {
   __typename?: "UpdateCarreraPayload";
@@ -24076,7 +31812,7 @@ export interface UpdateCarreraPayload {
 }
 
 /**
- * The payload for the UpdateCategory mutation
+ * The payload for the updateCategory mutation.
  */
 export interface UpdateCategoryPayload {
   __typename?: "UpdateCategoryPayload";
@@ -24091,7 +31827,7 @@ export interface UpdateCategoryPayload {
 }
 
 /**
- * The payload for the updateComment mutation
+ * The payload for the updateComment mutation.
  */
 export interface UpdateCommentPayload {
   __typename?: "UpdateCommentPayload";
@@ -24110,7 +31846,7 @@ export interface UpdateCommentPayload {
 }
 
 /**
- * The payload for the updateDepartamento mutation
+ * The payload for the updateDepartamento mutation.
  */
 export interface UpdateDepartamentoPayload {
   __typename?: "UpdateDepartamentoPayload";
@@ -24125,7 +31861,7 @@ export interface UpdateDepartamentoPayload {
 }
 
 /**
- * The payload for the updateFacultad mutation
+ * The payload for the updateFacultad mutation.
  */
 export interface UpdateFacultadPayload {
   __typename?: "UpdateFacultadPayload";
@@ -24140,7 +31876,7 @@ export interface UpdateFacultadPayload {
 }
 
 /**
- * The payload for the updateGrado mutation
+ * The payload for the updateGrado mutation.
  */
 export interface UpdateGradoPayload {
   __typename?: "UpdateGradoPayload";
@@ -24155,7 +31891,7 @@ export interface UpdateGradoPayload {
 }
 
 /**
- * The payload for the UpdateGrupoDeRequisitos mutation
+ * The payload for the updateGrupoDeRequisitos mutation.
  */
 export interface UpdateGrupoDeRequisitosPayload {
   __typename?: "UpdateGrupoDeRequisitosPayload";
@@ -24170,7 +31906,7 @@ export interface UpdateGrupoDeRequisitosPayload {
 }
 
 /**
- * The payload for the updateInvestigacion mutation
+ * The payload for the updateInvestigacion mutation.
  */
 export interface UpdateInvestigacionPayload {
   __typename?: "UpdateInvestigacionPayload";
@@ -24185,7 +31921,7 @@ export interface UpdateInvestigacionPayload {
 }
 
 /**
- * The payload for the updateInvestigador mutation
+ * The payload for the updateInvestigador mutation.
  */
 export interface UpdateInvestigadorPayload {
   __typename?: "UpdateInvestigadorPayload";
@@ -24200,7 +31936,7 @@ export interface UpdateInvestigadorPayload {
 }
 
 /**
- * The payload for the updateLineaDeInvestigacion mutation
+ * The payload for the updateLineaDeInvestigacion mutation.
  */
 export interface UpdateLineaDeInvestigacionPayload {
   __typename?: "UpdateLineaDeInvestigacionPayload";
@@ -24215,7 +31951,7 @@ export interface UpdateLineaDeInvestigacionPayload {
 }
 
 /**
- * The payload for the updateMediaItem mutation
+ * The payload for the updateMediaItem mutation.
  */
 export interface UpdateMediaItemPayload {
   __typename?: "UpdateMediaItemPayload";
@@ -24230,7 +31966,7 @@ export interface UpdateMediaItemPayload {
 }
 
 /**
- * The payload for the updatePage mutation
+ * The payload for the updatePage mutation.
  */
 export interface UpdatePagePayload {
   __typename?: "UpdatePagePayload";
@@ -24245,7 +31981,7 @@ export interface UpdatePagePayload {
 }
 
 /**
- * The payload for the updatePeriodoDeAdmision mutation
+ * The payload for the updatePeriodoDeAdmision mutation.
  */
 export interface UpdatePeriodoDeAdmisionPayload {
   __typename?: "UpdatePeriodoDeAdmisionPayload";
@@ -24260,7 +31996,7 @@ export interface UpdatePeriodoDeAdmisionPayload {
 }
 
 /**
- * The payload for the UpdatePostFormat mutation
+ * The payload for the updatePostFormat mutation.
  */
 export interface UpdatePostFormatPayload {
   __typename?: "UpdatePostFormatPayload";
@@ -24275,7 +32011,7 @@ export interface UpdatePostFormatPayload {
 }
 
 /**
- * The payload for the updatePost mutation
+ * The payload for the updatePost mutation.
  */
 export interface UpdatePostPayload {
   __typename?: "UpdatePostPayload";
@@ -24290,7 +32026,7 @@ export interface UpdatePostPayload {
 }
 
 /**
- * The payload for the updateRecurso mutation
+ * The payload for the updateRecurso mutation.
  */
 export interface UpdateRecursoPayload {
   __typename?: "UpdateRecursoPayload";
@@ -24305,7 +32041,7 @@ export interface UpdateRecursoPayload {
 }
 
 /**
- * The payload for the updateSettings mutation
+ * The payload for the updateSettings mutation.
  */
 export interface UpdateSettingsPayload {
   __typename?: "UpdateSettingsPayload";
@@ -24340,7 +32076,7 @@ export interface UpdateSettingsPayload {
 }
 
 /**
- * The payload for the updateSlide mutation
+ * The payload for the updateSlide mutation.
  */
 export interface UpdateSlidePayload {
   __typename?: "UpdateSlidePayload";
@@ -24355,7 +32091,7 @@ export interface UpdateSlidePayload {
 }
 
 /**
- * The payload for the UpdateTag mutation
+ * The payload for the updateTag mutation.
  */
 export interface UpdateTagPayload {
   __typename?: "UpdateTagPayload";
@@ -24370,7 +32106,7 @@ export interface UpdateTagPayload {
 }
 
 /**
- * The payload for the updateUser mutation
+ * The payload for the updateUser mutation.
  */
 export interface UpdateUserPayload {
   __typename?: "UpdateUserPayload";
@@ -24869,8 +32605,8 @@ export interface User {
     /**
      * Arguments for filtering the connection
      */
-    where?: Maybe<UserToContentRevisionUnionConnectionWhereArgs>;
-  }) => Maybe<UserToContentRevisionUnionConnection>;
+    where?: Maybe<UserToRevisionsConnectionWhereArgs>;
+  }) => Maybe<UserToRevisionsConnection>;
   /**
    * Connection between the User type and the UserRole type
    */
@@ -24946,6 +32682,74 @@ export interface User {
 }
 
 /**
+ * Connection to User Nodes
+ */
+export interface UserConnection {
+  __typename?: "RootQueryToUserConnection";
+  /**
+   * A list of edges (relational context) between RootQuery and connected User Nodes
+   */
+  edges: Array<UserConnectionEdge>;
+  /**
+   * A list of connected User Nodes
+   */
+  nodes: Array<User>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: UserConnectionPageInfo;
+  $on: $UserConnection;
+}
+
+/**
+ * Edge between a Node and a connected User
+ */
+export interface UserConnectionEdge {
+  __typename?:
+    | "ContentNodeToEditLastConnectionEdge"
+    | "ContentNodeToEditLockConnectionEdge"
+    | "NodeWithAuthorToUserConnectionEdge"
+    | "RootQueryToUserConnectionEdge";
+  /**
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The connected User Node
+   */
+  node: User;
+  $on: $UserConnectionEdge;
+}
+
+/**
+ * Page Info on the connected UserConnectionEdge
+ */
+export interface UserConnectionPageInfo {
+  __typename?: "RootQueryToUserConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $UserConnectionPageInfo;
+}
+
+/**
  * A user role object
  */
 export interface UserRole {
@@ -24973,622 +32777,50 @@ export interface UserRole {
 }
 
 /**
- * Connection between the User type and the carrera type
+ * Connection to UserRole Nodes
  */
-export interface UserToCarreraConnection {
-  __typename?: "UserToCarreraConnection";
+export interface UserRoleConnection {
+  __typename?: "RootQueryToUserRoleConnection" | "UserToUserRoleConnection";
   /**
-   * Edges for the UserToCarreraConnection connection
+   * A list of edges (relational context) between RootQuery and connected UserRole Nodes
    */
-  edges?: Maybe<Array<Maybe<UserToCarreraConnectionEdge>>>;
+  edges: Array<UserRoleConnectionEdge>;
   /**
-   * The nodes of the connection, without the edges
+   * A list of connected UserRole Nodes
    */
-  nodes?: Maybe<Array<Maybe<Carrera>>>;
+  nodes: Array<UserRole>;
   /**
    * Information about pagination in a connection.
    */
-  pageInfo?: Maybe<WPPageInfo>;
+  pageInfo: UserRoleConnectionPageInfo;
+  $on: $UserRoleConnection;
 }
 
 /**
- * An edge in a connection
+ * Edge between a Node and a connected UserRole
  */
-export interface UserToCarreraConnectionEdge {
-  __typename?: "UserToCarreraConnectionEdge";
+export interface UserRoleConnectionEdge {
+  __typename?:
+    | "RootQueryToUserRoleConnectionEdge"
+    | "UserToUserRoleConnectionEdge";
   /**
-   * A cursor for use in pagination
+   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
    */
   cursor?: Maybe<ScalarsEnums["String"]>;
   /**
-   * The item at the end of the edge
+   * The connected UserRole Node
    */
-  node?: Maybe<Carrera>;
+  node: UserRole;
+  $on: $UserRoleConnectionEdge;
 }
 
 /**
- * Connection between the User type and the Comment type
+ * Page Info on the connected UserRoleConnectionEdge
  */
-export interface UserToCommentConnection {
-  __typename?: "UserToCommentConnection";
-  /**
-   * Edges for the UserToCommentConnection connection
-   */
-  edges?: Maybe<Array<Maybe<UserToCommentConnectionEdge>>>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes?: Maybe<Array<Maybe<Comment>>>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface UserToCommentConnectionEdge {
-  __typename?: "UserToCommentConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node?: Maybe<Comment>;
-}
-
-/**
- * Connection between the User type and the ContentRevisionUnion type
- */
-export interface UserToContentRevisionUnionConnection {
-  __typename?: "UserToContentRevisionUnionConnection";
-  /**
-   * Edges for the UserToContentRevisionUnionConnection connection
-   */
-  edges?: Maybe<Array<Maybe<UserToContentRevisionUnionConnectionEdge>>>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes?: Maybe<Array<Maybe<ContentRevisionUnion>>>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface UserToContentRevisionUnionConnectionEdge {
-  __typename?: "UserToContentRevisionUnionConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node?: Maybe<ContentRevisionUnion>;
-}
-
-/**
- * Connection between the User type and the departamento type
- */
-export interface UserToDepartamentoConnection {
-  __typename?: "UserToDepartamentoConnection";
-  /**
-   * Edges for the UserToDepartamentoConnection connection
-   */
-  edges?: Maybe<Array<Maybe<UserToDepartamentoConnectionEdge>>>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes?: Maybe<Array<Maybe<Departamento>>>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface UserToDepartamentoConnectionEdge {
-  __typename?: "UserToDepartamentoConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node?: Maybe<Departamento>;
-}
-
-/**
- * Connection between the User type and the EnqueuedScript type
- */
-export interface UserToEnqueuedScriptConnection {
-  __typename?: "UserToEnqueuedScriptConnection";
-  /**
-   * Edges for the UserToEnqueuedScriptConnection connection
-   */
-  edges?: Maybe<Array<Maybe<UserToEnqueuedScriptConnectionEdge>>>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes?: Maybe<Array<Maybe<EnqueuedScript>>>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface UserToEnqueuedScriptConnectionEdge {
-  __typename?: "UserToEnqueuedScriptConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node?: Maybe<EnqueuedScript>;
-}
-
-/**
- * Connection between the User type and the EnqueuedStylesheet type
- */
-export interface UserToEnqueuedStylesheetConnection {
-  __typename?: "UserToEnqueuedStylesheetConnection";
-  /**
-   * Edges for the UserToEnqueuedStylesheetConnection connection
-   */
-  edges?: Maybe<Array<Maybe<UserToEnqueuedStylesheetConnectionEdge>>>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes?: Maybe<Array<Maybe<EnqueuedStylesheet>>>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface UserToEnqueuedStylesheetConnectionEdge {
-  __typename?: "UserToEnqueuedStylesheetConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node?: Maybe<EnqueuedStylesheet>;
-}
-
-/**
- * Connection between the User type and the facultad type
- */
-export interface UserToFacultadConnection {
-  __typename?: "UserToFacultadConnection";
-  /**
-   * Edges for the UserToFacultadConnection connection
-   */
-  edges?: Maybe<Array<Maybe<UserToFacultadConnectionEdge>>>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes?: Maybe<Array<Maybe<Facultad>>>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface UserToFacultadConnectionEdge {
-  __typename?: "UserToFacultadConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node?: Maybe<Facultad>;
-}
-
-/**
- * Connection between the User type and the grado type
- */
-export interface UserToGradoConnection {
-  __typename?: "UserToGradoConnection";
-  /**
-   * Edges for the UserToGradoConnection connection
-   */
-  edges?: Maybe<Array<Maybe<UserToGradoConnectionEdge>>>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes?: Maybe<Array<Maybe<Grado>>>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface UserToGradoConnectionEdge {
-  __typename?: "UserToGradoConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node?: Maybe<Grado>;
-}
-
-/**
- * Connection between the User type and the investigacion type
- */
-export interface UserToInvestigacionConnection {
-  __typename?: "UserToInvestigacionConnection";
-  /**
-   * Edges for the UserToInvestigacionConnection connection
-   */
-  edges?: Maybe<Array<Maybe<UserToInvestigacionConnectionEdge>>>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes?: Maybe<Array<Maybe<Investigacion>>>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface UserToInvestigacionConnectionEdge {
-  __typename?: "UserToInvestigacionConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node?: Maybe<Investigacion>;
-}
-
-/**
- * Connection between the User type and the investigador type
- */
-export interface UserToInvestigadorConnection {
-  __typename?: "UserToInvestigadorConnection";
-  /**
-   * Edges for the UserToInvestigadorConnection connection
-   */
-  edges?: Maybe<Array<Maybe<UserToInvestigadorConnectionEdge>>>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes?: Maybe<Array<Maybe<Investigador>>>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface UserToInvestigadorConnectionEdge {
-  __typename?: "UserToInvestigadorConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node?: Maybe<Investigador>;
-}
-
-/**
- * Connection between the User type and the lineaDeInvestigacion type
- */
-export interface UserToLineaDeInvestigacionConnection {
-  __typename?: "UserToLineaDeInvestigacionConnection";
-  /**
-   * Edges for the UserToLineaDeInvestigacionConnection connection
-   */
-  edges?: Maybe<Array<Maybe<UserToLineaDeInvestigacionConnectionEdge>>>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes?: Maybe<Array<Maybe<LineaDeInvestigacion>>>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface UserToLineaDeInvestigacionConnectionEdge {
-  __typename?: "UserToLineaDeInvestigacionConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node?: Maybe<LineaDeInvestigacion>;
-}
-
-/**
- * Connection between the User type and the mediaItem type
- */
-export interface UserToMediaItemConnection {
-  __typename?: "UserToMediaItemConnection";
-  /**
-   * Edges for the UserToMediaItemConnection connection
-   */
-  edges?: Maybe<Array<Maybe<UserToMediaItemConnectionEdge>>>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes?: Maybe<Array<Maybe<MediaItem>>>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface UserToMediaItemConnectionEdge {
-  __typename?: "UserToMediaItemConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node?: Maybe<MediaItem>;
-}
-
-/**
- * Connection between the User type and the page type
- */
-export interface UserToPageConnection {
-  __typename?: "UserToPageConnection";
-  /**
-   * Edges for the UserToPageConnection connection
-   */
-  edges?: Maybe<Array<Maybe<UserToPageConnectionEdge>>>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes?: Maybe<Array<Maybe<Page>>>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface UserToPageConnectionEdge {
-  __typename?: "UserToPageConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node?: Maybe<Page>;
-}
-
-/**
- * Connection between the User type and the periodoDeAdmision type
- */
-export interface UserToPeriodoDeAdmisionConnection {
-  __typename?: "UserToPeriodoDeAdmisionConnection";
-  /**
-   * Edges for the UserToPeriodoDeAdmisionConnection connection
-   */
-  edges?: Maybe<Array<Maybe<UserToPeriodoDeAdmisionConnectionEdge>>>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes?: Maybe<Array<Maybe<PeriodoDeAdmision>>>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface UserToPeriodoDeAdmisionConnectionEdge {
-  __typename?: "UserToPeriodoDeAdmisionConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node?: Maybe<PeriodoDeAdmision>;
-}
-
-/**
- * Connection between the User type and the post type
- */
-export interface UserToPostConnection {
-  __typename?: "UserToPostConnection";
-  /**
-   * Edges for the UserToPostConnection connection
-   */
-  edges?: Maybe<Array<Maybe<UserToPostConnectionEdge>>>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes?: Maybe<Array<Maybe<Post>>>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface UserToPostConnectionEdge {
-  __typename?: "UserToPostConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node?: Maybe<Post>;
-}
-
-/**
- * Connection between the User type and the recurso type
- */
-export interface UserToRecursoConnection {
-  __typename?: "UserToRecursoConnection";
-  /**
-   * Edges for the UserToRecursoConnection connection
-   */
-  edges?: Maybe<Array<Maybe<UserToRecursoConnectionEdge>>>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes?: Maybe<Array<Maybe<Recurso>>>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface UserToRecursoConnectionEdge {
-  __typename?: "UserToRecursoConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node?: Maybe<Recurso>;
-}
-
-/**
- * Connection between the User type and the slide type
- */
-export interface UserToSlideConnection {
-  __typename?: "UserToSlideConnection";
-  /**
-   * Edges for the UserToSlideConnection connection
-   */
-  edges?: Maybe<Array<Maybe<UserToSlideConnectionEdge>>>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes?: Maybe<Array<Maybe<Slide>>>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface UserToSlideConnectionEdge {
-  __typename?: "UserToSlideConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node?: Maybe<Slide>;
-}
-
-/**
- * Connection between the User type and the UserRole type
- */
-export interface UserToUserRoleConnection {
-  __typename?: "UserToUserRoleConnection";
-  /**
-   * Edges for the UserToUserRoleConnection connection
-   */
-  edges?: Maybe<Array<Maybe<UserToUserRoleConnectionEdge>>>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes?: Maybe<Array<Maybe<UserRole>>>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo?: Maybe<WPPageInfo>;
-}
-
-/**
- * An edge in a connection
- */
-export interface UserToUserRoleConnectionEdge {
-  __typename?: "UserToUserRoleConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node?: Maybe<UserRole>;
-}
-
-/**
- * Information about pagination in a connection.
- */
-export interface WPPageInfo {
-  __typename?: "WPPageInfo";
+export interface UserRoleConnectionPageInfo {
+  __typename?:
+    | "RootQueryToUserRoleConnectionPageInfo"
+    | "UserToUserRoleConnectionPageInfo";
   /**
    * When paginating forwards, the cursor to continue.
    */
@@ -25609,6 +32841,1225 @@ export interface WPPageInfo {
    * When paginating backwards, the cursor to continue.
    */
   startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $UserRoleConnectionPageInfo;
+}
+
+/**
+ * Connection between the User type and the carrera type
+ */
+export interface UserToCarreraConnection {
+  __typename?: "UserToCarreraConnection";
+  /**
+   * Edges for the UserToCarreraConnection connection
+   */
+  edges: Array<UserToCarreraConnectionEdge>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes: Array<Carrera>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: UserToCarreraConnectionPageInfo;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface UserToCarreraConnectionEdge {
+  __typename?: "UserToCarreraConnectionEdge";
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node: Carrera;
+}
+
+/**
+ * Page Info on the &quot;UserToCarreraConnection&quot;
+ */
+export interface UserToCarreraConnectionPageInfo {
+  __typename?: "UserToCarreraConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the User type and the Comment type
+ */
+export interface UserToCommentConnection {
+  __typename?: "UserToCommentConnection";
+  /**
+   * Edges for the UserToCommentConnection connection
+   */
+  edges: Array<UserToCommentConnectionEdge>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes: Array<Comment>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: UserToCommentConnectionPageInfo;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface UserToCommentConnectionEdge {
+  __typename?: "UserToCommentConnectionEdge";
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node: Comment;
+}
+
+/**
+ * Page Info on the &quot;UserToCommentConnection&quot;
+ */
+export interface UserToCommentConnectionPageInfo {
+  __typename?: "UserToCommentConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the User type and the departamento type
+ */
+export interface UserToDepartamentoConnection {
+  __typename?: "UserToDepartamentoConnection";
+  /**
+   * Edges for the UserToDepartamentoConnection connection
+   */
+  edges: Array<UserToDepartamentoConnectionEdge>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes: Array<Departamento>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: UserToDepartamentoConnectionPageInfo;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface UserToDepartamentoConnectionEdge {
+  __typename?: "UserToDepartamentoConnectionEdge";
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node: Departamento;
+}
+
+/**
+ * Page Info on the &quot;UserToDepartamentoConnection&quot;
+ */
+export interface UserToDepartamentoConnectionPageInfo {
+  __typename?: "UserToDepartamentoConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the User type and the EnqueuedScript type
+ */
+export interface UserToEnqueuedScriptConnection {
+  __typename?: "UserToEnqueuedScriptConnection";
+  /**
+   * Edges for the UserToEnqueuedScriptConnection connection
+   */
+  edges: Array<UserToEnqueuedScriptConnectionEdge>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes: Array<EnqueuedScript>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: UserToEnqueuedScriptConnectionPageInfo;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface UserToEnqueuedScriptConnectionEdge {
+  __typename?: "UserToEnqueuedScriptConnectionEdge";
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node: EnqueuedScript;
+}
+
+/**
+ * Page Info on the &quot;UserToEnqueuedScriptConnection&quot;
+ */
+export interface UserToEnqueuedScriptConnectionPageInfo {
+  __typename?: "UserToEnqueuedScriptConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the User type and the EnqueuedStylesheet type
+ */
+export interface UserToEnqueuedStylesheetConnection {
+  __typename?: "UserToEnqueuedStylesheetConnection";
+  /**
+   * Edges for the UserToEnqueuedStylesheetConnection connection
+   */
+  edges: Array<UserToEnqueuedStylesheetConnectionEdge>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes: Array<EnqueuedStylesheet>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: UserToEnqueuedStylesheetConnectionPageInfo;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface UserToEnqueuedStylesheetConnectionEdge {
+  __typename?: "UserToEnqueuedStylesheetConnectionEdge";
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node: EnqueuedStylesheet;
+}
+
+/**
+ * Page Info on the &quot;UserToEnqueuedStylesheetConnection&quot;
+ */
+export interface UserToEnqueuedStylesheetConnectionPageInfo {
+  __typename?: "UserToEnqueuedStylesheetConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the User type and the facultad type
+ */
+export interface UserToFacultadConnection {
+  __typename?: "UserToFacultadConnection";
+  /**
+   * Edges for the UserToFacultadConnection connection
+   */
+  edges: Array<UserToFacultadConnectionEdge>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes: Array<Facultad>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: UserToFacultadConnectionPageInfo;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface UserToFacultadConnectionEdge {
+  __typename?: "UserToFacultadConnectionEdge";
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node: Facultad;
+}
+
+/**
+ * Page Info on the &quot;UserToFacultadConnection&quot;
+ */
+export interface UserToFacultadConnectionPageInfo {
+  __typename?: "UserToFacultadConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the User type and the grado type
+ */
+export interface UserToGradoConnection {
+  __typename?: "UserToGradoConnection";
+  /**
+   * Edges for the UserToGradoConnection connection
+   */
+  edges: Array<UserToGradoConnectionEdge>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes: Array<Grado>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: UserToGradoConnectionPageInfo;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface UserToGradoConnectionEdge {
+  __typename?: "UserToGradoConnectionEdge";
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node: Grado;
+}
+
+/**
+ * Page Info on the &quot;UserToGradoConnection&quot;
+ */
+export interface UserToGradoConnectionPageInfo {
+  __typename?: "UserToGradoConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the User type and the investigacion type
+ */
+export interface UserToInvestigacionConnection {
+  __typename?: "UserToInvestigacionConnection";
+  /**
+   * Edges for the UserToInvestigacionConnection connection
+   */
+  edges: Array<UserToInvestigacionConnectionEdge>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes: Array<Investigacion>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: UserToInvestigacionConnectionPageInfo;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface UserToInvestigacionConnectionEdge {
+  __typename?: "UserToInvestigacionConnectionEdge";
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node: Investigacion;
+}
+
+/**
+ * Page Info on the &quot;UserToInvestigacionConnection&quot;
+ */
+export interface UserToInvestigacionConnectionPageInfo {
+  __typename?: "UserToInvestigacionConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the User type and the investigador type
+ */
+export interface UserToInvestigadorConnection {
+  __typename?: "UserToInvestigadorConnection";
+  /**
+   * Edges for the UserToInvestigadorConnection connection
+   */
+  edges: Array<UserToInvestigadorConnectionEdge>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes: Array<Investigador>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: UserToInvestigadorConnectionPageInfo;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface UserToInvestigadorConnectionEdge {
+  __typename?: "UserToInvestigadorConnectionEdge";
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node: Investigador;
+}
+
+/**
+ * Page Info on the &quot;UserToInvestigadorConnection&quot;
+ */
+export interface UserToInvestigadorConnectionPageInfo {
+  __typename?: "UserToInvestigadorConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the User type and the lineaDeInvestigacion type
+ */
+export interface UserToLineaDeInvestigacionConnection {
+  __typename?: "UserToLineaDeInvestigacionConnection";
+  /**
+   * Edges for the UserToLineaDeInvestigacionConnection connection
+   */
+  edges: Array<UserToLineaDeInvestigacionConnectionEdge>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes: Array<LineaDeInvestigacion>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: UserToLineaDeInvestigacionConnectionPageInfo;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface UserToLineaDeInvestigacionConnectionEdge {
+  __typename?: "UserToLineaDeInvestigacionConnectionEdge";
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node: LineaDeInvestigacion;
+}
+
+/**
+ * Page Info on the &quot;UserToLineaDeInvestigacionConnection&quot;
+ */
+export interface UserToLineaDeInvestigacionConnectionPageInfo {
+  __typename?: "UserToLineaDeInvestigacionConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the User type and the mediaItem type
+ */
+export interface UserToMediaItemConnection {
+  __typename?: "UserToMediaItemConnection";
+  /**
+   * Edges for the UserToMediaItemConnection connection
+   */
+  edges: Array<UserToMediaItemConnectionEdge>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes: Array<MediaItem>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: UserToMediaItemConnectionPageInfo;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface UserToMediaItemConnectionEdge {
+  __typename?: "UserToMediaItemConnectionEdge";
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node: MediaItem;
+}
+
+/**
+ * Page Info on the &quot;UserToMediaItemConnection&quot;
+ */
+export interface UserToMediaItemConnectionPageInfo {
+  __typename?: "UserToMediaItemConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the User type and the page type
+ */
+export interface UserToPageConnection {
+  __typename?: "UserToPageConnection";
+  /**
+   * Edges for the UserToPageConnection connection
+   */
+  edges: Array<UserToPageConnectionEdge>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes: Array<Page>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: UserToPageConnectionPageInfo;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface UserToPageConnectionEdge {
+  __typename?: "UserToPageConnectionEdge";
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node: Page;
+}
+
+/**
+ * Page Info on the &quot;UserToPageConnection&quot;
+ */
+export interface UserToPageConnectionPageInfo {
+  __typename?: "UserToPageConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the User type and the periodoDeAdmision type
+ */
+export interface UserToPeriodoDeAdmisionConnection {
+  __typename?: "UserToPeriodoDeAdmisionConnection";
+  /**
+   * Edges for the UserToPeriodoDeAdmisionConnection connection
+   */
+  edges: Array<UserToPeriodoDeAdmisionConnectionEdge>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes: Array<PeriodoDeAdmision>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: UserToPeriodoDeAdmisionConnectionPageInfo;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface UserToPeriodoDeAdmisionConnectionEdge {
+  __typename?: "UserToPeriodoDeAdmisionConnectionEdge";
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node: PeriodoDeAdmision;
+}
+
+/**
+ * Page Info on the &quot;UserToPeriodoDeAdmisionConnection&quot;
+ */
+export interface UserToPeriodoDeAdmisionConnectionPageInfo {
+  __typename?: "UserToPeriodoDeAdmisionConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the User type and the post type
+ */
+export interface UserToPostConnection {
+  __typename?: "UserToPostConnection";
+  /**
+   * Edges for the UserToPostConnection connection
+   */
+  edges: Array<UserToPostConnectionEdge>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes: Array<Post>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: UserToPostConnectionPageInfo;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface UserToPostConnectionEdge {
+  __typename?: "UserToPostConnectionEdge";
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node: Post;
+}
+
+/**
+ * Page Info on the &quot;UserToPostConnection&quot;
+ */
+export interface UserToPostConnectionPageInfo {
+  __typename?: "UserToPostConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the User type and the recurso type
+ */
+export interface UserToRecursoConnection {
+  __typename?: "UserToRecursoConnection";
+  /**
+   * Edges for the UserToRecursoConnection connection
+   */
+  edges: Array<UserToRecursoConnectionEdge>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes: Array<Recurso>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: UserToRecursoConnectionPageInfo;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface UserToRecursoConnectionEdge {
+  __typename?: "UserToRecursoConnectionEdge";
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node: Recurso;
+}
+
+/**
+ * Page Info on the &quot;UserToRecursoConnection&quot;
+ */
+export interface UserToRecursoConnectionPageInfo {
+  __typename?: "UserToRecursoConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the User type and the ContentNode type
+ */
+export interface UserToRevisionsConnection {
+  __typename?: "UserToRevisionsConnection";
+  /**
+   * Edges for the UserToRevisionsConnection connection
+   */
+  edges: Array<UserToRevisionsConnectionEdge>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes: Array<ContentNode>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: UserToRevisionsConnectionPageInfo;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface UserToRevisionsConnectionEdge {
+  __typename?: "UserToRevisionsConnectionEdge";
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node: ContentNode;
+}
+
+/**
+ * Page Info on the &quot;UserToRevisionsConnection&quot;
+ */
+export interface UserToRevisionsConnectionPageInfo {
+  __typename?: "UserToRevisionsConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the User type and the slide type
+ */
+export interface UserToSlideConnection {
+  __typename?: "UserToSlideConnection";
+  /**
+   * Edges for the UserToSlideConnection connection
+   */
+  edges: Array<UserToSlideConnectionEdge>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes: Array<Slide>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: UserToSlideConnectionPageInfo;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface UserToSlideConnectionEdge {
+  __typename?: "UserToSlideConnectionEdge";
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node: Slide;
+}
+
+/**
+ * Page Info on the &quot;UserToSlideConnection&quot;
+ */
+export interface UserToSlideConnectionPageInfo {
+  __typename?: "UserToSlideConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the User type and the UserRole type
+ */
+export interface UserToUserRoleConnection {
+  __typename?: "UserToUserRoleConnection";
+  /**
+   * Edges for the UserToUserRoleConnection connection
+   */
+  edges: Array<UserToUserRoleConnectionEdge>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes: Array<UserRole>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: UserToUserRoleConnectionPageInfo;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface UserToUserRoleConnectionEdge {
+  __typename?: "UserToUserRoleConnectionEdge";
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node: UserRole;
+}
+
+/**
+ * Page Info on the &quot;UserToUserRoleConnection&quot;
+ */
+export interface UserToUserRoleConnectionPageInfo {
+  __typename?: "UserToUserRoleConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Information about pagination in a connection.
+ */
+export interface WPPageInfo {
+  __typename?:
+    | "CarreraToRecursoConnectionPageInfo"
+    | "CategoryToAncestorsCategoryConnectionPageInfo"
+    | "CategoryToCategoryConnectionPageInfo"
+    | "CategoryToContentNodeConnectionPageInfo"
+    | "CategoryToPostConnectionPageInfo"
+    | "CommentToCommentConnectionPageInfo"
+    | "ContentNodeToEnqueuedScriptConnectionPageInfo"
+    | "ContentNodeToEnqueuedStylesheetConnectionPageInfo"
+    | "ContentTypeToContentNodeConnectionPageInfo"
+    | "ContentTypeToTaxonomyConnectionPageInfo"
+    | "DepartamentoToCarreraConnectionPageInfo"
+    | "DepartamentoToLineaDeInvestigacionConnectionPageInfo"
+    | "FacultadToCarreraConnectionPageInfo"
+    | "FacultadToDepartamentoConnectionPageInfo"
+    | "GradoToCarreraConnectionPageInfo"
+    | "GradoToGrupoDeRequisitosConnectionPageInfo"
+    | "GradoToTermNodeConnectionPageInfo"
+    | "GrupoDeRequisitosToContentNodeConnectionPageInfo"
+    | "GrupoDeRequisitosToGradoConnectionPageInfo"
+    | "HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo"
+    | "HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo"
+    | "InvestigacionToInvestigadorConnectionPageInfo"
+    | "InvestigadorToInvestigacionConnectionPageInfo"
+    | "LineaDeInvestigacionToInvestigacionConnectionPageInfo"
+    | "MediaItemToCommentConnectionPageInfo"
+    | "MenuItemToMenuItemConnectionPageInfo"
+    | "MenuToMenuItemConnectionPageInfo"
+    | "PageToCommentConnectionPageInfo"
+    | "PageToRevisionConnectionPageInfo"
+    | "PostFormatToContentNodeConnectionPageInfo"
+    | "PostFormatToPostConnectionPageInfo"
+    | "PostToCategoryConnectionPageInfo"
+    | "PostToCommentConnectionPageInfo"
+    | "PostToPostFormatConnectionPageInfo"
+    | "PostToRevisionConnectionPageInfo"
+    | "PostToTagConnectionPageInfo"
+    | "PostToTermNodeConnectionPageInfo"
+    | "RecursoToCarreraConnectionPageInfo"
+    | "RootQueryToCarreraConnectionPageInfo"
+    | "RootQueryToCategoryConnectionPageInfo"
+    | "RootQueryToCommentConnectionPageInfo"
+    | "RootQueryToContentNodeConnectionPageInfo"
+    | "RootQueryToContentTypeConnectionPageInfo"
+    | "RootQueryToDepartamentoConnectionPageInfo"
+    | "RootQueryToEnqueuedScriptConnectionPageInfo"
+    | "RootQueryToEnqueuedStylesheetConnectionPageInfo"
+    | "RootQueryToFacultadConnectionPageInfo"
+    | "RootQueryToGradoConnectionPageInfo"
+    | "RootQueryToGrupoDeRequisitosConnectionPageInfo"
+    | "RootQueryToInvestigacionConnectionPageInfo"
+    | "RootQueryToInvestigadorConnectionPageInfo"
+    | "RootQueryToLineaDeInvestigacionConnectionPageInfo"
+    | "RootQueryToMediaItemConnectionPageInfo"
+    | "RootQueryToMenuConnectionPageInfo"
+    | "RootQueryToMenuItemConnectionPageInfo"
+    | "RootQueryToPageConnectionPageInfo"
+    | "RootQueryToPeriodoDeAdmisionConnectionPageInfo"
+    | "RootQueryToPluginConnectionPageInfo"
+    | "RootQueryToPostConnectionPageInfo"
+    | "RootQueryToPostFormatConnectionPageInfo"
+    | "RootQueryToRecursoConnectionPageInfo"
+    | "RootQueryToRevisionsConnectionPageInfo"
+    | "RootQueryToSlideConnectionPageInfo"
+    | "RootQueryToTagConnectionPageInfo"
+    | "RootQueryToTaxonomyConnectionPageInfo"
+    | "RootQueryToTermNodeConnectionPageInfo"
+    | "RootQueryToThemeConnectionPageInfo"
+    | "RootQueryToUserConnectionPageInfo"
+    | "RootQueryToUserRoleConnectionPageInfo"
+    | "TagToContentNodeConnectionPageInfo"
+    | "TagToPostConnectionPageInfo"
+    | "TaxonomyToContentTypeConnectionPageInfo"
+    | "TermNodeToEnqueuedScriptConnectionPageInfo"
+    | "TermNodeToEnqueuedStylesheetConnectionPageInfo"
+    | "UserToCarreraConnectionPageInfo"
+    | "UserToCommentConnectionPageInfo"
+    | "UserToDepartamentoConnectionPageInfo"
+    | "UserToEnqueuedScriptConnectionPageInfo"
+    | "UserToEnqueuedStylesheetConnectionPageInfo"
+    | "UserToFacultadConnectionPageInfo"
+    | "UserToGradoConnectionPageInfo"
+    | "UserToInvestigacionConnectionPageInfo"
+    | "UserToInvestigadorConnectionPageInfo"
+    | "UserToLineaDeInvestigacionConnectionPageInfo"
+    | "UserToMediaItemConnectionPageInfo"
+    | "UserToPageConnectionPageInfo"
+    | "UserToPeriodoDeAdmisionConnectionPageInfo"
+    | "UserToPostConnectionPageInfo"
+    | "UserToRecursoConnectionPageInfo"
+    | "UserToRevisionsConnectionPageInfo"
+    | "UserToSlideConnectionPageInfo"
+    | "UserToUserRoleConnectionPageInfo";
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: ScalarsEnums["Boolean"];
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: ScalarsEnums["Boolean"];
+  /**
+   * Raw schema for page
+   */
+  seo?: Maybe<SEOPostTypePageInfo>;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor?: Maybe<ScalarsEnums["String"]>;
+  $on: $WPPageInfo;
 }
 
 /**
@@ -25827,7 +34278,10 @@ export interface Query {
     id: Scalars["ID"];
     idType?: Maybe<CategoryIdType>;
   }) => Maybe<Category>;
-  comment: (args: { id: Scalars["ID"] }) => Maybe<Comment>;
+  comment: (args: {
+    id: Scalars["ID"];
+    idType?: Maybe<CommentNodeIdTypeEnum>;
+  }) => Maybe<Comment>;
   comments: (args?: {
     after?: Maybe<Scalars["String"]>;
     before?: Maybe<Scalars["String"]>;
@@ -26131,8 +34585,8 @@ export interface Query {
     before?: Maybe<Scalars["String"]>;
     first?: Maybe<Scalars["Int"]>;
     last?: Maybe<Scalars["Int"]>;
-    where?: Maybe<RootQueryToContentRevisionUnionConnectionWhereArgs>;
-  }) => Maybe<RootQueryToContentRevisionUnionConnection>;
+    where?: Maybe<RootQueryToRevisionsConnectionWhereArgs>;
+  }) => Maybe<RootQueryToRevisionsConnection>;
   seo?: Maybe<SEOConfig>;
   slide: (args: {
     asPreview?: Maybe<Scalars["Boolean"]>;
@@ -26236,30 +34690,37 @@ export interface SchemaObjectTypes {
   CarreraToPreviewConnectionEdge: CarreraToPreviewConnectionEdge;
   CarreraToRecursoConnection: CarreraToRecursoConnection;
   CarreraToRecursoConnectionEdge: CarreraToRecursoConnectionEdge;
+  CarreraToRecursoConnectionPageInfo: CarreraToRecursoConnectionPageInfo;
   Carrera_Contacto: Carrera_Contacto;
-  Carrera_Contacto_direcciones: Carrera_Contacto_direcciones;
-  Carrera_Contacto_emails: Carrera_Contacto_emails;
-  Carrera_Contacto_horarios: Carrera_Contacto_horarios;
-  Carrera_Contacto_telefonos: Carrera_Contacto_telefonos;
-  Carrera_Contacto_telefonos_extensiones: Carrera_Contacto_telefonos_extensiones;
-  Carrera_Contacto_whatsapp: Carrera_Contacto_whatsapp;
+  Carrera_Contacto_unidad: Carrera_Contacto_unidad;
+  Carrera_Contacto_unidad_direcciones: Carrera_Contacto_unidad_direcciones;
+  Carrera_Contacto_unidad_emails: Carrera_Contacto_unidad_emails;
+  Carrera_Contacto_unidad_horarios: Carrera_Contacto_unidad_horarios;
+  Carrera_Contacto_unidad_telefonos: Carrera_Contacto_unidad_telefonos;
+  Carrera_Contacto_unidad_telefonos_extensiones: Carrera_Contacto_unidad_telefonos_extensiones;
+  Carrera_Contacto_unidad_whatsapp: Carrera_Contacto_unidad_whatsapp;
   Carrera_Datoscarrera: Carrera_Datoscarrera;
   Carrera_Datoscarrera_tabs: Carrera_Datoscarrera_tabs;
   Category: Category;
   CategoryToAncestorsCategoryConnection: CategoryToAncestorsCategoryConnection;
   CategoryToAncestorsCategoryConnectionEdge: CategoryToAncestorsCategoryConnectionEdge;
+  CategoryToAncestorsCategoryConnectionPageInfo: CategoryToAncestorsCategoryConnectionPageInfo;
   CategoryToCategoryConnection: CategoryToCategoryConnection;
   CategoryToCategoryConnectionEdge: CategoryToCategoryConnectionEdge;
+  CategoryToCategoryConnectionPageInfo: CategoryToCategoryConnectionPageInfo;
   CategoryToContentNodeConnection: CategoryToContentNodeConnection;
   CategoryToContentNodeConnectionEdge: CategoryToContentNodeConnectionEdge;
+  CategoryToContentNodeConnectionPageInfo: CategoryToContentNodeConnectionPageInfo;
   CategoryToParentCategoryConnectionEdge: CategoryToParentCategoryConnectionEdge;
   CategoryToPostConnection: CategoryToPostConnection;
   CategoryToPostConnectionEdge: CategoryToPostConnectionEdge;
+  CategoryToPostConnectionPageInfo: CategoryToPostConnectionPageInfo;
   CategoryToTaxonomyConnectionEdge: CategoryToTaxonomyConnectionEdge;
   Comment: Comment;
   CommentAuthor: CommentAuthor;
   CommentToCommentConnection: CommentToCommentConnection;
   CommentToCommentConnectionEdge: CommentToCommentConnectionEdge;
+  CommentToCommentConnectionPageInfo: CommentToCommentConnectionPageInfo;
   CommentToCommenterConnectionEdge: CommentToCommenterConnectionEdge;
   CommentToContentNodeConnectionEdge: CommentToContentNodeConnectionEdge;
   CommentToParentCommentConnectionEdge: CommentToParentCommentConnectionEdge;
@@ -26269,13 +34730,17 @@ export interface SchemaObjectTypes {
   ContentNodeToEditLockConnectionEdge: ContentNodeToEditLockConnectionEdge;
   ContentNodeToEnqueuedScriptConnection: ContentNodeToEnqueuedScriptConnection;
   ContentNodeToEnqueuedScriptConnectionEdge: ContentNodeToEnqueuedScriptConnectionEdge;
+  ContentNodeToEnqueuedScriptConnectionPageInfo: ContentNodeToEnqueuedScriptConnectionPageInfo;
   ContentNodeToEnqueuedStylesheetConnection: ContentNodeToEnqueuedStylesheetConnection;
   ContentNodeToEnqueuedStylesheetConnectionEdge: ContentNodeToEnqueuedStylesheetConnectionEdge;
+  ContentNodeToEnqueuedStylesheetConnectionPageInfo: ContentNodeToEnqueuedStylesheetConnectionPageInfo;
   ContentType: ContentType;
   ContentTypeToContentNodeConnection: ContentTypeToContentNodeConnection;
   ContentTypeToContentNodeConnectionEdge: ContentTypeToContentNodeConnectionEdge;
+  ContentTypeToContentNodeConnectionPageInfo: ContentTypeToContentNodeConnectionPageInfo;
   ContentTypeToTaxonomyConnection: ContentTypeToTaxonomyConnection;
   ContentTypeToTaxonomyConnectionEdge: ContentTypeToTaxonomyConnectionEdge;
+  ContentTypeToTaxonomyConnectionPageInfo: ContentTypeToTaxonomyConnectionPageInfo;
   CreateCarreraPayload: CreateCarreraPayload;
   CreateCategoryPayload: CreateCategoryPayload;
   CreateCommentPayload: CreateCommentPayload;
@@ -26318,43 +34783,52 @@ export interface SchemaObjectTypes {
   Departamento: Departamento;
   DepartamentoToCarreraConnection: DepartamentoToCarreraConnection;
   DepartamentoToCarreraConnectionEdge: DepartamentoToCarreraConnectionEdge;
+  DepartamentoToCarreraConnectionPageInfo: DepartamentoToCarreraConnectionPageInfo;
   DepartamentoToFacultadConnectionEdge: DepartamentoToFacultadConnectionEdge;
   DepartamentoToLineaDeInvestigacionConnection: DepartamentoToLineaDeInvestigacionConnection;
   DepartamentoToLineaDeInvestigacionConnectionEdge: DepartamentoToLineaDeInvestigacionConnectionEdge;
+  DepartamentoToLineaDeInvestigacionConnectionPageInfo: DepartamentoToLineaDeInvestigacionConnectionPageInfo;
   DepartamentoToPreviewConnectionEdge: DepartamentoToPreviewConnectionEdge;
   Departamento_Contacto: Departamento_Contacto;
-  Departamento_Contacto_direcciones: Departamento_Contacto_direcciones;
-  Departamento_Contacto_emails: Departamento_Contacto_emails;
-  Departamento_Contacto_horarios: Departamento_Contacto_horarios;
-  Departamento_Contacto_telefonos: Departamento_Contacto_telefonos;
-  Departamento_Contacto_telefonos_extensiones: Departamento_Contacto_telefonos_extensiones;
-  Departamento_Contacto_whatsapp: Departamento_Contacto_whatsapp;
+  Departamento_Contacto_unidad: Departamento_Contacto_unidad;
+  Departamento_Contacto_unidad_direcciones: Departamento_Contacto_unidad_direcciones;
+  Departamento_Contacto_unidad_emails: Departamento_Contacto_unidad_emails;
+  Departamento_Contacto_unidad_horarios: Departamento_Contacto_unidad_horarios;
+  Departamento_Contacto_unidad_telefonos: Departamento_Contacto_unidad_telefonos;
+  Departamento_Contacto_unidad_telefonos_extensiones: Departamento_Contacto_unidad_telefonos_extensiones;
+  Departamento_Contacto_unidad_whatsapp: Departamento_Contacto_unidad_whatsapp;
   DiscussionSettings: DiscussionSettings;
   EnqueuedScript: EnqueuedScript;
   EnqueuedStylesheet: EnqueuedStylesheet;
   Facultad: Facultad;
   FacultadToCarreraConnection: FacultadToCarreraConnection;
   FacultadToCarreraConnectionEdge: FacultadToCarreraConnectionEdge;
+  FacultadToCarreraConnectionPageInfo: FacultadToCarreraConnectionPageInfo;
   FacultadToDepartamentoConnection: FacultadToDepartamentoConnection;
   FacultadToDepartamentoConnectionEdge: FacultadToDepartamentoConnectionEdge;
+  FacultadToDepartamentoConnectionPageInfo: FacultadToDepartamentoConnectionPageInfo;
   FacultadToPreviewConnectionEdge: FacultadToPreviewConnectionEdge;
   Facultad_Contacto: Facultad_Contacto;
-  Facultad_Contacto_direcciones: Facultad_Contacto_direcciones;
-  Facultad_Contacto_emails: Facultad_Contacto_emails;
-  Facultad_Contacto_horarios: Facultad_Contacto_horarios;
-  Facultad_Contacto_telefonos: Facultad_Contacto_telefonos;
-  Facultad_Contacto_telefonos_extensiones: Facultad_Contacto_telefonos_extensiones;
-  Facultad_Contacto_whatsapp: Facultad_Contacto_whatsapp;
+  Facultad_Contacto_unidad: Facultad_Contacto_unidad;
+  Facultad_Contacto_unidad_direcciones: Facultad_Contacto_unidad_direcciones;
+  Facultad_Contacto_unidad_emails: Facultad_Contacto_unidad_emails;
+  Facultad_Contacto_unidad_horarios: Facultad_Contacto_unidad_horarios;
+  Facultad_Contacto_unidad_telefonos: Facultad_Contacto_unidad_telefonos;
+  Facultad_Contacto_unidad_telefonos_extensiones: Facultad_Contacto_unidad_telefonos_extensiones;
+  Facultad_Contacto_unidad_whatsapp: Facultad_Contacto_unidad_whatsapp;
   GeneralSettings: GeneralSettings;
   GenerateAuthorizationCodePayload: GenerateAuthorizationCodePayload;
   Grado: Grado;
   GradoToCarreraConnection: GradoToCarreraConnection;
   GradoToCarreraConnectionEdge: GradoToCarreraConnectionEdge;
+  GradoToCarreraConnectionPageInfo: GradoToCarreraConnectionPageInfo;
   GradoToGrupoDeRequisitosConnection: GradoToGrupoDeRequisitosConnection;
   GradoToGrupoDeRequisitosConnectionEdge: GradoToGrupoDeRequisitosConnectionEdge;
+  GradoToGrupoDeRequisitosConnectionPageInfo: GradoToGrupoDeRequisitosConnectionPageInfo;
   GradoToPreviewConnectionEdge: GradoToPreviewConnectionEdge;
   GradoToTermNodeConnection: GradoToTermNodeConnection;
   GradoToTermNodeConnectionEdge: GradoToTermNodeConnectionEdge;
+  GradoToTermNodeConnectionPageInfo: GradoToTermNodeConnectionPageInfo;
   Grado_Datosrequisitos: Grado_Datosrequisitos;
   Grado_Datosrequisitos_requisitos: Grado_Datosrequisitos_requisitos;
   Grado_Formulariosgrado: Grado_Formulariosgrado;
@@ -26362,23 +34836,29 @@ export interface SchemaObjectTypes {
   GrupoDeRequisitos: GrupoDeRequisitos;
   GrupoDeRequisitosToContentNodeConnection: GrupoDeRequisitosToContentNodeConnection;
   GrupoDeRequisitosToContentNodeConnectionEdge: GrupoDeRequisitosToContentNodeConnectionEdge;
+  GrupoDeRequisitosToContentNodeConnectionPageInfo: GrupoDeRequisitosToContentNodeConnectionPageInfo;
   GrupoDeRequisitosToGradoConnection: GrupoDeRequisitosToGradoConnection;
   GrupoDeRequisitosToGradoConnectionEdge: GrupoDeRequisitosToGradoConnectionEdge;
+  GrupoDeRequisitosToGradoConnectionPageInfo: GrupoDeRequisitosToGradoConnectionPageInfo;
   GrupoDeRequisitosToTaxonomyConnectionEdge: GrupoDeRequisitosToTaxonomyConnectionEdge;
   HierarchicalContentNodeToContentNodeAncestorsConnection: HierarchicalContentNodeToContentNodeAncestorsConnection;
   HierarchicalContentNodeToContentNodeAncestorsConnectionEdge: HierarchicalContentNodeToContentNodeAncestorsConnectionEdge;
+  HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo: HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo;
   HierarchicalContentNodeToContentNodeChildrenConnection: HierarchicalContentNodeToContentNodeChildrenConnection;
   HierarchicalContentNodeToContentNodeChildrenConnectionEdge: HierarchicalContentNodeToContentNodeChildrenConnectionEdge;
+  HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo: HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo;
   HierarchicalContentNodeToParentContentNodeConnectionEdge: HierarchicalContentNodeToParentContentNodeConnectionEdge;
   Investigacion: Investigacion;
   InvestigacionToInvestigadorConnection: InvestigacionToInvestigadorConnection;
   InvestigacionToInvestigadorConnectionEdge: InvestigacionToInvestigadorConnectionEdge;
+  InvestigacionToInvestigadorConnectionPageInfo: InvestigacionToInvestigadorConnectionPageInfo;
   InvestigacionToLineaDeInvestigacionConnectionEdge: InvestigacionToLineaDeInvestigacionConnectionEdge;
   InvestigacionToPreviewConnectionEdge: InvestigacionToPreviewConnectionEdge;
   Investigacion_Datosinvestigacion: Investigacion_Datosinvestigacion;
   Investigador: Investigador;
   InvestigadorToInvestigacionConnection: InvestigadorToInvestigacionConnection;
   InvestigadorToInvestigacionConnectionEdge: InvestigadorToInvestigacionConnectionEdge;
+  InvestigadorToInvestigacionConnectionPageInfo: InvestigadorToInvestigacionConnectionPageInfo;
   InvestigadorToPreviewConnectionEdge: InvestigadorToPreviewConnectionEdge;
   Investigador_Datosinvestigador: Investigador_Datosinvestigador;
   Investigador_Datosinvestigador_CarreraNacionalInvestigacion: Investigador_Datosinvestigador_CarreraNacionalInvestigacion;
@@ -26386,22 +34866,26 @@ export interface SchemaObjectTypes {
   LineaDeInvestigacionToDepartamentoConnectionEdge: LineaDeInvestigacionToDepartamentoConnectionEdge;
   LineaDeInvestigacionToInvestigacionConnection: LineaDeInvestigacionToInvestigacionConnection;
   LineaDeInvestigacionToInvestigacionConnectionEdge: LineaDeInvestigacionToInvestigacionConnectionEdge;
+  LineaDeInvestigacionToInvestigacionConnectionPageInfo: LineaDeInvestigacionToInvestigacionConnectionPageInfo;
   LineaDeInvestigacionToPreviewConnectionEdge: LineaDeInvestigacionToPreviewConnectionEdge;
   MediaDetails: MediaDetails;
   MediaItem: MediaItem;
   MediaItemMeta: MediaItemMeta;
   MediaItemToCommentConnection: MediaItemToCommentConnection;
   MediaItemToCommentConnectionEdge: MediaItemToCommentConnectionEdge;
+  MediaItemToCommentConnectionPageInfo: MediaItemToCommentConnectionPageInfo;
   MediaSize: MediaSize;
   Menu: Menu;
   MenuItem: MenuItem;
   MenuItemToMenuConnectionEdge: MenuItemToMenuConnectionEdge;
   MenuItemToMenuItemConnection: MenuItemToMenuItemConnection;
   MenuItemToMenuItemConnectionEdge: MenuItemToMenuItemConnectionEdge;
+  MenuItemToMenuItemConnectionPageInfo: MenuItemToMenuItemConnectionPageInfo;
   MenuItemToMenuItemLinkableConnectionEdge: MenuItemToMenuItemLinkableConnectionEdge;
   MenuItem_Datosmenu: MenuItem_Datosmenu;
   MenuToMenuItemConnection: MenuToMenuItemConnection;
   MenuToMenuItemConnectionEdge: MenuToMenuItemConnectionEdge;
+  MenuToMenuItemConnectionPageInfo: MenuToMenuItemConnectionPageInfo;
   Mutation: Mutation;
   NodeWithAuthorToUserConnectionEdge: NodeWithAuthorToUserConnectionEdge;
   NodeWithFeaturedImageToMediaItemConnectionEdge: NodeWithFeaturedImageToMediaItemConnectionEdge;
@@ -26409,16 +34893,19 @@ export interface SchemaObjectTypes {
   Page: Page;
   PageToCommentConnection: PageToCommentConnection;
   PageToCommentConnectionEdge: PageToCommentConnectionEdge;
+  PageToCommentConnectionPageInfo: PageToCommentConnectionPageInfo;
   PageToPreviewConnectionEdge: PageToPreviewConnectionEdge;
   PageToRevisionConnection: PageToRevisionConnection;
   PageToRevisionConnectionEdge: PageToRevisionConnectionEdge;
+  PageToRevisionConnectionPageInfo: PageToRevisionConnectionPageInfo;
   Page_Contacto: Page_Contacto;
-  Page_Contacto_direcciones: Page_Contacto_direcciones;
-  Page_Contacto_emails: Page_Contacto_emails;
-  Page_Contacto_horarios: Page_Contacto_horarios;
-  Page_Contacto_telefonos: Page_Contacto_telefonos;
-  Page_Contacto_telefonos_extensiones: Page_Contacto_telefonos_extensiones;
-  Page_Contacto_whatsapp: Page_Contacto_whatsapp;
+  Page_Contacto_unidad: Page_Contacto_unidad;
+  Page_Contacto_unidad_direcciones: Page_Contacto_unidad_direcciones;
+  Page_Contacto_unidad_emails: Page_Contacto_unidad_emails;
+  Page_Contacto_unidad_horarios: Page_Contacto_unidad_horarios;
+  Page_Contacto_unidad_telefonos: Page_Contacto_unidad_telefonos;
+  Page_Contacto_unidad_telefonos_extensiones: Page_Contacto_unidad_telefonos_extensiones;
+  Page_Contacto_unidad_whatsapp: Page_Contacto_unidad_whatsapp;
   Page_Datosrecursos: Page_Datosrecursos;
   Page_Pagesettings: Page_Pagesettings;
   PeriodoDeAdmision: PeriodoDeAdmision;
@@ -26430,22 +34917,30 @@ export interface SchemaObjectTypes {
   PostFormat: PostFormat;
   PostFormatToContentNodeConnection: PostFormatToContentNodeConnection;
   PostFormatToContentNodeConnectionEdge: PostFormatToContentNodeConnectionEdge;
+  PostFormatToContentNodeConnectionPageInfo: PostFormatToContentNodeConnectionPageInfo;
   PostFormatToPostConnection: PostFormatToPostConnection;
   PostFormatToPostConnectionEdge: PostFormatToPostConnectionEdge;
+  PostFormatToPostConnectionPageInfo: PostFormatToPostConnectionPageInfo;
   PostFormatToTaxonomyConnectionEdge: PostFormatToTaxonomyConnectionEdge;
   PostToCategoryConnection: PostToCategoryConnection;
   PostToCategoryConnectionEdge: PostToCategoryConnectionEdge;
+  PostToCategoryConnectionPageInfo: PostToCategoryConnectionPageInfo;
   PostToCommentConnection: PostToCommentConnection;
   PostToCommentConnectionEdge: PostToCommentConnectionEdge;
+  PostToCommentConnectionPageInfo: PostToCommentConnectionPageInfo;
   PostToPostFormatConnection: PostToPostFormatConnection;
   PostToPostFormatConnectionEdge: PostToPostFormatConnectionEdge;
+  PostToPostFormatConnectionPageInfo: PostToPostFormatConnectionPageInfo;
   PostToPreviewConnectionEdge: PostToPreviewConnectionEdge;
   PostToRevisionConnection: PostToRevisionConnection;
   PostToRevisionConnectionEdge: PostToRevisionConnectionEdge;
+  PostToRevisionConnectionPageInfo: PostToRevisionConnectionPageInfo;
   PostToTagConnection: PostToTagConnection;
   PostToTagConnectionEdge: PostToTagConnectionEdge;
+  PostToTagConnectionPageInfo: PostToTagConnectionPageInfo;
   PostToTermNodeConnection: PostToTermNodeConnection;
   PostToTermNodeConnectionEdge: PostToTermNodeConnectionEdge;
+  PostToTermNodeConnectionPageInfo: PostToTermNodeConnectionPageInfo;
   PostTypeLabelDetails: PostTypeLabelDetails;
   PostTypeSEO: PostTypeSEO;
   Post_Datospublicacion: Post_Datospublicacion;
@@ -26455,6 +34950,7 @@ export interface SchemaObjectTypes {
   Recurso: Recurso;
   RecursoToCarreraConnection: RecursoToCarreraConnection;
   RecursoToCarreraConnectionEdge: RecursoToCarreraConnectionEdge;
+  RecursoToCarreraConnectionPageInfo: RecursoToCarreraConnectionPageInfo;
   RecursoToPreviewConnectionEdge: RecursoToPreviewConnectionEdge;
   Recurso_Datosrecurso: Recurso_Datosrecurso;
   RegisterUserPayload: RegisterUserPayload;
@@ -26462,71 +34958,108 @@ export interface SchemaObjectTypes {
   RestoreCommentPayload: RestoreCommentPayload;
   RootQueryToCarreraConnection: RootQueryToCarreraConnection;
   RootQueryToCarreraConnectionEdge: RootQueryToCarreraConnectionEdge;
+  RootQueryToCarreraConnectionPageInfo: RootQueryToCarreraConnectionPageInfo;
   RootQueryToCategoryConnection: RootQueryToCategoryConnection;
   RootQueryToCategoryConnectionEdge: RootQueryToCategoryConnectionEdge;
+  RootQueryToCategoryConnectionPageInfo: RootQueryToCategoryConnectionPageInfo;
   RootQueryToCommentConnection: RootQueryToCommentConnection;
   RootQueryToCommentConnectionEdge: RootQueryToCommentConnectionEdge;
+  RootQueryToCommentConnectionPageInfo: RootQueryToCommentConnectionPageInfo;
   RootQueryToContentNodeConnection: RootQueryToContentNodeConnection;
   RootQueryToContentNodeConnectionEdge: RootQueryToContentNodeConnectionEdge;
-  RootQueryToContentRevisionUnionConnection: RootQueryToContentRevisionUnionConnection;
-  RootQueryToContentRevisionUnionConnectionEdge: RootQueryToContentRevisionUnionConnectionEdge;
+  RootQueryToContentNodeConnectionPageInfo: RootQueryToContentNodeConnectionPageInfo;
   RootQueryToContentTypeConnection: RootQueryToContentTypeConnection;
   RootQueryToContentTypeConnectionEdge: RootQueryToContentTypeConnectionEdge;
+  RootQueryToContentTypeConnectionPageInfo: RootQueryToContentTypeConnectionPageInfo;
   RootQueryToDepartamentoConnection: RootQueryToDepartamentoConnection;
   RootQueryToDepartamentoConnectionEdge: RootQueryToDepartamentoConnectionEdge;
+  RootQueryToDepartamentoConnectionPageInfo: RootQueryToDepartamentoConnectionPageInfo;
   RootQueryToEnqueuedScriptConnection: RootQueryToEnqueuedScriptConnection;
   RootQueryToEnqueuedScriptConnectionEdge: RootQueryToEnqueuedScriptConnectionEdge;
+  RootQueryToEnqueuedScriptConnectionPageInfo: RootQueryToEnqueuedScriptConnectionPageInfo;
   RootQueryToEnqueuedStylesheetConnection: RootQueryToEnqueuedStylesheetConnection;
   RootQueryToEnqueuedStylesheetConnectionEdge: RootQueryToEnqueuedStylesheetConnectionEdge;
+  RootQueryToEnqueuedStylesheetConnectionPageInfo: RootQueryToEnqueuedStylesheetConnectionPageInfo;
   RootQueryToFacultadConnection: RootQueryToFacultadConnection;
   RootQueryToFacultadConnectionEdge: RootQueryToFacultadConnectionEdge;
+  RootQueryToFacultadConnectionPageInfo: RootQueryToFacultadConnectionPageInfo;
   RootQueryToGradoConnection: RootQueryToGradoConnection;
   RootQueryToGradoConnectionEdge: RootQueryToGradoConnectionEdge;
+  RootQueryToGradoConnectionPageInfo: RootQueryToGradoConnectionPageInfo;
   RootQueryToGrupoDeRequisitosConnection: RootQueryToGrupoDeRequisitosConnection;
   RootQueryToGrupoDeRequisitosConnectionEdge: RootQueryToGrupoDeRequisitosConnectionEdge;
+  RootQueryToGrupoDeRequisitosConnectionPageInfo: RootQueryToGrupoDeRequisitosConnectionPageInfo;
   RootQueryToInvestigacionConnection: RootQueryToInvestigacionConnection;
   RootQueryToInvestigacionConnectionEdge: RootQueryToInvestigacionConnectionEdge;
+  RootQueryToInvestigacionConnectionPageInfo: RootQueryToInvestigacionConnectionPageInfo;
   RootQueryToInvestigadorConnection: RootQueryToInvestigadorConnection;
   RootQueryToInvestigadorConnectionEdge: RootQueryToInvestigadorConnectionEdge;
+  RootQueryToInvestigadorConnectionPageInfo: RootQueryToInvestigadorConnectionPageInfo;
   RootQueryToLineaDeInvestigacionConnection: RootQueryToLineaDeInvestigacionConnection;
   RootQueryToLineaDeInvestigacionConnectionEdge: RootQueryToLineaDeInvestigacionConnectionEdge;
+  RootQueryToLineaDeInvestigacionConnectionPageInfo: RootQueryToLineaDeInvestigacionConnectionPageInfo;
   RootQueryToMediaItemConnection: RootQueryToMediaItemConnection;
   RootQueryToMediaItemConnectionEdge: RootQueryToMediaItemConnectionEdge;
+  RootQueryToMediaItemConnectionPageInfo: RootQueryToMediaItemConnectionPageInfo;
   RootQueryToMenuConnection: RootQueryToMenuConnection;
   RootQueryToMenuConnectionEdge: RootQueryToMenuConnectionEdge;
+  RootQueryToMenuConnectionPageInfo: RootQueryToMenuConnectionPageInfo;
   RootQueryToMenuItemConnection: RootQueryToMenuItemConnection;
   RootQueryToMenuItemConnectionEdge: RootQueryToMenuItemConnectionEdge;
+  RootQueryToMenuItemConnectionPageInfo: RootQueryToMenuItemConnectionPageInfo;
   RootQueryToPageConnection: RootQueryToPageConnection;
   RootQueryToPageConnectionEdge: RootQueryToPageConnectionEdge;
+  RootQueryToPageConnectionPageInfo: RootQueryToPageConnectionPageInfo;
   RootQueryToPeriodoDeAdmisionConnection: RootQueryToPeriodoDeAdmisionConnection;
   RootQueryToPeriodoDeAdmisionConnectionEdge: RootQueryToPeriodoDeAdmisionConnectionEdge;
+  RootQueryToPeriodoDeAdmisionConnectionPageInfo: RootQueryToPeriodoDeAdmisionConnectionPageInfo;
   RootQueryToPluginConnection: RootQueryToPluginConnection;
   RootQueryToPluginConnectionEdge: RootQueryToPluginConnectionEdge;
+  RootQueryToPluginConnectionPageInfo: RootQueryToPluginConnectionPageInfo;
   RootQueryToPostConnection: RootQueryToPostConnection;
   RootQueryToPostConnectionEdge: RootQueryToPostConnectionEdge;
+  RootQueryToPostConnectionPageInfo: RootQueryToPostConnectionPageInfo;
   RootQueryToPostFormatConnection: RootQueryToPostFormatConnection;
   RootQueryToPostFormatConnectionEdge: RootQueryToPostFormatConnectionEdge;
+  RootQueryToPostFormatConnectionPageInfo: RootQueryToPostFormatConnectionPageInfo;
   RootQueryToRecursoConnection: RootQueryToRecursoConnection;
   RootQueryToRecursoConnectionEdge: RootQueryToRecursoConnectionEdge;
+  RootQueryToRecursoConnectionPageInfo: RootQueryToRecursoConnectionPageInfo;
+  RootQueryToRevisionsConnection: RootQueryToRevisionsConnection;
+  RootQueryToRevisionsConnectionEdge: RootQueryToRevisionsConnectionEdge;
+  RootQueryToRevisionsConnectionPageInfo: RootQueryToRevisionsConnectionPageInfo;
   RootQueryToSlideConnection: RootQueryToSlideConnection;
   RootQueryToSlideConnectionEdge: RootQueryToSlideConnectionEdge;
+  RootQueryToSlideConnectionPageInfo: RootQueryToSlideConnectionPageInfo;
   RootQueryToTagConnection: RootQueryToTagConnection;
   RootQueryToTagConnectionEdge: RootQueryToTagConnectionEdge;
+  RootQueryToTagConnectionPageInfo: RootQueryToTagConnectionPageInfo;
   RootQueryToTaxonomyConnection: RootQueryToTaxonomyConnection;
   RootQueryToTaxonomyConnectionEdge: RootQueryToTaxonomyConnectionEdge;
+  RootQueryToTaxonomyConnectionPageInfo: RootQueryToTaxonomyConnectionPageInfo;
   RootQueryToTermNodeConnection: RootQueryToTermNodeConnection;
   RootQueryToTermNodeConnectionEdge: RootQueryToTermNodeConnectionEdge;
+  RootQueryToTermNodeConnectionPageInfo: RootQueryToTermNodeConnectionPageInfo;
   RootQueryToThemeConnection: RootQueryToThemeConnection;
   RootQueryToThemeConnectionEdge: RootQueryToThemeConnectionEdge;
+  RootQueryToThemeConnectionPageInfo: RootQueryToThemeConnectionPageInfo;
   RootQueryToUserConnection: RootQueryToUserConnection;
   RootQueryToUserConnectionEdge: RootQueryToUserConnectionEdge;
+  RootQueryToUserConnectionPageInfo: RootQueryToUserConnectionPageInfo;
   RootQueryToUserRoleConnection: RootQueryToUserRoleConnection;
   RootQueryToUserRoleConnectionEdge: RootQueryToUserRoleConnectionEdge;
+  RootQueryToUserRoleConnectionPageInfo: RootQueryToUserRoleConnectionPageInfo;
   SEOBreadcrumbs: SEOBreadcrumbs;
   SEOConfig: SEOConfig;
   SEOContentType: SEOContentType;
   SEOContentTypeArchive: SEOContentTypeArchive;
   SEOContentTypes: SEOContentTypes;
+  SEOGlobalMeta: SEOGlobalMeta;
+  SEOGlobalMeta404: SEOGlobalMeta404;
+  SEOGlobalMetaAuthor: SEOGlobalMetaAuthor;
+  SEOGlobalMetaConfig: SEOGlobalMetaConfig;
+  SEOGlobalMetaDate: SEOGlobalMetaDate;
+  SEOGlobalMetaHome: SEOGlobalMetaHome;
   SEOOpenGraph: SEOOpenGraph;
   SEOOpenGraphFrontPage: SEOOpenGraphFrontPage;
   SEOPageInfoSchema: SEOPageInfoSchema;
@@ -26558,17 +35091,22 @@ export interface SchemaObjectTypes {
   Tag: Tag;
   TagToContentNodeConnection: TagToContentNodeConnection;
   TagToContentNodeConnectionEdge: TagToContentNodeConnectionEdge;
+  TagToContentNodeConnectionPageInfo: TagToContentNodeConnectionPageInfo;
   TagToPostConnection: TagToPostConnection;
   TagToPostConnectionEdge: TagToPostConnectionEdge;
+  TagToPostConnectionPageInfo: TagToPostConnectionPageInfo;
   TagToTaxonomyConnectionEdge: TagToTaxonomyConnectionEdge;
   Taxonomy: Taxonomy;
   TaxonomySEO: TaxonomySEO;
   TaxonomyToContentTypeConnection: TaxonomyToContentTypeConnection;
   TaxonomyToContentTypeConnectionEdge: TaxonomyToContentTypeConnectionEdge;
+  TaxonomyToContentTypeConnectionPageInfo: TaxonomyToContentTypeConnectionPageInfo;
   TermNodeToEnqueuedScriptConnection: TermNodeToEnqueuedScriptConnection;
   TermNodeToEnqueuedScriptConnectionEdge: TermNodeToEnqueuedScriptConnectionEdge;
+  TermNodeToEnqueuedScriptConnectionPageInfo: TermNodeToEnqueuedScriptConnectionPageInfo;
   TermNodeToEnqueuedStylesheetConnection: TermNodeToEnqueuedStylesheetConnection;
   TermNodeToEnqueuedStylesheetConnectionEdge: TermNodeToEnqueuedStylesheetConnectionEdge;
+  TermNodeToEnqueuedStylesheetConnectionPageInfo: TermNodeToEnqueuedStylesheetConnectionPageInfo;
   Theme: Theme;
   UpdateCarreraPayload: UpdateCarreraPayload;
   UpdateCategoryPayload: UpdateCategoryPayload;
@@ -26594,41 +35132,58 @@ export interface SchemaObjectTypes {
   UserRole: UserRole;
   UserToCarreraConnection: UserToCarreraConnection;
   UserToCarreraConnectionEdge: UserToCarreraConnectionEdge;
+  UserToCarreraConnectionPageInfo: UserToCarreraConnectionPageInfo;
   UserToCommentConnection: UserToCommentConnection;
   UserToCommentConnectionEdge: UserToCommentConnectionEdge;
-  UserToContentRevisionUnionConnection: UserToContentRevisionUnionConnection;
-  UserToContentRevisionUnionConnectionEdge: UserToContentRevisionUnionConnectionEdge;
+  UserToCommentConnectionPageInfo: UserToCommentConnectionPageInfo;
   UserToDepartamentoConnection: UserToDepartamentoConnection;
   UserToDepartamentoConnectionEdge: UserToDepartamentoConnectionEdge;
+  UserToDepartamentoConnectionPageInfo: UserToDepartamentoConnectionPageInfo;
   UserToEnqueuedScriptConnection: UserToEnqueuedScriptConnection;
   UserToEnqueuedScriptConnectionEdge: UserToEnqueuedScriptConnectionEdge;
+  UserToEnqueuedScriptConnectionPageInfo: UserToEnqueuedScriptConnectionPageInfo;
   UserToEnqueuedStylesheetConnection: UserToEnqueuedStylesheetConnection;
   UserToEnqueuedStylesheetConnectionEdge: UserToEnqueuedStylesheetConnectionEdge;
+  UserToEnqueuedStylesheetConnectionPageInfo: UserToEnqueuedStylesheetConnectionPageInfo;
   UserToFacultadConnection: UserToFacultadConnection;
   UserToFacultadConnectionEdge: UserToFacultadConnectionEdge;
+  UserToFacultadConnectionPageInfo: UserToFacultadConnectionPageInfo;
   UserToGradoConnection: UserToGradoConnection;
   UserToGradoConnectionEdge: UserToGradoConnectionEdge;
+  UserToGradoConnectionPageInfo: UserToGradoConnectionPageInfo;
   UserToInvestigacionConnection: UserToInvestigacionConnection;
   UserToInvestigacionConnectionEdge: UserToInvestigacionConnectionEdge;
+  UserToInvestigacionConnectionPageInfo: UserToInvestigacionConnectionPageInfo;
   UserToInvestigadorConnection: UserToInvestigadorConnection;
   UserToInvestigadorConnectionEdge: UserToInvestigadorConnectionEdge;
+  UserToInvestigadorConnectionPageInfo: UserToInvestigadorConnectionPageInfo;
   UserToLineaDeInvestigacionConnection: UserToLineaDeInvestigacionConnection;
   UserToLineaDeInvestigacionConnectionEdge: UserToLineaDeInvestigacionConnectionEdge;
+  UserToLineaDeInvestigacionConnectionPageInfo: UserToLineaDeInvestigacionConnectionPageInfo;
   UserToMediaItemConnection: UserToMediaItemConnection;
   UserToMediaItemConnectionEdge: UserToMediaItemConnectionEdge;
+  UserToMediaItemConnectionPageInfo: UserToMediaItemConnectionPageInfo;
   UserToPageConnection: UserToPageConnection;
   UserToPageConnectionEdge: UserToPageConnectionEdge;
+  UserToPageConnectionPageInfo: UserToPageConnectionPageInfo;
   UserToPeriodoDeAdmisionConnection: UserToPeriodoDeAdmisionConnection;
   UserToPeriodoDeAdmisionConnectionEdge: UserToPeriodoDeAdmisionConnectionEdge;
+  UserToPeriodoDeAdmisionConnectionPageInfo: UserToPeriodoDeAdmisionConnectionPageInfo;
   UserToPostConnection: UserToPostConnection;
   UserToPostConnectionEdge: UserToPostConnectionEdge;
+  UserToPostConnectionPageInfo: UserToPostConnectionPageInfo;
   UserToRecursoConnection: UserToRecursoConnection;
   UserToRecursoConnectionEdge: UserToRecursoConnectionEdge;
+  UserToRecursoConnectionPageInfo: UserToRecursoConnectionPageInfo;
+  UserToRevisionsConnection: UserToRevisionsConnection;
+  UserToRevisionsConnectionEdge: UserToRevisionsConnectionEdge;
+  UserToRevisionsConnectionPageInfo: UserToRevisionsConnectionPageInfo;
   UserToSlideConnection: UserToSlideConnection;
   UserToSlideConnectionEdge: UserToSlideConnectionEdge;
+  UserToSlideConnectionPageInfo: UserToSlideConnectionPageInfo;
   UserToUserRoleConnection: UserToUserRoleConnection;
   UserToUserRoleConnectionEdge: UserToUserRoleConnectionEdge;
-  WPPageInfo: WPPageInfo;
+  UserToUserRoleConnectionPageInfo: UserToUserRoleConnectionPageInfo;
   WritingSettings: WritingSettings;
 }
 export type SchemaObjectTypesNames =
@@ -26652,30 +35207,37 @@ export type SchemaObjectTypesNames =
   | "CarreraToPreviewConnectionEdge"
   | "CarreraToRecursoConnection"
   | "CarreraToRecursoConnectionEdge"
+  | "CarreraToRecursoConnectionPageInfo"
   | "Carrera_Contacto"
-  | "Carrera_Contacto_direcciones"
-  | "Carrera_Contacto_emails"
-  | "Carrera_Contacto_horarios"
-  | "Carrera_Contacto_telefonos"
-  | "Carrera_Contacto_telefonos_extensiones"
-  | "Carrera_Contacto_whatsapp"
+  | "Carrera_Contacto_unidad"
+  | "Carrera_Contacto_unidad_direcciones"
+  | "Carrera_Contacto_unidad_emails"
+  | "Carrera_Contacto_unidad_horarios"
+  | "Carrera_Contacto_unidad_telefonos"
+  | "Carrera_Contacto_unidad_telefonos_extensiones"
+  | "Carrera_Contacto_unidad_whatsapp"
   | "Carrera_Datoscarrera"
   | "Carrera_Datoscarrera_tabs"
   | "Category"
   | "CategoryToAncestorsCategoryConnection"
   | "CategoryToAncestorsCategoryConnectionEdge"
+  | "CategoryToAncestorsCategoryConnectionPageInfo"
   | "CategoryToCategoryConnection"
   | "CategoryToCategoryConnectionEdge"
+  | "CategoryToCategoryConnectionPageInfo"
   | "CategoryToContentNodeConnection"
   | "CategoryToContentNodeConnectionEdge"
+  | "CategoryToContentNodeConnectionPageInfo"
   | "CategoryToParentCategoryConnectionEdge"
   | "CategoryToPostConnection"
   | "CategoryToPostConnectionEdge"
+  | "CategoryToPostConnectionPageInfo"
   | "CategoryToTaxonomyConnectionEdge"
   | "Comment"
   | "CommentAuthor"
   | "CommentToCommentConnection"
   | "CommentToCommentConnectionEdge"
+  | "CommentToCommentConnectionPageInfo"
   | "CommentToCommenterConnectionEdge"
   | "CommentToContentNodeConnectionEdge"
   | "CommentToParentCommentConnectionEdge"
@@ -26685,13 +35247,17 @@ export type SchemaObjectTypesNames =
   | "ContentNodeToEditLockConnectionEdge"
   | "ContentNodeToEnqueuedScriptConnection"
   | "ContentNodeToEnqueuedScriptConnectionEdge"
+  | "ContentNodeToEnqueuedScriptConnectionPageInfo"
   | "ContentNodeToEnqueuedStylesheetConnection"
   | "ContentNodeToEnqueuedStylesheetConnectionEdge"
+  | "ContentNodeToEnqueuedStylesheetConnectionPageInfo"
   | "ContentType"
   | "ContentTypeToContentNodeConnection"
   | "ContentTypeToContentNodeConnectionEdge"
+  | "ContentTypeToContentNodeConnectionPageInfo"
   | "ContentTypeToTaxonomyConnection"
   | "ContentTypeToTaxonomyConnectionEdge"
+  | "ContentTypeToTaxonomyConnectionPageInfo"
   | "CreateCarreraPayload"
   | "CreateCategoryPayload"
   | "CreateCommentPayload"
@@ -26734,43 +35300,52 @@ export type SchemaObjectTypesNames =
   | "Departamento"
   | "DepartamentoToCarreraConnection"
   | "DepartamentoToCarreraConnectionEdge"
+  | "DepartamentoToCarreraConnectionPageInfo"
   | "DepartamentoToFacultadConnectionEdge"
   | "DepartamentoToLineaDeInvestigacionConnection"
   | "DepartamentoToLineaDeInvestigacionConnectionEdge"
+  | "DepartamentoToLineaDeInvestigacionConnectionPageInfo"
   | "DepartamentoToPreviewConnectionEdge"
   | "Departamento_Contacto"
-  | "Departamento_Contacto_direcciones"
-  | "Departamento_Contacto_emails"
-  | "Departamento_Contacto_horarios"
-  | "Departamento_Contacto_telefonos"
-  | "Departamento_Contacto_telefonos_extensiones"
-  | "Departamento_Contacto_whatsapp"
+  | "Departamento_Contacto_unidad"
+  | "Departamento_Contacto_unidad_direcciones"
+  | "Departamento_Contacto_unidad_emails"
+  | "Departamento_Contacto_unidad_horarios"
+  | "Departamento_Contacto_unidad_telefonos"
+  | "Departamento_Contacto_unidad_telefonos_extensiones"
+  | "Departamento_Contacto_unidad_whatsapp"
   | "DiscussionSettings"
   | "EnqueuedScript"
   | "EnqueuedStylesheet"
   | "Facultad"
   | "FacultadToCarreraConnection"
   | "FacultadToCarreraConnectionEdge"
+  | "FacultadToCarreraConnectionPageInfo"
   | "FacultadToDepartamentoConnection"
   | "FacultadToDepartamentoConnectionEdge"
+  | "FacultadToDepartamentoConnectionPageInfo"
   | "FacultadToPreviewConnectionEdge"
   | "Facultad_Contacto"
-  | "Facultad_Contacto_direcciones"
-  | "Facultad_Contacto_emails"
-  | "Facultad_Contacto_horarios"
-  | "Facultad_Contacto_telefonos"
-  | "Facultad_Contacto_telefonos_extensiones"
-  | "Facultad_Contacto_whatsapp"
+  | "Facultad_Contacto_unidad"
+  | "Facultad_Contacto_unidad_direcciones"
+  | "Facultad_Contacto_unidad_emails"
+  | "Facultad_Contacto_unidad_horarios"
+  | "Facultad_Contacto_unidad_telefonos"
+  | "Facultad_Contacto_unidad_telefonos_extensiones"
+  | "Facultad_Contacto_unidad_whatsapp"
   | "GeneralSettings"
   | "GenerateAuthorizationCodePayload"
   | "Grado"
   | "GradoToCarreraConnection"
   | "GradoToCarreraConnectionEdge"
+  | "GradoToCarreraConnectionPageInfo"
   | "GradoToGrupoDeRequisitosConnection"
   | "GradoToGrupoDeRequisitosConnectionEdge"
+  | "GradoToGrupoDeRequisitosConnectionPageInfo"
   | "GradoToPreviewConnectionEdge"
   | "GradoToTermNodeConnection"
   | "GradoToTermNodeConnectionEdge"
+  | "GradoToTermNodeConnectionPageInfo"
   | "Grado_Datosrequisitos"
   | "Grado_Datosrequisitos_requisitos"
   | "Grado_Formulariosgrado"
@@ -26778,23 +35353,29 @@ export type SchemaObjectTypesNames =
   | "GrupoDeRequisitos"
   | "GrupoDeRequisitosToContentNodeConnection"
   | "GrupoDeRequisitosToContentNodeConnectionEdge"
+  | "GrupoDeRequisitosToContentNodeConnectionPageInfo"
   | "GrupoDeRequisitosToGradoConnection"
   | "GrupoDeRequisitosToGradoConnectionEdge"
+  | "GrupoDeRequisitosToGradoConnectionPageInfo"
   | "GrupoDeRequisitosToTaxonomyConnectionEdge"
   | "HierarchicalContentNodeToContentNodeAncestorsConnection"
   | "HierarchicalContentNodeToContentNodeAncestorsConnectionEdge"
+  | "HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo"
   | "HierarchicalContentNodeToContentNodeChildrenConnection"
   | "HierarchicalContentNodeToContentNodeChildrenConnectionEdge"
+  | "HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo"
   | "HierarchicalContentNodeToParentContentNodeConnectionEdge"
   | "Investigacion"
   | "InvestigacionToInvestigadorConnection"
   | "InvestigacionToInvestigadorConnectionEdge"
+  | "InvestigacionToInvestigadorConnectionPageInfo"
   | "InvestigacionToLineaDeInvestigacionConnectionEdge"
   | "InvestigacionToPreviewConnectionEdge"
   | "Investigacion_Datosinvestigacion"
   | "Investigador"
   | "InvestigadorToInvestigacionConnection"
   | "InvestigadorToInvestigacionConnectionEdge"
+  | "InvestigadorToInvestigacionConnectionPageInfo"
   | "InvestigadorToPreviewConnectionEdge"
   | "Investigador_Datosinvestigador"
   | "Investigador_Datosinvestigador_CarreraNacionalInvestigacion"
@@ -26802,22 +35383,26 @@ export type SchemaObjectTypesNames =
   | "LineaDeInvestigacionToDepartamentoConnectionEdge"
   | "LineaDeInvestigacionToInvestigacionConnection"
   | "LineaDeInvestigacionToInvestigacionConnectionEdge"
+  | "LineaDeInvestigacionToInvestigacionConnectionPageInfo"
   | "LineaDeInvestigacionToPreviewConnectionEdge"
   | "MediaDetails"
   | "MediaItem"
   | "MediaItemMeta"
   | "MediaItemToCommentConnection"
   | "MediaItemToCommentConnectionEdge"
+  | "MediaItemToCommentConnectionPageInfo"
   | "MediaSize"
   | "Menu"
   | "MenuItem"
   | "MenuItemToMenuConnectionEdge"
   | "MenuItemToMenuItemConnection"
   | "MenuItemToMenuItemConnectionEdge"
+  | "MenuItemToMenuItemConnectionPageInfo"
   | "MenuItemToMenuItemLinkableConnectionEdge"
   | "MenuItem_Datosmenu"
   | "MenuToMenuItemConnection"
   | "MenuToMenuItemConnectionEdge"
+  | "MenuToMenuItemConnectionPageInfo"
   | "Mutation"
   | "NodeWithAuthorToUserConnectionEdge"
   | "NodeWithFeaturedImageToMediaItemConnectionEdge"
@@ -26825,16 +35410,19 @@ export type SchemaObjectTypesNames =
   | "Page"
   | "PageToCommentConnection"
   | "PageToCommentConnectionEdge"
+  | "PageToCommentConnectionPageInfo"
   | "PageToPreviewConnectionEdge"
   | "PageToRevisionConnection"
   | "PageToRevisionConnectionEdge"
+  | "PageToRevisionConnectionPageInfo"
   | "Page_Contacto"
-  | "Page_Contacto_direcciones"
-  | "Page_Contacto_emails"
-  | "Page_Contacto_horarios"
-  | "Page_Contacto_telefonos"
-  | "Page_Contacto_telefonos_extensiones"
-  | "Page_Contacto_whatsapp"
+  | "Page_Contacto_unidad"
+  | "Page_Contacto_unidad_direcciones"
+  | "Page_Contacto_unidad_emails"
+  | "Page_Contacto_unidad_horarios"
+  | "Page_Contacto_unidad_telefonos"
+  | "Page_Contacto_unidad_telefonos_extensiones"
+  | "Page_Contacto_unidad_whatsapp"
   | "Page_Datosrecursos"
   | "Page_Pagesettings"
   | "PeriodoDeAdmision"
@@ -26846,22 +35434,30 @@ export type SchemaObjectTypesNames =
   | "PostFormat"
   | "PostFormatToContentNodeConnection"
   | "PostFormatToContentNodeConnectionEdge"
+  | "PostFormatToContentNodeConnectionPageInfo"
   | "PostFormatToPostConnection"
   | "PostFormatToPostConnectionEdge"
+  | "PostFormatToPostConnectionPageInfo"
   | "PostFormatToTaxonomyConnectionEdge"
   | "PostToCategoryConnection"
   | "PostToCategoryConnectionEdge"
+  | "PostToCategoryConnectionPageInfo"
   | "PostToCommentConnection"
   | "PostToCommentConnectionEdge"
+  | "PostToCommentConnectionPageInfo"
   | "PostToPostFormatConnection"
   | "PostToPostFormatConnectionEdge"
+  | "PostToPostFormatConnectionPageInfo"
   | "PostToPreviewConnectionEdge"
   | "PostToRevisionConnection"
   | "PostToRevisionConnectionEdge"
+  | "PostToRevisionConnectionPageInfo"
   | "PostToTagConnection"
   | "PostToTagConnectionEdge"
+  | "PostToTagConnectionPageInfo"
   | "PostToTermNodeConnection"
   | "PostToTermNodeConnectionEdge"
+  | "PostToTermNodeConnectionPageInfo"
   | "PostTypeLabelDetails"
   | "PostTypeSEO"
   | "Post_Datospublicacion"
@@ -26871,6 +35467,7 @@ export type SchemaObjectTypesNames =
   | "Recurso"
   | "RecursoToCarreraConnection"
   | "RecursoToCarreraConnectionEdge"
+  | "RecursoToCarreraConnectionPageInfo"
   | "RecursoToPreviewConnectionEdge"
   | "Recurso_Datosrecurso"
   | "RegisterUserPayload"
@@ -26878,71 +35475,108 @@ export type SchemaObjectTypesNames =
   | "RestoreCommentPayload"
   | "RootQueryToCarreraConnection"
   | "RootQueryToCarreraConnectionEdge"
+  | "RootQueryToCarreraConnectionPageInfo"
   | "RootQueryToCategoryConnection"
   | "RootQueryToCategoryConnectionEdge"
+  | "RootQueryToCategoryConnectionPageInfo"
   | "RootQueryToCommentConnection"
   | "RootQueryToCommentConnectionEdge"
+  | "RootQueryToCommentConnectionPageInfo"
   | "RootQueryToContentNodeConnection"
   | "RootQueryToContentNodeConnectionEdge"
-  | "RootQueryToContentRevisionUnionConnection"
-  | "RootQueryToContentRevisionUnionConnectionEdge"
+  | "RootQueryToContentNodeConnectionPageInfo"
   | "RootQueryToContentTypeConnection"
   | "RootQueryToContentTypeConnectionEdge"
+  | "RootQueryToContentTypeConnectionPageInfo"
   | "RootQueryToDepartamentoConnection"
   | "RootQueryToDepartamentoConnectionEdge"
+  | "RootQueryToDepartamentoConnectionPageInfo"
   | "RootQueryToEnqueuedScriptConnection"
   | "RootQueryToEnqueuedScriptConnectionEdge"
+  | "RootQueryToEnqueuedScriptConnectionPageInfo"
   | "RootQueryToEnqueuedStylesheetConnection"
   | "RootQueryToEnqueuedStylesheetConnectionEdge"
+  | "RootQueryToEnqueuedStylesheetConnectionPageInfo"
   | "RootQueryToFacultadConnection"
   | "RootQueryToFacultadConnectionEdge"
+  | "RootQueryToFacultadConnectionPageInfo"
   | "RootQueryToGradoConnection"
   | "RootQueryToGradoConnectionEdge"
+  | "RootQueryToGradoConnectionPageInfo"
   | "RootQueryToGrupoDeRequisitosConnection"
   | "RootQueryToGrupoDeRequisitosConnectionEdge"
+  | "RootQueryToGrupoDeRequisitosConnectionPageInfo"
   | "RootQueryToInvestigacionConnection"
   | "RootQueryToInvestigacionConnectionEdge"
+  | "RootQueryToInvestigacionConnectionPageInfo"
   | "RootQueryToInvestigadorConnection"
   | "RootQueryToInvestigadorConnectionEdge"
+  | "RootQueryToInvestigadorConnectionPageInfo"
   | "RootQueryToLineaDeInvestigacionConnection"
   | "RootQueryToLineaDeInvestigacionConnectionEdge"
+  | "RootQueryToLineaDeInvestigacionConnectionPageInfo"
   | "RootQueryToMediaItemConnection"
   | "RootQueryToMediaItemConnectionEdge"
+  | "RootQueryToMediaItemConnectionPageInfo"
   | "RootQueryToMenuConnection"
   | "RootQueryToMenuConnectionEdge"
+  | "RootQueryToMenuConnectionPageInfo"
   | "RootQueryToMenuItemConnection"
   | "RootQueryToMenuItemConnectionEdge"
+  | "RootQueryToMenuItemConnectionPageInfo"
   | "RootQueryToPageConnection"
   | "RootQueryToPageConnectionEdge"
+  | "RootQueryToPageConnectionPageInfo"
   | "RootQueryToPeriodoDeAdmisionConnection"
   | "RootQueryToPeriodoDeAdmisionConnectionEdge"
+  | "RootQueryToPeriodoDeAdmisionConnectionPageInfo"
   | "RootQueryToPluginConnection"
   | "RootQueryToPluginConnectionEdge"
+  | "RootQueryToPluginConnectionPageInfo"
   | "RootQueryToPostConnection"
   | "RootQueryToPostConnectionEdge"
+  | "RootQueryToPostConnectionPageInfo"
   | "RootQueryToPostFormatConnection"
   | "RootQueryToPostFormatConnectionEdge"
+  | "RootQueryToPostFormatConnectionPageInfo"
   | "RootQueryToRecursoConnection"
   | "RootQueryToRecursoConnectionEdge"
+  | "RootQueryToRecursoConnectionPageInfo"
+  | "RootQueryToRevisionsConnection"
+  | "RootQueryToRevisionsConnectionEdge"
+  | "RootQueryToRevisionsConnectionPageInfo"
   | "RootQueryToSlideConnection"
   | "RootQueryToSlideConnectionEdge"
+  | "RootQueryToSlideConnectionPageInfo"
   | "RootQueryToTagConnection"
   | "RootQueryToTagConnectionEdge"
+  | "RootQueryToTagConnectionPageInfo"
   | "RootQueryToTaxonomyConnection"
   | "RootQueryToTaxonomyConnectionEdge"
+  | "RootQueryToTaxonomyConnectionPageInfo"
   | "RootQueryToTermNodeConnection"
   | "RootQueryToTermNodeConnectionEdge"
+  | "RootQueryToTermNodeConnectionPageInfo"
   | "RootQueryToThemeConnection"
   | "RootQueryToThemeConnectionEdge"
+  | "RootQueryToThemeConnectionPageInfo"
   | "RootQueryToUserConnection"
   | "RootQueryToUserConnectionEdge"
+  | "RootQueryToUserConnectionPageInfo"
   | "RootQueryToUserRoleConnection"
   | "RootQueryToUserRoleConnectionEdge"
+  | "RootQueryToUserRoleConnectionPageInfo"
   | "SEOBreadcrumbs"
   | "SEOConfig"
   | "SEOContentType"
   | "SEOContentTypeArchive"
   | "SEOContentTypes"
+  | "SEOGlobalMeta"
+  | "SEOGlobalMeta404"
+  | "SEOGlobalMetaAuthor"
+  | "SEOGlobalMetaConfig"
+  | "SEOGlobalMetaDate"
+  | "SEOGlobalMetaHome"
   | "SEOOpenGraph"
   | "SEOOpenGraphFrontPage"
   | "SEOPageInfoSchema"
@@ -26974,17 +35608,22 @@ export type SchemaObjectTypesNames =
   | "Tag"
   | "TagToContentNodeConnection"
   | "TagToContentNodeConnectionEdge"
+  | "TagToContentNodeConnectionPageInfo"
   | "TagToPostConnection"
   | "TagToPostConnectionEdge"
+  | "TagToPostConnectionPageInfo"
   | "TagToTaxonomyConnectionEdge"
   | "Taxonomy"
   | "TaxonomySEO"
   | "TaxonomyToContentTypeConnection"
   | "TaxonomyToContentTypeConnectionEdge"
+  | "TaxonomyToContentTypeConnectionPageInfo"
   | "TermNodeToEnqueuedScriptConnection"
   | "TermNodeToEnqueuedScriptConnectionEdge"
+  | "TermNodeToEnqueuedScriptConnectionPageInfo"
   | "TermNodeToEnqueuedStylesheetConnection"
   | "TermNodeToEnqueuedStylesheetConnectionEdge"
+  | "TermNodeToEnqueuedStylesheetConnectionPageInfo"
   | "Theme"
   | "UpdateCarreraPayload"
   | "UpdateCategoryPayload"
@@ -27010,41 +35649,58 @@ export type SchemaObjectTypesNames =
   | "UserRole"
   | "UserToCarreraConnection"
   | "UserToCarreraConnectionEdge"
+  | "UserToCarreraConnectionPageInfo"
   | "UserToCommentConnection"
   | "UserToCommentConnectionEdge"
-  | "UserToContentRevisionUnionConnection"
-  | "UserToContentRevisionUnionConnectionEdge"
+  | "UserToCommentConnectionPageInfo"
   | "UserToDepartamentoConnection"
   | "UserToDepartamentoConnectionEdge"
+  | "UserToDepartamentoConnectionPageInfo"
   | "UserToEnqueuedScriptConnection"
   | "UserToEnqueuedScriptConnectionEdge"
+  | "UserToEnqueuedScriptConnectionPageInfo"
   | "UserToEnqueuedStylesheetConnection"
   | "UserToEnqueuedStylesheetConnectionEdge"
+  | "UserToEnqueuedStylesheetConnectionPageInfo"
   | "UserToFacultadConnection"
   | "UserToFacultadConnectionEdge"
+  | "UserToFacultadConnectionPageInfo"
   | "UserToGradoConnection"
   | "UserToGradoConnectionEdge"
+  | "UserToGradoConnectionPageInfo"
   | "UserToInvestigacionConnection"
   | "UserToInvestigacionConnectionEdge"
+  | "UserToInvestigacionConnectionPageInfo"
   | "UserToInvestigadorConnection"
   | "UserToInvestigadorConnectionEdge"
+  | "UserToInvestigadorConnectionPageInfo"
   | "UserToLineaDeInvestigacionConnection"
   | "UserToLineaDeInvestigacionConnectionEdge"
+  | "UserToLineaDeInvestigacionConnectionPageInfo"
   | "UserToMediaItemConnection"
   | "UserToMediaItemConnectionEdge"
+  | "UserToMediaItemConnectionPageInfo"
   | "UserToPageConnection"
   | "UserToPageConnectionEdge"
+  | "UserToPageConnectionPageInfo"
   | "UserToPeriodoDeAdmisionConnection"
   | "UserToPeriodoDeAdmisionConnectionEdge"
+  | "UserToPeriodoDeAdmisionConnectionPageInfo"
   | "UserToPostConnection"
   | "UserToPostConnectionEdge"
+  | "UserToPostConnectionPageInfo"
   | "UserToRecursoConnection"
   | "UserToRecursoConnectionEdge"
+  | "UserToRecursoConnectionPageInfo"
+  | "UserToRevisionsConnection"
+  | "UserToRevisionsConnectionEdge"
+  | "UserToRevisionsConnectionPageInfo"
   | "UserToSlideConnection"
   | "UserToSlideConnectionEdge"
+  | "UserToSlideConnectionPageInfo"
   | "UserToUserRoleConnection"
   | "UserToUserRoleConnectionEdge"
-  | "WPPageInfo"
+  | "UserToUserRoleConnectionPageInfo"
   | "WritingSettings";
 
 export interface $AcfFieldGroup {
@@ -27055,28 +35711,31 @@ export interface $AcfFieldGroup {
   AcfOptionsServiciosOpcionales_Serviciosopcionales_servicios?: AcfOptionsServiciosOpcionales_Serviciosopcionales_servicios;
   AcfOptionsVideoInstitucional_Videoinstitucional?: AcfOptionsVideoInstitucional_Videoinstitucional;
   Carrera_Contacto?: Carrera_Contacto;
-  Carrera_Contacto_direcciones?: Carrera_Contacto_direcciones;
-  Carrera_Contacto_emails?: Carrera_Contacto_emails;
-  Carrera_Contacto_horarios?: Carrera_Contacto_horarios;
-  Carrera_Contacto_telefonos?: Carrera_Contacto_telefonos;
-  Carrera_Contacto_telefonos_extensiones?: Carrera_Contacto_telefonos_extensiones;
-  Carrera_Contacto_whatsapp?: Carrera_Contacto_whatsapp;
+  Carrera_Contacto_unidad?: Carrera_Contacto_unidad;
+  Carrera_Contacto_unidad_direcciones?: Carrera_Contacto_unidad_direcciones;
+  Carrera_Contacto_unidad_emails?: Carrera_Contacto_unidad_emails;
+  Carrera_Contacto_unidad_horarios?: Carrera_Contacto_unidad_horarios;
+  Carrera_Contacto_unidad_telefonos?: Carrera_Contacto_unidad_telefonos;
+  Carrera_Contacto_unidad_telefonos_extensiones?: Carrera_Contacto_unidad_telefonos_extensiones;
+  Carrera_Contacto_unidad_whatsapp?: Carrera_Contacto_unidad_whatsapp;
   Carrera_Datoscarrera?: Carrera_Datoscarrera;
   Carrera_Datoscarrera_tabs?: Carrera_Datoscarrera_tabs;
   Departamento_Contacto?: Departamento_Contacto;
-  Departamento_Contacto_direcciones?: Departamento_Contacto_direcciones;
-  Departamento_Contacto_emails?: Departamento_Contacto_emails;
-  Departamento_Contacto_horarios?: Departamento_Contacto_horarios;
-  Departamento_Contacto_telefonos?: Departamento_Contacto_telefonos;
-  Departamento_Contacto_telefonos_extensiones?: Departamento_Contacto_telefonos_extensiones;
-  Departamento_Contacto_whatsapp?: Departamento_Contacto_whatsapp;
+  Departamento_Contacto_unidad?: Departamento_Contacto_unidad;
+  Departamento_Contacto_unidad_direcciones?: Departamento_Contacto_unidad_direcciones;
+  Departamento_Contacto_unidad_emails?: Departamento_Contacto_unidad_emails;
+  Departamento_Contacto_unidad_horarios?: Departamento_Contacto_unidad_horarios;
+  Departamento_Contacto_unidad_telefonos?: Departamento_Contacto_unidad_telefonos;
+  Departamento_Contacto_unidad_telefonos_extensiones?: Departamento_Contacto_unidad_telefonos_extensiones;
+  Departamento_Contacto_unidad_whatsapp?: Departamento_Contacto_unidad_whatsapp;
   Facultad_Contacto?: Facultad_Contacto;
-  Facultad_Contacto_direcciones?: Facultad_Contacto_direcciones;
-  Facultad_Contacto_emails?: Facultad_Contacto_emails;
-  Facultad_Contacto_horarios?: Facultad_Contacto_horarios;
-  Facultad_Contacto_telefonos?: Facultad_Contacto_telefonos;
-  Facultad_Contacto_telefonos_extensiones?: Facultad_Contacto_telefonos_extensiones;
-  Facultad_Contacto_whatsapp?: Facultad_Contacto_whatsapp;
+  Facultad_Contacto_unidad?: Facultad_Contacto_unidad;
+  Facultad_Contacto_unidad_direcciones?: Facultad_Contacto_unidad_direcciones;
+  Facultad_Contacto_unidad_emails?: Facultad_Contacto_unidad_emails;
+  Facultad_Contacto_unidad_horarios?: Facultad_Contacto_unidad_horarios;
+  Facultad_Contacto_unidad_telefonos?: Facultad_Contacto_unidad_telefonos;
+  Facultad_Contacto_unidad_telefonos_extensiones?: Facultad_Contacto_unidad_telefonos_extensiones;
+  Facultad_Contacto_unidad_whatsapp?: Facultad_Contacto_unidad_whatsapp;
   Grado_Datosrequisitos?: Grado_Datosrequisitos;
   Grado_Datosrequisitos_requisitos?: Grado_Datosrequisitos_requisitos;
   Grado_Formulariosgrado?: Grado_Formulariosgrado;
@@ -27086,12 +35745,13 @@ export interface $AcfFieldGroup {
   Investigador_Datosinvestigador_CarreraNacionalInvestigacion?: Investigador_Datosinvestigador_CarreraNacionalInvestigacion;
   MenuItem_Datosmenu?: MenuItem_Datosmenu;
   Page_Contacto?: Page_Contacto;
-  Page_Contacto_direcciones?: Page_Contacto_direcciones;
-  Page_Contacto_emails?: Page_Contacto_emails;
-  Page_Contacto_horarios?: Page_Contacto_horarios;
-  Page_Contacto_telefonos?: Page_Contacto_telefonos;
-  Page_Contacto_telefonos_extensiones?: Page_Contacto_telefonos_extensiones;
-  Page_Contacto_whatsapp?: Page_Contacto_whatsapp;
+  Page_Contacto_unidad?: Page_Contacto_unidad;
+  Page_Contacto_unidad_direcciones?: Page_Contacto_unidad_direcciones;
+  Page_Contacto_unidad_emails?: Page_Contacto_unidad_emails;
+  Page_Contacto_unidad_horarios?: Page_Contacto_unidad_horarios;
+  Page_Contacto_unidad_telefonos?: Page_Contacto_unidad_telefonos;
+  Page_Contacto_unidad_telefonos_extensiones?: Page_Contacto_unidad_telefonos_extensiones;
+  Page_Contacto_unidad_whatsapp?: Page_Contacto_unidad_whatsapp;
   Page_Datosrecursos?: Page_Datosrecursos;
   Page_Pagesettings?: Page_Pagesettings;
   PeriodoDeAdmision_Datosperiodosdeadmision?: PeriodoDeAdmision_Datosperiodosdeadmision;
@@ -27102,9 +35762,186 @@ export interface $AcfFieldGroup {
   Slide_Datoscta?: Slide_Datoscta;
 }
 
+export interface $CarreraConnection {
+  DepartamentoToCarreraConnection?: DepartamentoToCarreraConnection;
+  FacultadToCarreraConnection?: FacultadToCarreraConnection;
+  GradoToCarreraConnection?: GradoToCarreraConnection;
+  RecursoToCarreraConnection?: RecursoToCarreraConnection;
+  RootQueryToCarreraConnection?: RootQueryToCarreraConnection;
+  UserToCarreraConnection?: UserToCarreraConnection;
+}
+
+export interface $CarreraConnectionEdge {
+  CarreraToPreviewConnectionEdge?: CarreraToPreviewConnectionEdge;
+  DepartamentoToCarreraConnectionEdge?: DepartamentoToCarreraConnectionEdge;
+  FacultadToCarreraConnectionEdge?: FacultadToCarreraConnectionEdge;
+  GradoToCarreraConnectionEdge?: GradoToCarreraConnectionEdge;
+  RecursoToCarreraConnectionEdge?: RecursoToCarreraConnectionEdge;
+  RootQueryToCarreraConnectionEdge?: RootQueryToCarreraConnectionEdge;
+  UserToCarreraConnectionEdge?: UserToCarreraConnectionEdge;
+}
+
+export interface $CarreraConnectionPageInfo {
+  DepartamentoToCarreraConnectionPageInfo?: DepartamentoToCarreraConnectionPageInfo;
+  FacultadToCarreraConnectionPageInfo?: FacultadToCarreraConnectionPageInfo;
+  GradoToCarreraConnectionPageInfo?: GradoToCarreraConnectionPageInfo;
+  RecursoToCarreraConnectionPageInfo?: RecursoToCarreraConnectionPageInfo;
+  RootQueryToCarreraConnectionPageInfo?: RootQueryToCarreraConnectionPageInfo;
+  UserToCarreraConnectionPageInfo?: UserToCarreraConnectionPageInfo;
+}
+
+export interface $CategoryConnection {
+  CategoryToAncestorsCategoryConnection?: CategoryToAncestorsCategoryConnection;
+  CategoryToCategoryConnection?: CategoryToCategoryConnection;
+  PostToCategoryConnection?: PostToCategoryConnection;
+  RootQueryToCategoryConnection?: RootQueryToCategoryConnection;
+}
+
+export interface $CategoryConnectionEdge {
+  CategoryToAncestorsCategoryConnectionEdge?: CategoryToAncestorsCategoryConnectionEdge;
+  CategoryToCategoryConnectionEdge?: CategoryToCategoryConnectionEdge;
+  CategoryToParentCategoryConnectionEdge?: CategoryToParentCategoryConnectionEdge;
+  PostToCategoryConnectionEdge?: PostToCategoryConnectionEdge;
+  RootQueryToCategoryConnectionEdge?: RootQueryToCategoryConnectionEdge;
+}
+
+export interface $CategoryConnectionPageInfo {
+  CategoryToAncestorsCategoryConnectionPageInfo?: CategoryToAncestorsCategoryConnectionPageInfo;
+  CategoryToCategoryConnectionPageInfo?: CategoryToCategoryConnectionPageInfo;
+  PostToCategoryConnectionPageInfo?: PostToCategoryConnectionPageInfo;
+  RootQueryToCategoryConnectionPageInfo?: RootQueryToCategoryConnectionPageInfo;
+}
+
+export interface $CommentConnection {
+  CommentToCommentConnection?: CommentToCommentConnection;
+  MediaItemToCommentConnection?: MediaItemToCommentConnection;
+  PageToCommentConnection?: PageToCommentConnection;
+  PostToCommentConnection?: PostToCommentConnection;
+  RootQueryToCommentConnection?: RootQueryToCommentConnection;
+  UserToCommentConnection?: UserToCommentConnection;
+}
+
+export interface $CommentConnectionEdge {
+  CommentToCommentConnectionEdge?: CommentToCommentConnectionEdge;
+  CommentToParentCommentConnectionEdge?: CommentToParentCommentConnectionEdge;
+  MediaItemToCommentConnectionEdge?: MediaItemToCommentConnectionEdge;
+  PageToCommentConnectionEdge?: PageToCommentConnectionEdge;
+  PostToCommentConnectionEdge?: PostToCommentConnectionEdge;
+  RootQueryToCommentConnectionEdge?: RootQueryToCommentConnectionEdge;
+  UserToCommentConnectionEdge?: UserToCommentConnectionEdge;
+}
+
+export interface $CommentConnectionPageInfo {
+  CommentToCommentConnectionPageInfo?: CommentToCommentConnectionPageInfo;
+  MediaItemToCommentConnectionPageInfo?: MediaItemToCommentConnectionPageInfo;
+  PageToCommentConnectionPageInfo?: PageToCommentConnectionPageInfo;
+  PostToCommentConnectionPageInfo?: PostToCommentConnectionPageInfo;
+  RootQueryToCommentConnectionPageInfo?: RootQueryToCommentConnectionPageInfo;
+  UserToCommentConnectionPageInfo?: UserToCommentConnectionPageInfo;
+}
+
 export interface $Commenter {
   CommentAuthor?: CommentAuthor;
   User?: User;
+}
+
+export interface $CommenterConnectionEdge {
+  CommentToCommenterConnectionEdge?: CommentToCommenterConnectionEdge;
+}
+
+export interface $Connection {
+  CarreraToRecursoConnection?: CarreraToRecursoConnection;
+  CategoryToAncestorsCategoryConnection?: CategoryToAncestorsCategoryConnection;
+  CategoryToCategoryConnection?: CategoryToCategoryConnection;
+  CategoryToContentNodeConnection?: CategoryToContentNodeConnection;
+  CategoryToPostConnection?: CategoryToPostConnection;
+  CommentToCommentConnection?: CommentToCommentConnection;
+  ContentNodeToEnqueuedScriptConnection?: ContentNodeToEnqueuedScriptConnection;
+  ContentNodeToEnqueuedStylesheetConnection?: ContentNodeToEnqueuedStylesheetConnection;
+  ContentTypeToContentNodeConnection?: ContentTypeToContentNodeConnection;
+  ContentTypeToTaxonomyConnection?: ContentTypeToTaxonomyConnection;
+  DepartamentoToCarreraConnection?: DepartamentoToCarreraConnection;
+  DepartamentoToLineaDeInvestigacionConnection?: DepartamentoToLineaDeInvestigacionConnection;
+  FacultadToCarreraConnection?: FacultadToCarreraConnection;
+  FacultadToDepartamentoConnection?: FacultadToDepartamentoConnection;
+  GradoToCarreraConnection?: GradoToCarreraConnection;
+  GradoToGrupoDeRequisitosConnection?: GradoToGrupoDeRequisitosConnection;
+  GradoToTermNodeConnection?: GradoToTermNodeConnection;
+  GrupoDeRequisitosToContentNodeConnection?: GrupoDeRequisitosToContentNodeConnection;
+  GrupoDeRequisitosToGradoConnection?: GrupoDeRequisitosToGradoConnection;
+  HierarchicalContentNodeToContentNodeAncestorsConnection?: HierarchicalContentNodeToContentNodeAncestorsConnection;
+  HierarchicalContentNodeToContentNodeChildrenConnection?: HierarchicalContentNodeToContentNodeChildrenConnection;
+  InvestigacionToInvestigadorConnection?: InvestigacionToInvestigadorConnection;
+  InvestigadorToInvestigacionConnection?: InvestigadorToInvestigacionConnection;
+  LineaDeInvestigacionToInvestigacionConnection?: LineaDeInvestigacionToInvestigacionConnection;
+  MediaItemToCommentConnection?: MediaItemToCommentConnection;
+  MenuItemToMenuItemConnection?: MenuItemToMenuItemConnection;
+  MenuToMenuItemConnection?: MenuToMenuItemConnection;
+  PageToCommentConnection?: PageToCommentConnection;
+  PageToRevisionConnection?: PageToRevisionConnection;
+  PostFormatToContentNodeConnection?: PostFormatToContentNodeConnection;
+  PostFormatToPostConnection?: PostFormatToPostConnection;
+  PostToCategoryConnection?: PostToCategoryConnection;
+  PostToCommentConnection?: PostToCommentConnection;
+  PostToPostFormatConnection?: PostToPostFormatConnection;
+  PostToRevisionConnection?: PostToRevisionConnection;
+  PostToTagConnection?: PostToTagConnection;
+  PostToTermNodeConnection?: PostToTermNodeConnection;
+  RecursoToCarreraConnection?: RecursoToCarreraConnection;
+  RootQueryToCarreraConnection?: RootQueryToCarreraConnection;
+  RootQueryToCategoryConnection?: RootQueryToCategoryConnection;
+  RootQueryToCommentConnection?: RootQueryToCommentConnection;
+  RootQueryToContentNodeConnection?: RootQueryToContentNodeConnection;
+  RootQueryToContentTypeConnection?: RootQueryToContentTypeConnection;
+  RootQueryToDepartamentoConnection?: RootQueryToDepartamentoConnection;
+  RootQueryToEnqueuedScriptConnection?: RootQueryToEnqueuedScriptConnection;
+  RootQueryToEnqueuedStylesheetConnection?: RootQueryToEnqueuedStylesheetConnection;
+  RootQueryToFacultadConnection?: RootQueryToFacultadConnection;
+  RootQueryToGradoConnection?: RootQueryToGradoConnection;
+  RootQueryToGrupoDeRequisitosConnection?: RootQueryToGrupoDeRequisitosConnection;
+  RootQueryToInvestigacionConnection?: RootQueryToInvestigacionConnection;
+  RootQueryToInvestigadorConnection?: RootQueryToInvestigadorConnection;
+  RootQueryToLineaDeInvestigacionConnection?: RootQueryToLineaDeInvestigacionConnection;
+  RootQueryToMediaItemConnection?: RootQueryToMediaItemConnection;
+  RootQueryToMenuConnection?: RootQueryToMenuConnection;
+  RootQueryToMenuItemConnection?: RootQueryToMenuItemConnection;
+  RootQueryToPageConnection?: RootQueryToPageConnection;
+  RootQueryToPeriodoDeAdmisionConnection?: RootQueryToPeriodoDeAdmisionConnection;
+  RootQueryToPluginConnection?: RootQueryToPluginConnection;
+  RootQueryToPostConnection?: RootQueryToPostConnection;
+  RootQueryToPostFormatConnection?: RootQueryToPostFormatConnection;
+  RootQueryToRecursoConnection?: RootQueryToRecursoConnection;
+  RootQueryToRevisionsConnection?: RootQueryToRevisionsConnection;
+  RootQueryToSlideConnection?: RootQueryToSlideConnection;
+  RootQueryToTagConnection?: RootQueryToTagConnection;
+  RootQueryToTaxonomyConnection?: RootQueryToTaxonomyConnection;
+  RootQueryToTermNodeConnection?: RootQueryToTermNodeConnection;
+  RootQueryToThemeConnection?: RootQueryToThemeConnection;
+  RootQueryToUserConnection?: RootQueryToUserConnection;
+  RootQueryToUserRoleConnection?: RootQueryToUserRoleConnection;
+  TagToContentNodeConnection?: TagToContentNodeConnection;
+  TagToPostConnection?: TagToPostConnection;
+  TaxonomyToContentTypeConnection?: TaxonomyToContentTypeConnection;
+  TermNodeToEnqueuedScriptConnection?: TermNodeToEnqueuedScriptConnection;
+  TermNodeToEnqueuedStylesheetConnection?: TermNodeToEnqueuedStylesheetConnection;
+  UserToCarreraConnection?: UserToCarreraConnection;
+  UserToCommentConnection?: UserToCommentConnection;
+  UserToDepartamentoConnection?: UserToDepartamentoConnection;
+  UserToEnqueuedScriptConnection?: UserToEnqueuedScriptConnection;
+  UserToEnqueuedStylesheetConnection?: UserToEnqueuedStylesheetConnection;
+  UserToFacultadConnection?: UserToFacultadConnection;
+  UserToGradoConnection?: UserToGradoConnection;
+  UserToInvestigacionConnection?: UserToInvestigacionConnection;
+  UserToInvestigadorConnection?: UserToInvestigadorConnection;
+  UserToLineaDeInvestigacionConnection?: UserToLineaDeInvestigacionConnection;
+  UserToMediaItemConnection?: UserToMediaItemConnection;
+  UserToPageConnection?: UserToPageConnection;
+  UserToPeriodoDeAdmisionConnection?: UserToPeriodoDeAdmisionConnection;
+  UserToPostConnection?: UserToPostConnection;
+  UserToRecursoConnection?: UserToRecursoConnection;
+  UserToRevisionsConnection?: UserToRevisionsConnection;
+  UserToSlideConnection?: UserToSlideConnection;
+  UserToUserRoleConnection?: UserToUserRoleConnection;
 }
 
 export interface $ContentNode {
@@ -27123,19 +35960,73 @@ export interface $ContentNode {
   Slide?: Slide;
 }
 
-export interface $ContentRevisionUnion {
-  Page?: Page;
-  Post?: Post;
+export interface $ContentNodeConnection {
+  CategoryToContentNodeConnection?: CategoryToContentNodeConnection;
+  ContentTypeToContentNodeConnection?: ContentTypeToContentNodeConnection;
+  GrupoDeRequisitosToContentNodeConnection?: GrupoDeRequisitosToContentNodeConnection;
+  HierarchicalContentNodeToContentNodeAncestorsConnection?: HierarchicalContentNodeToContentNodeAncestorsConnection;
+  HierarchicalContentNodeToContentNodeChildrenConnection?: HierarchicalContentNodeToContentNodeChildrenConnection;
+  PostFormatToContentNodeConnection?: PostFormatToContentNodeConnection;
+  RootQueryToContentNodeConnection?: RootQueryToContentNodeConnection;
+  RootQueryToRevisionsConnection?: RootQueryToRevisionsConnection;
+  TagToContentNodeConnection?: TagToContentNodeConnection;
+  UserToRevisionsConnection?: UserToRevisionsConnection;
+}
+
+export interface $ContentNodeConnectionEdge {
+  CategoryToContentNodeConnectionEdge?: CategoryToContentNodeConnectionEdge;
+  CommentToContentNodeConnectionEdge?: CommentToContentNodeConnectionEdge;
+  ContentTypeToContentNodeConnectionEdge?: ContentTypeToContentNodeConnectionEdge;
+  GrupoDeRequisitosToContentNodeConnectionEdge?: GrupoDeRequisitosToContentNodeConnectionEdge;
+  HierarchicalContentNodeToContentNodeAncestorsConnectionEdge?: HierarchicalContentNodeToContentNodeAncestorsConnectionEdge;
+  HierarchicalContentNodeToContentNodeChildrenConnectionEdge?: HierarchicalContentNodeToContentNodeChildrenConnectionEdge;
+  HierarchicalContentNodeToParentContentNodeConnectionEdge?: HierarchicalContentNodeToParentContentNodeConnectionEdge;
+  NodeWithRevisionsToContentNodeConnectionEdge?: NodeWithRevisionsToContentNodeConnectionEdge;
+  PostFormatToContentNodeConnectionEdge?: PostFormatToContentNodeConnectionEdge;
+  RootQueryToContentNodeConnectionEdge?: RootQueryToContentNodeConnectionEdge;
+  RootQueryToRevisionsConnectionEdge?: RootQueryToRevisionsConnectionEdge;
+  TagToContentNodeConnectionEdge?: TagToContentNodeConnectionEdge;
+  UserToRevisionsConnectionEdge?: UserToRevisionsConnectionEdge;
+}
+
+export interface $ContentNodeConnectionPageInfo {
+  CategoryToContentNodeConnectionPageInfo?: CategoryToContentNodeConnectionPageInfo;
+  ContentTypeToContentNodeConnectionPageInfo?: ContentTypeToContentNodeConnectionPageInfo;
+  GrupoDeRequisitosToContentNodeConnectionPageInfo?: GrupoDeRequisitosToContentNodeConnectionPageInfo;
+  HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo?: HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo;
+  HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo?: HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo;
+  PostFormatToContentNodeConnectionPageInfo?: PostFormatToContentNodeConnectionPageInfo;
+  RootQueryToContentNodeConnectionPageInfo?: RootQueryToContentNodeConnectionPageInfo;
+  RootQueryToRevisionsConnectionPageInfo?: RootQueryToRevisionsConnectionPageInfo;
+  TagToContentNodeConnectionPageInfo?: TagToContentNodeConnectionPageInfo;
+  UserToRevisionsConnectionPageInfo?: UserToRevisionsConnectionPageInfo;
 }
 
 export interface $ContentTemplate {
   DefaultTemplate?: DefaultTemplate;
 }
 
+export interface $ContentTypeConnection {
+  RootQueryToContentTypeConnection?: RootQueryToContentTypeConnection;
+  TaxonomyToContentTypeConnection?: TaxonomyToContentTypeConnection;
+}
+
+export interface $ContentTypeConnectionEdge {
+  ContentNodeToContentTypeConnectionEdge?: ContentNodeToContentTypeConnectionEdge;
+  RootQueryToContentTypeConnectionEdge?: RootQueryToContentTypeConnectionEdge;
+  TaxonomyToContentTypeConnectionEdge?: TaxonomyToContentTypeConnectionEdge;
+}
+
+export interface $ContentTypeConnectionPageInfo {
+  RootQueryToContentTypeConnectionPageInfo?: RootQueryToContentTypeConnectionPageInfo;
+  TaxonomyToContentTypeConnectionPageInfo?: TaxonomyToContentTypeConnectionPageInfo;
+}
+
 export interface $DatabaseIdentifier {
   Carrera?: Carrera;
   Category?: Category;
   Comment?: Comment;
+  CommentAuthor?: CommentAuthor;
   Departamento?: Departamento;
   Facultad?: Facultad;
   Grado?: Grado;
@@ -27156,12 +36047,264 @@ export interface $DatabaseIdentifier {
   User?: User;
 }
 
+export interface $DepartamentoConnection {
+  FacultadToDepartamentoConnection?: FacultadToDepartamentoConnection;
+  RootQueryToDepartamentoConnection?: RootQueryToDepartamentoConnection;
+  UserToDepartamentoConnection?: UserToDepartamentoConnection;
+}
+
+export interface $DepartamentoConnectionEdge {
+  CarreraToDepartamentoConnectionEdge?: CarreraToDepartamentoConnectionEdge;
+  DepartamentoToPreviewConnectionEdge?: DepartamentoToPreviewConnectionEdge;
+  FacultadToDepartamentoConnectionEdge?: FacultadToDepartamentoConnectionEdge;
+  LineaDeInvestigacionToDepartamentoConnectionEdge?: LineaDeInvestigacionToDepartamentoConnectionEdge;
+  RootQueryToDepartamentoConnectionEdge?: RootQueryToDepartamentoConnectionEdge;
+  UserToDepartamentoConnectionEdge?: UserToDepartamentoConnectionEdge;
+}
+
+export interface $DepartamentoConnectionPageInfo {
+  FacultadToDepartamentoConnectionPageInfo?: FacultadToDepartamentoConnectionPageInfo;
+  RootQueryToDepartamentoConnectionPageInfo?: RootQueryToDepartamentoConnectionPageInfo;
+  UserToDepartamentoConnectionPageInfo?: UserToDepartamentoConnectionPageInfo;
+}
+
+export interface $Edge {
+  CarreraToDepartamentoConnectionEdge?: CarreraToDepartamentoConnectionEdge;
+  CarreraToFacultadConnectionEdge?: CarreraToFacultadConnectionEdge;
+  CarreraToGradoConnectionEdge?: CarreraToGradoConnectionEdge;
+  CarreraToPreviewConnectionEdge?: CarreraToPreviewConnectionEdge;
+  CarreraToRecursoConnectionEdge?: CarreraToRecursoConnectionEdge;
+  CategoryToAncestorsCategoryConnectionEdge?: CategoryToAncestorsCategoryConnectionEdge;
+  CategoryToCategoryConnectionEdge?: CategoryToCategoryConnectionEdge;
+  CategoryToContentNodeConnectionEdge?: CategoryToContentNodeConnectionEdge;
+  CategoryToParentCategoryConnectionEdge?: CategoryToParentCategoryConnectionEdge;
+  CategoryToPostConnectionEdge?: CategoryToPostConnectionEdge;
+  CategoryToTaxonomyConnectionEdge?: CategoryToTaxonomyConnectionEdge;
+  CommentToCommentConnectionEdge?: CommentToCommentConnectionEdge;
+  CommentToCommenterConnectionEdge?: CommentToCommenterConnectionEdge;
+  CommentToContentNodeConnectionEdge?: CommentToContentNodeConnectionEdge;
+  CommentToParentCommentConnectionEdge?: CommentToParentCommentConnectionEdge;
+  ContentNodeToContentTypeConnectionEdge?: ContentNodeToContentTypeConnectionEdge;
+  ContentNodeToEditLastConnectionEdge?: ContentNodeToEditLastConnectionEdge;
+  ContentNodeToEditLockConnectionEdge?: ContentNodeToEditLockConnectionEdge;
+  ContentNodeToEnqueuedScriptConnectionEdge?: ContentNodeToEnqueuedScriptConnectionEdge;
+  ContentNodeToEnqueuedStylesheetConnectionEdge?: ContentNodeToEnqueuedStylesheetConnectionEdge;
+  ContentTypeToContentNodeConnectionEdge?: ContentTypeToContentNodeConnectionEdge;
+  ContentTypeToTaxonomyConnectionEdge?: ContentTypeToTaxonomyConnectionEdge;
+  DepartamentoToCarreraConnectionEdge?: DepartamentoToCarreraConnectionEdge;
+  DepartamentoToFacultadConnectionEdge?: DepartamentoToFacultadConnectionEdge;
+  DepartamentoToLineaDeInvestigacionConnectionEdge?: DepartamentoToLineaDeInvestigacionConnectionEdge;
+  DepartamentoToPreviewConnectionEdge?: DepartamentoToPreviewConnectionEdge;
+  FacultadToCarreraConnectionEdge?: FacultadToCarreraConnectionEdge;
+  FacultadToDepartamentoConnectionEdge?: FacultadToDepartamentoConnectionEdge;
+  FacultadToPreviewConnectionEdge?: FacultadToPreviewConnectionEdge;
+  GradoToCarreraConnectionEdge?: GradoToCarreraConnectionEdge;
+  GradoToGrupoDeRequisitosConnectionEdge?: GradoToGrupoDeRequisitosConnectionEdge;
+  GradoToPreviewConnectionEdge?: GradoToPreviewConnectionEdge;
+  GradoToTermNodeConnectionEdge?: GradoToTermNodeConnectionEdge;
+  GrupoDeRequisitosToContentNodeConnectionEdge?: GrupoDeRequisitosToContentNodeConnectionEdge;
+  GrupoDeRequisitosToGradoConnectionEdge?: GrupoDeRequisitosToGradoConnectionEdge;
+  GrupoDeRequisitosToTaxonomyConnectionEdge?: GrupoDeRequisitosToTaxonomyConnectionEdge;
+  HierarchicalContentNodeToContentNodeAncestorsConnectionEdge?: HierarchicalContentNodeToContentNodeAncestorsConnectionEdge;
+  HierarchicalContentNodeToContentNodeChildrenConnectionEdge?: HierarchicalContentNodeToContentNodeChildrenConnectionEdge;
+  HierarchicalContentNodeToParentContentNodeConnectionEdge?: HierarchicalContentNodeToParentContentNodeConnectionEdge;
+  InvestigacionToInvestigadorConnectionEdge?: InvestigacionToInvestigadorConnectionEdge;
+  InvestigacionToLineaDeInvestigacionConnectionEdge?: InvestigacionToLineaDeInvestigacionConnectionEdge;
+  InvestigacionToPreviewConnectionEdge?: InvestigacionToPreviewConnectionEdge;
+  InvestigadorToInvestigacionConnectionEdge?: InvestigadorToInvestigacionConnectionEdge;
+  InvestigadorToPreviewConnectionEdge?: InvestigadorToPreviewConnectionEdge;
+  LineaDeInvestigacionToDepartamentoConnectionEdge?: LineaDeInvestigacionToDepartamentoConnectionEdge;
+  LineaDeInvestigacionToInvestigacionConnectionEdge?: LineaDeInvestigacionToInvestigacionConnectionEdge;
+  LineaDeInvestigacionToPreviewConnectionEdge?: LineaDeInvestigacionToPreviewConnectionEdge;
+  MediaItemToCommentConnectionEdge?: MediaItemToCommentConnectionEdge;
+  MenuItemToMenuConnectionEdge?: MenuItemToMenuConnectionEdge;
+  MenuItemToMenuItemConnectionEdge?: MenuItemToMenuItemConnectionEdge;
+  MenuItemToMenuItemLinkableConnectionEdge?: MenuItemToMenuItemLinkableConnectionEdge;
+  MenuToMenuItemConnectionEdge?: MenuToMenuItemConnectionEdge;
+  NodeWithAuthorToUserConnectionEdge?: NodeWithAuthorToUserConnectionEdge;
+  NodeWithFeaturedImageToMediaItemConnectionEdge?: NodeWithFeaturedImageToMediaItemConnectionEdge;
+  NodeWithRevisionsToContentNodeConnectionEdge?: NodeWithRevisionsToContentNodeConnectionEdge;
+  PageToCommentConnectionEdge?: PageToCommentConnectionEdge;
+  PageToPreviewConnectionEdge?: PageToPreviewConnectionEdge;
+  PageToRevisionConnectionEdge?: PageToRevisionConnectionEdge;
+  PeriodoDeAdmisionToPreviewConnectionEdge?: PeriodoDeAdmisionToPreviewConnectionEdge;
+  PostFormatToContentNodeConnectionEdge?: PostFormatToContentNodeConnectionEdge;
+  PostFormatToPostConnectionEdge?: PostFormatToPostConnectionEdge;
+  PostFormatToTaxonomyConnectionEdge?: PostFormatToTaxonomyConnectionEdge;
+  PostToCategoryConnectionEdge?: PostToCategoryConnectionEdge;
+  PostToCommentConnectionEdge?: PostToCommentConnectionEdge;
+  PostToPostFormatConnectionEdge?: PostToPostFormatConnectionEdge;
+  PostToPreviewConnectionEdge?: PostToPreviewConnectionEdge;
+  PostToRevisionConnectionEdge?: PostToRevisionConnectionEdge;
+  PostToTagConnectionEdge?: PostToTagConnectionEdge;
+  PostToTermNodeConnectionEdge?: PostToTermNodeConnectionEdge;
+  RecursoToCarreraConnectionEdge?: RecursoToCarreraConnectionEdge;
+  RecursoToPreviewConnectionEdge?: RecursoToPreviewConnectionEdge;
+  RootQueryToCarreraConnectionEdge?: RootQueryToCarreraConnectionEdge;
+  RootQueryToCategoryConnectionEdge?: RootQueryToCategoryConnectionEdge;
+  RootQueryToCommentConnectionEdge?: RootQueryToCommentConnectionEdge;
+  RootQueryToContentNodeConnectionEdge?: RootQueryToContentNodeConnectionEdge;
+  RootQueryToContentTypeConnectionEdge?: RootQueryToContentTypeConnectionEdge;
+  RootQueryToDepartamentoConnectionEdge?: RootQueryToDepartamentoConnectionEdge;
+  RootQueryToEnqueuedScriptConnectionEdge?: RootQueryToEnqueuedScriptConnectionEdge;
+  RootQueryToEnqueuedStylesheetConnectionEdge?: RootQueryToEnqueuedStylesheetConnectionEdge;
+  RootQueryToFacultadConnectionEdge?: RootQueryToFacultadConnectionEdge;
+  RootQueryToGradoConnectionEdge?: RootQueryToGradoConnectionEdge;
+  RootQueryToGrupoDeRequisitosConnectionEdge?: RootQueryToGrupoDeRequisitosConnectionEdge;
+  RootQueryToInvestigacionConnectionEdge?: RootQueryToInvestigacionConnectionEdge;
+  RootQueryToInvestigadorConnectionEdge?: RootQueryToInvestigadorConnectionEdge;
+  RootQueryToLineaDeInvestigacionConnectionEdge?: RootQueryToLineaDeInvestigacionConnectionEdge;
+  RootQueryToMediaItemConnectionEdge?: RootQueryToMediaItemConnectionEdge;
+  RootQueryToMenuConnectionEdge?: RootQueryToMenuConnectionEdge;
+  RootQueryToMenuItemConnectionEdge?: RootQueryToMenuItemConnectionEdge;
+  RootQueryToPageConnectionEdge?: RootQueryToPageConnectionEdge;
+  RootQueryToPeriodoDeAdmisionConnectionEdge?: RootQueryToPeriodoDeAdmisionConnectionEdge;
+  RootQueryToPluginConnectionEdge?: RootQueryToPluginConnectionEdge;
+  RootQueryToPostConnectionEdge?: RootQueryToPostConnectionEdge;
+  RootQueryToPostFormatConnectionEdge?: RootQueryToPostFormatConnectionEdge;
+  RootQueryToRecursoConnectionEdge?: RootQueryToRecursoConnectionEdge;
+  RootQueryToRevisionsConnectionEdge?: RootQueryToRevisionsConnectionEdge;
+  RootQueryToSlideConnectionEdge?: RootQueryToSlideConnectionEdge;
+  RootQueryToTagConnectionEdge?: RootQueryToTagConnectionEdge;
+  RootQueryToTaxonomyConnectionEdge?: RootQueryToTaxonomyConnectionEdge;
+  RootQueryToTermNodeConnectionEdge?: RootQueryToTermNodeConnectionEdge;
+  RootQueryToThemeConnectionEdge?: RootQueryToThemeConnectionEdge;
+  RootQueryToUserConnectionEdge?: RootQueryToUserConnectionEdge;
+  RootQueryToUserRoleConnectionEdge?: RootQueryToUserRoleConnectionEdge;
+  SlideToPreviewConnectionEdge?: SlideToPreviewConnectionEdge;
+  TagToContentNodeConnectionEdge?: TagToContentNodeConnectionEdge;
+  TagToPostConnectionEdge?: TagToPostConnectionEdge;
+  TagToTaxonomyConnectionEdge?: TagToTaxonomyConnectionEdge;
+  TaxonomyToContentTypeConnectionEdge?: TaxonomyToContentTypeConnectionEdge;
+  TermNodeToEnqueuedScriptConnectionEdge?: TermNodeToEnqueuedScriptConnectionEdge;
+  TermNodeToEnqueuedStylesheetConnectionEdge?: TermNodeToEnqueuedStylesheetConnectionEdge;
+  UserToCarreraConnectionEdge?: UserToCarreraConnectionEdge;
+  UserToCommentConnectionEdge?: UserToCommentConnectionEdge;
+  UserToDepartamentoConnectionEdge?: UserToDepartamentoConnectionEdge;
+  UserToEnqueuedScriptConnectionEdge?: UserToEnqueuedScriptConnectionEdge;
+  UserToEnqueuedStylesheetConnectionEdge?: UserToEnqueuedStylesheetConnectionEdge;
+  UserToFacultadConnectionEdge?: UserToFacultadConnectionEdge;
+  UserToGradoConnectionEdge?: UserToGradoConnectionEdge;
+  UserToInvestigacionConnectionEdge?: UserToInvestigacionConnectionEdge;
+  UserToInvestigadorConnectionEdge?: UserToInvestigadorConnectionEdge;
+  UserToLineaDeInvestigacionConnectionEdge?: UserToLineaDeInvestigacionConnectionEdge;
+  UserToMediaItemConnectionEdge?: UserToMediaItemConnectionEdge;
+  UserToPageConnectionEdge?: UserToPageConnectionEdge;
+  UserToPeriodoDeAdmisionConnectionEdge?: UserToPeriodoDeAdmisionConnectionEdge;
+  UserToPostConnectionEdge?: UserToPostConnectionEdge;
+  UserToRecursoConnectionEdge?: UserToRecursoConnectionEdge;
+  UserToRevisionsConnectionEdge?: UserToRevisionsConnectionEdge;
+  UserToSlideConnectionEdge?: UserToSlideConnectionEdge;
+  UserToUserRoleConnectionEdge?: UserToUserRoleConnectionEdge;
+}
+
 export interface $EnqueuedAsset {
   EnqueuedScript?: EnqueuedScript;
   EnqueuedStylesheet?: EnqueuedStylesheet;
 }
 
+export interface $EnqueuedScriptConnection {
+  ContentNodeToEnqueuedScriptConnection?: ContentNodeToEnqueuedScriptConnection;
+  RootQueryToEnqueuedScriptConnection?: RootQueryToEnqueuedScriptConnection;
+  TermNodeToEnqueuedScriptConnection?: TermNodeToEnqueuedScriptConnection;
+  UserToEnqueuedScriptConnection?: UserToEnqueuedScriptConnection;
+}
+
+export interface $EnqueuedScriptConnectionEdge {
+  ContentNodeToEnqueuedScriptConnectionEdge?: ContentNodeToEnqueuedScriptConnectionEdge;
+  RootQueryToEnqueuedScriptConnectionEdge?: RootQueryToEnqueuedScriptConnectionEdge;
+  TermNodeToEnqueuedScriptConnectionEdge?: TermNodeToEnqueuedScriptConnectionEdge;
+  UserToEnqueuedScriptConnectionEdge?: UserToEnqueuedScriptConnectionEdge;
+}
+
+export interface $EnqueuedScriptConnectionPageInfo {
+  ContentNodeToEnqueuedScriptConnectionPageInfo?: ContentNodeToEnqueuedScriptConnectionPageInfo;
+  RootQueryToEnqueuedScriptConnectionPageInfo?: RootQueryToEnqueuedScriptConnectionPageInfo;
+  TermNodeToEnqueuedScriptConnectionPageInfo?: TermNodeToEnqueuedScriptConnectionPageInfo;
+  UserToEnqueuedScriptConnectionPageInfo?: UserToEnqueuedScriptConnectionPageInfo;
+}
+
+export interface $EnqueuedStylesheetConnection {
+  ContentNodeToEnqueuedStylesheetConnection?: ContentNodeToEnqueuedStylesheetConnection;
+  RootQueryToEnqueuedStylesheetConnection?: RootQueryToEnqueuedStylesheetConnection;
+  TermNodeToEnqueuedStylesheetConnection?: TermNodeToEnqueuedStylesheetConnection;
+  UserToEnqueuedStylesheetConnection?: UserToEnqueuedStylesheetConnection;
+}
+
+export interface $EnqueuedStylesheetConnectionEdge {
+  ContentNodeToEnqueuedStylesheetConnectionEdge?: ContentNodeToEnqueuedStylesheetConnectionEdge;
+  RootQueryToEnqueuedStylesheetConnectionEdge?: RootQueryToEnqueuedStylesheetConnectionEdge;
+  TermNodeToEnqueuedStylesheetConnectionEdge?: TermNodeToEnqueuedStylesheetConnectionEdge;
+  UserToEnqueuedStylesheetConnectionEdge?: UserToEnqueuedStylesheetConnectionEdge;
+}
+
+export interface $EnqueuedStylesheetConnectionPageInfo {
+  ContentNodeToEnqueuedStylesheetConnectionPageInfo?: ContentNodeToEnqueuedStylesheetConnectionPageInfo;
+  RootQueryToEnqueuedStylesheetConnectionPageInfo?: RootQueryToEnqueuedStylesheetConnectionPageInfo;
+  TermNodeToEnqueuedStylesheetConnectionPageInfo?: TermNodeToEnqueuedStylesheetConnectionPageInfo;
+  UserToEnqueuedStylesheetConnectionPageInfo?: UserToEnqueuedStylesheetConnectionPageInfo;
+}
+
+export interface $FacultadConnection {
+  RootQueryToFacultadConnection?: RootQueryToFacultadConnection;
+  UserToFacultadConnection?: UserToFacultadConnection;
+}
+
+export interface $FacultadConnectionEdge {
+  CarreraToFacultadConnectionEdge?: CarreraToFacultadConnectionEdge;
+  DepartamentoToFacultadConnectionEdge?: DepartamentoToFacultadConnectionEdge;
+  FacultadToPreviewConnectionEdge?: FacultadToPreviewConnectionEdge;
+  RootQueryToFacultadConnectionEdge?: RootQueryToFacultadConnectionEdge;
+  UserToFacultadConnectionEdge?: UserToFacultadConnectionEdge;
+}
+
+export interface $FacultadConnectionPageInfo {
+  RootQueryToFacultadConnectionPageInfo?: RootQueryToFacultadConnectionPageInfo;
+  UserToFacultadConnectionPageInfo?: UserToFacultadConnectionPageInfo;
+}
+
+export interface $GradoConnection {
+  GrupoDeRequisitosToGradoConnection?: GrupoDeRequisitosToGradoConnection;
+  RootQueryToGradoConnection?: RootQueryToGradoConnection;
+  UserToGradoConnection?: UserToGradoConnection;
+}
+
+export interface $GradoConnectionEdge {
+  CarreraToGradoConnectionEdge?: CarreraToGradoConnectionEdge;
+  GradoToPreviewConnectionEdge?: GradoToPreviewConnectionEdge;
+  GrupoDeRequisitosToGradoConnectionEdge?: GrupoDeRequisitosToGradoConnectionEdge;
+  RootQueryToGradoConnectionEdge?: RootQueryToGradoConnectionEdge;
+  UserToGradoConnectionEdge?: UserToGradoConnectionEdge;
+}
+
+export interface $GradoConnectionPageInfo {
+  GrupoDeRequisitosToGradoConnectionPageInfo?: GrupoDeRequisitosToGradoConnectionPageInfo;
+  RootQueryToGradoConnectionPageInfo?: RootQueryToGradoConnectionPageInfo;
+  UserToGradoConnectionPageInfo?: UserToGradoConnectionPageInfo;
+}
+
+export interface $GrupoDeRequisitosConnection {
+  GradoToGrupoDeRequisitosConnection?: GradoToGrupoDeRequisitosConnection;
+  RootQueryToGrupoDeRequisitosConnection?: RootQueryToGrupoDeRequisitosConnection;
+}
+
+export interface $GrupoDeRequisitosConnectionEdge {
+  GradoToGrupoDeRequisitosConnectionEdge?: GradoToGrupoDeRequisitosConnectionEdge;
+  RootQueryToGrupoDeRequisitosConnectionEdge?: RootQueryToGrupoDeRequisitosConnectionEdge;
+}
+
+export interface $GrupoDeRequisitosConnectionPageInfo {
+  GradoToGrupoDeRequisitosConnectionPageInfo?: GradoToGrupoDeRequisitosConnectionPageInfo;
+  RootQueryToGrupoDeRequisitosConnectionPageInfo?: RootQueryToGrupoDeRequisitosConnectionPageInfo;
+}
+
 export interface $HierarchicalContentNode {
+  MediaItem?: MediaItem;
+  Page?: Page;
+}
+
+export interface $HierarchicalNode {
+  Category?: Category;
   MediaItem?: MediaItem;
   Page?: Page;
 }
@@ -27170,12 +36313,124 @@ export interface $HierarchicalTermNode {
   Category?: Category;
 }
 
+export interface $InvestigacionConnection {
+  InvestigadorToInvestigacionConnection?: InvestigadorToInvestigacionConnection;
+  LineaDeInvestigacionToInvestigacionConnection?: LineaDeInvestigacionToInvestigacionConnection;
+  RootQueryToInvestigacionConnection?: RootQueryToInvestigacionConnection;
+  UserToInvestigacionConnection?: UserToInvestigacionConnection;
+}
+
+export interface $InvestigacionConnectionEdge {
+  InvestigacionToPreviewConnectionEdge?: InvestigacionToPreviewConnectionEdge;
+  InvestigadorToInvestigacionConnectionEdge?: InvestigadorToInvestigacionConnectionEdge;
+  LineaDeInvestigacionToInvestigacionConnectionEdge?: LineaDeInvestigacionToInvestigacionConnectionEdge;
+  RootQueryToInvestigacionConnectionEdge?: RootQueryToInvestigacionConnectionEdge;
+  UserToInvestigacionConnectionEdge?: UserToInvestigacionConnectionEdge;
+}
+
+export interface $InvestigacionConnectionPageInfo {
+  InvestigadorToInvestigacionConnectionPageInfo?: InvestigadorToInvestigacionConnectionPageInfo;
+  LineaDeInvestigacionToInvestigacionConnectionPageInfo?: LineaDeInvestigacionToInvestigacionConnectionPageInfo;
+  RootQueryToInvestigacionConnectionPageInfo?: RootQueryToInvestigacionConnectionPageInfo;
+  UserToInvestigacionConnectionPageInfo?: UserToInvestigacionConnectionPageInfo;
+}
+
+export interface $InvestigadorConnection {
+  InvestigacionToInvestigadorConnection?: InvestigacionToInvestigadorConnection;
+  RootQueryToInvestigadorConnection?: RootQueryToInvestigadorConnection;
+  UserToInvestigadorConnection?: UserToInvestigadorConnection;
+}
+
+export interface $InvestigadorConnectionEdge {
+  InvestigacionToInvestigadorConnectionEdge?: InvestigacionToInvestigadorConnectionEdge;
+  InvestigadorToPreviewConnectionEdge?: InvestigadorToPreviewConnectionEdge;
+  RootQueryToInvestigadorConnectionEdge?: RootQueryToInvestigadorConnectionEdge;
+  UserToInvestigadorConnectionEdge?: UserToInvestigadorConnectionEdge;
+}
+
+export interface $InvestigadorConnectionPageInfo {
+  InvestigacionToInvestigadorConnectionPageInfo?: InvestigacionToInvestigadorConnectionPageInfo;
+  RootQueryToInvestigadorConnectionPageInfo?: RootQueryToInvestigadorConnectionPageInfo;
+  UserToInvestigadorConnectionPageInfo?: UserToInvestigadorConnectionPageInfo;
+}
+
+export interface $LineaDeInvestigacionConnection {
+  DepartamentoToLineaDeInvestigacionConnection?: DepartamentoToLineaDeInvestigacionConnection;
+  RootQueryToLineaDeInvestigacionConnection?: RootQueryToLineaDeInvestigacionConnection;
+  UserToLineaDeInvestigacionConnection?: UserToLineaDeInvestigacionConnection;
+}
+
+export interface $LineaDeInvestigacionConnectionEdge {
+  DepartamentoToLineaDeInvestigacionConnectionEdge?: DepartamentoToLineaDeInvestigacionConnectionEdge;
+  InvestigacionToLineaDeInvestigacionConnectionEdge?: InvestigacionToLineaDeInvestigacionConnectionEdge;
+  LineaDeInvestigacionToPreviewConnectionEdge?: LineaDeInvestigacionToPreviewConnectionEdge;
+  RootQueryToLineaDeInvestigacionConnectionEdge?: RootQueryToLineaDeInvestigacionConnectionEdge;
+  UserToLineaDeInvestigacionConnectionEdge?: UserToLineaDeInvestigacionConnectionEdge;
+}
+
+export interface $LineaDeInvestigacionConnectionPageInfo {
+  DepartamentoToLineaDeInvestigacionConnectionPageInfo?: DepartamentoToLineaDeInvestigacionConnectionPageInfo;
+  RootQueryToLineaDeInvestigacionConnectionPageInfo?: RootQueryToLineaDeInvestigacionConnectionPageInfo;
+  UserToLineaDeInvestigacionConnectionPageInfo?: UserToLineaDeInvestigacionConnectionPageInfo;
+}
+
+export interface $MediaItemConnection {
+  RootQueryToMediaItemConnection?: RootQueryToMediaItemConnection;
+  UserToMediaItemConnection?: UserToMediaItemConnection;
+}
+
+export interface $MediaItemConnectionEdge {
+  NodeWithFeaturedImageToMediaItemConnectionEdge?: NodeWithFeaturedImageToMediaItemConnectionEdge;
+  RootQueryToMediaItemConnectionEdge?: RootQueryToMediaItemConnectionEdge;
+  UserToMediaItemConnectionEdge?: UserToMediaItemConnectionEdge;
+}
+
+export interface $MediaItemConnectionPageInfo {
+  RootQueryToMediaItemConnectionPageInfo?: RootQueryToMediaItemConnectionPageInfo;
+  UserToMediaItemConnectionPageInfo?: UserToMediaItemConnectionPageInfo;
+}
+
+export interface $MenuConnection {
+  RootQueryToMenuConnection?: RootQueryToMenuConnection;
+}
+
+export interface $MenuConnectionEdge {
+  MenuItemToMenuConnectionEdge?: MenuItemToMenuConnectionEdge;
+  RootQueryToMenuConnectionEdge?: RootQueryToMenuConnectionEdge;
+}
+
+export interface $MenuConnectionPageInfo {
+  RootQueryToMenuConnectionPageInfo?: RootQueryToMenuConnectionPageInfo;
+}
+
+export interface $MenuItemConnection {
+  MenuItemToMenuItemConnection?: MenuItemToMenuItemConnection;
+  MenuToMenuItemConnection?: MenuToMenuItemConnection;
+  RootQueryToMenuItemConnection?: RootQueryToMenuItemConnection;
+}
+
+export interface $MenuItemConnectionEdge {
+  MenuItemToMenuItemConnectionEdge?: MenuItemToMenuItemConnectionEdge;
+  MenuToMenuItemConnectionEdge?: MenuToMenuItemConnectionEdge;
+  RootQueryToMenuItemConnectionEdge?: RootQueryToMenuItemConnectionEdge;
+}
+
+export interface $MenuItemConnectionPageInfo {
+  MenuItemToMenuItemConnectionPageInfo?: MenuItemToMenuItemConnectionPageInfo;
+  MenuToMenuItemConnectionPageInfo?: MenuToMenuItemConnectionPageInfo;
+  RootQueryToMenuItemConnectionPageInfo?: RootQueryToMenuItemConnectionPageInfo;
+}
+
 export interface $MenuItemLinkable {
   Category?: Category;
   GrupoDeRequisitos?: GrupoDeRequisitos;
   Page?: Page;
   Post?: Post;
   Tag?: Tag;
+}
+
+export interface $MenuItemLinkableConnectionEdge {
+  MenuItemToMenuItemLinkableConnectionEdge?: MenuItemToMenuItemLinkableConnectionEdge;
 }
 
 export interface $MenuItemObjectUnion {
@@ -27306,8 +36561,315 @@ export interface $NodeWithTrackbacks {
   Post?: Post;
 }
 
+export interface $OneToOneConnection {
+  CarreraToDepartamentoConnectionEdge?: CarreraToDepartamentoConnectionEdge;
+  CarreraToFacultadConnectionEdge?: CarreraToFacultadConnectionEdge;
+  CarreraToGradoConnectionEdge?: CarreraToGradoConnectionEdge;
+  CarreraToPreviewConnectionEdge?: CarreraToPreviewConnectionEdge;
+  CategoryToParentCategoryConnectionEdge?: CategoryToParentCategoryConnectionEdge;
+  CategoryToTaxonomyConnectionEdge?: CategoryToTaxonomyConnectionEdge;
+  CommentToCommenterConnectionEdge?: CommentToCommenterConnectionEdge;
+  CommentToContentNodeConnectionEdge?: CommentToContentNodeConnectionEdge;
+  CommentToParentCommentConnectionEdge?: CommentToParentCommentConnectionEdge;
+  ContentNodeToContentTypeConnectionEdge?: ContentNodeToContentTypeConnectionEdge;
+  ContentNodeToEditLastConnectionEdge?: ContentNodeToEditLastConnectionEdge;
+  ContentNodeToEditLockConnectionEdge?: ContentNodeToEditLockConnectionEdge;
+  DepartamentoToFacultadConnectionEdge?: DepartamentoToFacultadConnectionEdge;
+  DepartamentoToPreviewConnectionEdge?: DepartamentoToPreviewConnectionEdge;
+  FacultadToPreviewConnectionEdge?: FacultadToPreviewConnectionEdge;
+  GradoToPreviewConnectionEdge?: GradoToPreviewConnectionEdge;
+  GrupoDeRequisitosToTaxonomyConnectionEdge?: GrupoDeRequisitosToTaxonomyConnectionEdge;
+  HierarchicalContentNodeToParentContentNodeConnectionEdge?: HierarchicalContentNodeToParentContentNodeConnectionEdge;
+  InvestigacionToLineaDeInvestigacionConnectionEdge?: InvestigacionToLineaDeInvestigacionConnectionEdge;
+  InvestigacionToPreviewConnectionEdge?: InvestigacionToPreviewConnectionEdge;
+  InvestigadorToPreviewConnectionEdge?: InvestigadorToPreviewConnectionEdge;
+  LineaDeInvestigacionToDepartamentoConnectionEdge?: LineaDeInvestigacionToDepartamentoConnectionEdge;
+  LineaDeInvestigacionToPreviewConnectionEdge?: LineaDeInvestigacionToPreviewConnectionEdge;
+  MenuItemToMenuConnectionEdge?: MenuItemToMenuConnectionEdge;
+  MenuItemToMenuItemLinkableConnectionEdge?: MenuItemToMenuItemLinkableConnectionEdge;
+  NodeWithAuthorToUserConnectionEdge?: NodeWithAuthorToUserConnectionEdge;
+  NodeWithFeaturedImageToMediaItemConnectionEdge?: NodeWithFeaturedImageToMediaItemConnectionEdge;
+  NodeWithRevisionsToContentNodeConnectionEdge?: NodeWithRevisionsToContentNodeConnectionEdge;
+  PageToPreviewConnectionEdge?: PageToPreviewConnectionEdge;
+  PeriodoDeAdmisionToPreviewConnectionEdge?: PeriodoDeAdmisionToPreviewConnectionEdge;
+  PostFormatToTaxonomyConnectionEdge?: PostFormatToTaxonomyConnectionEdge;
+  PostToPreviewConnectionEdge?: PostToPreviewConnectionEdge;
+  RecursoToPreviewConnectionEdge?: RecursoToPreviewConnectionEdge;
+  SlideToPreviewConnectionEdge?: SlideToPreviewConnectionEdge;
+  TagToTaxonomyConnectionEdge?: TagToTaxonomyConnectionEdge;
+}
+
+export interface $PageConnection {
+  PageToRevisionConnection?: PageToRevisionConnection;
+  RootQueryToPageConnection?: RootQueryToPageConnection;
+  UserToPageConnection?: UserToPageConnection;
+}
+
+export interface $PageConnectionEdge {
+  PageToPreviewConnectionEdge?: PageToPreviewConnectionEdge;
+  PageToRevisionConnectionEdge?: PageToRevisionConnectionEdge;
+  RootQueryToPageConnectionEdge?: RootQueryToPageConnectionEdge;
+  UserToPageConnectionEdge?: UserToPageConnectionEdge;
+}
+
+export interface $PageConnectionPageInfo {
+  PageToRevisionConnectionPageInfo?: PageToRevisionConnectionPageInfo;
+  RootQueryToPageConnectionPageInfo?: RootQueryToPageConnectionPageInfo;
+  UserToPageConnectionPageInfo?: UserToPageConnectionPageInfo;
+}
+
+export interface $PageInfo {
+  CarreraToRecursoConnectionPageInfo?: CarreraToRecursoConnectionPageInfo;
+  CategoryToAncestorsCategoryConnectionPageInfo?: CategoryToAncestorsCategoryConnectionPageInfo;
+  CategoryToCategoryConnectionPageInfo?: CategoryToCategoryConnectionPageInfo;
+  CategoryToContentNodeConnectionPageInfo?: CategoryToContentNodeConnectionPageInfo;
+  CategoryToPostConnectionPageInfo?: CategoryToPostConnectionPageInfo;
+  CommentToCommentConnectionPageInfo?: CommentToCommentConnectionPageInfo;
+  ContentNodeToEnqueuedScriptConnectionPageInfo?: ContentNodeToEnqueuedScriptConnectionPageInfo;
+  ContentNodeToEnqueuedStylesheetConnectionPageInfo?: ContentNodeToEnqueuedStylesheetConnectionPageInfo;
+  ContentTypeToContentNodeConnectionPageInfo?: ContentTypeToContentNodeConnectionPageInfo;
+  ContentTypeToTaxonomyConnectionPageInfo?: ContentTypeToTaxonomyConnectionPageInfo;
+  DepartamentoToCarreraConnectionPageInfo?: DepartamentoToCarreraConnectionPageInfo;
+  DepartamentoToLineaDeInvestigacionConnectionPageInfo?: DepartamentoToLineaDeInvestigacionConnectionPageInfo;
+  FacultadToCarreraConnectionPageInfo?: FacultadToCarreraConnectionPageInfo;
+  FacultadToDepartamentoConnectionPageInfo?: FacultadToDepartamentoConnectionPageInfo;
+  GradoToCarreraConnectionPageInfo?: GradoToCarreraConnectionPageInfo;
+  GradoToGrupoDeRequisitosConnectionPageInfo?: GradoToGrupoDeRequisitosConnectionPageInfo;
+  GradoToTermNodeConnectionPageInfo?: GradoToTermNodeConnectionPageInfo;
+  GrupoDeRequisitosToContentNodeConnectionPageInfo?: GrupoDeRequisitosToContentNodeConnectionPageInfo;
+  GrupoDeRequisitosToGradoConnectionPageInfo?: GrupoDeRequisitosToGradoConnectionPageInfo;
+  HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo?: HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo;
+  HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo?: HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo;
+  InvestigacionToInvestigadorConnectionPageInfo?: InvestigacionToInvestigadorConnectionPageInfo;
+  InvestigadorToInvestigacionConnectionPageInfo?: InvestigadorToInvestigacionConnectionPageInfo;
+  LineaDeInvestigacionToInvestigacionConnectionPageInfo?: LineaDeInvestigacionToInvestigacionConnectionPageInfo;
+  MediaItemToCommentConnectionPageInfo?: MediaItemToCommentConnectionPageInfo;
+  MenuItemToMenuItemConnectionPageInfo?: MenuItemToMenuItemConnectionPageInfo;
+  MenuToMenuItemConnectionPageInfo?: MenuToMenuItemConnectionPageInfo;
+  PageToCommentConnectionPageInfo?: PageToCommentConnectionPageInfo;
+  PageToRevisionConnectionPageInfo?: PageToRevisionConnectionPageInfo;
+  PostFormatToContentNodeConnectionPageInfo?: PostFormatToContentNodeConnectionPageInfo;
+  PostFormatToPostConnectionPageInfo?: PostFormatToPostConnectionPageInfo;
+  PostToCategoryConnectionPageInfo?: PostToCategoryConnectionPageInfo;
+  PostToCommentConnectionPageInfo?: PostToCommentConnectionPageInfo;
+  PostToPostFormatConnectionPageInfo?: PostToPostFormatConnectionPageInfo;
+  PostToRevisionConnectionPageInfo?: PostToRevisionConnectionPageInfo;
+  PostToTagConnectionPageInfo?: PostToTagConnectionPageInfo;
+  PostToTermNodeConnectionPageInfo?: PostToTermNodeConnectionPageInfo;
+  RecursoToCarreraConnectionPageInfo?: RecursoToCarreraConnectionPageInfo;
+  RootQueryToCarreraConnectionPageInfo?: RootQueryToCarreraConnectionPageInfo;
+  RootQueryToCategoryConnectionPageInfo?: RootQueryToCategoryConnectionPageInfo;
+  RootQueryToCommentConnectionPageInfo?: RootQueryToCommentConnectionPageInfo;
+  RootQueryToContentNodeConnectionPageInfo?: RootQueryToContentNodeConnectionPageInfo;
+  RootQueryToContentTypeConnectionPageInfo?: RootQueryToContentTypeConnectionPageInfo;
+  RootQueryToDepartamentoConnectionPageInfo?: RootQueryToDepartamentoConnectionPageInfo;
+  RootQueryToEnqueuedScriptConnectionPageInfo?: RootQueryToEnqueuedScriptConnectionPageInfo;
+  RootQueryToEnqueuedStylesheetConnectionPageInfo?: RootQueryToEnqueuedStylesheetConnectionPageInfo;
+  RootQueryToFacultadConnectionPageInfo?: RootQueryToFacultadConnectionPageInfo;
+  RootQueryToGradoConnectionPageInfo?: RootQueryToGradoConnectionPageInfo;
+  RootQueryToGrupoDeRequisitosConnectionPageInfo?: RootQueryToGrupoDeRequisitosConnectionPageInfo;
+  RootQueryToInvestigacionConnectionPageInfo?: RootQueryToInvestigacionConnectionPageInfo;
+  RootQueryToInvestigadorConnectionPageInfo?: RootQueryToInvestigadorConnectionPageInfo;
+  RootQueryToLineaDeInvestigacionConnectionPageInfo?: RootQueryToLineaDeInvestigacionConnectionPageInfo;
+  RootQueryToMediaItemConnectionPageInfo?: RootQueryToMediaItemConnectionPageInfo;
+  RootQueryToMenuConnectionPageInfo?: RootQueryToMenuConnectionPageInfo;
+  RootQueryToMenuItemConnectionPageInfo?: RootQueryToMenuItemConnectionPageInfo;
+  RootQueryToPageConnectionPageInfo?: RootQueryToPageConnectionPageInfo;
+  RootQueryToPeriodoDeAdmisionConnectionPageInfo?: RootQueryToPeriodoDeAdmisionConnectionPageInfo;
+  RootQueryToPluginConnectionPageInfo?: RootQueryToPluginConnectionPageInfo;
+  RootQueryToPostConnectionPageInfo?: RootQueryToPostConnectionPageInfo;
+  RootQueryToPostFormatConnectionPageInfo?: RootQueryToPostFormatConnectionPageInfo;
+  RootQueryToRecursoConnectionPageInfo?: RootQueryToRecursoConnectionPageInfo;
+  RootQueryToRevisionsConnectionPageInfo?: RootQueryToRevisionsConnectionPageInfo;
+  RootQueryToSlideConnectionPageInfo?: RootQueryToSlideConnectionPageInfo;
+  RootQueryToTagConnectionPageInfo?: RootQueryToTagConnectionPageInfo;
+  RootQueryToTaxonomyConnectionPageInfo?: RootQueryToTaxonomyConnectionPageInfo;
+  RootQueryToTermNodeConnectionPageInfo?: RootQueryToTermNodeConnectionPageInfo;
+  RootQueryToThemeConnectionPageInfo?: RootQueryToThemeConnectionPageInfo;
+  RootQueryToUserConnectionPageInfo?: RootQueryToUserConnectionPageInfo;
+  RootQueryToUserRoleConnectionPageInfo?: RootQueryToUserRoleConnectionPageInfo;
+  TagToContentNodeConnectionPageInfo?: TagToContentNodeConnectionPageInfo;
+  TagToPostConnectionPageInfo?: TagToPostConnectionPageInfo;
+  TaxonomyToContentTypeConnectionPageInfo?: TaxonomyToContentTypeConnectionPageInfo;
+  TermNodeToEnqueuedScriptConnectionPageInfo?: TermNodeToEnqueuedScriptConnectionPageInfo;
+  TermNodeToEnqueuedStylesheetConnectionPageInfo?: TermNodeToEnqueuedStylesheetConnectionPageInfo;
+  UserToCarreraConnectionPageInfo?: UserToCarreraConnectionPageInfo;
+  UserToCommentConnectionPageInfo?: UserToCommentConnectionPageInfo;
+  UserToDepartamentoConnectionPageInfo?: UserToDepartamentoConnectionPageInfo;
+  UserToEnqueuedScriptConnectionPageInfo?: UserToEnqueuedScriptConnectionPageInfo;
+  UserToEnqueuedStylesheetConnectionPageInfo?: UserToEnqueuedStylesheetConnectionPageInfo;
+  UserToFacultadConnectionPageInfo?: UserToFacultadConnectionPageInfo;
+  UserToGradoConnectionPageInfo?: UserToGradoConnectionPageInfo;
+  UserToInvestigacionConnectionPageInfo?: UserToInvestigacionConnectionPageInfo;
+  UserToInvestigadorConnectionPageInfo?: UserToInvestigadorConnectionPageInfo;
+  UserToLineaDeInvestigacionConnectionPageInfo?: UserToLineaDeInvestigacionConnectionPageInfo;
+  UserToMediaItemConnectionPageInfo?: UserToMediaItemConnectionPageInfo;
+  UserToPageConnectionPageInfo?: UserToPageConnectionPageInfo;
+  UserToPeriodoDeAdmisionConnectionPageInfo?: UserToPeriodoDeAdmisionConnectionPageInfo;
+  UserToPostConnectionPageInfo?: UserToPostConnectionPageInfo;
+  UserToRecursoConnectionPageInfo?: UserToRecursoConnectionPageInfo;
+  UserToRevisionsConnectionPageInfo?: UserToRevisionsConnectionPageInfo;
+  UserToSlideConnectionPageInfo?: UserToSlideConnectionPageInfo;
+  UserToUserRoleConnectionPageInfo?: UserToUserRoleConnectionPageInfo;
+}
+
 export interface $Page_Datosrecursos_Relacion {
   Recurso?: Recurso;
+}
+
+export interface $PeriodoDeAdmisionConnection {
+  RootQueryToPeriodoDeAdmisionConnection?: RootQueryToPeriodoDeAdmisionConnection;
+  UserToPeriodoDeAdmisionConnection?: UserToPeriodoDeAdmisionConnection;
+}
+
+export interface $PeriodoDeAdmisionConnectionEdge {
+  PeriodoDeAdmisionToPreviewConnectionEdge?: PeriodoDeAdmisionToPreviewConnectionEdge;
+  RootQueryToPeriodoDeAdmisionConnectionEdge?: RootQueryToPeriodoDeAdmisionConnectionEdge;
+  UserToPeriodoDeAdmisionConnectionEdge?: UserToPeriodoDeAdmisionConnectionEdge;
+}
+
+export interface $PeriodoDeAdmisionConnectionPageInfo {
+  RootQueryToPeriodoDeAdmisionConnectionPageInfo?: RootQueryToPeriodoDeAdmisionConnectionPageInfo;
+  UserToPeriodoDeAdmisionConnectionPageInfo?: UserToPeriodoDeAdmisionConnectionPageInfo;
+}
+
+export interface $PluginConnection {
+  RootQueryToPluginConnection?: RootQueryToPluginConnection;
+}
+
+export interface $PluginConnectionEdge {
+  RootQueryToPluginConnectionEdge?: RootQueryToPluginConnectionEdge;
+}
+
+export interface $PluginConnectionPageInfo {
+  RootQueryToPluginConnectionPageInfo?: RootQueryToPluginConnectionPageInfo;
+}
+
+export interface $PostConnection {
+  CategoryToPostConnection?: CategoryToPostConnection;
+  PostFormatToPostConnection?: PostFormatToPostConnection;
+  PostToRevisionConnection?: PostToRevisionConnection;
+  RootQueryToPostConnection?: RootQueryToPostConnection;
+  TagToPostConnection?: TagToPostConnection;
+  UserToPostConnection?: UserToPostConnection;
+}
+
+export interface $PostConnectionEdge {
+  CategoryToPostConnectionEdge?: CategoryToPostConnectionEdge;
+  PostFormatToPostConnectionEdge?: PostFormatToPostConnectionEdge;
+  PostToPreviewConnectionEdge?: PostToPreviewConnectionEdge;
+  PostToRevisionConnectionEdge?: PostToRevisionConnectionEdge;
+  RootQueryToPostConnectionEdge?: RootQueryToPostConnectionEdge;
+  TagToPostConnectionEdge?: TagToPostConnectionEdge;
+  UserToPostConnectionEdge?: UserToPostConnectionEdge;
+}
+
+export interface $PostConnectionPageInfo {
+  CategoryToPostConnectionPageInfo?: CategoryToPostConnectionPageInfo;
+  PostFormatToPostConnectionPageInfo?: PostFormatToPostConnectionPageInfo;
+  PostToRevisionConnectionPageInfo?: PostToRevisionConnectionPageInfo;
+  RootQueryToPostConnectionPageInfo?: RootQueryToPostConnectionPageInfo;
+  TagToPostConnectionPageInfo?: TagToPostConnectionPageInfo;
+  UserToPostConnectionPageInfo?: UserToPostConnectionPageInfo;
+}
+
+export interface $PostFormatConnection {
+  PostToPostFormatConnection?: PostToPostFormatConnection;
+  RootQueryToPostFormatConnection?: RootQueryToPostFormatConnection;
+}
+
+export interface $PostFormatConnectionEdge {
+  PostToPostFormatConnectionEdge?: PostToPostFormatConnectionEdge;
+  RootQueryToPostFormatConnectionEdge?: RootQueryToPostFormatConnectionEdge;
+}
+
+export interface $PostFormatConnectionPageInfo {
+  PostToPostFormatConnectionPageInfo?: PostToPostFormatConnectionPageInfo;
+  RootQueryToPostFormatConnectionPageInfo?: RootQueryToPostFormatConnectionPageInfo;
+}
+
+export interface $Previewable {
+  Carrera?: Carrera;
+  Departamento?: Departamento;
+  Facultad?: Facultad;
+  Grado?: Grado;
+  Investigacion?: Investigacion;
+  Investigador?: Investigador;
+  LineaDeInvestigacion?: LineaDeInvestigacion;
+  Page?: Page;
+  PeriodoDeAdmision?: PeriodoDeAdmision;
+  Post?: Post;
+  Recurso?: Recurso;
+  Slide?: Slide;
+}
+
+export interface $RecursoConnection {
+  CarreraToRecursoConnection?: CarreraToRecursoConnection;
+  RootQueryToRecursoConnection?: RootQueryToRecursoConnection;
+  UserToRecursoConnection?: UserToRecursoConnection;
+}
+
+export interface $RecursoConnectionEdge {
+  CarreraToRecursoConnectionEdge?: CarreraToRecursoConnectionEdge;
+  RecursoToPreviewConnectionEdge?: RecursoToPreviewConnectionEdge;
+  RootQueryToRecursoConnectionEdge?: RootQueryToRecursoConnectionEdge;
+  UserToRecursoConnectionEdge?: UserToRecursoConnectionEdge;
+}
+
+export interface $RecursoConnectionPageInfo {
+  CarreraToRecursoConnectionPageInfo?: CarreraToRecursoConnectionPageInfo;
+  RootQueryToRecursoConnectionPageInfo?: RootQueryToRecursoConnectionPageInfo;
+  UserToRecursoConnectionPageInfo?: UserToRecursoConnectionPageInfo;
+}
+
+export interface $SlideConnection {
+  RootQueryToSlideConnection?: RootQueryToSlideConnection;
+  UserToSlideConnection?: UserToSlideConnection;
+}
+
+export interface $SlideConnectionEdge {
+  RootQueryToSlideConnectionEdge?: RootQueryToSlideConnectionEdge;
+  SlideToPreviewConnectionEdge?: SlideToPreviewConnectionEdge;
+  UserToSlideConnectionEdge?: UserToSlideConnectionEdge;
+}
+
+export interface $SlideConnectionPageInfo {
+  RootQueryToSlideConnectionPageInfo?: RootQueryToSlideConnectionPageInfo;
+  UserToSlideConnectionPageInfo?: UserToSlideConnectionPageInfo;
+}
+
+export interface $TagConnection {
+  PostToTagConnection?: PostToTagConnection;
+  RootQueryToTagConnection?: RootQueryToTagConnection;
+}
+
+export interface $TagConnectionEdge {
+  PostToTagConnectionEdge?: PostToTagConnectionEdge;
+  RootQueryToTagConnectionEdge?: RootQueryToTagConnectionEdge;
+}
+
+export interface $TagConnectionPageInfo {
+  PostToTagConnectionPageInfo?: PostToTagConnectionPageInfo;
+  RootQueryToTagConnectionPageInfo?: RootQueryToTagConnectionPageInfo;
+}
+
+export interface $TaxonomyConnection {
+  ContentTypeToTaxonomyConnection?: ContentTypeToTaxonomyConnection;
+  RootQueryToTaxonomyConnection?: RootQueryToTaxonomyConnection;
+}
+
+export interface $TaxonomyConnectionEdge {
+  CategoryToTaxonomyConnectionEdge?: CategoryToTaxonomyConnectionEdge;
+  ContentTypeToTaxonomyConnectionEdge?: ContentTypeToTaxonomyConnectionEdge;
+  GrupoDeRequisitosToTaxonomyConnectionEdge?: GrupoDeRequisitosToTaxonomyConnectionEdge;
+  PostFormatToTaxonomyConnectionEdge?: PostFormatToTaxonomyConnectionEdge;
+  RootQueryToTaxonomyConnectionEdge?: RootQueryToTaxonomyConnectionEdge;
+  TagToTaxonomyConnectionEdge?: TagToTaxonomyConnectionEdge;
+}
+
+export interface $TaxonomyConnectionPageInfo {
+  ContentTypeToTaxonomyConnectionPageInfo?: ContentTypeToTaxonomyConnectionPageInfo;
+  RootQueryToTaxonomyConnectionPageInfo?: RootQueryToTaxonomyConnectionPageInfo;
 }
 
 export interface $TermNode {
@@ -27315,6 +36877,36 @@ export interface $TermNode {
   GrupoDeRequisitos?: GrupoDeRequisitos;
   PostFormat?: PostFormat;
   Tag?: Tag;
+}
+
+export interface $TermNodeConnection {
+  GradoToTermNodeConnection?: GradoToTermNodeConnection;
+  PostToTermNodeConnection?: PostToTermNodeConnection;
+  RootQueryToTermNodeConnection?: RootQueryToTermNodeConnection;
+}
+
+export interface $TermNodeConnectionEdge {
+  GradoToTermNodeConnectionEdge?: GradoToTermNodeConnectionEdge;
+  PostToTermNodeConnectionEdge?: PostToTermNodeConnectionEdge;
+  RootQueryToTermNodeConnectionEdge?: RootQueryToTermNodeConnectionEdge;
+}
+
+export interface $TermNodeConnectionPageInfo {
+  GradoToTermNodeConnectionPageInfo?: GradoToTermNodeConnectionPageInfo;
+  PostToTermNodeConnectionPageInfo?: PostToTermNodeConnectionPageInfo;
+  RootQueryToTermNodeConnectionPageInfo?: RootQueryToTermNodeConnectionPageInfo;
+}
+
+export interface $ThemeConnection {
+  RootQueryToThemeConnection?: RootQueryToThemeConnection;
+}
+
+export interface $ThemeConnectionEdge {
+  RootQueryToThemeConnectionEdge?: RootQueryToThemeConnectionEdge;
+}
+
+export interface $ThemeConnectionPageInfo {
+  RootQueryToThemeConnectionPageInfo?: RootQueryToThemeConnectionPageInfo;
 }
 
 export interface $UniformResourceIdentifiable {
@@ -27339,6 +36931,131 @@ export interface $UniformResourceIdentifiable {
   User?: User;
 }
 
+export interface $UserConnection {
+  RootQueryToUserConnection?: RootQueryToUserConnection;
+}
+
+export interface $UserConnectionEdge {
+  ContentNodeToEditLastConnectionEdge?: ContentNodeToEditLastConnectionEdge;
+  ContentNodeToEditLockConnectionEdge?: ContentNodeToEditLockConnectionEdge;
+  NodeWithAuthorToUserConnectionEdge?: NodeWithAuthorToUserConnectionEdge;
+  RootQueryToUserConnectionEdge?: RootQueryToUserConnectionEdge;
+}
+
+export interface $UserConnectionPageInfo {
+  RootQueryToUserConnectionPageInfo?: RootQueryToUserConnectionPageInfo;
+}
+
+export interface $UserRoleConnection {
+  RootQueryToUserRoleConnection?: RootQueryToUserRoleConnection;
+  UserToUserRoleConnection?: UserToUserRoleConnection;
+}
+
+export interface $UserRoleConnectionEdge {
+  RootQueryToUserRoleConnectionEdge?: RootQueryToUserRoleConnectionEdge;
+  UserToUserRoleConnectionEdge?: UserToUserRoleConnectionEdge;
+}
+
+export interface $UserRoleConnectionPageInfo {
+  RootQueryToUserRoleConnectionPageInfo?: RootQueryToUserRoleConnectionPageInfo;
+  UserToUserRoleConnectionPageInfo?: UserToUserRoleConnectionPageInfo;
+}
+
+export interface $WPPageInfo {
+  CarreraToRecursoConnectionPageInfo?: CarreraToRecursoConnectionPageInfo;
+  CategoryToAncestorsCategoryConnectionPageInfo?: CategoryToAncestorsCategoryConnectionPageInfo;
+  CategoryToCategoryConnectionPageInfo?: CategoryToCategoryConnectionPageInfo;
+  CategoryToContentNodeConnectionPageInfo?: CategoryToContentNodeConnectionPageInfo;
+  CategoryToPostConnectionPageInfo?: CategoryToPostConnectionPageInfo;
+  CommentToCommentConnectionPageInfo?: CommentToCommentConnectionPageInfo;
+  ContentNodeToEnqueuedScriptConnectionPageInfo?: ContentNodeToEnqueuedScriptConnectionPageInfo;
+  ContentNodeToEnqueuedStylesheetConnectionPageInfo?: ContentNodeToEnqueuedStylesheetConnectionPageInfo;
+  ContentTypeToContentNodeConnectionPageInfo?: ContentTypeToContentNodeConnectionPageInfo;
+  ContentTypeToTaxonomyConnectionPageInfo?: ContentTypeToTaxonomyConnectionPageInfo;
+  DepartamentoToCarreraConnectionPageInfo?: DepartamentoToCarreraConnectionPageInfo;
+  DepartamentoToLineaDeInvestigacionConnectionPageInfo?: DepartamentoToLineaDeInvestigacionConnectionPageInfo;
+  FacultadToCarreraConnectionPageInfo?: FacultadToCarreraConnectionPageInfo;
+  FacultadToDepartamentoConnectionPageInfo?: FacultadToDepartamentoConnectionPageInfo;
+  GradoToCarreraConnectionPageInfo?: GradoToCarreraConnectionPageInfo;
+  GradoToGrupoDeRequisitosConnectionPageInfo?: GradoToGrupoDeRequisitosConnectionPageInfo;
+  GradoToTermNodeConnectionPageInfo?: GradoToTermNodeConnectionPageInfo;
+  GrupoDeRequisitosToContentNodeConnectionPageInfo?: GrupoDeRequisitosToContentNodeConnectionPageInfo;
+  GrupoDeRequisitosToGradoConnectionPageInfo?: GrupoDeRequisitosToGradoConnectionPageInfo;
+  HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo?: HierarchicalContentNodeToContentNodeAncestorsConnectionPageInfo;
+  HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo?: HierarchicalContentNodeToContentNodeChildrenConnectionPageInfo;
+  InvestigacionToInvestigadorConnectionPageInfo?: InvestigacionToInvestigadorConnectionPageInfo;
+  InvestigadorToInvestigacionConnectionPageInfo?: InvestigadorToInvestigacionConnectionPageInfo;
+  LineaDeInvestigacionToInvestigacionConnectionPageInfo?: LineaDeInvestigacionToInvestigacionConnectionPageInfo;
+  MediaItemToCommentConnectionPageInfo?: MediaItemToCommentConnectionPageInfo;
+  MenuItemToMenuItemConnectionPageInfo?: MenuItemToMenuItemConnectionPageInfo;
+  MenuToMenuItemConnectionPageInfo?: MenuToMenuItemConnectionPageInfo;
+  PageToCommentConnectionPageInfo?: PageToCommentConnectionPageInfo;
+  PageToRevisionConnectionPageInfo?: PageToRevisionConnectionPageInfo;
+  PostFormatToContentNodeConnectionPageInfo?: PostFormatToContentNodeConnectionPageInfo;
+  PostFormatToPostConnectionPageInfo?: PostFormatToPostConnectionPageInfo;
+  PostToCategoryConnectionPageInfo?: PostToCategoryConnectionPageInfo;
+  PostToCommentConnectionPageInfo?: PostToCommentConnectionPageInfo;
+  PostToPostFormatConnectionPageInfo?: PostToPostFormatConnectionPageInfo;
+  PostToRevisionConnectionPageInfo?: PostToRevisionConnectionPageInfo;
+  PostToTagConnectionPageInfo?: PostToTagConnectionPageInfo;
+  PostToTermNodeConnectionPageInfo?: PostToTermNodeConnectionPageInfo;
+  RecursoToCarreraConnectionPageInfo?: RecursoToCarreraConnectionPageInfo;
+  RootQueryToCarreraConnectionPageInfo?: RootQueryToCarreraConnectionPageInfo;
+  RootQueryToCategoryConnectionPageInfo?: RootQueryToCategoryConnectionPageInfo;
+  RootQueryToCommentConnectionPageInfo?: RootQueryToCommentConnectionPageInfo;
+  RootQueryToContentNodeConnectionPageInfo?: RootQueryToContentNodeConnectionPageInfo;
+  RootQueryToContentTypeConnectionPageInfo?: RootQueryToContentTypeConnectionPageInfo;
+  RootQueryToDepartamentoConnectionPageInfo?: RootQueryToDepartamentoConnectionPageInfo;
+  RootQueryToEnqueuedScriptConnectionPageInfo?: RootQueryToEnqueuedScriptConnectionPageInfo;
+  RootQueryToEnqueuedStylesheetConnectionPageInfo?: RootQueryToEnqueuedStylesheetConnectionPageInfo;
+  RootQueryToFacultadConnectionPageInfo?: RootQueryToFacultadConnectionPageInfo;
+  RootQueryToGradoConnectionPageInfo?: RootQueryToGradoConnectionPageInfo;
+  RootQueryToGrupoDeRequisitosConnectionPageInfo?: RootQueryToGrupoDeRequisitosConnectionPageInfo;
+  RootQueryToInvestigacionConnectionPageInfo?: RootQueryToInvestigacionConnectionPageInfo;
+  RootQueryToInvestigadorConnectionPageInfo?: RootQueryToInvestigadorConnectionPageInfo;
+  RootQueryToLineaDeInvestigacionConnectionPageInfo?: RootQueryToLineaDeInvestigacionConnectionPageInfo;
+  RootQueryToMediaItemConnectionPageInfo?: RootQueryToMediaItemConnectionPageInfo;
+  RootQueryToMenuConnectionPageInfo?: RootQueryToMenuConnectionPageInfo;
+  RootQueryToMenuItemConnectionPageInfo?: RootQueryToMenuItemConnectionPageInfo;
+  RootQueryToPageConnectionPageInfo?: RootQueryToPageConnectionPageInfo;
+  RootQueryToPeriodoDeAdmisionConnectionPageInfo?: RootQueryToPeriodoDeAdmisionConnectionPageInfo;
+  RootQueryToPluginConnectionPageInfo?: RootQueryToPluginConnectionPageInfo;
+  RootQueryToPostConnectionPageInfo?: RootQueryToPostConnectionPageInfo;
+  RootQueryToPostFormatConnectionPageInfo?: RootQueryToPostFormatConnectionPageInfo;
+  RootQueryToRecursoConnectionPageInfo?: RootQueryToRecursoConnectionPageInfo;
+  RootQueryToRevisionsConnectionPageInfo?: RootQueryToRevisionsConnectionPageInfo;
+  RootQueryToSlideConnectionPageInfo?: RootQueryToSlideConnectionPageInfo;
+  RootQueryToTagConnectionPageInfo?: RootQueryToTagConnectionPageInfo;
+  RootQueryToTaxonomyConnectionPageInfo?: RootQueryToTaxonomyConnectionPageInfo;
+  RootQueryToTermNodeConnectionPageInfo?: RootQueryToTermNodeConnectionPageInfo;
+  RootQueryToThemeConnectionPageInfo?: RootQueryToThemeConnectionPageInfo;
+  RootQueryToUserConnectionPageInfo?: RootQueryToUserConnectionPageInfo;
+  RootQueryToUserRoleConnectionPageInfo?: RootQueryToUserRoleConnectionPageInfo;
+  TagToContentNodeConnectionPageInfo?: TagToContentNodeConnectionPageInfo;
+  TagToPostConnectionPageInfo?: TagToPostConnectionPageInfo;
+  TaxonomyToContentTypeConnectionPageInfo?: TaxonomyToContentTypeConnectionPageInfo;
+  TermNodeToEnqueuedScriptConnectionPageInfo?: TermNodeToEnqueuedScriptConnectionPageInfo;
+  TermNodeToEnqueuedStylesheetConnectionPageInfo?: TermNodeToEnqueuedStylesheetConnectionPageInfo;
+  UserToCarreraConnectionPageInfo?: UserToCarreraConnectionPageInfo;
+  UserToCommentConnectionPageInfo?: UserToCommentConnectionPageInfo;
+  UserToDepartamentoConnectionPageInfo?: UserToDepartamentoConnectionPageInfo;
+  UserToEnqueuedScriptConnectionPageInfo?: UserToEnqueuedScriptConnectionPageInfo;
+  UserToEnqueuedStylesheetConnectionPageInfo?: UserToEnqueuedStylesheetConnectionPageInfo;
+  UserToFacultadConnectionPageInfo?: UserToFacultadConnectionPageInfo;
+  UserToGradoConnectionPageInfo?: UserToGradoConnectionPageInfo;
+  UserToInvestigacionConnectionPageInfo?: UserToInvestigacionConnectionPageInfo;
+  UserToInvestigadorConnectionPageInfo?: UserToInvestigadorConnectionPageInfo;
+  UserToLineaDeInvestigacionConnectionPageInfo?: UserToLineaDeInvestigacionConnectionPageInfo;
+  UserToMediaItemConnectionPageInfo?: UserToMediaItemConnectionPageInfo;
+  UserToPageConnectionPageInfo?: UserToPageConnectionPageInfo;
+  UserToPeriodoDeAdmisionConnectionPageInfo?: UserToPeriodoDeAdmisionConnectionPageInfo;
+  UserToPostConnectionPageInfo?: UserToPostConnectionPageInfo;
+  UserToRecursoConnectionPageInfo?: UserToRecursoConnectionPageInfo;
+  UserToRevisionsConnectionPageInfo?: UserToRevisionsConnectionPageInfo;
+  UserToSlideConnectionPageInfo?: UserToSlideConnectionPageInfo;
+  UserToUserRoleConnectionPageInfo?: UserToUserRoleConnectionPageInfo;
+}
+
 export interface GeneratedSchema {
   query: Query;
   mutation: Mutation;
@@ -27353,6 +37070,8 @@ export interface ScalarsEnums extends MakeNullable<Scalars> {
   AvatarRatingEnum: AvatarRatingEnum | undefined;
   CarreraIdType: CarreraIdType | undefined;
   CategoryIdType: CategoryIdType | undefined;
+  CommentNodeIdTypeEnum: CommentNodeIdTypeEnum | undefined;
+  CommentStatusEnum: CommentStatusEnum | undefined;
   CommentsConnectionOrderbyEnum: CommentsConnectionOrderbyEnum | undefined;
   ContentNodeIdTypeEnum: ContentNodeIdTypeEnum | undefined;
   ContentTypeEnum: ContentTypeEnum | undefined;

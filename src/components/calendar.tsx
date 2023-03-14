@@ -1,26 +1,30 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import { css, Global } from '@emotion/react'
-import colors from 'components/colors'
-import moment from 'moment'
-import { DayPicker } from 'react-day-picker'
-import useModal from 'hooks/useModal'
-import Link from 'next/link'
-import { container, mq } from './grid'
-import es from 'date-fns/locale/es'
-import { client, PeriodoDeAdmision } from 'client'
+import React from "react";
+import styled from "@emotion/styled";
+import { css, Global } from "@emotion/react";
+import colors from "components/colors";
+import moment from "moment";
+import { DayPicker } from "react-day-picker";
+import useModal from "hooks/useModal";
+import Link from "next/link";
+import { container, mq } from "./grid";
+import es from "date-fns/locale/es";
+import { client, PeriodoDeAdmision } from "client";
+import Cta from "./CTA";
 
 interface EventProps {
-  event?: PeriodoDeAdmision
+  event?: PeriodoDeAdmision;
 }
 
 const Event = ({ event }: EventProps) => {
-  const { openModal, ModalUI } = useModal()
-  const examDates = event.datosPeriodosDeAdmision.fechasExamenesAdmision.map(
-    (date) => moment(date.fechaExamen, '', 'es').toDate(),
-  )
+  const { openModal, ModalUI } = useModal();
+  const examDates =
+    event.datosPeriodosDeAdmision.fechasExamenesAdmision?.map((date) =>
+      moment(date.fechaExamen, "", "es").toDate()
+    ) || [];
 
-  const pastMonth = examDates[examDates.length - 1]
+  const pastMonth = examDates[examDates.length - 1];
+
+  const urlPOMA = event.datosPeriodosDeAdmision.urlFormulario;
 
   return (
     <>
@@ -40,35 +44,41 @@ const Event = ({ event }: EventProps) => {
         <ColStyles>
           <BoxContact>
             <span>Haz tu cita en: </span>
-            <Link href={'mailto:admisiones@isa.edu.do'} target="_blank">
+            <Link href={"mailto:admisiones@isa.edu.do"} target="_blank">
               admisiones@isa.edu.do
             </Link>
           </BoxContact>
           <BoxContact>
             <span>Whatsapp: </span>
-            <Link href={'https://wa.me/8295209209'} target="_blank">
+            <Link href={"https://wa.me/8295209209"} target="_blank">
               829-520-9209
             </Link>
           </BoxContact>
+          <br />
+          {urlPOMA ? (
+            <Cta to={urlPOMA} target="_blank">
+              Solicitar prueba de admisión
+            </Cta>
+          ) : null}
         </ColStyles>
       </ModalUI>
     </>
-  )
-}
+  );
+};
 
 // var isEmpty = (".DayPicker-Month").html() === "";
 // var getid= document.getElementById("identificador_del_div").hasChildNodes();
 interface CalendarProps {
-  title?: string
-  noEventsTitle?: string
+  title?: string;
+  noEventsTitle?: string;
 }
 const Calendar = ({
-  title = 'FECHAS PARA TOMAR EL EXAMEN DE ADMISIÓN POMA',
+  title = "FECHAS PARA TOMAR EL EXAMEN DE ADMISIÓN POMA",
   noEventsTitle,
 }: CalendarProps) => {
-  const { useQuery } = client
+  const { useQuery } = client;
   //Obtiene los datos de los Eventos
-  const events = useQuery().periodosDeAdmision().nodes
+  const events = useQuery().periodosDeAdmision().nodes;
 
   //Ordena los eventos de menor a mayor
   // const events = events.nodes.nodes
@@ -85,7 +95,7 @@ const Calendar = ({
         {events.length ? (
           <EventList>
             {events.map((event, index) => {
-              return <Event key={index} event={event} />
+              return <Event key={index} event={event} />;
             })}
           </EventList>
         ) : (
@@ -93,23 +103,23 @@ const Calendar = ({
         )}
       </Container>
     </Section>
-  ) : null
-}
+  ) : null;
+};
 
-export default Calendar
+export default Calendar;
 
 const Section = styled.section`
   margin-bottom: 9.6rem;
   margin-top: 9.6rem;
-`
+`;
 
 const Container = styled.div`
   ${container}
-`
+`;
 
 const Title = styled.h2`
   text-align: center;
-`
+`;
 
 const EventList = styled.div`
   max-width: fit-content;
@@ -125,7 +135,7 @@ const EventList = styled.div`
     column-rule-color: lightgray;
     column-rule-width: 0.25rem;
   }
-`
+`;
 
 const EventCard = styled.div`
   cursor: pointer;
@@ -149,17 +159,17 @@ const EventCard = styled.div`
   &:first-of-type {
     /* border: initial; */
   }
-`
+`;
 
 const EventName = styled.span`
   text-align: center;
   font-size: 18px;
   font-weight: bold;
-`
+`;
 
 const NoEventsText = styled.p`
   text-align: center;
-`
+`;
 
 const EventTitle = styled.h3`
   color: ${colors.primary.dark};
@@ -167,7 +177,7 @@ const EventTitle = styled.h3`
   text-align: left;
   margin-bottom: 2rem;
   margin-top: 0;
-`
+`;
 
 const birthdayStyle = css`
   .rdp-caption {
@@ -217,7 +227,7 @@ const birthdayStyle = css`
   .rdp-vhidden {
     display: none;
   }
-`
+`;
 
 const BoxContact = styled.div`
   & > a {
@@ -228,8 +238,8 @@ const BoxContact = styled.div`
     font-weight: bold;
     color: #001f56;
   }
-`
+`;
 
 const ColStyles = styled.div`
   margin-top: 2rem;
-`
+`;

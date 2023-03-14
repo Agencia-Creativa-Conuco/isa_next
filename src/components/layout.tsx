@@ -1,39 +1,39 @@
-import React from 'react'
-import styled from '@emotion/styled'
+import React from "react";
+import styled from "@emotion/styled";
 
-import Header from 'components/Header'
-import Footer from 'components/Footer'
-import ResourcesList from './resourceslist'
-import Contact from './contact'
-import PageIndexes from './page-indexes'
-import { client, Recurso } from 'client'
-import { NextSeo } from 'next-seo'
+import Header from "components/Header";
+import Footer from "components/Footer";
+import ResourcesList from "./resourceslist";
+import Contact from "./contact";
+import PageIndexes from "./page-indexes";
+import { client, Recurso } from "client";
+import { NextSeo } from "next-seo";
 
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   // eslint-disable-next-line global-require
   //   require('smooth-scroll')('a[href*="#"]')
 }
 
 const findIndexes = (children: any) => {
-  let resultado: any
+  let resultado: any;
   if (Array.isArray(children)) {
     resultado = children.reduce((prev, curr) => {
       if (curr?.props?.id) {
-        prev.push({ id: curr.props.id, name: curr.props.name })
+        prev.push({ id: curr.props.id, name: curr.props.name });
       }
       if (curr?.props?.children?.length) {
-        return findIndexes(curr.props.children)
+        return findIndexes(curr.props.children);
       }
-      return prev
-    }, [])
+      return prev;
+    }, []);
   } else if (children.props?.children) {
-    resultado = findIndexes(children?.props?.children)
+    resultado = findIndexes(children?.props?.children);
   } else {
-    resultado = []
+    resultado = [];
   }
 
-  return resultado
-}
+  return resultado;
+};
 
 // interface LayoutProps {
 //   recursos?: Recurso[]
@@ -42,10 +42,10 @@ const findIndexes = (children: any) => {
 // }
 
 const Layout = (props) => {
-  const { useQuery } = client
-  const settings = useQuery()?.generalSettings
+  const { useQuery } = client;
+  const settings = useQuery()?.generalSettings;
 
-  const indexes = props?.children ? findIndexes(props?.children) : []
+  const indexes = props?.children ? findIndexes(props?.children) : [];
 
   // const [resultsSearch, setResultsSearch] = useState()
 
@@ -59,9 +59,9 @@ const Layout = (props) => {
           if (React.isValidElement(child)) {
             return React.cloneElement(child, {
               // ...{ resultsSearch, setResultsSearch },
-            })
+            });
           }
-          return child
+          return child;
         })}
         {/* 
           Se muestran recursos relacionados con el tipo de dato 
@@ -71,17 +71,19 @@ const Layout = (props) => {
           <ResourcesList items={props.recursos || []} />
         ) : null}
         {/* Se muestra información de contacto relacionada con el tipo de dato */}
-        {props.contacto ? <Contact data={props.contacto} /> : null}
+        {props.contacto?.unidad?.length ? (
+          <Contact data={props.contacto.unidad} />
+        ) : null}
         <PageIndexes items={indexes} />
       </Main>
 
       <Footer />
     </>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;
 
 const Main = styled.main`
   overflow: hidden;
-`
+`;
