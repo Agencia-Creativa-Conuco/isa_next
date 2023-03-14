@@ -1,20 +1,20 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import Cta from 'components/CTA'
-import Image from 'next/image'
-import colors from 'components/colors'
-import { container, mq } from 'components/grid'
-import centro_mipymes from '../../../public/images/direccion-extension-y-proyectos/centro_mipymes.jpg'
+import React from "react";
+import styled from "@emotion/styled";
+import Cta from "components/CTA";
+import Image from "next/image";
+import colors from "components/colors";
+import { container, mq } from "components/grid";
+import centro_mipymes from "../../../public/images/direccion-extension-y-proyectos/centro_mipymes.jpg";
 
 const DEPPymes = (props) => {
-  const title = 'Centro MIPYMES',
+  const title = "Centro MIPYMES",
     copy =
-      'El Centro MIPYMES (Centro de Servicios de Apoyo Integral de las micro, pequeñas y medianas empresas) es una iniciativa por parte del Ministerio de Industria y Comercio a través del Viceministerio de Fomento a las  MIPYMES en alianza con la Universidad ISA, el cual tiene como objetivo principal brindar los servicios y las consultorías necesarias a las micro, pequeñas y medianas empresas, de manera gratuita, para fortalecer su capacidad productiva, competitividad y eficiencia.',
+      "El Centro MIPYMES (Centro de Servicios de Apoyo Integral de las micro, pequeñas y medianas empresas) es una iniciativa por parte del Ministerio de Industria y Comercio a través del Viceministerio de Fomento a las  MIPYMES en alianza con la Universidad ISA, el cual tiene como objetivo principal brindar los servicios y las consultorías necesarias a las micro, pequeñas y medianas empresas, de manera gratuita, para fortalecer su capacidad productiva, competitividad y eficiencia.",
     cta = {
-      url: '/centro-mipymes',
-      title: 'Conoce más',
+      url: "/centro-mipymes",
+      title: "Conoce más",
       target: null,
-    }
+    };
 
   return (
     <Section {...props}>
@@ -26,6 +26,7 @@ const DEPPymes = (props) => {
             height={1920}
             objectFit="cover"
             placeholder="blur"
+            alt={title}
           />
         </Media>
         <Content>
@@ -41,17 +42,17 @@ const DEPPymes = (props) => {
         </Content>
       </Container>
     </Section>
-  )
-}
+  );
+};
 
-export default DEPPymes
+export default DEPPymes;
 
 const Section = styled.section`
   background: ${colors.blue.base};
   margin-top: 15rem;
   position: relative;
   &:before {
-    content: '';
+    content: "";
     position: absolute;
     width: 1.6%;
     padding-bottom: 17%;
@@ -60,7 +61,7 @@ const Section = styled.section`
     background: ${colors.blue.dark};
     opacity: 0.8;
   }
-`
+`;
 
 const Container = styled.div`
   ${container}
@@ -71,10 +72,10 @@ const Container = styled.div`
   ${mq.md} {
     grid-template-columns: 42% 50%;
   }
-`
+`;
 const Content = styled.div`
   padding: 0 1.5rem 4rem 1.5rem;
-`
+`;
 
 const DivTitle = styled.div`
   color: ${colors.white};
@@ -88,7 +89,7 @@ const DivTitle = styled.div`
   ${mq.lg} {
     padding: 2rem 0rem 2rem 0rem;
   }
-`
+`;
 
 const SectionTitle = styled.h2`
   ${mq.md} {
@@ -99,9 +100,9 @@ const SectionTitle = styled.h2`
     margin-top: 0;
     transform: translateY(-6rem);
   }
-`
+`;
 
-const Copy = styled.p``
+const Copy = styled.p``;
 
 const Media = styled.div`
   position: relative;
@@ -111,7 +112,7 @@ const Media = styled.div`
     margin-top: -20%;
   }
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     width: 200%;
     padding-bottom: 10%;
@@ -119,4 +120,4 @@ const Media = styled.div`
     top: 13%;
     background: ${colors.blue.dark};
   }
-`
+`;

@@ -1,30 +1,30 @@
-import React, { useState } from 'react'
-import { css } from '@emotion/react'
-import styled from '@emotion/styled'
-import colors from 'components/colors'
-import Form from 'components/form'
-import ctas from 'styles/cta'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Grado } from 'client'
+import React, { useState } from "react";
+import { css } from "@emotion/react";
+import styled from "@emotion/styled";
+import colors from "components/colors";
+import Form from "components/form";
+import ctas from "styles/cta";
+import Image from "next/image";
+import Link from "next/link";
+import { Grado } from "client";
 
-import { container, mq } from 'components/grid'
-import formImage from '../../../public/images/admisiones/form.jpg'
+import { container, mq } from "components/grid";
+import formImage from "../../../public/images/admisiones/form.jpg";
 import {
   client,
   PostObjectsConnectionOrderbyEnum,
   PostObjectsConnectionOrderbyInput,
   OrderEnum,
-} from 'client'
+} from "client";
 
 const AdmisionesForm = (props) => {
-  const { useQuery } = client
-  const [active, setActive] = useState(0)
+  const { useQuery } = client;
+  const [active, setActive] = useState(0);
 
   const order: PostObjectsConnectionOrderbyInput = {
     field: PostObjectsConnectionOrderbyEnum.MENU_ORDER,
     order: OrderEnum.ASC,
-  }
+  };
 
   const gradeForms = useQuery()
     .grados({
@@ -37,11 +37,11 @@ const AdmisionesForm = (props) => {
       return {
         ...grado.formulariosGrado,
         action: () => {
-          setActive(index + 1)
+          setActive(index + 1);
         },
         name: grado.nombre,
-      }
-    })
+      };
+    });
 
   // const forms = useGrados()
 
@@ -58,12 +58,12 @@ const AdmisionesForm = (props) => {
 
   const forms = [
     {
-      tipoFormulario: '',
-      urlFormularioGoogle: '',
+      tipoFormulario: "",
+      urlFormularioGoogle: "",
       hsFormularios: [],
-      name: 'Regresar',
+      name: "Regresar",
       action: () => {
-        setActive(0)
+        setActive(0);
       },
     },
   ].concat(
@@ -73,11 +73,11 @@ const AdmisionesForm = (props) => {
       hsFormularios: item.hsFormularios,
       name: item.name,
       action: item.action,
-    })),
-  )
+    }))
+  );
 
   return forms?.length > 1 ? (
-    <Section {...props} style={{ overflow: 'hidden' }}>
+    <Section {...props} style={{ overflow: "hidden" }}>
       <Container fluid id="section_3">
         <Media>
           <Image
@@ -87,6 +87,7 @@ const AdmisionesForm = (props) => {
             objectFit="cover"
             objectPosition="40% 40%"
             placeholder="blur"
+            alt="formulario"
           />
         </Media>
 
@@ -95,7 +96,7 @@ const AdmisionesForm = (props) => {
             <Title>Solicitud de admisión</Title>
             <Buttons>
               {forms?.map((form, index) => {
-                const { name, action } = form
+                const { name, action } = form;
                 return (
                   <div key={index}>
                     <Grade
@@ -104,8 +105,8 @@ const AdmisionesForm = (props) => {
                     >
                       {name}
                     </Grade>
-                    {form.tipoFormulario === 'google' ? (
-                      <Link href={form.urlFormularioGoogle ?? ''} passHref>
+                    {form.tipoFormulario === "google" ? (
+                      <Link href={form.urlFormularioGoogle ?? ""} passHref>
                         <SLink
                           target="_blank"
                           hidden={
@@ -125,19 +126,19 @@ const AdmisionesForm = (props) => {
                       </Cta>
                     )}
                   </div>
-                )
+                );
               })}
             </Buttons>
             <Displayer>
               {forms
                 ?.filter(
                   (form, index) =>
-                    index === active && form.tipoFormulario === 'hubspot',
+                    index === active && form.tipoFormulario === "hubspot"
                 )
                 .map((form, index) => {
                   const formIds = form.hsFormularios.map(
-                    (item) => item.idFormulario,
-                  )
+                    (item) => item.idFormulario
+                  );
 
                   return (
                     <Form
@@ -145,19 +146,19 @@ const AdmisionesForm = (props) => {
                       formIds={formIds ?? []}
                       cardStyle={false}
                     />
-                  )
+                  );
                 })}
             </Displayer>
           </Container>
         </Wrapper>
       </Container>
     </Section>
-  ) : null
-}
+  ) : null;
+};
 
-export default AdmisionesForm
+export default AdmisionesForm;
 
-const Section = styled.section``
+const Section = styled.section``;
 
 const Container = styled.div`
   ${container}
@@ -165,7 +166,7 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: 100%;
   justify-content: flex-start;
-`
+`;
 
 const Media = styled.div`
   width: 100%;
@@ -175,7 +176,7 @@ const Media = styled.div`
 
     position: absolute;
   }
-`
+`;
 
 const Wrapper = styled.div`
   background-color: ${colors.gray.light};
@@ -196,16 +197,16 @@ const Wrapper = styled.div`
   ${mq.xl} {
     margin-left: 15rem;
   }
-`
+`;
 
 const Title = styled.h2`
   text-transform: uppercase;
   margin-bottom: 3rem;
-`
+`;
 
 const Grade = styled.h3`
-  ${({ color = 'darkblue', hidden }) => css`
-    ${hidden ? 'display:none;' : ''}
+  ${({ color = "darkblue", hidden }) => css`
+    ${hidden ? "display:none;" : ""}
     text-transform: uppercase;
     /* background-color: #F0F0F0; */
     padding: 0.5rem;
@@ -214,7 +215,7 @@ const Grade = styled.h3`
     border-top: 0.2rem solid ${color};
     border-bottom: 0.2rem solid ${color};
   `}
-`
+`;
 
 const Cta = styled.button`
   ${ctas}
@@ -225,13 +226,13 @@ const Cta = styled.button`
       ? css`
           display: none;
         `
-      : ''}
-`
+      : ""}
+`;
 
 const SLink = styled.a`
   ${ctas}
-`
+`;
 
-const Buttons = styled.div``
+const Buttons = styled.div``;
 
-const Displayer = styled.div``
+const Displayer = styled.div``;

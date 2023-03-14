@@ -1,14 +1,14 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import { css } from '@emotion/react'
-import Image from 'next/image'
-import colors from 'components/colors'
-import { container, mq } from 'components/grid'
-import cover from '../../../public/images/centro-de-educacion-tecnica-huascar-rodriguez-herrera/cover.jpg'
-import infotepLogo from '../../../public/images/centro-de-educacion-tecnica-huascar-rodriguez-herrera/infotep_logo.png'
+import React from "react";
+import styled from "@emotion/styled";
+import { css } from "@emotion/react";
+import Image from "next/image";
+import colors from "components/colors";
+import { container, mq } from "components/grid";
+import cover from "../../../public/images/centro-de-educacion-tecnica-huascar-rodriguez-herrera/cover.jpg";
+import infotepLogo from "../../../public/images/centro-de-educacion-tecnica-huascar-rodriguez-herrera/infotep_logo.png";
 
 const NosotrosCover = () => {
-  const title = 'Centro de Educación Técnica Huascar Rodríguez Herrera'
+  const title = "Centro de Educación Técnica Huascar Rodríguez Herrera";
   const copy = `
       <p>
       El Centro de Educación Técnica Huáscar Rodríguez Herrera surge
@@ -24,7 +24,7 @@ const NosotrosCover = () => {
       agregando acciones en los sectores Agroindustrial y Empresarial
       (Servicio).
     </p>
-  `
+  `;
 
   return (
     <Container fluid>
@@ -32,7 +32,7 @@ const NosotrosCover = () => {
         <SectionTitle> {title} </SectionTitle>
         <Copy dangerouslySetInnerHTML={{ __html: copy }} />
         <Infotep>
-          <Image src={infotepLogo} loading="eager" />
+          <Image src={infotepLogo} loading="eager" alt={title} />
         </Infotep>
       </Content>
       <div>
@@ -51,10 +51,10 @@ const NosotrosCover = () => {
         </Media>
       </div>
     </Container>
-  )
-}
+  );
+};
 
-export default NosotrosCover
+export default NosotrosCover;
 
 const Container = styled.section`
   ${container}
@@ -73,7 +73,7 @@ const Container = styled.section`
       order: 2;
     }
   }
-`
+`;
 
 const Content = styled.div`
   margin: 4rem auto;
@@ -83,7 +83,7 @@ const Content = styled.div`
   align-self: center;
   z-index: 5;
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     width: 25%;
     padding-bottom: 25%;
@@ -94,18 +94,18 @@ const Content = styled.div`
     transform: translate(-50%, 50%);
     z-index: -1;
   }
-`
+`;
 
 const SectionTitle = styled.h1`
   margin-bottom: 2rem;
-`
+`;
 const Copy = styled.p`
   margin-bottom: 3rem;
-`
+`;
 
 const Infotep = styled.div`
   max-width: 15rem;
-`
+`;
 
 const Media = styled.div`
   position: relative;
@@ -118,7 +118,7 @@ const Media = styled.div`
     margin: 0;
   }
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     width: 10%;
     padding-bottom: 10%;
@@ -128,12 +128,12 @@ const Media = styled.div`
     top: 10%;
     box-shadow: 0 2.5rem 2.5rem rgba(0, 0, 0, 0.15);
   }
-`
+`;
 
 const Logo = styled(Image)`
   clip-path: ellipse(100% 100% at right 73%);
   z-index: 4;
-`
+`;
 
 const DivCube = styled.div`
   position: absolute;
@@ -146,7 +146,7 @@ const DivCube = styled.div`
   transform: translate(-75%, 0);
   z-index: 2;
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     width: 35%;
     padding-bottom: 70%;
@@ -157,7 +157,7 @@ const DivCube = styled.div`
     z-index: 3;
   }
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     left: 35%;
     top: 0;
@@ -168,4 +168,4 @@ const DivCube = styled.div`
     transform: translate(0, -30%);
     z-index: 1;
   }
-`
+`;

@@ -1,19 +1,19 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import Image from 'next/image'
-import Cta from 'components/CTA'
-import colors from 'components/colors'
-import { container, mq } from 'components/grid'
-import { Post } from 'client'
-import blur from 'styles/blur'
+import React from "react";
+import styled from "@emotion/styled";
+import Image from "next/image";
+import Cta from "components/CTA";
+import colors from "components/colors";
+import { container, mq } from "components/grid";
+import { Post } from "client";
+import blur from "styles/blur";
 
 interface FileCoverProps {
-  post?: Post
+  post?: Post;
 }
 const FileCover = ({ post }: FileCoverProps) => {
-  const { title, content, featuredImage, datosPublicacion } = post
+  const { title, content, featuredImage, datosPublicacion } = post;
 
-  const archivo = datosPublicacion.archivo
+  const archivo = datosPublicacion.archivo;
   return (
     <Section>
       <Wrapper>
@@ -27,6 +27,7 @@ const FileCover = ({ post }: FileCoverProps) => {
               blurDataURL={blur.src}
               placeholder="blur"
               priority
+              alt={title()}
             />
           </ImageContainer>
 
@@ -36,7 +37,7 @@ const FileCover = ({ post }: FileCoverProps) => {
               <div dangerouslySetInnerHTML={{ __html: content() }} />
             </Content>
             <CTABox>
-              <Cta to={archivo.mediaItemUrl ?? ''} download target="_blank">
+              <Cta to={archivo.mediaItemUrl ?? ""} download target="_blank">
                 Descargar
               </Cta>
             </CTABox>
@@ -44,10 +45,10 @@ const FileCover = ({ post }: FileCoverProps) => {
         </Container>
       </Wrapper>
     </Section>
-  )
-}
+  );
+};
 
-export default FileCover
+export default FileCover;
 
 const Section = styled.section`
   position: relative;
@@ -57,7 +58,7 @@ const Section = styled.section`
     margin-bottom: 16rem;
     margin-top: 16rem;
   }
-`
+`;
 const Container = styled.div`
   ${container}
   display:grid;
@@ -69,12 +70,12 @@ const Container = styled.div`
   ${mq.md} {
     grid-template-columns: 31% 60%;
   }
-`
+`;
 
 const Wrapper = styled.div`
   margin-top: 12rem;
   padding: 1rem;
-`
+`;
 
 const ImageContainer = styled.div`
   position: relative;
@@ -87,7 +88,7 @@ const ImageContainer = styled.div`
     width: initial;
   }
   &:before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -100,7 +101,7 @@ const ImageContainer = styled.div`
     opacity: 0.5;
   }
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     right: 0;
@@ -112,17 +113,17 @@ const ImageContainer = styled.div`
     z-index: -1;
     opacity: 0.5;
   }
-`
+`;
 
-const Content = styled.div``
+const Content = styled.div``;
 
 const CTABox = styled.div`
   margin-top: 2rem;
   ${mq.md} {
     margin-top: 4rem;
   }
-`
+`;
 
 const Title = styled.h1`
   margin-bottom: 0.5rem;
-`
+`;

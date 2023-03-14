@@ -1,15 +1,15 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import { css } from '@emotion/react'
-import Image from 'next/image'
-import { darken, lighten } from 'polished'
-import { container, mq } from 'components/grid'
-import colors from 'components/colors'
-import { Carrera } from 'client'
-import blur from 'styles/blur'
+import React from "react";
+import styled from "@emotion/styled";
+import { css } from "@emotion/react";
+import Image from "next/image";
+import { darken, lighten } from "polished";
+import { container, mq } from "components/grid";
+import colors from "components/colors";
+import { Carrera } from "client";
+import blur from "styles/blur";
 
 interface CarreraProps {
-  carrera?: Carrera
+  carrera?: Carrera;
 }
 
 const CarreraCover = ({ carrera }: CarreraProps) => {
@@ -22,24 +22,24 @@ const CarreraCover = ({ carrera }: CarreraProps) => {
     duracionPasantia,
     facultad,
     grado,
-  } = carrera
+  } = carrera;
 
   const metadata = [
     {
-      name: 'Créditos',
+      name: "Créditos",
       value: creditos,
     },
     {
-      name: 'Duración',
+      name: "Duración",
       value: duracion,
     },
     {
-      name: 'Pasantía',
+      name: "Pasantía",
       value: duracionPasantia,
     },
-  ]
+  ];
 
-  const facultyColor = facultad.node?.color || colors.primary.base
+  const facultyColor = facultad.node?.color || colors.primary.base;
 
   return (
     <Section bgColor={facultyColor} decoBgColor={darken(0.15, facultyColor)}>
@@ -53,6 +53,7 @@ const CarreraCover = ({ carrera }: CarreraProps) => {
             blurDataURL={blur.src}
             placeholder="blur"
             priority
+            alt={nombre}
             // size="56.25%"
             // heightLG="100%"
           />
@@ -70,7 +71,7 @@ const CarreraCover = ({ carrera }: CarreraProps) => {
                   {metadata
                     .filter((item) => item.value)
                     .map((item, index) => {
-                      const { name, value } = item
+                      const { name, value } = item;
 
                       return (
                         <Gadgets key={index}>
@@ -79,7 +80,7 @@ const CarreraCover = ({ carrera }: CarreraProps) => {
                             <GadgetValue>{value}</GadgetValue>
                           </Gadget>
                         </Gadgets>
-                      )
+                      );
                     })}
                 </RowStyles>
               </Content>
@@ -88,22 +89,22 @@ const CarreraCover = ({ carrera }: CarreraProps) => {
         </ColStyles>
       </ContainerLayout>
     </Section>
-  )
-}
+  );
+};
 
-export default CarreraCover
+export default CarreraCover;
 
 interface SectionProps {
-  bgColor?: string
-  decoBgColor?: string
+  bgColor?: string;
+  decoBgColor?: string;
 }
 const Section = styled.section`
-  ${({ bgColor = 'green', decoBgColor = 'green' }: SectionProps) => css`
+  ${({ bgColor = "green", decoBgColor = "green" }: SectionProps) => css`
     background-color: ${bgColor};
     position: relative;
 
     &:before {
-      content: '';
+      content: "";
       background-color: ${decoBgColor};
       width: 20%;
       padding-bottom: 20%;
@@ -116,7 +117,7 @@ const Section = styled.section`
       z-index: 1;
     }
   `}
-`
+`;
 
 const ContainerLayout = styled.div`
   ${container}
@@ -126,11 +127,11 @@ const ContainerLayout = styled.div`
   ${mq.lg} {
     grid-template-columns: 50% 50%;
   }
-`
+`;
 const Container = styled.div`
   ${container}
   padding: 0;
-`
+`;
 
 const OtherSection = styled.div`
   margin-bottom: 5.5rem;
@@ -139,18 +140,18 @@ const OtherSection = styled.div`
     margin-bottom: 9.6rem;
     margin-top: 9.6rem;
   }
-`
+`;
 interface MediaProps {
-  decoBgColor?: string
+  decoBgColor?: string;
 }
 const Media = styled.div`
-  ${({ decoBgColor = 'green' }: MediaProps) => css`
+  ${({ decoBgColor = "green" }: MediaProps) => css`
     position: relative;
     height: 100%;
     font-size: 0;
     display: grid;
     &:before {
-      content: '';
+      content: "";
       background-color: ${decoBgColor};
       width: 10%;
       padding-bottom: 10%;
@@ -167,7 +168,7 @@ const Media = styled.div`
       }
     }
   `}
-`
+`;
 const ColStyles = styled.div`
   background-color: ${(props: { bgColor?: string }) => props.bgColor};
   max-width: 54rem;
@@ -183,7 +184,7 @@ const ColStyles = styled.div`
   ${mq.xl} {
     max-width: 56.4rem;
   }
-`
+`;
 
 const Content = styled.div`
   margin: 0 auto;
@@ -194,39 +195,39 @@ const Content = styled.div`
   ${mq.lg} {
     padding-left: 12%;
   }
-`
+`;
 
 const Faculty = styled.h3`
-  ${({ color = 'white' }) => css`
+  ${({ color = "white" }) => css`
     text-transform: uppercase;
     margin: 0;
     color: ${color};
     font-weight: 300;
   `}
-`
+`;
 
 const Title = styled.h1`
   text-transform: uppercase;
   margin-top: 0;
   margin-bottom: 3rem;
   color: white;
-`
+`;
 
 const Copy = styled.div`
   margin-bottom: 3rem;
   white-space: break-spaces;
-`
+`;
 
 const RowStyles = styled.div`
   display: flex;
   justify-content: space-around;
   gap: 1rem;
   flex-wrap: wrap;
-`
+`;
 const Gadgets = styled.ul`
   margin: 0;
   padding: 0;
-`
+`;
 
 const Gadget = styled.li`
   width: 15rem;
@@ -234,13 +235,13 @@ const Gadget = styled.li`
   margin-bottom: 2rem;
   padding: 0;
   list-style: none;
-`
+`;
 
 const GadgetName = styled.span`
   display: block;
   text-align: center;
   text-transform: uppercase;
-`
+`;
 
 const GadgetValue = styled.span`
   display: block;
@@ -249,4 +250,4 @@ const GadgetValue = styled.span`
   text-align: center;
   font-weight: 900;
   font-size: 2rem;
-`
+`;

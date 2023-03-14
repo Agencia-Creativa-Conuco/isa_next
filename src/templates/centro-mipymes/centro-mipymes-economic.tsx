@@ -1,12 +1,12 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import { container, mq } from 'components/grid'
-import FeaturedMedia from 'next/image'
-import logo from '../../../public/images/centro-mipymes/logo.png'
+import React from "react";
+import styled from "@emotion/styled";
+import { container, mq } from "components/grid";
+import FeaturedMedia from "next/image";
+import logo from "../../../public/images/centro-mipymes/logo.png";
 
 const CentroMipymesEconomic = () => {
   const data = {
-    title: 'IMPACTO ECONÓMICO',
+    title: "IMPACTO ECONÓMICO",
     copy: `
       <ul>
       <li>Acceso al financiamiento</li>
@@ -16,7 +16,7 @@ const CentroMipymesEconomic = () => {
       </ul`,
 
     image: logo,
-  }
+  };
 
   return (
     <Section>
@@ -30,16 +30,16 @@ const CentroMipymesEconomic = () => {
       <Image>
         <FeaturedMedia
           src={data.image}
-          alt="CENTRO MIPYMES"
           placeholder="blur"
+          alt="Centro MYPIMES"
         />
       </Image>
       {/* </Conatiner> */}
     </Section>
-  )
-}
+  );
+};
 
-export default CentroMipymesEconomic
+export default CentroMipymesEconomic;
 
 const Section = styled.section`
   ${container}
@@ -52,19 +52,19 @@ const Section = styled.section`
     justify-items: center;
     align-items: center;
   }
-`
+`;
 
 const Image = styled.div`
   position: relative;
   width: 33rem;
-`
+`;
 
 const Content = styled.div`
   max-width: 50rem;
-`
+`;
 
 const Title = styled.h2`
   padding-bottom: 2.5rem;
-`
+`;
 
-const Copy = styled.div``
+const Copy = styled.div``;

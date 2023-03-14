@@ -1,35 +1,35 @@
-import { getNextStaticProps, is404 } from '@faustjs/next'
-import Head from 'next/head'
-import { Header, Footer, Posts, Pagination } from 'components'
-import { GetStaticPropsContext } from 'next'
-import { useRouter } from 'next/router'
-import { client } from 'client'
-import Layout from 'components/layout'
-import { SITE_URL } from 'lib/constants'
+import { getNextStaticProps, is404 } from "@faustjs/next";
+import Head from "next/head";
+import { Header, Footer, Posts, Pagination } from "components";
+import { GetStaticPropsContext } from "next";
+import { useRouter } from "next/router";
+import { client } from "client";
+import Layout from "components/layout";
+import { SITE_URL } from "lib/constants";
 
-const POSTS_PER_PAGE = 6
+const POSTS_PER_PAGE = 6;
 
 export default function Page() {
-  const { useQuery, usePosts, useCategory } = client
-  const { query = {} } = useRouter()
-  const { categorySlug, paginationTerm, categoryCursor } = query
-  const generalSettings = useQuery().generalSettings
-  const category = useCategory()
-  const isBefore = paginationTerm === 'before'
+  const { useQuery, usePosts, useCategory } = client;
+  const { query = {} } = useRouter();
+  const { categorySlug, paginationTerm, categoryCursor } = query;
+  const generalSettings = useQuery().generalSettings;
+  const category = useCategory();
+  const isBefore = paginationTerm === "before";
   const posts = usePosts({
     after: !isBefore ? (categoryCursor as string) : undefined,
     before: isBefore ? (categoryCursor as string) : undefined,
     first: !isBefore ? POSTS_PER_PAGE : undefined,
     last: isBefore ? POSTS_PER_PAGE : undefined,
-  })
+  });
 
   const seo = {
-    title: 'Categoría - ' + category.name,
-    description: category.name + ' de la Universidad ISA',
+    title: "Categoría - " + category.name,
+    description: category.name + " de la Universidad ISA",
     canonical: `${SITE_URL}/category/${category.slug}`,
     // noFollow: carrera.seo.metaRobotsNofollow,
     // noIndex: carrera.seo.metaRobotsNoindex,
-  }
+  };
 
   return (
     <Layout {...{ seo }}>
@@ -42,7 +42,7 @@ export default function Page() {
         />
       </main>
     </Layout>
-  )
+  );
 }
 
 export async function getStaticProps(context: GetStaticPropsContext) {
@@ -50,12 +50,12 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     Page,
     client,
     notFound: await is404(context, { client }),
-  })
+  });
 }
 
 export function getStaticPaths() {
   return {
     paths: [],
-    fallback: 'blocking',
-  }
+    fallback: "blocking",
+  };
 }

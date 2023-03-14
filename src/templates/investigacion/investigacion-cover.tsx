@@ -1,18 +1,18 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import { css } from '@emotion/react'
-import { container, mq } from 'components/grid'
-import Image from 'next/image'
-import { h2 } from 'styles/posts-tipography'
-import colors from 'components/colors'
-import { Investigacion } from 'client'
-import blur from 'styles/blur'
+import React from "react";
+import styled from "@emotion/styled";
+import { css } from "@emotion/react";
+import { container, mq } from "components/grid";
+import Image from "next/image";
+import { h2 } from "styles/posts-tipography";
+import colors from "components/colors";
+import { Investigacion } from "client";
+import blur from "styles/blur";
 
 interface InvestigacionProps {
-  investigacion: Investigacion
+  investigacion: Investigacion;
 }
 const InvestigacionCover = ({ investigacion }: InvestigacionProps) => {
-  const { nombre, imagenPortada, descripcion } = investigacion
+  const { nombre, imagenPortada, descripcion } = investigacion;
 
   return (
     <Section>
@@ -28,6 +28,7 @@ const InvestigacionCover = ({ investigacion }: InvestigacionProps) => {
               blurDataURL={blur.src}
               placeholder="blur"
               priority
+              alt={nombre}
             />
           </Media>
           <StylesContent>
@@ -37,17 +38,17 @@ const InvestigacionCover = ({ investigacion }: InvestigacionProps) => {
         </DecoContent>
       </Container>
     </Section>
-  )
-}
+  );
+};
 
-export default InvestigacionCover
+export default InvestigacionCover;
 
-const Section = styled.section``
+const Section = styled.section``;
 
 const Container = styled.div`
   ${container}
   padding: 0;
-`
+`;
 
 const DivBG = styled.div`
   width: 100%;
@@ -58,7 +59,7 @@ const DivBG = styled.div`
   ${mq.lg} {
     height: 30rem;
   }
-`
+`;
 
 const DecoContent = styled(Container)`
   position: relative;
@@ -71,26 +72,26 @@ const DecoContent = styled(Container)`
   ${mq.lg} {
     border-radius: 0 3rem 3rem 0;
   }
-`
+`;
 const StylesContent = styled.div`
   padding: 2rem 4rem;
   ${mq.lg} {
     padding: 4rem 5rem;
   }
-`
+`;
 
 const Title = styled.h1`
   margin-bottom: 3rem;
-`
+`;
 
 const Copy = styled.div`
   white-space: break-spaces;
   ${mq.xl} {
     max-width: 57rem;
   }
-`
+`;
 
 const Media = styled.div`
   display: grid;
   font-size: 0;
-`
+`;

@@ -1,12 +1,12 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import Image from 'next/image'
-import colors from 'components/colors'
-import { container, mq } from 'components/grid'
-import servicios from '../../../public/images/biblioteca/servicios.jpg'
+import React from "react";
+import styled from "@emotion/styled";
+import Image from "next/image";
+import colors from "components/colors";
+import { container, mq } from "components/grid";
+import servicios from "../../../public/images/biblioteca/servicios.jpg";
 
 const BibliotecaServicios = () => {
-  const title = 'Servicios',
+  const title = "Servicios",
     content = `
             <ul>
                 <li>Préstamo de materiales: libros, revistas, enciclopedias, diccionarios, atlas, entre otros.</li>
@@ -21,7 +21,7 @@ const BibliotecaServicios = () => {
                 <li>Servicio de Internet Wifi</li>
             </ul>
         `,
-    image = servicios
+    image = servicios;
 
   return (
     <Section id="section_1" fluid>
@@ -33,6 +33,7 @@ const BibliotecaServicios = () => {
           height={1152}
           objectFit="cover"
           placeholder="blur"
+          alt={title}
         />
       </Media>
       <DivTitle>
@@ -40,10 +41,10 @@ const BibliotecaServicios = () => {
         <div dangerouslySetInnerHTML={{ __html: content }} />
       </DivTitle>
     </Section>
-  )
-}
+  );
+};
 
-export default BibliotecaServicios
+export default BibliotecaServicios;
 
 const Section = styled.section`
   ${container}
@@ -61,7 +62,7 @@ const Section = styled.section`
   }
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     background: ${colors.gray.light};
     width: 100%;
@@ -70,7 +71,7 @@ const Section = styled.section`
       width: 97%;
     }
   }
-`
+`;
 
 const DivTitle = styled.div`
   margin: 6rem;
@@ -83,14 +84,14 @@ const DivTitle = styled.div`
   ${mq.xl} {
     margin: 4rem 8rem 6rem 12rem;
   }
-`
+`;
 
-const SectionTitle = styled.h2``
+const SectionTitle = styled.h2``;
 
 const Media = styled.div`
   position: relative;
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     padding: 3%;
     padding-bottom: 53.2%;
@@ -101,7 +102,7 @@ const Media = styled.div`
     box-shadow: 0 2.5rem 2.5rem rgba(0, 0, 0, 0.15);
   }
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -110,11 +111,11 @@ const Media = styled.div`
     background-color: ${colors.blue.base};
     z-index: 2;
   }
-`
+`;
 const DecoMedia = styled.div`
   ${mq.lg} {
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       padding: 3%;
       padding-bottom: 25%;
@@ -125,7 +126,7 @@ const DecoMedia = styled.div`
       box-shadow: 0 2.5rem 2.5rem rgba(0, 0, 0, 0.15);
     }
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       bottom: 0;
       left: 100%;
@@ -135,4 +136,4 @@ const DecoMedia = styled.div`
       z-index: 2;
     }
   }
-`
+`;

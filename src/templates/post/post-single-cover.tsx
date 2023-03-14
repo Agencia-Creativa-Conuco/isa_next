@@ -1,15 +1,15 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import Image from 'next/image'
-import { container, mq } from 'components/grid'
-import { Post } from 'client'
-import blur from 'styles/blur'
+import React from "react";
+import styled from "@emotion/styled";
+import Image from "next/image";
+import { container, mq } from "components/grid";
+import { Post } from "client";
+import blur from "styles/blur";
 
 interface PostCoverProps {
-  post?: Post
+  post?: Post;
 }
 const PostCover = ({ post }: PostCoverProps) => {
-  const { title, featuredImage } = post
+  const { title, featuredImage } = post;
 
   return (
     <Section>
@@ -24,6 +24,7 @@ const PostCover = ({ post }: PostCoverProps) => {
               blurDataURL={blur.src}
               placeholder="blur"
               priority
+              alt={title()}
             />
           </Media>
         </ImageContainer>
@@ -34,12 +35,12 @@ const PostCover = ({ post }: PostCoverProps) => {
         </SubContainer>
       </Container>
     </Section>
-  )
-}
+  );
+};
 
-export default PostCover
+export default PostCover;
 
-const Section = styled.section``
+const Section = styled.section``;
 const Container = styled.div`
   ${container}
   display:grid;
@@ -56,7 +57,7 @@ const Container = styled.div`
   ${mq.xl} {
     grid-template-columns: 7.5% 75%;
   }
-`
+`;
 
 const SubContainer = styled.div`
   ${container}
@@ -71,7 +72,7 @@ const SubContainer = styled.div`
   ${mq.lg} {
     grid-template-columns: 100%;
   }
-`
+`;
 
 const ImageContainer = styled.div`
   position: relative;
@@ -81,7 +82,7 @@ const ImageContainer = styled.div`
   ${mq.lg} {
     padding-bottom: 56.25%;
   }
-`
+`;
 
 const Media = styled.div`
   position: absolute;
@@ -91,7 +92,7 @@ const Media = styled.div`
   height: 100%;
   font-size: 0;
   display: grid;
-`
+`;
 
 const Content = styled.div`
   align-self: end;
@@ -102,7 +103,7 @@ const Content = styled.div`
     margin: 10rem 0;
     width: 57rem;
   }
-`
+`;
 
 const Title = styled.h1`
   position: relative;
@@ -114,4 +115,4 @@ const Title = styled.h1`
   display: inline;
   z-index: 2;
   line-height: 1.2;
-`
+`;

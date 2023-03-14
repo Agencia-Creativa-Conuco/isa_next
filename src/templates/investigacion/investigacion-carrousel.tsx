@@ -1,21 +1,21 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import { css } from '@emotion/react'
-import { mq, container } from 'components/grid'
-import Image from 'next/image'
-import Carousel from 'react-slick'
-import { LeftArrowIcon, RightArrowIcon } from '../../components/icons'
-import colors from 'components/colors'
-import blur from 'styles/blur'
-import { Investigacion } from 'client'
+import React from "react";
+import styled from "@emotion/styled";
+import { css } from "@emotion/react";
+import { mq, container } from "components/grid";
+import Image from "next/image";
+import Carousel from "react-slick";
+import { LeftArrowIcon, RightArrowIcon } from "../../components/icons";
+import colors from "components/colors";
+import blur from "styles/blur";
+import { Investigacion } from "client";
 
 const Arrows = (props) => {
   interface ArrowProps {
-    bgColor?: string
-    color?: string
+    bgColor?: string;
+    color?: string;
   }
   const Arrow = styled.div`
-    ${({ bgColor = 'blue', color = 'white' }: ArrowProps) => css`
+    ${({ bgColor = "blue", color = "white" }: ArrowProps) => css`
       padding: 1rem;
       border-radius: 50%;
       background-color: ${bgColor};
@@ -42,17 +42,17 @@ const Arrows = (props) => {
         content: initial;
       }
     `}
-  `
+  `;
 
-  return <Arrow {...props} />
-}
+  return <Arrow {...props} />;
+};
 interface InvestigacionCarrouselProps {
-  investigacion: Investigacion
+  investigacion: Investigacion;
 }
 const InvestigacionCarrousel = ({
   investigacion,
 }: InvestigacionCarrouselProps) => {
-  const imagenes = investigacion.datosInvestigacion.imagenes
+  const imagenes = investigacion.datosInvestigacion.imagenes;
 
   return imagenes.length ? (
     <Section spaceTop fluid>
@@ -63,12 +63,12 @@ const InvestigacionCarrousel = ({
           slidesToScroll={1}
           centerMode
           prevArrow={
-            <Arrows color={'white'} bgColor={colors.primary.base}>
+            <Arrows color={"white"} bgColor={colors.primary.base}>
               <LeftArrowIcon />
             </Arrows>
           }
           nextArrow={
-            <Arrows color={'white'} bgColor={colors.primary.base}>
+            <Arrows color={"white"} bgColor={colors.primary.base}>
               <RightArrowIcon />
             </Arrows>
           }
@@ -110,23 +110,24 @@ const InvestigacionCarrousel = ({
                   blurDataURL={blur.src}
                   placeholder="blur"
                   priority
+                  alt="carousel"
                 />
               </SlideStyle>
-            )
+            );
           })}
         </Carousel>
       </SliderWrapper>
     </Section>
-  ) : null
-}
+  ) : null;
+};
 
-export default InvestigacionCarrousel
+export default InvestigacionCarrousel;
 
 const Section = styled.section`
   ${container}
   padding: 0;
-`
+`;
 
-const SliderWrapper = styled.div``
+const SliderWrapper = styled.div``;
 
-const SlideStyle = styled.div``
+const SlideStyle = styled.div``;
