@@ -1,21 +1,23 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import Image from 'next/image'
-import colors from 'components/colors'
-import { container, mq } from 'components/grid'
-import enfermeria from '../../../public/images/servicios-estudiantiles/enfermeria.png'
+import React from "react";
+import styled from "@emotion/styled";
+import Image from "next/image";
+import colors from "components/colors";
+import { container, mq } from "components/grid";
+import enfermeria from "../../../public/images/servicios-estudiantiles/enfermeria.png";
 
 const ServiciosEstudiantilesClinica = (props) => {
-  const title = 'Salud y Enfermería',
+  const title = "Salud y Enfermería",
     content = `
             <p>Incentiva la salud y ofrece servicios de atención primaria a la comunidad universitaria. </p>
             <p>La Unidad de Salud y Enfermería se enfoca en atender y orientar las necesidades de salud y emergencias que puedan surgir durante el desarrollo de la actividad académica y administrativa de la Universidad, ofreciendo servicios de atención primaria, primeros auxilios ambulatorios y de urgencia a la comunidad universitaria.</p>
             <p>Esta unidad promueve además, campañas orientadas a fomentar hábitos de conductas sanas y riesgos de enfermedades, con el objetivo primordial de contribuir al desarrollo integral, tanto de los estudiantes, como de los empleados, mediante la prevención, mantenimiento y promoción de la salud. </p>
             <p><strong>Horarios</strong><br>
-            Lunes a viernes de 8:00 a.m. a 7:00 p.m.<br>
-            Sábados de 8:00 a.m. a 5:00 p.m.</p>
+            <span>Lunes a viernes de 8:00 a.m. - 12:00p.m. / 1:00 p.m. - 5:00 p.m.</span>
+            <br>
+            <span>Sábados de 8:00 a.m. - 12:00 p.m.</span>
+            </p>
         `,
-    image = enfermeria
+    image = enfermeria;
 
   return (
     <Section {...props}>
@@ -30,10 +32,10 @@ const ServiciosEstudiantilesClinica = (props) => {
         </DivTitle>
       </ContentCol>
     </Section>
-  )
-}
+  );
+};
 
-export default ServiciosEstudiantilesClinica
+export default ServiciosEstudiantilesClinica;
 
 const Section = styled.section`
   ${container}
@@ -46,7 +48,7 @@ const Section = styled.section`
     margin-bottom: 9.6rem;
     grid-template-columns: 59% 46%;
   }
-`
+`;
 
 const ContentCol = styled.div`
   z-index: 1;
@@ -54,7 +56,7 @@ const ContentCol = styled.div`
   /* padding-bottom: 4rem; */
   padding: 0 1.5rem 4rem 1.5rem;
   &:before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -68,17 +70,17 @@ const ContentCol = styled.div`
       transform: scale(1.2, 2);
     }
   }
-`
+`;
 
 const Media = styled(Image)`
   z-index: 2;
-`
+`;
 
-const DivTitle = styled.div``
+const DivTitle = styled.div``;
 
 const SectionTitle = styled.h2`
   margin-bottom: 2rem;
-`
+`;
 
 const DecoLogo = styled.div`
   position: relative;
@@ -87,7 +89,7 @@ const DecoLogo = styled.div`
     display: initial;
   }
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     top: -4%;
@@ -98,7 +100,7 @@ const DecoLogo = styled.div`
     // transform: translate(50%,0);
   }
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     top: -4%;
@@ -107,4 +109,4 @@ const DecoLogo = styled.div`
     padding-bottom: 7%;
     z-index: 4;
   }
-`
+`;

@@ -61,9 +61,9 @@ const Galeria = () => {
     galeria07,
     galeria08,
     galeria09,
-    galeria10,
-    galeria11,
-    galeria12,
+    // galeria10,
+    // galeria11,
+    // galeria12,
   ];
 
   return (
