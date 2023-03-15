@@ -91,7 +91,7 @@ const AdmisionesForm = (props) => {
           />
         </Media>
 
-        <Wrapper>
+        <Wrapper id="form">
           <Container>
             <Title>Solicitud de admisión</Title>
             <Buttons>
