@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import { mq } from "components/grid";
-const HubspotForm = dynamic(() => import("react-hubspot-form"), { ssr: false });
+const HubspotForm: any = dynamic(() => import("react-hubspot-form"), {
+  ssr: false,
+});
 import Loading from "components/loading";
 import colors from "components/colors";
 import { HUBSPOT_ID } from "lib/constants";
