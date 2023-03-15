@@ -1,22 +1,22 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import { css } from '@emotion/react'
-import Image from 'next/image'
-import { container, mq } from 'components/grid'
-import colors from 'components/colors'
-import { Carrera } from 'client'
-import blur from 'styles/blur'
+import React from "react";
+import styled from "@emotion/styled";
+import { css } from "@emotion/react";
+import Image from "next/image";
+import { container, mq } from "components/grid";
+import colors from "components/colors";
+import { Carrera } from "client";
+import blur from "styles/blur";
 
 interface CarreraProps {
-  carrera?: Carrera
+  carrera?: Carrera;
 }
 
 const CarreraPerfil = ({ carrera }: CarreraProps) => {
-  const { imagenPerfilEgresado, contenidoPerfilEgresado, facultad } = carrera
+  const { imagenPerfilEgresado, contenidoPerfilEgresado, facultad } = carrera;
 
-  const tituloPerfilEgresado = 'Perfil del egresado'
+  const tituloPerfilEgresado = "Perfil del egresado";
 
-  const facultyColor = facultad.node?.color || colors.primary.base
+  const facultyColor = facultad?.node?.color || colors.primary.base;
 
   return (
     <Section>
@@ -42,10 +42,10 @@ const CarreraPerfil = ({ carrera }: CarreraProps) => {
         </Content>
       </Container>
     </Section>
-  )
-}
+  );
+};
 
-export default CarreraPerfil
+export default CarreraPerfil;
 
 const Section = styled.div`
   margin-bottom: 5.5rem;
@@ -54,7 +54,7 @@ const Section = styled.div`
     margin-bottom: 9.6rem;
     margin-top: 9.6rem;
   }
-`
+`;
 
 const Container = styled.div`
   ${container}
@@ -66,12 +66,12 @@ const Container = styled.div`
   ${mq.lg} {
     grid-template-columns: 51% 49%;
   }
-`
+`;
 interface MediaProps {
-  decoBgColor?: string
+  decoBgColor?: string;
 }
 const Media = styled.div`
-  ${({ decoBgColor = 'green' }: MediaProps) => css`
+  ${({ decoBgColor = "green" }: MediaProps) => css`
     width: 100%;
     position: relative;
     max-width: 40rem;
@@ -86,7 +86,7 @@ const Media = styled.div`
       order: 2;
     }
     &:before {
-      content: '';
+      content: "";
       background-color: ${decoBgColor};
       width: 15%;
       padding-bottom: 15%;
@@ -98,22 +98,22 @@ const Media = styled.div`
       z-index: 1;
     }
   `}
-`
+`;
 
 const Content = styled.div`
   margin: 0 auto;
   padding: 4rem 1.5rem;
   position: relative;
   z-index: 2;
-`
+`;
 
 const Title = styled.h2`
-  ${({ color = 'green' }) => css`
+  ${({ color = "green" }) => css`
     color: ${color};
     text-transform: uppercase;
     margin-top: 0;
     margin-bottom: 3rem;
   `}
-`
+`;
 
-const Description = styled.div``
+const Description = styled.div``;

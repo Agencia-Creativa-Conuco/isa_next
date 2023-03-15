@@ -39,7 +39,7 @@ const CarreraCover = ({ carrera }: CarreraProps) => {
     },
   ];
 
-  const facultyColor = facultad.node?.color || colors.primary.base;
+  const facultyColor = facultad?.node?.color || colors.primary.base;
 
   return (
     <Section bgColor={facultyColor} decoBgColor={darken(0.15, facultyColor)}>
