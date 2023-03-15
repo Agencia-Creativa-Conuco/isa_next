@@ -1,66 +1,67 @@
-import React, { useEffect, useState } from 'react'
-import styled from '@emotion/styled'
-import { css } from '@emotion/react'
-import { mq } from 'components/grid'
-import HubspotForm from 'react-hubspot-form'
-import Loading from 'components/loading'
-import colors from 'components/colors'
-import { HUBSPOT_ID } from 'lib/constants'
+import React, { useEffect, useState } from "react";
+import styled from "@emotion/styled";
+import { css } from "@emotion/react";
+import { mq } from "components/grid";
+const HubspotForm = dynamic(() => import("react-hubspot-form"), { ssr: false });
+import Loading from "components/loading";
+import colors from "components/colors";
+import { HUBSPOT_ID } from "lib/constants";
+import dynamic from "next/dynamic";
 
 interface FormProps {
-  formId?: string
-  formIds?: string[]
-  id?: string
-  loadingHeight?: string
-  cardStyle?: boolean
-  submitedTitle?: string
-  submitedText?: string
+  formId?: string;
+  formIds?: string[];
+  id?: string;
+  loadingHeight?: string;
+  cardStyle?: boolean;
+  submitedTitle?: string;
+  submitedText?: string;
 }
 const Form = ({
   formId,
   formIds = [],
-  id = 'form',
-  loadingHeight = '100%',
+  id = "form",
+  loadingHeight = "100%",
   cardStyle = true,
-  submitedTitle = '¡Gracias por enviar el formulario!',
-  submitedText = 'Hola, gracias por contactar Universidad ISA, responderemos su requerimiento en cuanto nos sea posible. Siempre a la orden.',
+  submitedTitle = "¡Gracias por enviar el formulario!",
+  submitedText = "Hola, gracias por contactar Universidad ISA, responderemos su requerimiento en cuanto nos sea posible. Siempre a la orden.",
   ...props
 }: FormProps) => {
-  const [submited, setSubmited] = useState(false)
-  const [active, setActive] = useState(0)
-  const [displayedForms, setDisplayedForms] = useState([])
+  const [submited, setSubmited] = useState(false);
+  const [active, setActive] = useState(0);
+  const [displayedForms, setDisplayedForms] = useState([]);
 
-  const forms = formIds?.length ? formIds : [formId]
+  const forms = formIds?.length ? formIds : [formId];
 
   const manageFormSubmit = () => {
     if (active < forms.length - 1) {
-      setActive(active + 1)
+      setActive(active + 1);
     } else {
-      setSubmited(true)
+      setSubmited(true);
     }
-  }
+  };
 
   useEffect(() => {
     const scripts = [
-      'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js',
+      "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js",
       // '//js.hs-scripts.com/20627890.js',
       // '//js.hsforms.net/forms/shell.js',
-    ]
+    ];
 
     scripts.map((url) => {
-      const script = document.createElement('script')
-      script.src = url
-      let jqueryScript = document.getElementsByTagName('script')
+      const script = document.createElement("script");
+      script.src = url;
+      let jqueryScript = document.getElementsByTagName("script");
       let src = Array.from(jqueryScript).filter(
-        (item) => item.src === script.src,
-      )
+        (item) => item.src === script.src
+      );
       if (src.length === 0) {
-        document.body.appendChild(script)
+        document.body.appendChild(script);
       }
 
-      return url
-    })
-  }, [])
+      return url;
+    });
+  }, []);
 
   return (
     <FormSwitcher id={id}>
@@ -69,14 +70,14 @@ const Form = ({
           <FormDots>
             {forms.map((form, index) => {
               const isVisible =
-                displayedForms.includes(index) && displayedForms.length > 1
-              const isCurrent = index === active
+                displayedForms.includes(index) && displayedForms.length > 1;
+              const isCurrent = index === active;
 
               return (
                 <Dot
                   key={index}
                   onClick={() => {
-                    setActive(index)
+                    setActive(index);
                   }}
                   hidden={!isVisible}
                   bgColor={colors.primary.base}
@@ -84,11 +85,11 @@ const Form = ({
                 >
                   {index + 1}
                 </Dot>
-              )
+              );
             })}
           </FormDots>
           {forms.map((form: string, index) => {
-            const isVisible = active === index
+            const isVisible = active === index;
 
             return isVisible && form ? (
               <FormContainer
@@ -102,17 +103,17 @@ const Form = ({
                     portalId={HUBSPOT_ID}
                     formId={form}
                     onReady={() => {
-                      setDisplayedForms(displayedForms.concat(active))
+                      setDisplayedForms(displayedForms.concat(active));
                     }}
                     onFormSubmitted={() => {
-                      manageFormSubmit()
+                      manageFormSubmit();
                     }}
                     inlineMessage={submitedText}
                     loading={<Loading height={loadingHeight} />}
                   />
                 </FormCut>
               </FormContainer>
-            ) : null
+            ) : null;
           })}
         </>
       ) : (
@@ -122,18 +123,18 @@ const Form = ({
         </Message>
       )}
     </FormSwitcher>
-  )
-}
+  );
+};
 
-export default Form
+export default Form;
 
-const FormSwitcher = styled.div``
+const FormSwitcher = styled.div``;
 
 const FormDots = styled.ul`
   display: flex;
   margin: 0;
   margin-bottom: 2rem;
-`
+`;
 
 const Dot = styled.li`
   ${(props: { bgColor?: string; current?: boolean }) => css`
@@ -160,7 +161,7 @@ const Dot = styled.li`
       margin-right: 0;
     }
   `}
-`
+`;
 
 const FormContainer = styled.div`
   ${(props: { cardStyle?: boolean }) => css`
@@ -182,7 +183,7 @@ const FormContainer = styled.div`
         `
       : css``}
   `}
-`
+`;
 
 const FormCut = styled.div`
   padding: 0 0.1rem;
@@ -192,6 +193,6 @@ const FormCut = styled.div`
     display: block;
     margin-bottom: -8.5rem;
   }
-`
+`;
 
-const Message = styled.div``
+const Message = styled.div``;
