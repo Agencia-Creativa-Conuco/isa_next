@@ -1,32 +1,32 @@
-import React from 'react'
-import { getNextStaticProps, is404 } from '@faustjs/next'
-import { GetStaticPropsContext } from 'next'
-import { client, CarreraIdType } from 'client'
+import React from "react";
+import { getNextStaticProps, is404 } from "@faustjs/next";
+import { GetStaticPropsContext } from "next";
+import { client, CarreraIdType } from "client";
 
-import styled from '@emotion/styled'
-import CarreraCover from 'templates/carrera/carrera-cover'
-import CarreraPerfil from 'templates/carrera/carrera-perfil'
-import CarreraCompetencias from 'templates/carrera/carrera-competencies'
-import CarreraPensum from 'templates/carrera/carrera-pensum'
-import CarreraForm from 'templates/carrera/carrera-form'
+import styled from "@emotion/styled";
+import CarreraCover from "templates/carrera/carrera-cover";
+import CarreraPerfil from "templates/carrera/carrera-perfil";
+import CarreraCompetencias from "templates/carrera/carrera-competencies";
+import CarreraPensum from "templates/carrera/carrera-pensum";
+import CarreraForm from "templates/carrera/carrera-form";
 
-import Layout from 'components/layout'
-import { fetchAPI } from 'lib/api'
+import Layout from "components/layout";
+import { fetchAPI } from "lib/api";
 
-import { SITE_URL } from 'lib/constants'
+import { REVALIDATE_TIME, SITE_URL } from "lib/constants";
 
 const Page = ({ slug }) => {
-  const { useQuery } = client
+  const { useQuery } = client;
   const carrera = useQuery().carrera({
     id: slug,
     idType: CarreraIdType.SLUG,
-  })
+  });
 
-  const contacto = carrera.contacto
+  const contacto = carrera.contacto;
 
   const recursos = carrera
     .recursos()
-    .nodes?.filter((recurso) => recurso.tipo.toString() !== 'pensum')
+    .nodes?.filter((recurso) => recurso.tipo.toString() !== "pensum");
 
   const seo = {
     title: carrera.title(),
@@ -42,7 +42,7 @@ const Page = ({ slug }) => {
         },
       ],
     },
-  }
+  };
   return (
     <Layout {...{ contacto, recursos, seo }}>
       <Article>
@@ -53,13 +53,13 @@ const Page = ({ slug }) => {
         <CarreraForm {...{ carrera }} />
       </Article>
     </Layout>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;
 
 export async function getStaticProps(context: GetStaticPropsContext) {
-  const slug = context.params.slug.toString()
+  const slug = context.params.slug.toString();
 
   const { carrera } = await fetchAPI(
     `
@@ -71,24 +71,25 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   `,
     {
       variables: { slug },
-    },
-  )
+    }
+  );
 
   return getNextStaticProps(context, {
     Page,
     client,
+    revalidate: REVALIDATE_TIME,
     notFound: !carrera,
     props: {
       slug,
     },
-  })
+  });
 }
 
 export function getStaticPaths() {
   return {
     paths: [],
-    fallback: 'blocking',
-  }
+    fallback: "blocking",
+  };
 }
 
-const Article = styled.article``
+const Article = styled.article``;

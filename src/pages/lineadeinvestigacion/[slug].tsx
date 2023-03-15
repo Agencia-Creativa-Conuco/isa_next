@@ -1,31 +1,31 @@
-import React from 'react'
-import { getNextStaticProps, is404 } from '@faustjs/next'
-import { GetStaticPropsContext } from 'next'
-import { client, LineaDeInvestigacionIdType } from 'client'
-import styled from '@emotion/styled'
-import { container, mq } from 'components/grid'
-import Link from 'next/link'
-import Image from 'next/image'
-import { fetchAPI } from 'lib/api'
-import Layout from 'components/layout'
-import blur from 'styles/blur'
-import colors from 'components/colors'
-import { SITE_URL } from 'lib/constants'
+import React from "react";
+import { getNextStaticProps, is404 } from "@faustjs/next";
+import { GetStaticPropsContext } from "next";
+import { client, LineaDeInvestigacionIdType } from "client";
+import styled from "@emotion/styled";
+import { container, mq } from "components/grid";
+import Link from "next/link";
+import Image from "next/image";
+import { fetchAPI } from "lib/api";
+import Layout from "components/layout";
+import blur from "styles/blur";
+import colors from "components/colors";
+import { REVALIDATE_TIME, SITE_URL } from "lib/constants";
 
 const Page = ({ slug }) => {
-  const { useQuery } = client
+  const { useQuery } = client;
   const lineaDeInvestigacion = useQuery().lineaDeInvestigacion({
     id: slug,
     idType: LineaDeInvestigacionIdType.SLUG,
-  })
+  });
 
-  const investigaciones = lineaDeInvestigacion.investigaciones().nodes
+  const investigaciones = lineaDeInvestigacion.investigaciones().nodes;
 
   const seo = {
     title: lineaDeInvestigacion.title(),
     description: lineaDeInvestigacion.title(),
     canonical: SITE_URL + lineaDeInvestigacion.uri,
-  }
+  };
 
   return (
     <Layout {...{ seo }}>
@@ -42,7 +42,7 @@ const Page = ({ slug }) => {
               <Investigaciones>
                 {investigaciones.map((investigacion, index) => {
                   return (
-                    <Link href={investigacion.uri ?? ''} key={index} passHref>
+                    <Link href={investigacion.uri ?? ""} key={index} passHref>
                       <SLink>
                         <Project>
                           {investigacion.imagenPortada ? (
@@ -66,7 +66,7 @@ const Page = ({ slug }) => {
                         </Project>
                       </SLink>
                     </Link>
-                  )
+                  );
                 })}
               </Investigaciones>
             </Container>
@@ -74,13 +74,13 @@ const Page = ({ slug }) => {
         ) : null}
       </Article>
     </Layout>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;
 
 export async function getStaticProps(context: GetStaticPropsContext) {
-  const slug = context.params.slug.toString()
+  const slug = context.params.slug.toString();
 
   const { lineaDeInvestigacion } = await fetchAPI(
     `
@@ -92,27 +92,28 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     `,
     {
       variables: { slug },
-    },
-  )
+    }
+  );
 
   return getNextStaticProps(context, {
     Page,
     client,
+    revalidate: REVALIDATE_TIME,
     notFound: !lineaDeInvestigacion,
     props: {
       slug,
     },
-  })
+  });
 }
 
 export function getStaticPaths() {
   return {
     paths: [],
-    fallback: 'blocking',
-  }
+    fallback: "blocking",
+  };
 }
 
-const Article = styled.article``
+const Article = styled.article``;
 
 const Investigaciones = styled.div`
   display: grid;
@@ -120,31 +121,31 @@ const Investigaciones = styled.div`
   ${mq.md} {
     grid-template-columns: 1fr 1fr;
   }
-`
+`;
 
 const Container = styled.div`
   ${container}
-`
+`;
 
 const Cover = styled.div`
   overflow: hidden;
   background-color: ${colors.primary.base};
-`
+`;
 
 const List = styled.section`
   margin-bottom: 20rem !important;
-`
+`;
 
 const Title = styled.h1`
   text-align: center;
   color: white;
   margin-bottom: 4rem;
   margin-top: 4rem;
-`
+`;
 
 const SubTitle = styled.h2`
   font-weight: 300;
-`
+`;
 
 const Project = styled(Container)`
   padding: 1.5rem;
@@ -157,20 +158,20 @@ const Project = styled(Container)`
   &:hover {
     background-color: #f5f5f5;
   }
-`
+`;
 
 const ProjectTitle = styled.h3`
   margin: 0;
   text-transform: uppercase;
   color: ${colors.text.base};
-`
+`;
 
 const ProjectMedia = styled.div`
   display: grid;
   font-size: 0;
-`
+`;
 
 const SLink = styled.a`
   text-decoration: none;
   color: inherit;
-`
+`;

@@ -1,24 +1,24 @@
-import React from 'react'
-import { GetStaticPropsContext } from 'next'
-import { getNextStaticProps } from '@faustjs/next'
-import { client } from 'client'
-import styled from '@emotion/styled'
-import { css } from '@emotion/react'
-import Carousel from 'react-slick'
-import Layout from '../components/layout'
-import Image from 'next/image'
-import colors from 'components/colors'
-import { LeftArrowIcon, RightArrowIcon } from '../components/icons'
-import { container, mq } from 'components/grid'
-import logo from '../../public/images/liaai/logo.jpg'
-import liaai01 from '../../public/images/liaai/liaai01.jpg'
-import liaai03 from '../../public/images/liaai/liaai03.jpg'
-import liaai04 from '../../public/images/liaai/liaai04.jpg'
-import liaai05 from '../../public/images/liaai/liaai05.jpg'
-import liaai07 from '../../public/images/liaai/liaai07.jpg'
-import Page from 'components/PageMeta'
-import { useRouter } from 'next/router'
-import { SITE_URL } from 'lib/constants'
+import React from "react";
+import { GetStaticPropsContext } from "next";
+import { getNextStaticProps } from "@faustjs/next";
+import { client } from "client";
+import styled from "@emotion/styled";
+import { css } from "@emotion/react";
+import Carousel from "react-slick";
+import Layout from "../components/layout";
+import Image from "next/image";
+import colors from "components/colors";
+import { LeftArrowIcon, RightArrowIcon } from "../components/icons";
+import { container, mq } from "components/grid";
+import logo from "../../public/images/liaai/logo.jpg";
+import liaai01 from "../../public/images/liaai/liaai01.jpg";
+import liaai03 from "../../public/images/liaai/liaai03.jpg";
+import liaai04 from "../../public/images/liaai/liaai04.jpg";
+import liaai05 from "../../public/images/liaai/liaai05.jpg";
+import liaai07 from "../../public/images/liaai/liaai07.jpg";
+import Page from "components/PageMeta";
+import { useRouter } from "next/router";
+import { REVALIDATE_TIME, SITE_URL } from "lib/constants";
 
 const Arrows = (props) => {
   const Arrow = styled.div`
@@ -49,30 +49,30 @@ const Arrows = (props) => {
     &:before {
       content: initial;
     }
-  `
+  `;
 
-  return <Arrow {...props} />
-}
+  return <Arrow {...props} />;
+};
 
 const LIAAI = (props) => {
   const metaData = {
-    title: 'LIAAI',
+    title: "LIAAI",
     description:
-      'El Laboratorio de Inocuidad de Alimentos y Análisis Industrial (LIAAI), es una dependencia de carácter científico y tecnológico, con autonomía administrativa, adscrito a la Universidad ISA.  El LIAAI nace con la intención de responder a la necesidad del sector agrícola e industrial de tener a la  disposición un laboratorio, con personal altamente capacitado, tecnología especializada, capaz de ofrecer servicios de análisis destinados a confirmar la calidad de los productos según los requerimientos nacionales e internacionales.',
-  }
+      "El Laboratorio de Inocuidad de Alimentos y Análisis Industrial (LIAAI), es una dependencia de carácter científico y tecnológico, con autonomía administrativa, adscrito a la Universidad ISA.  El LIAAI nace con la intención de responder a la necesidad del sector agrícola e industrial de tener a la  disposición un laboratorio, con personal altamente capacitado, tecnología especializada, capaz de ofrecer servicios de análisis destinados a confirmar la calidad de los productos según los requerimientos nacionales e internacionales.",
+  };
 
-  const router = useRouter()
+  const router = useRouter();
 
   const seo = {
-    title: 'LIAAI',
+    title: "LIAAI",
     description:
-      'El Laboratorio de Inocuidad de Alimentos y Análisis Industrial (LIAAI), es una dependencia de carácter científico y tecnológico, con autonomía administrativa, adscrito a la Universidad ISA.  El LIAAI nace con la intención de responder a la necesidad del sector agrícola e industrial de tener a la  disposición un laboratorio, con personal altamente capacitado, tecnología especializada, capaz de ofrecer servicios de análisis destinados a confirmar la calidad de los productos según los requerimientos nacionales e internacionales.',
+      "El Laboratorio de Inocuidad de Alimentos y Análisis Industrial (LIAAI), es una dependencia de carácter científico y tecnológico, con autonomía administrativa, adscrito a la Universidad ISA.  El LIAAI nace con la intención de responder a la necesidad del sector agrícola e industrial de tener a la  disposición un laboratorio, con personal altamente capacitado, tecnología especializada, capaz de ofrecer servicios de análisis destinados a confirmar la calidad de los productos según los requerimientos nacionales e internacionales.",
     canonical: SITE_URL + router.asPath,
     // noFollow: carrera.seo.metaRobotsNofollow,
     // noIndex: carrera.seo.metaRobotsNoindex,
-  }
+  };
 
-  const imagesSlider = [liaai01, liaai03, liaai04, liaai05, liaai07]
+  const imagesSlider = [liaai01, liaai03, liaai04, liaai05, liaai07];
 
   return (
     <Page uri="/liaai">
@@ -167,7 +167,7 @@ const LIAAI = (props) => {
                     objectFit="cover"
                     placeholder="blur"
                   />
-                )
+                );
               })}
             </Carousel>
           </Container>
@@ -260,16 +260,17 @@ const LIAAI = (props) => {
         </SectionServicios>
       </Layout>
     </Page>
-  )
-}
+  );
+};
 
-export default LIAAI
+export default LIAAI;
 
 export async function getStaticProps(context: GetStaticPropsContext) {
   return getNextStaticProps(context, {
     Page: LIAAI,
     client,
-  })
+    revalidate: REVALIDATE_TIME,
+  });
 }
 
 const Section = styled.section`
@@ -280,11 +281,11 @@ const Section = styled.section`
   ${mq.md} {
     margin-top: 12.8rem;
   }
-`
+`;
 
 const Container = styled.div`
   ${container};
-`
+`;
 
 const Overlay = styled.div`
   padding: 5%;
@@ -293,7 +294,7 @@ const Overlay = styled.div`
   margin-bottom: -10%;
   border-radius: 2rem;
   &:before {
-    content: '';
+    content: "";
     position: absolute;
     border-radius: 2rem;
     left: 0;
@@ -303,7 +304,7 @@ const Overlay = styled.div`
     box-shadow: 0 0 3.5rem rgba(0, 0, 0, 0.3);
     z-index: -1;
   }
-`
+`;
 const SPoliticas = styled.section`
   position: relative;
   margin-top: 0;
@@ -333,7 +334,7 @@ const SPoliticas = styled.section`
     transform: translate(50%, 50%);
     z-index: 1;
   } */
-`
+`;
 
 const SectionSlider = styled.section`
   position: relative;
@@ -343,7 +344,7 @@ const SectionSlider = styled.section`
     margin-bottom: 9.6rem;
   }
   &:before {
-    content: '';
+    content: "";
     position: absolute;
     top: -50%;
     left: 0;
@@ -354,7 +355,7 @@ const SectionSlider = styled.section`
   }
 
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 50%;
     right: 0;
@@ -365,7 +366,7 @@ const SectionSlider = styled.section`
     transform: translate(50%, 50%);
     z-index: -1;
   }
-`
+`;
 
 const Logo = styled.div`
   max-width: 25rem;
@@ -374,12 +375,12 @@ const Logo = styled.div`
   ${mq.md} {
     max-width: 35rem;
   }
-`
+`;
 
 const Title = styled.h1`
   text-align: center;
   margin-bottom: 4rem;
-`
+`;
 
 const SSection = styled.div`
   margin-bottom: 5.5rem;
@@ -390,7 +391,7 @@ const SSection = styled.div`
   background-color: ${colors.primary.dark};
   color: white;
   overflow: hidden;
-`
+`;
 
 const SectionServicios = styled.div`
   margin-bottom: 5.5rem;
@@ -402,13 +403,13 @@ const SectionServicios = styled.div`
     margin-bottom: 9.6rem;
   }
   overflow: hidden;
-`
+`;
 
 const SubTitle = styled.h2`
   color: white;
   margin-top: 0;
   margin-bottom: 3rem;
-`
+`;
 
 const ListPolíticas = styled.ul`
   display: grid;
@@ -421,11 +422,11 @@ const ListPolíticas = styled.ul`
   ${mq.lg} {
     grid-template-columns: 1fr 1fr;
   }
-`
+`;
 const CotainerServices = styled.div`
   display: grid;
   grid-template-columns: 100%;
   ${mq.md} {
     grid-template-columns: 50% 50%;
   }
-`
+`;

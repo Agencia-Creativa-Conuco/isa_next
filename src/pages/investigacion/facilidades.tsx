@@ -1,106 +1,106 @@
-import React from 'react'
-import { GetStaticPropsContext } from 'next'
-import { getNextStaticProps } from '@faustjs/next'
-import { client } from 'client'
-import styled from '@emotion/styled'
-import Link from 'next/link'
-import Layout from 'components/layout'
-import colors from 'components/colors'
-import Image from 'next/image'
-import { h4 } from 'styles/tipography'
-import { container, mq } from 'components/grid'
-import fdiversity from '../../../public/images/investigacion/facilidades/fdiversity.jpg'
-import infostat from '../../../public/images/investigacion/facilidades/infostat.png'
-import minitab from '../../../public/images/investigacion/facilidades/minitab.svg'
-import past from '../../../public/images/investigacion/facilidades/past.png'
-import r from '../../../public/images/investigacion/facilidades/r.png'
-import rstudio from '../../../public/images/investigacion/facilidades/rstudio.svg'
-import sas from '../../../public/images/investigacion/facilidades/sas.jpg'
-import turnitin from '../../../public/images/investigacion/facilidades/turnitin.jpg'
-import blur from 'styles/blur'
-import PageMeta from 'components/PageMeta'
-import { SITE_URL } from 'lib/constants'
-import { useRouter } from 'next/router'
+import React from "react";
+import { GetStaticPropsContext } from "next";
+import { getNextStaticProps } from "@faustjs/next";
+import { client } from "client";
+import styled from "@emotion/styled";
+import Link from "next/link";
+import Layout from "components/layout";
+import colors from "components/colors";
+import Image from "next/image";
+import { h4 } from "styles/tipography";
+import { container, mq } from "components/grid";
+import fdiversity from "../../../public/images/investigacion/facilidades/fdiversity.jpg";
+import infostat from "../../../public/images/investigacion/facilidades/infostat.png";
+import minitab from "../../../public/images/investigacion/facilidades/minitab.svg";
+import past from "../../../public/images/investigacion/facilidades/past.png";
+import r from "../../../public/images/investigacion/facilidades/r.png";
+import rstudio from "../../../public/images/investigacion/facilidades/rstudio.svg";
+import sas from "../../../public/images/investigacion/facilidades/sas.jpg";
+import turnitin from "../../../public/images/investigacion/facilidades/turnitin.jpg";
+import blur from "styles/blur";
+import PageMeta from "components/PageMeta";
+import { REVALIDATE_TIME, SITE_URL } from "lib/constants";
+import { useRouter } from "next/router";
 
 const ProjectLines = () => {
-  const title = 'Facilidades y Recursos de Investigación'
+  const title = "Facilidades y Recursos de Investigación";
   const facilities = [
     {
-      title: 'Laboratorio de Inocuidad De Alimentos y Análisis Industrial',
-      url: '/liaai',
-      target: '_blank',
+      title: "Laboratorio de Inocuidad De Alimentos y Análisis Industrial",
+      url: "/liaai",
+      target: "_blank",
     },
     {
-      title: 'Biblioteca Marco A. Cabral de la Universidad ISA',
-      url: 'http://bibliotecaunisa.com/',
-      target: '_blank',
+      title: "Biblioteca Marco A. Cabral de la Universidad ISA",
+      url: "http://bibliotecaunisa.com/",
+      target: "_blank",
     },
-  ]
+  ];
   const resources = [
     {
-      category: 'Paquetes Estadísticos',
+      category: "Paquetes Estadísticos",
       list: [
         {
-          title: 'FDIVERSITY',
-          url: 'http://www.nucleodiversus.org/index.php?mod=page&id=62',
-          target: '_blank',
+          title: "FDIVERSITY",
+          url: "http://www.nucleodiversus.org/index.php?mod=page&id=62",
+          target: "_blank",
           image: fdiversity,
         },
         {
-          title: 'INFOSTAT',
-          url: 'https://www.infostat.com.ar/',
-          target: '_blank',
+          title: "INFOSTAT",
+          url: "https://www.infostat.com.ar/",
+          target: "_blank",
           image: infostat,
         },
         {
-          title: 'MINITAB',
-          url: 'https://www.minitab.com/es-mx/',
-          target: '_blank',
+          title: "MINITAB",
+          url: "https://www.minitab.com/es-mx/",
+          target: "_blank",
           image: minitab,
         },
         {
-          title: 'PAST',
-          url: 'https://www.portalprogramas.com/past/',
-          target: '_blank',
+          title: "PAST",
+          url: "https://www.portalprogramas.com/past/",
+          target: "_blank",
           image: past,
         },
         {
-          title: 'R',
-          url: 'https://www.r-project.org/',
-          target: '_blank',
+          title: "R",
+          url: "https://www.r-project.org/",
+          target: "_blank",
           image: r,
         },
         {
-          title: 'R STUDIO',
-          url: 'https://rstudio.com/',
-          target: '_blank',
+          title: "R STUDIO",
+          url: "https://rstudio.com/",
+          target: "_blank",
           image: rstudio,
         },
         {
-          title: 'SAS UNIVERSITY EDITION',
-          url: 'https://www.sas.com/es_mx/home.html',
-          target: '_blank',
+          title: "SAS UNIVERSITY EDITION",
+          url: "https://www.sas.com/es_mx/home.html",
+          target: "_blank",
           image: sas,
         },
         {
-          title: 'TURNITIN',
-          url: 'https://www.turnitin.com/',
-          target: '_blank',
+          title: "TURNITIN",
+          url: "https://www.turnitin.com/",
+          target: "_blank",
           image: turnitin,
         },
       ],
     },
-  ]
+  ];
 
-  const router = useRouter()
+  const router = useRouter();
 
   const seo = {
-    title: 'Facilidades y recursos',
-    description: 'Facilidades y recursos de investigación.',
+    title: "Facilidades y recursos",
+    description: "Facilidades y recursos de investigación.",
     canonical: SITE_URL + router.asPath,
     // noFollow: carrera.seo.metaRobotsNofollow,
     // noIndex: carrera.seo.metaRobotsNoindex,
-  }
+  };
 
   return (
     <PageMeta uri="/investigacion/facilidades">
@@ -129,7 +129,7 @@ const ProjectLines = () => {
                           <span>{facility.title}</span>
                         </Line>
                       </SLink>
-                    )
+                    );
                   })}
                 </ContainerFacilidades>
               </Container>
@@ -170,11 +170,11 @@ const ProjectLines = () => {
                                 </ContainerSub>
                               </Line>
                             </SLink>
-                          )
+                          );
                         })}
                       </ContainerRecursos>
                     </div>
-                  )
+                  );
                 })}
               </Container>
             </List>
@@ -182,16 +182,17 @@ const ProjectLines = () => {
         </Section>
       </Layout>
     </PageMeta>
-  )
-}
+  );
+};
 
-export default ProjectLines
+export default ProjectLines;
 
 export async function getStaticProps(context: GetStaticPropsContext) {
   return getNextStaticProps(context, {
     Page: ProjectLines,
     client,
-  })
+    revalidate: REVALIDATE_TIME,
+  });
 }
 
 const Section = styled.article`
@@ -199,7 +200,7 @@ const Section = styled.article`
   ${mq.md} {
     margin-bottom: 9.5rem;
   }
-`
+`;
 
 const Cover = styled.section`
   overflow: hidden;
@@ -211,11 +212,11 @@ const Cover = styled.section`
     padding-top: 9.6rem;
     margin-bottom: 9.5rem;
   }
-`
+`;
 
 const Container = styled.div`
   ${container}
-`
+`;
 
 const ContainerFacilidades = styled.div`
   display: grid;
@@ -225,7 +226,7 @@ const ContainerFacilidades = styled.div`
   ${mq.md} {
     grid-template-columns: 50% 50%;
   }
-`
+`;
 
 const ContainerRecursos = styled.div`
   display: grid;
@@ -240,14 +241,14 @@ const ContainerRecursos = styled.div`
     grid-template-columns: 32% 32% 32%;
     margin: 0 auto;
   }
-`
+`;
 
 const ContainerSub = styled.div`
   display: flex;
   column-gap: 20px;
-`
+`;
 
-const List = styled(Section)``
+const List = styled(Section)``;
 
 const Title = styled.h1`
   text-align: center;
@@ -255,11 +256,11 @@ const Title = styled.h1`
   margin-bottom: 4rem;
   margin-top: 4rem;
   text-shadow: ${(props) => props.color};
-`
+`;
 
-const Facilidades = styled.div``
+const Facilidades = styled.div``;
 
-const Recursos = styled.div``
+const Recursos = styled.div``;
 
 const Line = styled.h2`
   ${h4}
@@ -271,19 +272,19 @@ const Line = styled.h2`
   &:hover {
     background-color: #f5f5f5;
   }
-`
+`;
 
 const SLink = styled(Link)`
   text-decoration: none;
   color: inherit;
-`
+`;
 
-const STitle = styled.h2``
+const STitle = styled.h2``;
 
 const SubTitle = styled.h3`
   font-weight: 300;
   text-transform: uppercase;
-`
+`;
 
 const InlineImage = styled.span`
   width: 8rem;
@@ -291,4 +292,4 @@ const InlineImage = styled.span`
   background-color: #f5f5f5;
   display: flex;
   align-items: center;
-`
+`;

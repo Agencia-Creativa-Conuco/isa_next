@@ -1,21 +1,21 @@
-import React from 'react'
-import { getNextStaticProps, is404 } from '@faustjs/next'
-import { GetStaticPropsContext } from 'next'
-import { client, GradoIdType } from 'client'
-import styled from '@emotion/styled'
+import React from "react";
+import { getNextStaticProps, is404 } from "@faustjs/next";
+import { GetStaticPropsContext } from "next";
+import { client, GradoIdType } from "client";
+import styled from "@emotion/styled";
 
-import GradoCover from '../../templates/grado/grado-cover'
-import GradoOffer from '../../templates/grado/grado-offer'
-import { fetchAPI } from 'lib/api'
-import Layout from 'components/layout'
-import { SITE_URL } from 'lib/constants'
+import GradoCover from "../../templates/grado/grado-cover";
+import GradoOffer from "../../templates/grado/grado-offer";
+import { fetchAPI } from "lib/api";
+import Layout from "components/layout";
+import { REVALIDATE_TIME, SITE_URL } from "lib/constants";
 
 const Page = ({ slug }) => {
-  const { useQuery } = client
+  const { useQuery } = client;
   const grado = useQuery().grado({
     id: slug,
     idType: GradoIdType.SLUG,
-  })
+  });
 
   const seo = {
     title: grado.title(),
@@ -37,7 +37,7 @@ const Page = ({ slug }) => {
     //     content: false,
     //   },
     // ],
-  }
+  };
   return (
     <Layout {...{ seo }}>
       <Article>
@@ -45,13 +45,13 @@ const Page = ({ slug }) => {
         <GradoOffer {...{ grado }} />
       </Article>
     </Layout>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;
 
 export async function getStaticProps(context: GetStaticPropsContext) {
-  const slug = context.params.slug.toString()
+  const slug = context.params.slug.toString();
 
   const { grado } = await fetchAPI(
     `
@@ -63,24 +63,25 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     `,
     {
       variables: { slug },
-    },
-  )
+    }
+  );
 
   return getNextStaticProps(context, {
     Page,
     client,
+    revalidate: REVALIDATE_TIME,
     notFound: !grado,
     props: {
       slug,
     },
-  })
+  });
 }
 
 export function getStaticPaths() {
   return {
     paths: [],
-    fallback: 'blocking',
-  }
+    fallback: "blocking",
+  };
 }
 
-const Article = styled.article``
+const Article = styled.article``;

@@ -1,23 +1,23 @@
-import { getNextStaticProps, is404 } from '@faustjs/next'
-import { client, Post } from 'client'
-import { GetStaticPropsContext } from 'next'
-import styled from '@emotion/styled'
-import Layout from 'components/layout'
+import { getNextStaticProps, is404 } from "@faustjs/next";
+import { client, Post } from "client";
+import { GetStaticPropsContext } from "next";
+import styled from "@emotion/styled";
+import Layout from "components/layout";
 
-import PostSingleCover from 'templates/post/post-single-cover'
-import PostSingleContent from 'templates/post/post-single-content'
-import PostFileCover from 'templates/post/post-file-cover'
-import { SITE_URL } from 'lib/constants'
+import PostSingleCover from "templates/post/post-single-cover";
+import PostSingleContent from "templates/post/post-single-content";
+import PostFileCover from "templates/post/post-file-cover";
+import { REVALIDATE_TIME, SITE_URL } from "lib/constants";
 
 export interface PostProps {
-  post: Post | Post['preview']['node'] | null | undefined
+  post: Post | Post["preview"]["node"] | null | undefined;
 }
 
 export function PostComponent({ post }: PostProps) {
-  const { useQuery } = client
-  const generalSettings = useQuery().generalSettings
+  const { useQuery } = client;
+  const generalSettings = useQuery().generalSettings;
 
-  const isFile = post.datosPublicacion.tipo === 'file'
+  const isFile = post.datosPublicacion.tipo === "file";
 
   const seo = {
     title: post.title(),
@@ -33,7 +33,7 @@ export function PostComponent({ post }: PostProps) {
         },
       ],
     },
-  }
+  };
   return (
     <Layout {...{ seo }}>
       {isFile ? (
@@ -71,31 +71,32 @@ export function PostComponent({ post }: PostProps) {
 
       <Footer copyrightHolder={generalSettings.title} /> */}
     </Layout>
-  )
+  );
 }
 
 export default function Page() {
-  const { usePost } = client
-  const post = usePost()
+  const { usePost } = client;
+  const post = usePost();
 
-  return <PostComponent post={post} />
+  return <PostComponent post={post} />;
 }
 
 export async function getStaticProps(context: GetStaticPropsContext) {
   return getNextStaticProps(context, {
     Page,
     client,
+    revalidate: REVALIDATE_TIME,
     notFound: await is404(context, { client }),
-  })
+  });
 }
 
 export function getStaticPaths() {
   return {
     paths: [],
-    fallback: 'blocking',
-  }
+    fallback: "blocking",
+  };
 }
 
 const Article = styled.article`
   overflow: hidden;
-`
+`;

@@ -5,7 +5,7 @@ import { GetStaticPropsContext } from "next";
 import { useRouter } from "next/router";
 import { client } from "client";
 import Layout from "components/layout";
-import { SITE_URL } from "lib/constants";
+import { REVALIDATE_TIME, SITE_URL } from "lib/constants";
 
 const POSTS_PER_PAGE = 6;
 
@@ -49,6 +49,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   return getNextStaticProps(context, {
     Page,
     client,
+    revalidate: REVALIDATE_TIME,
     notFound: await is404(context, { client }),
   });
 }

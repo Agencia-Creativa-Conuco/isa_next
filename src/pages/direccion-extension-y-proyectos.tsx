@@ -16,7 +16,7 @@ import DEPPymes from "../templates/dep/dep-pymes";
 import PageMeta from "components/PageMeta";
 import { idxModelGenerator } from "lib/auxiliar";
 import { useRouter } from "next/router";
-import { SITE_URL } from "lib/constants";
+import { REVALIDATE_TIME, SITE_URL } from "lib/constants";
 
 const DEPPage = (props) => {
   const router = useRouter();
@@ -55,6 +55,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   return getNextStaticProps(context, {
     Page: DEPPage,
     client,
+    revalidate: REVALIDATE_TIME,
   });
 }
 

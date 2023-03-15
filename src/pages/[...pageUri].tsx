@@ -1,32 +1,32 @@
-import React from 'react'
-import { getNextStaticProps, is404 } from '@faustjs/next'
-import { GetStaticPropsContext } from 'next'
-import { client, Page as PageType } from 'client'
-import Layout from 'components/layout'
+import React from "react";
+import { getNextStaticProps, is404 } from "@faustjs/next";
+import { GetStaticPropsContext } from "next";
+import { client, Page as PageType } from "client";
+import Layout from "components/layout";
 
-import styled from '@emotion/styled'
-import { css } from '@emotion/react'
-import Image from 'next/image'
-import { container, mq } from 'components/grid'
-import colors from 'components/colors'
-import blur from 'styles/blur'
-import { SITE_URL } from 'lib/constants'
+import styled from "@emotion/styled";
+import { css } from "@emotion/react";
+import Image from "next/image";
+import { container, mq } from "components/grid";
+import colors from "components/colors";
+import blur from "styles/blur";
+import { REVALIDATE_TIME, SITE_URL } from "lib/constants";
 
 export interface PageProps {
-  page: PageType | PageType['preview']['node'] | null | undefined
+  page: PageType | PageType["preview"]["node"] | null | undefined;
 }
 
 export function PageComponent({ page }: PageProps) {
   // const { useQuery } = client
   // const generalSettings = useQuery().generalSettings
-  const { title, content, featuredImage, pageSettings } = page
+  const { title, content, featuredImage, pageSettings } = page;
 
-  const pageCustom = pageSettings.pageCustom
+  const pageCustom = pageSettings.pageCustom;
 
-  const contacto = page?.contacto
+  const contacto = page?.contacto;
   const recursos = page?.datosRecursos?.relacion?.map(
-    (item) => item.$on.Recurso,
-  )
+    (item) => item.$on.Recurso
+  );
 
   const seo = {
     title: page.title(),
@@ -42,7 +42,7 @@ export function PageComponent({ page }: PageProps) {
         },
       ],
     },
-  }
+  };
 
   return (
     <Layout {...{ contacto, recursos, seo }}>
@@ -86,40 +86,41 @@ export function PageComponent({ page }: PageProps) {
         </Section>
       </Article>
     </Layout>
-  )
+  );
 }
 
 export default function Page() {
-  const { usePage } = client
-  const page = usePage()
+  const { usePage } = client;
+  const page = usePage();
 
-  return <PageComponent page={page} />
+  return <PageComponent page={page} />;
 }
 
 export async function getStaticProps(context: GetStaticPropsContext) {
   return getNextStaticProps(context, {
     Page,
     client,
+    revalidate: REVALIDATE_TIME,
     notFound: await is404(context, { client }),
-  })
+  });
 }
 
 export function getStaticPaths() {
   return {
     paths: [],
-    fallback: 'blocking',
-  }
+    fallback: "blocking",
+  };
 }
 
-const Article = styled.article``
-const Section = styled.section``
+const Article = styled.article``;
+const Section = styled.section``;
 
 interface CoverProps {
-  bgColor?: string
-  hasMedia?: boolean
+  bgColor?: string;
+  hasMedia?: boolean;
 }
 const Cover = styled.div`
-  ${({ bgColor = 'darkblue', hasMedia }: CoverProps) => css`
+  ${({ bgColor = "darkblue", hasMedia }: CoverProps) => css`
     background-color: ${bgColor};
     position: relative;
     height: 0;
@@ -145,7 +146,7 @@ const Cover = styled.div`
           min-height: 40rem;
         `}
   `}
-`
+`;
 
 const Media = styled.div`
   position: absolute;
@@ -154,33 +155,33 @@ const Media = styled.div`
   width: 100%;
   height: 100%;
   display: grid;
-`
+`;
 
 const Header = styled.div`
   margin-top: -10rem;
-`
+`;
 
 const TitleWrapper = styled.div`
   background-color: white;
   border-radius: 5rem 5rem 0 0;
   overflow: hidden;
-`
+`;
 
 const Title = styled.h1`
-  ${({ color = '#001F56' }) => css`
+  ${({ color = "#001F56" }) => css`
     color: ${color};
     margin-top: 4rem;
     margin-bottom: 4rem;
     padding: 0 10rem;
     text-align: center;
   `}
-`
+`;
 
 const Content = styled.div`
   max-width: 75rem;
   margin: 0 auto;
-`
+`;
 
 const Container = styled.div`
   ${container}
-`
+`;

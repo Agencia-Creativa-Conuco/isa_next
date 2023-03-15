@@ -1,25 +1,25 @@
-import React from 'react'
-import { getNextStaticProps, is404 } from '@faustjs/next'
-import { GetStaticPropsContext } from 'next'
-import { client, DepartamentoIdType } from 'client'
+import React from "react";
+import { getNextStaticProps, is404 } from "@faustjs/next";
+import { GetStaticPropsContext } from "next";
+import { client, DepartamentoIdType } from "client";
 
-import styled from '@emotion/styled'
-import DepartamentoCover from 'templates/departamento/departamento-cover'
-import DepartamentoCarreras from 'templates/departamento/departamento-carreras'
+import styled from "@emotion/styled";
+import DepartamentoCover from "templates/departamento/departamento-cover";
+import DepartamentoCarreras from "templates/departamento/departamento-carreras";
 
-import Layout from 'components/layout'
-import { fetchAPI } from 'lib/api'
+import Layout from "components/layout";
+import { fetchAPI } from "lib/api";
 
-import { SITE_URL } from 'lib/constants'
+import { REVALIDATE_TIME, SITE_URL } from "lib/constants";
 
 const Page = ({ slug }) => {
-  const { useQuery } = client
+  const { useQuery } = client;
   const departamento = useQuery().departamento({
     id: slug,
     idType: DepartamentoIdType.SLUG,
-  })
+  });
 
-  const contacto = departamento.contacto
+  const contacto = departamento.contacto;
 
   const seo = {
     title: departamento.title(),
@@ -35,7 +35,7 @@ const Page = ({ slug }) => {
         },
       ],
     },
-  }
+  };
 
   return (
     <Layout {...{ seo, contacto }}>
@@ -44,13 +44,13 @@ const Page = ({ slug }) => {
         <DepartamentoCarreras {...{ departamento }} />
       </Article>
     </Layout>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;
 
 export async function getStaticProps(context: GetStaticPropsContext) {
-  const slug = context.params.slug.toString()
+  const slug = context.params.slug.toString();
 
   const { departamento } = await fetchAPI(
     `
@@ -62,24 +62,25 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   `,
     {
       variables: { slug },
-    },
-  )
+    }
+  );
 
   return getNextStaticProps(context, {
     Page,
     client,
+    revalidate: REVALIDATE_TIME,
     notFound: !departamento,
     props: {
       slug,
     },
-  })
+  });
 }
 
 export function getStaticPaths() {
   return {
     paths: [],
-    fallback: 'blocking',
-  }
+    fallback: "blocking",
+  };
 }
 
-const Article = styled.article``
+const Article = styled.article``;

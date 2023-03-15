@@ -10,7 +10,7 @@ import Galeria from "templates/centro-de-educacion-tecnica-huascar-rodriguez-her
 import OfertaTecnica from "templates/centro-de-educacion-tecnica-huascar-rodriguez-herrera/oferta-tecnica";
 import PageMeta from "components/PageMeta";
 import { useRouter } from "next/router";
-import { SITE_URL } from "lib/constants";
+import { REVALIDATE_TIME, SITE_URL } from "lib/constants";
 
 const CentroHuascar = (props) => {
   const router = useRouter();
@@ -43,5 +43,6 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   return getNextStaticProps(context, {
     Page: CentroHuascar,
     client,
+    revalidate: REVALIDATE_TIME,
   });
 }

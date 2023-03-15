@@ -1,21 +1,21 @@
-import React from 'react'
-import { GetStaticPropsContext } from 'next'
-import { getNextStaticProps } from '@faustjs/next'
-import { client } from 'client'
+import React from "react";
+import { GetStaticPropsContext } from "next";
+import { getNextStaticProps } from "@faustjs/next";
+import { client } from "client";
 
-import styled from '@emotion/styled'
-import Link from 'next/link'
-import Layout from 'components/layout'
-import colors from 'components/colors'
-import { container, mq } from 'components/grid'
-import { SITE_URL } from 'lib/constants'
-import { useRouter } from 'next/router'
+import styled from "@emotion/styled";
+import Link from "next/link";
+import Layout from "components/layout";
+import colors from "components/colors";
+import { container, mq } from "components/grid";
+import { REVALIDATE_TIME, SITE_URL } from "lib/constants";
+import { useRouter } from "next/router";
 
 const ProjectLines = () => {
-  const { useQuery } = client
+  const { useQuery } = client;
   const lineasDeInvestigacion = useQuery().lineasDeInvestigacion({
     first: 1000,
-  })?.nodes
+  })?.nodes;
 
   const departamentos = useQuery()
     .departamentos({
@@ -24,8 +24,8 @@ const ProjectLines = () => {
     .nodes?.filter((departamento) =>
       lineasDeInvestigacion
         .map((line) => line.departamento.node.id)
-        .includes(departamento.id),
-    )
+        .includes(departamento.id)
+    );
 
   const facultades = useQuery()
     .facultades({
@@ -34,19 +34,19 @@ const ProjectLines = () => {
     .nodes?.filter((facultad) => {
       return departamentos
         .map((departamento) => {
-          return departamento.facultad.node.id
+          return departamento.facultad.node.id;
         })
-        .includes(facultad.id)
-    })
+        .includes(facultad.id);
+    });
 
-  const router = useRouter()
+  const router = useRouter();
   const seo = {
-    title: 'Líneas de investigación',
-    description: 'Líneas de investigación',
+    title: "Líneas de investigación",
+    description: "Líneas de investigación",
     canonical: SITE_URL + router.asPath,
     // noFollow: carrera.seo.metaRobotsNofollow,
     // noIndex: carrera.seo.metaRobotsNoindex,
-  }
+  };
 
   return (
     <Layout {...{ seo }}>
@@ -65,7 +65,7 @@ const ProjectLines = () => {
                   {departamentos
                     .filter(
                       (departamento) =>
-                        departamento.facultad.node.id === facultad.id,
+                        departamento.facultad.node.id === facultad.id
                     )
                     .map((departamento) => {
                       return (
@@ -75,12 +75,12 @@ const ProjectLines = () => {
                             {lineasDeInvestigacion
                               .filter(
                                 (line) =>
-                                  line.departamento.node.id === departamento.id,
+                                  line.departamento.node.id === departamento.id
                               )
                               .map((line) => {
                                 return (
                                   <Link
-                                    href={line.uri ?? ''}
+                                    href={line.uri ?? ""}
                                     key={line.id}
                                     passHref
                                   >
@@ -88,29 +88,30 @@ const ProjectLines = () => {
                                       <Line>{line.nombre}</Line>
                                     </SLink>
                                   </Link>
-                                )
+                                );
                               })}
                           </ContainerLine>
                         </div>
-                      )
+                      );
                     })}
                 </Section>
-              )
+              );
             })}
           </Container>
         </List>
       </Section>
     </Layout>
-  )
-}
+  );
+};
 
-export default ProjectLines
+export default ProjectLines;
 
 export async function getStaticProps(context: GetStaticPropsContext) {
   return getNextStaticProps(context, {
     Page: ProjectLines,
     client,
-  })
+    revalidate: REVALIDATE_TIME,
+  });
 }
 
 const Section = styled.article`
@@ -118,7 +119,7 @@ const Section = styled.article`
   ${mq.md} {
     margin-bottom: 9.5rem;
   }
-`
+`;
 
 const Cover = styled.section`
   overflow: hidden;
@@ -130,11 +131,11 @@ const Cover = styled.section`
     padding-top: 9.6rem;
     margin-bottom: 9.5rem;
   }
-`
+`;
 
 const Container = styled.div`
   ${container}
-`
+`;
 const ContainerLine = styled.div`
   display: grid;
   grid-template-columns: 100%;
@@ -143,9 +144,9 @@ const ContainerLine = styled.div`
   ${mq.md} {
     grid-template-columns: 48% 48%;
   }
-`
+`;
 
-const List = styled(Section)``
+const List = styled(Section)``;
 
 const Title = styled.h1`
   text-align: center;
@@ -153,17 +154,17 @@ const Title = styled.h1`
   margin-bottom: 4rem;
   margin-top: 4rem;
   text-shadow: ${colors.shadow.base};
-`
+`;
 
 const Faculty = styled.h2`
   text-align: center;
   font-weight: 300;
   padding: 0 0 1rem;
-`
+`;
 
 const Departament = styled.h3`
   text-transform: uppercase;
-`
+`;
 
 const Line = styled.h4`
   font-weight: normal;
@@ -174,9 +175,9 @@ const Line = styled.h4`
   &:hover {
     background-color: #f5f5f5;
   }
-`
+`;
 
 const SLink = styled.a`
   text-decoration: none;
   color: inherit;
-`
+`;
