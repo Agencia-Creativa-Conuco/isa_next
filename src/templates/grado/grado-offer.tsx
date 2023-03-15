@@ -1,36 +1,36 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import { css } from '@emotion/react'
-import Link from 'next/link'
-import colors from 'components/colors'
-import { container, mq } from 'components/grid'
-import { Grado, Carrera } from 'client'
+import React from "react";
+import styled from "@emotion/styled";
+import { css } from "@emotion/react";
+import Link from "next/link";
+import colors from "components/colors";
+import { container, mq } from "components/grid";
+import { Grado, Carrera } from "client";
 
 interface GradoProps {
-  grado: Grado
+  grado: Grado;
 }
 
 const GradeOffer = ({ grado }: GradoProps) => {
   const carreras = grado.carreras({
     first: 100,
-  })?.nodes
+  })?.nodes;
 
   const facultades = carreras.reduce((acu, carrera) => {
-    const facultad = carrera.facultad.node
+    const facultad = carrera.facultad?.node;
     if (facultad) {
-      const existe = acu.map((item) => item.id).includes(facultad.id)
+      const existe = acu.map((item) => item.id).includes(facultad.id);
 
       if (!existe) {
         acu.push({
           id: facultad.id,
           nombre: facultad.nombre,
           uri: facultad.uri,
-        })
+        });
       }
     }
 
-    return acu
-  }, [])
+    return acu;
+  }, []);
 
   return carreras.length ? (
     <Section>
@@ -39,14 +39,14 @@ const GradeOffer = ({ grado }: GradoProps) => {
       {/* CARRERAS SIN FAULTADES ASIGNADAS */}
       <Carreras
         carreras={carreras.filter((carrera) => {
-          return !carrera.facultad.node
+          return !carrera.facultad?.node;
         })}
       />
       {/* CARRERAS CON FACULTADES ASIGNADAS */}
       {facultades?.map((facultad, key) => {
         return (
           <Facultad key={key}>
-            <Link href={facultad.uri ?? ''} passHref>
+            <Link href={facultad.uri ?? ""} passHref>
               <SLink>
                 <Title
                   color={colors.primary.dark}
@@ -59,27 +59,27 @@ const GradeOffer = ({ grado }: GradoProps) => {
             </Link>
             <Carreras
               carreras={carreras.filter((carrera) => {
-                return carrera.facultad?.node?.id === facultad?.id
+                return carrera.facultad?.node?.id === facultad?.id;
               })}
             />
           </Facultad>
-        )
+        );
       })}
     </Section>
-  ) : null
-}
+  ) : null;
+};
 
-export default GradeOffer
+export default GradeOffer;
 
 interface CarrerasProps {
-  carreras: Carrera[]
+  carreras: Carrera[];
 }
 const Carreras = ({ carreras }: CarrerasProps) => {
   return carreras.length ? (
     <Container>
       {carreras.map((carrera, key) => {
         return (
-          <Link href={carrera.uri ?? ''} key={key} passHref>
+          <Link href={carrera.uri ?? ""} key={key} passHref>
             <SLink>
               <Title
                 color={colors.text.base}
@@ -90,15 +90,15 @@ const Carreras = ({ carreras }: CarrerasProps) => {
               </Title>
             </SLink>
           </Link>
-        )
+        );
       })}
     </Container>
-  ) : null
-}
+  ) : null;
+};
 
 const Facultad = styled.div`
   margin-bottom: 4rem;
-`
+`;
 
 const Section = styled.section`
   ${container}
@@ -106,7 +106,7 @@ const Section = styled.section`
   padding: 0;
   background-color: #fefefe;
   padding-bottom: 10rem;
-`
+`;
 
 const Container = styled.div`
   display: grid;
@@ -115,7 +115,7 @@ const Container = styled.div`
   ${mq.md} {
     grid-template-columns: 50% 50%;
   }
-`
+`;
 
 const SectionTitle = styled.h2`
   text-align: center;
@@ -124,16 +124,16 @@ const SectionTitle = styled.h2`
   margin-top: 0.5rem;
   font-weight: 400;
   color: ${colors.primary.base};
-`
+`;
 
 const Title = styled.span`
   ${(props: {
-    isFaculty?: boolean
-    isCareer?: boolean
-    color?: string
-    bgHover: string
+    isFaculty?: boolean;
+    isCareer?: boolean;
+    color?: string;
+    bgHover: string;
   }) => css`
-    color: ${props.color ?? 'blue'};
+    color: ${props.color ?? "blue"};
     padding: 0.5rem 1.5rem;
     text-transform: uppercase;
     text-decoration: none;
@@ -143,7 +143,7 @@ const Title = styled.span`
       display: inline-block;
     }
     &:hover {
-      background-color: ${props.bgHover ?? 'lightgray'};
+      background-color: ${props.bgHover ?? "lightgray"};
     }
     ${props.isFaculty
       ? css`
@@ -158,8 +158,8 @@ const Title = styled.span`
           font-weight: 300;
         `}
   `}
-`
+`;
 
 const SLink = styled.a`
   text-decoration: none;
-`
+`;
