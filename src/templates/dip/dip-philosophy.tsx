@@ -1,34 +1,34 @@
-import React from 'react'
-import { useState } from 'react'
-import styled from '@emotion/styled'
-import colors from 'components/colors'
-import { container, mq } from 'components/grid'
-import { css } from '@emotion/react'
+import React from "react";
+import { useState } from "react";
+import styled from "@emotion/styled";
+import colors from "components/colors";
+import { container, mq } from "components/grid";
+import { css } from "@emotion/react";
 
-import { Spring, animated } from '@react-spring/web'
+import { Spring, animated } from "@react-spring/web";
 
 const DIPPhilosophy = (props) => {
   const tabs = [
     {
-      title: 'Departamento De Investigaciones y Publicaciones',
+      title: "Departamento De Investigaciones y Publicaciones",
       content: `
                 <p>Este departamento es dependiente de la Vicerrectoría de Investigación, Extensión y Postgrado de la Universidad ISA. El mismo tiene la responsabilidad institucional de posicionarla, en forma sostenible como, uno de los principales referentes en los círculos científicos y empresariales a nivel nacional y regional, debido a la calidad y pertinencia de sus investigaciones, así como por la rigurosidad y volumen de sus publicaciones.</p>
             `,
     },
     {
-      title: 'Misión',
+      title: "Misión",
       content: `
                 <p>Desarrollar, factibilizar y fortalecer la investigación y publicación científica, tecnológica y de innovación, mediante prácticas éticas y temas relevantes con impacto a nivel nacional e internacional.</p>
             `,
     },
     {
-      title: 'Visión',
+      title: "Visión",
       content: `
                 <p>Ser un departamento que posibilite, impulse y apoye las investigaciones y publicaciones, a los fines de contribuir en la solución de problemas de la sociedad.</p>
             `,
     },
     {
-      title: 'NATURALEZA DE LA INVESTIGACIÓN EN LA UNIVERSIDAD ISA',
+      title: "Naturaleza de la investigación en la Universidad ISA",
       content: `
                 <p>La Universidad ISA, en el marco de su naturaleza y el compromiso institucional con el desarrollo profesional, económico, social y cultural de la sociedad dominicana, contribuye en función de los problemas nacionales e internacionales, a través de diferentes formas de investigación científica, tecnológica y humanística, cuyos objetivos son: </p>
                 <ul>
@@ -41,12 +41,12 @@ const DIPPhilosophy = (props) => {
                 </ul>
             `,
     },
-  ]
+  ];
 
   // Index 0 by default
-  const [view, setView] = useState(0)
+  const [view, setView] = useState(0);
 
-  const handlerView = (value) => setView(value)
+  const handlerView = (value) => setView(value);
 
   return (
     <StyledSection fluid {...props}>
@@ -54,9 +54,9 @@ const DIPPhilosophy = (props) => {
         <DecoContainer />
         <ColumnOne>
           {tabs.map((item, i) => {
-            const { title, content } = item
+            const { title, content } = item;
 
-            const isActive = view === i
+            const isActive = view === i;
 
             return (
               <Spring
@@ -74,36 +74,36 @@ const DIPPhilosophy = (props) => {
                   </animated.div>
                 )}
               </Spring>
-            )
+            );
           })}
         </ColumnOne>
         <ColumnTwo>
           <List>
             {tabs.map((item, i) => {
-              const { title } = item
+              const { title } = item;
 
-              const isActive = view === i
+              const isActive = view === i;
 
               return (
                 <Item key={i} onClick={() => handlerView(i)} active={isActive}>
                   {title}
                 </Item>
-              )
+              );
             })}
           </List>
         </ColumnTwo>
       </Container>
     </StyledSection>
-  )
-}
+  );
+};
 
-export default DIPPhilosophy
+export default DIPPhilosophy;
 
 const StyledSection = styled.section`
   ${container}
   margin-top: 9.5rem;
   &:before {
-    content: '';
+    content: "";
     background-color: ${colors.blue.dark};
     position: absolute;
     top: 0;
@@ -115,7 +115,7 @@ const StyledSection = styled.section`
     }
   }
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     background: ${colors.blue.base};
     width: 15%;
@@ -127,20 +127,20 @@ const StyledSection = styled.section`
     opacity: 0.8;
     z-index: 3;
   }
-`
+`;
 
 const Container = styled.div`
   ${container}
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-areas:
-    'col_2 col_2'
-    'col_1 col_1';
+    "col_2 col_2"
+    "col_1 col_1";
 
   ${mq.lg} {
-    grid-template-areas: 'col_1 col_2';
+    grid-template-areas: "col_1 col_2";
   }
-`
+`;
 
 const DecoContainer = styled.div`
   position: relative;
@@ -156,7 +156,7 @@ const DecoContainer = styled.div`
   ${mq.lg} {
     display: block;
   }
-`
+`;
 
 const ColumnOne = styled.div`
   background-color: ${colors.blue.dark};
@@ -165,12 +165,12 @@ const ColumnOne = styled.div`
   ${mq.lg} {
     padding-right: 1.5rem;
   }
-`
+`;
 
 const ColumnTwo = styled.div`
   z-index: 2;
   grid-area: col_2;
-`
+`;
 
 const CardInfo = styled.div`
   display: none;
@@ -188,14 +188,14 @@ const CardInfo = styled.div`
       ? css`
           display: block;
         `
-      : ''};
-`
+      : ""};
+`;
 
 const CardTitle = styled.h2`
   color: white;
   text-transform: uppercase;
   margin-bottom: 3rem;
-`
+`;
 
 const List = styled.ul`
   padding: 1rem 0;
@@ -213,7 +213,7 @@ const List = styled.ul`
     padding-left: 3rem;
   }
   &:before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     right: 0;
@@ -228,13 +228,13 @@ const List = styled.ul`
       transform: translate(0%, -120%);
     }
   }
-`
+`;
 
 const Item = styled.li`
   display: inline-block;
   list-style: none;
   font-size: 2rem;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   cursor: pointer;
   padding: 1rem;
   margin: 0;
@@ -252,5 +252,5 @@ const Item = styled.li`
           text-decoration-thickness: 0.3rem;
           transition: padding 900ms ease-out;
         `
-      : ''};
-`
+      : ""};
+`;
