@@ -15,7 +15,7 @@ const AdmisionesCredito = (props) => {
       image: bancoAdopen,
     },
     {
-      url: "https://fondesa.com.do/",
+      url: "https://www.fondesa.org/",
       title: "fondesa",
       image: fondesa,
     },
