@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { container, mq } from "components/grid";
 import bancoAdopen from "../../../public/images/admisiones/banco_adopem.png";
-import banfondesa from "../../../public/images/admisiones/banfondesa.jpg";
+import fondesa from "../../../public/images/admisiones/fondesa.svg";
 import fundapec from "../../../public/images/admisiones/fundapec.png";
 
 const AdmisionesCredito = (props) => {
@@ -15,9 +15,9 @@ const AdmisionesCredito = (props) => {
       image: bancoAdopen,
     },
     {
-      url: "https://banfondesa.com.do/",
-      title: "Banfondesa",
-      image: banfondesa,
+      url: "https://fondesa.com.do/",
+      title: "fondesa",
+      image: fondesa,
     },
     {
       url: "https://www.fundapec.edu.do/",
