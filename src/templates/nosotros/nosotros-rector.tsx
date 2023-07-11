@@ -1,20 +1,20 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import Image from 'next/image'
-import colors from 'components/colors'
-import { container, mq } from 'components/grid'
-import rector from '../../../public/images/nosotros/rector.jpg'
+import React from "react";
+import styled from "@emotion/styled";
+import Image from "next/image";
+import colors from "components/colors";
+import { container, mq } from "components/grid";
+import rector from "../../../public/images/nosotros/rector.jpg";
 
 const NosotrosRector = (props) => {
-  const name = 'Benito A. Ferreiras',
-    jobtitle = 'Rector',
+  const name = "Ing. Angel Castillo",
+    jobtitle = "Rector",
     content = `
             <p>En nombre de la Universidad ISA, les doy la bienvenida a este portal a través del cual podrán obtener información relevante sobre nuestra institución, además de todas las opciones que tiene la Universidad para ofrecerles como alternativa al momento de elegir una alma máter para su educación.</p>
             <p>Nuestra institución brinda opciones que comprenden diferentes áreas del conocimiento, tanto a nivel técnico, grado y postgrado. Asimismo, nos preocupamos por la formación de recursos humanos para nuestra sociedad, siendo un espacio que se enfoca en generar tecnologías y servicios a los sectores productivos.</p>
             <p>De su lado, nuestro excelente equipo de profesores está empeñado en educar a nuestros estudiantes como buenos profesionales en cada una de sus áreas, cada uno orientados a inculcar valores que primen en cada componente de nuestra estructura social.</p>
             <p>Nuestros egresados, son muestra de nuestros principios de honestidad y responsabilidad que nos distinguen en el quehacer profesional.</p>
             <p>En esta página podrán encontrar la información necesaria para poder orientarse sobre todo lo que ofrecemos, espero les sirva de ayuda.</p>
-        `
+        `;
 
   return (
     <Section {...props}>
@@ -41,15 +41,15 @@ const NosotrosRector = (props) => {
         </Content>
       </Container>
     </Section>
-  )
-}
+  );
+};
 
-export default NosotrosRector
+export default NosotrosRector;
 
 const Section = styled.section`
   position: relative;
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     width: 7%;
     padding-bottom: 7%;
@@ -58,7 +58,7 @@ const Section = styled.section`
     top: -1%;
     box-shadow: 0 2.5rem 2.5rem rgba(0, 0, 0, 0.25);
   }
-`
+`;
 
 const Container = styled.div`
   ${container}
@@ -68,13 +68,13 @@ const Container = styled.div`
   ${mq.lg} {
     grid-template-columns: 50% 50%;
   }
-`
+`;
 
-const Content = styled.div``
+const Content = styled.div``;
 
 const SectionTitle = styled.h2`
   margin-top: 10rem;
-`
+`;
 
 const TitleText = styled.span`
   display: block;
@@ -82,7 +82,7 @@ const TitleText = styled.span`
     transform-origin: 0 0;
     transform: scale(0.7);
   }
-`
+`;
 
 const CubeRector = styled.div`
   position: relative;
@@ -95,7 +95,7 @@ const CubeRector = styled.div`
     padding-right: 6rem;
   }
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 8%;
     top: 8%;
@@ -106,7 +106,7 @@ const CubeRector = styled.div`
     box-shadow: 0 2.5rem 2.5rem rgba(0, 0, 0, 0.5);
   }
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     width: 5%;
     padding-bottom: 5%;
@@ -116,12 +116,12 @@ const CubeRector = styled.div`
     opacity: 0.6;
     z-index: -1;
   }
-`
+`;
 
 const CubeRector2 = styled.div`
   position: relative;
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     width: 45%;
     padding-bottom: 35%;
@@ -133,7 +133,7 @@ const CubeRector2 = styled.div`
     z-index: -1;
   }
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     width: 30%;
     padding-bottom: 15%;
@@ -144,9 +144,9 @@ const CubeRector2 = styled.div`
     transform: translate(-10%, 47%);
     z-index: -1;
   }
-`
+`;
 const Media = styled.div`
   border-radius: 50%;
   overflow: hidden;
   font-size: 0;
-`
+`;
