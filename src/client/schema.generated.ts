@@ -430,8 +430,6 @@ export enum ContentTypeEnum {
   POST = "POST",
   /** The Type of Content object */
   RECURSO = "RECURSO",
-  /** The Type of Content object */
-  SLIDE = "SLIDE",
 }
 
 /** The Type of Identifier used to fetch a single Content Type node. To be used along with the "id" field. Default is "ID". */
@@ -889,28 +887,6 @@ export interface CreateRecursoInput {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Input for the createSlide mutation. */
-export interface CreateSlideInput {
-  /** The userId to assign as the author of the object */
-  authorId?: InputMaybe<Scalars["ID"]>;
-  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
-  clientMutationId?: InputMaybe<Scalars["String"]>;
-  copy: Scalars["String"];
-  /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
-  date?: InputMaybe<Scalars["String"]>;
-  /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
-  menuOrder?: InputMaybe<Scalars["Int"]>;
-  /** The password used to protect the content of the object */
-  password?: InputMaybe<Scalars["String"]>;
-  /** The slug of the object */
-  slug?: InputMaybe<Scalars["String"]>;
-  /** The status of the object */
-  status?: InputMaybe<PostStatusEnum>;
-  /** The title of the object */
-  title?: InputMaybe<Scalars["String"]>;
-  titulo: Scalars["String"];
-}
-
 /** Input for the createTag mutation. */
 export interface CreateTagInput {
   /** The slug that the post_tag will be an alias of */
@@ -1176,18 +1152,6 @@ export interface DeleteRecursoInput {
   /** Whether the object should be force deleted instead of being moved to the trash */
   forceDelete?: InputMaybe<Scalars["Boolean"]>;
   /** The ID of the recurso to delete */
-  id: Scalars["ID"];
-  /** Override the edit lock when another user is editing the post */
-  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
-}
-
-/** Input for the deleteSlide mutation. */
-export interface DeleteSlideInput {
-  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
-  clientMutationId?: InputMaybe<Scalars["String"]>;
-  /** Whether the object should be force deleted instead of being moved to the trash */
-  forceDelete?: InputMaybe<Scalars["Boolean"]>;
-  /** The ID of the slide to delete */
   id: Scalars["ID"];
   /** Override the edit lock when another user is editing the post */
   ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
@@ -3639,52 +3603,6 @@ export interface RootQueryToRevisionsConnectionWhereArgs {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Arguments for filtering the RootQueryToSlideConnection connection */
-export interface RootQueryToSlideConnectionWhereArgs {
-  /** The user that's connected as the author of the object. Use the userId for the author object. */
-  author?: InputMaybe<Scalars["Int"]>;
-  /** Find objects connected to author(s) in the array of author's userIds */
-  authorIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Find objects connected to the author by the author's nicename */
-  authorName?: InputMaybe<Scalars["String"]>;
-  /** Find objects NOT connected to author(s) in the array of author's userIds */
-  authorNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Filter the connection based on dates */
-  dateQuery?: InputMaybe<DateQueryInput>;
-  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
-  hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific database ID of the object */
-  id?: InputMaybe<Scalars["Int"]>;
-  /** Array of IDs for the objects to retrieve */
-  in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Get objects with a specific mimeType property */
-  mimeType?: InputMaybe<MimeTypeEnum>;
-  /** Slug / post_name of the object */
-  name?: InputMaybe<Scalars["String"]>;
-  /** Specify objects to retrieve. Use slugs */
-  nameIn?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
-  notIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** What paramater to use to order the objects by. */
-  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
-  /** Use ID to return only children. Use 0 to return only top-level items */
-  parent?: InputMaybe<Scalars["ID"]>;
-  /** Specify objects whose parent is in an array */
-  parentIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Specify posts whose parent is not in an array */
-  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Show posts with a specific password. */
-  password?: InputMaybe<Scalars["String"]>;
-  /** Show Posts based on a keyword search */
-  search?: InputMaybe<Scalars["String"]>;
-  /** Retrieve posts where post status is in an array. */
-  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
-  /** Show posts with a specific status. */
-  status?: InputMaybe<PostStatusEnum>;
-  /** Title of the object */
-  title?: InputMaybe<Scalars["String"]>;
-}
-
 /** Arguments for filtering the RootQueryToTagConnection connection */
 export interface RootQueryToTagConnectionWhereArgs {
   /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
@@ -3827,18 +3745,6 @@ export interface SendPasswordResetEmailInput {
   clientMutationId?: InputMaybe<Scalars["String"]>;
   /** A string that contains the user's username or email address. */
   username: Scalars["String"];
-}
-
-/** The Type of Identifier used to fetch a single resource. Default is ID. */
-export enum SlideIdType {
-  /** Identify a resource by the Database ID. */
-  DATABASE_ID = "DATABASE_ID",
-  /** Identify a resource by the (hashed) Global ID. */
-  ID = "ID",
-  /** Identify a resource by the slug. Available to non-hierarchcial Types where the slug is a unique identifier. */
-  SLUG = "SLUG",
-  /** Identify a resource by the URI. */
-  URI = "URI",
 }
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
@@ -4494,32 +4400,6 @@ export interface UpdateSettingsInput {
   writingSettingsDefaultPostFormat?: InputMaybe<Scalars["String"]>;
   /** Convert emoticons like :-) and :-P to graphics on display. */
   writingSettingsUseSmilies?: InputMaybe<Scalars["Boolean"]>;
-}
-
-/** Input for the updateSlide mutation. */
-export interface UpdateSlideInput {
-  /** The userId to assign as the author of the object */
-  authorId?: InputMaybe<Scalars["ID"]>;
-  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
-  clientMutationId?: InputMaybe<Scalars["String"]>;
-  copy?: InputMaybe<Scalars["String"]>;
-  /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
-  date?: InputMaybe<Scalars["String"]>;
-  /** The ID of the slide object */
-  id: Scalars["ID"];
-  /** Override the edit lock when another user is editing the post */
-  ignoreEditLock?: InputMaybe<Scalars["Boolean"]>;
-  /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
-  menuOrder?: InputMaybe<Scalars["Int"]>;
-  /** The password used to protect the content of the object */
-  password?: InputMaybe<Scalars["String"]>;
-  /** The slug of the object */
-  slug?: InputMaybe<Scalars["String"]>;
-  /** The status of the object */
-  status?: InputMaybe<PostStatusEnum>;
-  /** The title of the object */
-  title?: InputMaybe<Scalars["String"]>;
-  titulo?: InputMaybe<Scalars["String"]>;
 }
 
 /** Input for the updateTag mutation. */
@@ -5286,52 +5166,6 @@ export interface UserToRevisionsConnectionWhereArgs {
   title?: InputMaybe<Scalars["String"]>;
 }
 
-/** Arguments for filtering the UserToSlideConnection connection */
-export interface UserToSlideConnectionWhereArgs {
-  /** The user that's connected as the author of the object. Use the userId for the author object. */
-  author?: InputMaybe<Scalars["Int"]>;
-  /** Find objects connected to author(s) in the array of author's userIds */
-  authorIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Find objects connected to the author by the author's nicename */
-  authorName?: InputMaybe<Scalars["String"]>;
-  /** Find objects NOT connected to author(s) in the array of author's userIds */
-  authorNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Filter the connection based on dates */
-  dateQuery?: InputMaybe<DateQueryInput>;
-  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
-  hasPassword?: InputMaybe<Scalars["Boolean"]>;
-  /** Specific database ID of the object */
-  id?: InputMaybe<Scalars["Int"]>;
-  /** Array of IDs for the objects to retrieve */
-  in?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Get objects with a specific mimeType property */
-  mimeType?: InputMaybe<MimeTypeEnum>;
-  /** Slug / post_name of the object */
-  name?: InputMaybe<Scalars["String"]>;
-  /** Specify objects to retrieve. Use slugs */
-  nameIn?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
-  notIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** What paramater to use to order the objects by. */
-  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
-  /** Use ID to return only children. Use 0 to return only top-level items */
-  parent?: InputMaybe<Scalars["ID"]>;
-  /** Specify objects whose parent is in an array */
-  parentIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Specify posts whose parent is not in an array */
-  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars["ID"]>>>;
-  /** Show posts with a specific password. */
-  password?: InputMaybe<Scalars["String"]>;
-  /** Show Posts based on a keyword search */
-  search?: InputMaybe<Scalars["String"]>;
-  /** Retrieve posts where post status is in an array. */
-  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
-  /** Show posts with a specific status. */
-  status?: InputMaybe<PostStatusEnum>;
-  /** Title of the object */
-  title?: InputMaybe<Scalars["String"]>;
-}
-
 /** Field to order the connection by */
 export enum UsersConnectionOrderbyEnum {
   /** Order by display name */
@@ -5419,7 +5253,6 @@ export const scalarsEnumsHash: import("gqty").ScalarsEnumsHash = {
   RecursoIdType: true,
   RelationEnum: true,
   SEOCardType: true,
-  SlideIdType: true,
   String: true,
   TagIdType: true,
   TaxonomyEnum: true,
@@ -5436,12 +5269,6 @@ export const generatedSchema = {
     __typename: { __type: "String!" },
     fieldGroupName: { __type: "String" },
     $on: { __type: "$AcfFieldGroup!" },
-  },
-  AcfLink: {
-    __typename: { __type: "String!" },
-    target: { __type: "String" },
-    title: { __type: "String" },
-    url: { __type: "String" },
   },
   AcfOptionsConfiguracionesDeHubspot: {
     __typename: { __type: "String!" },
@@ -6723,23 +6550,6 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     recurso: { __type: "Recurso" },
   },
-  CreateSlideInput: {
-    authorId: { __type: "ID" },
-    clientMutationId: { __type: "String" },
-    copy: { __type: "String!" },
-    date: { __type: "String" },
-    menuOrder: { __type: "Int" },
-    password: { __type: "String" },
-    slug: { __type: "String" },
-    status: { __type: "PostStatusEnum" },
-    title: { __type: "String" },
-    titulo: { __type: "String!" },
-  },
-  CreateSlidePayload: {
-    __typename: { __type: "String!" },
-    clientMutationId: { __type: "String" },
-    slide: { __type: "Slide" },
-  },
   CreateTagInput: {
     aliasOf: { __type: "String" },
     clientMutationId: { __type: "String" },
@@ -6989,18 +6799,6 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     deletedId: { __type: "ID" },
     recurso: { __type: "Recurso" },
-  },
-  DeleteSlideInput: {
-    clientMutationId: { __type: "String" },
-    forceDelete: { __type: "Boolean" },
-    id: { __type: "ID!" },
-    ignoreEditLock: { __type: "Boolean" },
-  },
-  DeleteSlidePayload: {
-    __typename: { __type: "String!" },
-    clientMutationId: { __type: "String" },
-    deletedId: { __type: "ID" },
-    slide: { __type: "Slide" },
   },
   DeleteTagInput: {
     clientMutationId: { __type: "String" },
@@ -10115,7 +9913,6 @@ export const generatedSchema = {
     databaseId: { __type: "Int!" },
     date: { __type: "String" },
     dateGmt: { __type: "String" },
-    datosRecurso: { __type: "Recurso_Datosrecurso" },
     descripcion: { __type: "String" },
     desiredSlug: { __type: "String" },
     editingLockedBy: { __type: "ContentNodeToEditLockConnectionEdge" },
@@ -10205,11 +10002,6 @@ export const generatedSchema = {
     __typename: { __type: "String!" },
     cursor: { __type: "String" },
     node: { __type: "Recurso!" },
-  },
-  Recurso_Datosrecurso: {
-    __typename: { __type: "String!" },
-    fieldGroupName: { __type: "String" },
-    tipo: { __type: "String" },
   },
   RegisterUserInput: {
     aim: { __type: "String" },
@@ -11154,48 +10946,6 @@ export const generatedSchema = {
     status: { __type: "PostStatusEnum" },
     title: { __type: "String" },
   },
-  RootQueryToSlideConnection: {
-    __typename: { __type: "String!" },
-    edges: { __type: "[RootQueryToSlideConnectionEdge!]!" },
-    nodes: { __type: "[Slide!]!" },
-    pageInfo: { __type: "RootQueryToSlideConnectionPageInfo!" },
-  },
-  RootQueryToSlideConnectionEdge: {
-    __typename: { __type: "String!" },
-    cursor: { __type: "String" },
-    node: { __type: "Slide!" },
-  },
-  RootQueryToSlideConnectionPageInfo: {
-    __typename: { __type: "String!" },
-    endCursor: { __type: "String" },
-    hasNextPage: { __type: "Boolean!" },
-    hasPreviousPage: { __type: "Boolean!" },
-    seo: { __type: "SEOPostTypePageInfo" },
-    startCursor: { __type: "String" },
-  },
-  RootQueryToSlideConnectionWhereArgs: {
-    author: { __type: "Int" },
-    authorIn: { __type: "[ID]" },
-    authorName: { __type: "String" },
-    authorNotIn: { __type: "[ID]" },
-    dateQuery: { __type: "DateQueryInput" },
-    hasPassword: { __type: "Boolean" },
-    id: { __type: "Int" },
-    in: { __type: "[ID]" },
-    mimeType: { __type: "MimeTypeEnum" },
-    name: { __type: "String" },
-    nameIn: { __type: "[String]" },
-    notIn: { __type: "[ID]" },
-    orderby: { __type: "[PostObjectsConnectionOrderbyInput]" },
-    parent: { __type: "ID" },
-    parentIn: { __type: "[ID]" },
-    parentNotIn: { __type: "[ID]" },
-    password: { __type: "String" },
-    search: { __type: "String" },
-    stati: { __type: "[PostStatusEnum]" },
-    status: { __type: "PostStatusEnum" },
-    title: { __type: "String" },
-  },
   RootQueryToTagConnection: {
     __typename: { __type: "String!" },
     edges: { __type: "[RootQueryToTagConnectionEdge!]!" },
@@ -11433,7 +11183,6 @@ export const generatedSchema = {
     periodoDeAdmision: { __type: "SEOContentType" },
     post: { __type: "SEOContentType" },
     recurso: { __type: "SEOContentType" },
-    slide: { __type: "SEOContentType" },
   },
   SEOGlobalMeta: {
     __typename: { __type: "String!" },
@@ -11647,93 +11396,6 @@ export const generatedSchema = {
     writingSettingsDefaultCategory: { __type: "Int" },
     writingSettingsDefaultPostFormat: { __type: "String" },
     writingSettingsUseSmilies: { __type: "Boolean" },
-  },
-  Slide: {
-    __typename: { __type: "String!" },
-    author: { __type: "NodeWithAuthorToUserConnectionEdge" },
-    authorDatabaseId: { __type: "Int" },
-    authorId: { __type: "ID" },
-    conditionalTags: { __type: "ConditionalTags" },
-    contentType: { __type: "ContentNodeToContentTypeConnectionEdge" },
-    contentTypeName: { __type: "String!" },
-    copy: { __type: "String" },
-    databaseId: { __type: "Int!" },
-    date: { __type: "String" },
-    dateGmt: { __type: "String" },
-    datosCTA: { __type: "Slide_Datoscta" },
-    desiredSlug: { __type: "String" },
-    editingLockedBy: { __type: "ContentNodeToEditLockConnectionEdge" },
-    enclosure: { __type: "String" },
-    enqueuedScripts: {
-      __type: "ContentNodeToEnqueuedScriptConnection",
-      __args: { after: "String", before: "String", first: "Int", last: "Int" },
-    },
-    enqueuedStylesheets: {
-      __type: "ContentNodeToEnqueuedStylesheetConnection",
-      __args: { after: "String", before: "String", first: "Int", last: "Int" },
-    },
-    featuredImage: { __type: "NodeWithFeaturedImageToMediaItemConnectionEdge" },
-    featuredImageDatabaseId: { __type: "Int" },
-    featuredImageId: { __type: "ID" },
-    guid: { __type: "String" },
-    id: { __type: "ID!" },
-    imagenPortada: { __type: "MediaItem" },
-    isContentNode: { __type: "Boolean!" },
-    isPreview: { __type: "Boolean" },
-    isRestricted: { __type: "Boolean" },
-    isTermNode: { __type: "Boolean!" },
-    lastEditedBy: { __type: "ContentNodeToEditLastConnectionEdge" },
-    link: { __type: "String" },
-    modified: { __type: "String" },
-    modifiedGmt: { __type: "String" },
-    preview: { __type: "SlideToPreviewConnectionEdge" },
-    previewRevisionDatabaseId: { __type: "Int" },
-    previewRevisionId: { __type: "ID" },
-    seo: { __type: "PostTypeSEO" },
-    slideId: { __type: "Int!" },
-    slug: { __type: "String" },
-    status: { __type: "String" },
-    styles: { __type: "String" },
-    template: { __type: "ContentTemplate" },
-    templates: { __type: "[String]" },
-    title: {
-      __type: "String",
-      __args: { format: "PostObjectFieldFormatEnum" },
-    },
-    titulo: { __type: "String" },
-    uri: { __type: "String" },
-  },
-  SlideConnection: {
-    __typename: { __type: "String!" },
-    edges: { __type: "[SlideConnectionEdge!]!" },
-    nodes: { __type: "[Slide!]!" },
-    pageInfo: { __type: "SlideConnectionPageInfo!" },
-    $on: { __type: "$SlideConnection!" },
-  },
-  SlideConnectionEdge: {
-    __typename: { __type: "String!" },
-    cursor: { __type: "String" },
-    node: { __type: "Slide!" },
-    $on: { __type: "$SlideConnectionEdge!" },
-  },
-  SlideConnectionPageInfo: {
-    __typename: { __type: "String!" },
-    endCursor: { __type: "String" },
-    hasNextPage: { __type: "Boolean!" },
-    hasPreviousPage: { __type: "Boolean!" },
-    seo: { __type: "SEOPostTypePageInfo" },
-    startCursor: { __type: "String" },
-    $on: { __type: "$SlideConnectionPageInfo!" },
-  },
-  SlideToPreviewConnectionEdge: {
-    __typename: { __type: "String!" },
-    cursor: { __type: "String" },
-    node: { __type: "Slide!" },
-  },
-  Slide_Datoscta: {
-    __typename: { __type: "String!" },
-    cta: { __type: "AcfLink" },
-    fieldGroupName: { __type: "String" },
   },
   Tag: {
     __typename: { __type: "String!" },
@@ -12482,25 +12144,6 @@ export const generatedSchema = {
     readingSettings: { __type: "ReadingSettings" },
     writingSettings: { __type: "WritingSettings" },
   },
-  UpdateSlideInput: {
-    authorId: { __type: "ID" },
-    clientMutationId: { __type: "String" },
-    copy: { __type: "String" },
-    date: { __type: "String" },
-    id: { __type: "ID!" },
-    ignoreEditLock: { __type: "Boolean" },
-    menuOrder: { __type: "Int" },
-    password: { __type: "String" },
-    slug: { __type: "String" },
-    status: { __type: "PostStatusEnum" },
-    title: { __type: "String" },
-    titulo: { __type: "String" },
-  },
-  UpdateSlidePayload: {
-    __typename: { __type: "String!" },
-    clientMutationId: { __type: "String" },
-    slide: { __type: "Slide" },
-  },
   UpdateTagInput: {
     aliasOf: { __type: "String" },
     clientMutationId: { __type: "String" },
@@ -12720,16 +12363,7 @@ export const generatedSchema = {
       __args: { after: "String", before: "String", first: "Int", last: "Int" },
     },
     seo: { __type: "SEOUser" },
-    slides: {
-      __type: "UserToSlideConnection",
-      __args: {
-        after: "String",
-        before: "String",
-        first: "Int",
-        last: "Int",
-        where: "UserToSlideConnectionWhereArgs",
-      },
-    },
+    shouldShowAdminToolbar: { __type: "Boolean" },
     slug: { __type: "String" },
     templates: { __type: "[String]" },
     uri: { __type: "String" },
@@ -13430,48 +13064,6 @@ export const generatedSchema = {
     status: { __type: "PostStatusEnum" },
     title: { __type: "String" },
   },
-  UserToSlideConnection: {
-    __typename: { __type: "String!" },
-    edges: { __type: "[UserToSlideConnectionEdge!]!" },
-    nodes: { __type: "[Slide!]!" },
-    pageInfo: { __type: "UserToSlideConnectionPageInfo!" },
-  },
-  UserToSlideConnectionEdge: {
-    __typename: { __type: "String!" },
-    cursor: { __type: "String" },
-    node: { __type: "Slide!" },
-  },
-  UserToSlideConnectionPageInfo: {
-    __typename: { __type: "String!" },
-    endCursor: { __type: "String" },
-    hasNextPage: { __type: "Boolean!" },
-    hasPreviousPage: { __type: "Boolean!" },
-    seo: { __type: "SEOPostTypePageInfo" },
-    startCursor: { __type: "String" },
-  },
-  UserToSlideConnectionWhereArgs: {
-    author: { __type: "Int" },
-    authorIn: { __type: "[ID]" },
-    authorName: { __type: "String" },
-    authorNotIn: { __type: "[ID]" },
-    dateQuery: { __type: "DateQueryInput" },
-    hasPassword: { __type: "Boolean" },
-    id: { __type: "Int" },
-    in: { __type: "[ID]" },
-    mimeType: { __type: "MimeTypeEnum" },
-    name: { __type: "String" },
-    nameIn: { __type: "[String]" },
-    notIn: { __type: "[ID]" },
-    orderby: { __type: "[PostObjectsConnectionOrderbyInput]" },
-    parent: { __type: "ID" },
-    parentIn: { __type: "[ID]" },
-    parentNotIn: { __type: "[ID]" },
-    password: { __type: "String" },
-    search: { __type: "String" },
-    stati: { __type: "[PostStatusEnum]" },
-    status: { __type: "PostStatusEnum" },
-    title: { __type: "String" },
-  },
   UserToUserRoleConnection: {
     __typename: { __type: "String!" },
     edges: { __type: "[UserToUserRoleConnectionEdge!]!" },
@@ -13576,10 +13168,6 @@ export const generatedSchema = {
       __type: "CreateRecursoPayload",
       __args: { input: "CreateRecursoInput!" },
     },
-    createSlide: {
-      __type: "CreateSlidePayload",
-      __args: { input: "CreateSlideInput!" },
-    },
     createTag: {
       __type: "CreateTagPayload",
       __args: { input: "CreateTagInput!" },
@@ -13651,10 +13239,6 @@ export const generatedSchema = {
     deleteRecurso: {
       __type: "DeleteRecursoPayload",
       __args: { input: "DeleteRecursoInput!" },
-    },
-    deleteSlide: {
-      __type: "DeleteSlidePayload",
-      __args: { input: "DeleteSlideInput!" },
     },
     deleteTag: {
       __type: "DeleteTagPayload",
@@ -13752,10 +13336,6 @@ export const generatedSchema = {
     updateSettings: {
       __type: "UpdateSettingsPayload",
       __args: { input: "UpdateSettingsInput!" },
-    },
-    updateSlide: {
-      __type: "UpdateSlidePayload",
-      __args: { input: "UpdateSlideInput!" },
     },
     updateTag: {
       __type: "UpdateTagPayload",
@@ -14180,24 +13760,6 @@ export const generatedSchema = {
       },
     },
     seo: { __type: "SEOConfig" },
-    slide: {
-      __type: "Slide",
-      __args: { asPreview: "Boolean", id: "ID!", idType: "SlideIdType" },
-    },
-    slideBy: {
-      __type: "Slide",
-      __args: { id: "ID", slideId: "Int", slug: "String", uri: "String" },
-    },
-    slides: {
-      __type: "RootQueryToSlideConnection",
-      __args: {
-        after: "String",
-        before: "String",
-        first: "Int",
-        last: "Int",
-        where: "RootQueryToSlideConnectionWhereArgs",
-      },
-    },
     tag: { __type: "Tag", __args: { id: "ID!", idType: "TagIdType" } },
     tags: {
       __type: "RootQueryToTagConnection",
@@ -14319,8 +13881,6 @@ export const generatedSchema = {
       "PeriodoDeAdmision_Datosperiodosdeadmision_fechasExamenesAdmision",
       "Post_Datospublicacion",
       "Post_Datospublicacion_DatosDelEvento",
-      "Recurso_Datosrecurso",
-      "Slide_Datoscta",
     ],
     ContentNode: [
       "Carrera",
@@ -14335,7 +13895,6 @@ export const generatedSchema = {
       "PeriodoDeAdmision",
       "Post",
       "Recurso",
-      "Slide",
     ],
     DatabaseIdentifier: [
       "Carrera",
@@ -14357,7 +13916,6 @@ export const generatedSchema = {
       "Post",
       "PostFormat",
       "Recurso",
-      "Slide",
       "Tag",
       "User",
     ],
@@ -14385,7 +13943,6 @@ export const generatedSchema = {
       "Post",
       "PostFormat",
       "Recurso",
-      "Slide",
       "Tag",
       "Taxonomy",
       "Theme",
@@ -14405,7 +13962,6 @@ export const generatedSchema = {
       "PeriodoDeAdmision",
       "Post",
       "Recurso",
-      "Slide",
     ],
     NodeWithFeaturedImage: [
       "Carrera",
@@ -14416,7 +13972,6 @@ export const generatedSchema = {
       "Page",
       "Post",
       "Recurso",
-      "Slide",
     ],
     NodeWithTemplate: [
       "Carrera",
@@ -14431,7 +13986,6 @@ export const generatedSchema = {
       "PeriodoDeAdmision",
       "Post",
       "Recurso",
-      "Slide",
     ],
     NodeWithTitle: [
       "Carrera",
@@ -14446,7 +14000,6 @@ export const generatedSchema = {
       "PeriodoDeAdmision",
       "Post",
       "Recurso",
-      "Slide",
     ],
     Previewable: [
       "Carrera",
@@ -14460,7 +14013,6 @@ export const generatedSchema = {
       "PeriodoDeAdmision",
       "Post",
       "Recurso",
-      "Slide",
     ],
     UniformResourceIdentifiable: [
       "Carrera",
@@ -14479,7 +14031,6 @@ export const generatedSchema = {
       "Post",
       "PostFormat",
       "Recurso",
-      "Slide",
       "Tag",
       "User",
     ],
@@ -14587,14 +14138,12 @@ export const generatedSchema = {
       "RootQueryToPostFormatConnectionEdge",
       "RootQueryToRecursoConnectionEdge",
       "RootQueryToRevisionsConnectionEdge",
-      "RootQueryToSlideConnectionEdge",
       "RootQueryToTagConnectionEdge",
       "RootQueryToTaxonomyConnectionEdge",
       "RootQueryToTermNodeConnectionEdge",
       "RootQueryToThemeConnectionEdge",
       "RootQueryToUserConnectionEdge",
       "RootQueryToUserRoleConnectionEdge",
-      "SlideToPreviewConnectionEdge",
       "TagToContentNodeConnectionEdge",
       "TagToPostConnectionEdge",
       "TagToTaxonomyConnectionEdge",
@@ -14617,7 +14166,6 @@ export const generatedSchema = {
       "UserToPostConnectionEdge",
       "UserToRecursoConnectionEdge",
       "UserToRevisionsConnectionEdge",
-      "UserToSlideConnectionEdge",
       "UserToUserRoleConnectionEdge",
     ],
     OneToOneConnection: [
@@ -14654,7 +14202,6 @@ export const generatedSchema = {
       "PostFormatToTaxonomyConnectionEdge",
       "PostToPreviewConnectionEdge",
       "RecursoToPreviewConnectionEdge",
-      "SlideToPreviewConnectionEdge",
       "TagToTaxonomyConnectionEdge",
     ],
     FacultadConnectionEdge: [
@@ -14743,7 +14290,6 @@ export const generatedSchema = {
       "RootQueryToPostFormatConnection",
       "RootQueryToRecursoConnection",
       "RootQueryToRevisionsConnection",
-      "RootQueryToSlideConnection",
       "RootQueryToTagConnection",
       "RootQueryToTaxonomyConnection",
       "RootQueryToTermNodeConnection",
@@ -14771,7 +14317,6 @@ export const generatedSchema = {
       "UserToPostConnection",
       "UserToRecursoConnection",
       "UserToRevisionsConnection",
-      "UserToSlideConnection",
       "UserToUserRoleConnection",
     ],
     RecursoConnection: [
@@ -14848,7 +14393,6 @@ export const generatedSchema = {
       "RootQueryToPostFormatConnectionPageInfo",
       "RootQueryToRecursoConnectionPageInfo",
       "RootQueryToRevisionsConnectionPageInfo",
-      "RootQueryToSlideConnectionPageInfo",
       "RootQueryToTagConnectionPageInfo",
       "RootQueryToTaxonomyConnectionPageInfo",
       "RootQueryToTermNodeConnectionPageInfo",
@@ -14876,7 +14420,6 @@ export const generatedSchema = {
       "UserToPostConnectionPageInfo",
       "UserToRecursoConnectionPageInfo",
       "UserToRevisionsConnectionPageInfo",
-      "UserToSlideConnectionPageInfo",
       "UserToUserRoleConnectionPageInfo",
     ],
     RecursoConnectionPageInfo: [
@@ -14947,7 +14490,6 @@ export const generatedSchema = {
       "RootQueryToPostFormatConnectionPageInfo",
       "RootQueryToRecursoConnectionPageInfo",
       "RootQueryToRevisionsConnectionPageInfo",
-      "RootQueryToSlideConnectionPageInfo",
       "RootQueryToTagConnectionPageInfo",
       "RootQueryToTaxonomyConnectionPageInfo",
       "RootQueryToTermNodeConnectionPageInfo",
@@ -14975,7 +14517,6 @@ export const generatedSchema = {
       "UserToPostConnectionPageInfo",
       "UserToRecursoConnectionPageInfo",
       "UserToRevisionsConnectionPageInfo",
-      "UserToSlideConnectionPageInfo",
       "UserToUserRoleConnectionPageInfo",
     ],
     HierarchicalNode: ["Category", "MediaItem", "Page"],
@@ -15393,16 +14934,6 @@ export const generatedSchema = {
     PluginConnection: ["RootQueryToPluginConnection"],
     PluginConnectionEdge: ["RootQueryToPluginConnectionEdge"],
     PluginConnectionPageInfo: ["RootQueryToPluginConnectionPageInfo"],
-    SlideConnection: ["RootQueryToSlideConnection", "UserToSlideConnection"],
-    SlideConnectionEdge: [
-      "RootQueryToSlideConnectionEdge",
-      "SlideToPreviewConnectionEdge",
-      "UserToSlideConnectionEdge",
-    ],
-    SlideConnectionPageInfo: [
-      "RootQueryToSlideConnectionPageInfo",
-      "UserToSlideConnectionPageInfo",
-    ],
     ThemeConnection: ["RootQueryToThemeConnection"],
     ThemeConnectionEdge: ["RootQueryToThemeConnectionEdge"],
     ThemeConnectionPageInfo: ["RootQueryToThemeConnectionPageInfo"],
@@ -15481,33 +15012,12 @@ export interface AcfFieldGroup {
     | "PeriodoDeAdmision_Datosperiodosdeadmision"
     | "PeriodoDeAdmision_Datosperiodosdeadmision_fechasExamenesAdmision"
     | "Post_Datospublicacion"
-    | "Post_Datospublicacion_DatosDelEvento"
-    | "Recurso_Datosrecurso"
-    | "Slide_Datoscta";
+    | "Post_Datospublicacion_DatosDelEvento";
   /**
    * The name of the ACF Field Group
    */
   fieldGroupName?: Maybe<ScalarsEnums["String"]>;
   $on: $AcfFieldGroup;
-}
-
-/**
- * ACF Link field
- */
-export interface AcfLink {
-  __typename?: "AcfLink";
-  /**
-   * The target of the link (_blank, etc)
-   */
-  target?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The title of the link
-   */
-  title?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The url of the link
-   */
-  url?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -17456,7 +16966,6 @@ export interface Connection {
     | "RootQueryToPostFormatConnection"
     | "RootQueryToRecursoConnection"
     | "RootQueryToRevisionsConnection"
-    | "RootQueryToSlideConnection"
     | "RootQueryToTagConnection"
     | "RootQueryToTaxonomyConnection"
     | "RootQueryToTermNodeConnection"
@@ -17484,7 +16993,6 @@ export interface Connection {
     | "UserToPostConnection"
     | "UserToRecursoConnection"
     | "UserToRevisionsConnection"
-    | "UserToSlideConnection"
     | "UserToUserRoleConnection";
   /**
    * A list of edges (relational context) between connected nodes
@@ -17517,8 +17025,7 @@ export interface ContentNode {
     | "Page"
     | "PeriodoDeAdmision"
     | "Post"
-    | "Recurso"
-    | "Slide";
+    | "Recurso";
   /**
    * @deprecated Deprecated in favor of using Next.js pages
    */
@@ -18569,21 +18076,6 @@ export interface CreateRecursoPayload {
 }
 
 /**
- * The payload for the createSlide mutation.
- */
-export interface CreateSlidePayload {
-  __typename?: "CreateSlidePayload";
-  /**
-   * If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
-   */
-  clientMutationId?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The Post object mutation type.
-   */
-  slide?: Maybe<Slide>;
-}
-
-/**
  * The payload for the createTag mutation.
  */
 export interface CreateTagPayload {
@@ -18637,7 +18129,6 @@ export interface DatabaseIdentifier {
     | "Post"
     | "PostFormat"
     | "Recurso"
-    | "Slide"
     | "Tag"
     | "User";
   /**
@@ -18960,25 +18451,6 @@ export interface DeleteRecursoPayload {
    * The object before it was deleted
    */
   recurso?: Maybe<Recurso>;
-}
-
-/**
- * The payload for the deleteSlide mutation.
- */
-export interface DeleteSlidePayload {
-  __typename?: "DeleteSlidePayload";
-  /**
-   * If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
-   */
-  clientMutationId?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The ID of the deleted object
-   */
-  deletedId?: Maybe<ScalarsEnums["ID"]>;
-  /**
-   * The object before it was deleted
-   */
-  slide?: Maybe<Slide>;
 }
 
 /**
@@ -19720,14 +19192,12 @@ export interface Edge {
     | "RootQueryToPostFormatConnectionEdge"
     | "RootQueryToRecursoConnectionEdge"
     | "RootQueryToRevisionsConnectionEdge"
-    | "RootQueryToSlideConnectionEdge"
     | "RootQueryToTagConnectionEdge"
     | "RootQueryToTaxonomyConnectionEdge"
     | "RootQueryToTermNodeConnectionEdge"
     | "RootQueryToThemeConnectionEdge"
     | "RootQueryToUserConnectionEdge"
     | "RootQueryToUserRoleConnectionEdge"
-    | "SlideToPreviewConnectionEdge"
     | "TagToContentNodeConnectionEdge"
     | "TagToPostConnectionEdge"
     | "TagToTaxonomyConnectionEdge"
@@ -19750,7 +19220,6 @@ export interface Edge {
     | "UserToPostConnectionEdge"
     | "UserToRecursoConnectionEdge"
     | "UserToRevisionsConnectionEdge"
-    | "UserToSlideConnectionEdge"
     | "UserToUserRoleConnectionEdge";
   /**
    * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
@@ -24520,7 +23989,6 @@ export interface Node {
     | "Post"
     | "PostFormat"
     | "Recurso"
-    | "Slide"
     | "Tag"
     | "Taxonomy"
     | "Theme"
@@ -24549,8 +24017,7 @@ export interface NodeWithAuthor {
     | "Page"
     | "PeriodoDeAdmision"
     | "Post"
-    | "Recurso"
-    | "Slide";
+    | "Recurso";
   /**
    * Connection between the NodeWithAuthor type and the User type
    */
@@ -24659,8 +24126,7 @@ export interface NodeWithFeaturedImage {
     | "Investigador"
     | "Page"
     | "Post"
-    | "Recurso"
-    | "Slide";
+    | "Recurso";
   /**
    * Connection between the NodeWithFeaturedImage type and the MediaItem type
    */
@@ -24762,8 +24228,7 @@ export interface NodeWithTemplate {
     | "Page"
     | "PeriodoDeAdmision"
     | "Post"
-    | "Recurso"
-    | "Slide";
+    | "Recurso";
   /**
    * The globally unique ID for the object
    */
@@ -24791,8 +24256,7 @@ export interface NodeWithTitle {
     | "Page"
     | "PeriodoDeAdmision"
     | "Post"
-    | "Recurso"
-    | "Slide";
+    | "Recurso";
   /**
    * The globally unique ID for the object
    */
@@ -24875,7 +24339,6 @@ export interface OneToOneConnection {
     | "PostFormatToTaxonomyConnectionEdge"
     | "PostToPreviewConnectionEdge"
     | "RecursoToPreviewConnectionEdge"
-    | "SlideToPreviewConnectionEdge"
     | "TagToTaxonomyConnectionEdge";
   /**
    * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
@@ -25394,7 +24857,6 @@ export interface PageInfo {
     | "RootQueryToPostFormatConnectionPageInfo"
     | "RootQueryToRecursoConnectionPageInfo"
     | "RootQueryToRevisionsConnectionPageInfo"
-    | "RootQueryToSlideConnectionPageInfo"
     | "RootQueryToTagConnectionPageInfo"
     | "RootQueryToTaxonomyConnectionPageInfo"
     | "RootQueryToTermNodeConnectionPageInfo"
@@ -25422,7 +24884,6 @@ export interface PageInfo {
     | "UserToPostConnectionPageInfo"
     | "UserToRecursoConnectionPageInfo"
     | "UserToRevisionsConnectionPageInfo"
-    | "UserToSlideConnectionPageInfo"
     | "UserToUserRoleConnectionPageInfo";
   /**
    * When paginating forwards, the cursor to continue.
@@ -27565,8 +27026,7 @@ export interface Previewable {
     | "Page"
     | "PeriodoDeAdmision"
     | "Post"
-    | "Recurso"
-    | "Slide";
+    | "Recurso";
   /**
    * Whether the object is a node in the preview state
    */
@@ -27668,10 +27128,6 @@ export interface Recurso {
    * The publishing date set in GMT.
    */
   dateGmt?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * Added to the GraphQL Schema because the ACF Field Group &quot;DATOS DEL RECURSO&quot; was set to Show in GraphQL.
-   */
-  datosRecurso?: Maybe<Recurso_Datosrecurso>;
   descripcion?: Maybe<ScalarsEnums["String"]>;
   /**
    * The desired slug of the post
@@ -27983,18 +27439,6 @@ export interface RecursoToPreviewConnectionEdge {
    * The node of the connection, without the edges
    */
   node: Recurso;
-}
-
-/**
- * Field Group
- */
-export interface Recurso_Datosrecurso {
-  __typename?: "Recurso_Datosrecurso";
-  /**
-   * The name of the ACF Field Group
-   */
-  fieldGroupName?: Maybe<ScalarsEnums["String"]>;
-  tipo?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -29511,67 +28955,6 @@ export interface RootQueryToRevisionsConnectionPageInfo {
 }
 
 /**
- * Connection between the RootQuery type and the slide type
- */
-export interface RootQueryToSlideConnection {
-  __typename?: "RootQueryToSlideConnection";
-  /**
-   * Edges for the RootQueryToSlideConnection connection
-   */
-  edges: Array<RootQueryToSlideConnectionEdge>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes: Array<Slide>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo: RootQueryToSlideConnectionPageInfo;
-}
-
-/**
- * An edge in a connection
- */
-export interface RootQueryToSlideConnectionEdge {
-  __typename?: "RootQueryToSlideConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node: Slide;
-}
-
-/**
- * Page Info on the &quot;RootQueryToSlideConnection&quot;
- */
-export interface RootQueryToSlideConnectionPageInfo {
-  __typename?: "RootQueryToSlideConnectionPageInfo";
-  /**
-   * When paginating forwards, the cursor to continue.
-   */
-  endCursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * When paginating forwards, are there more items?
-   */
-  hasNextPage: ScalarsEnums["Boolean"];
-  /**
-   * When paginating backwards, are there more items?
-   */
-  hasPreviousPage: ScalarsEnums["Boolean"];
-  /**
-   * Raw schema for page
-   */
-  seo?: Maybe<SEOPostTypePageInfo>;
-  /**
-   * When paginating backwards, the cursor to continue.
-   */
-  startCursor?: Maybe<ScalarsEnums["String"]>;
-}
-
-/**
  * Connection between the RootQuery type and the tag type
  */
 export interface RootQueryToTagConnection {
@@ -30015,7 +29398,6 @@ export interface SEOContentTypes {
   periodoDeAdmision?: Maybe<SEOContentType>;
   post?: Maybe<SEOContentType>;
   recurso?: Maybe<SEOContentType>;
-  slide?: Maybe<SEOContentType>;
 }
 
 /**
@@ -30379,309 +29761,6 @@ export interface Settings {
    * Settings of the the boolean Settings Group
    */
   writingSettingsUseSmilies?: Maybe<ScalarsEnums["Boolean"]>;
-}
-
-/**
- * The slide type
- */
-export interface Slide {
-  __typename?: "Slide";
-  /**
-   * Connection between the NodeWithAuthor type and the User type
-   */
-  author?: Maybe<NodeWithAuthorToUserConnectionEdge>;
-  /**
-   * The database identifier of the author of the node
-   */
-  authorDatabaseId?: Maybe<ScalarsEnums["Int"]>;
-  /**
-   * The globally unique identifier of the author of the node
-   */
-  authorId?: Maybe<ScalarsEnums["ID"]>;
-  /**
-   * @deprecated Deprecated in favor of using Next.js pages
-   */
-  conditionalTags?: Maybe<ConditionalTags>;
-  /**
-   * Connection between the ContentNode type and the ContentType type
-   */
-  contentType?: Maybe<ContentNodeToContentTypeConnectionEdge>;
-  /**
-   * The name of the Content Type the node belongs to
-   */
-  contentTypeName: ScalarsEnums["String"];
-  copy?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The unique identifier stored in the database
-   */
-  databaseId: ScalarsEnums["Int"];
-  /**
-   * Post publishing date.
-   */
-  date?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The publishing date set in GMT.
-   */
-  dateGmt?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * Added to the GraphQL Schema because the ACF Field Group &quot;DATOS DEL SLIDE&quot; was set to Show in GraphQL.
-   */
-  datosCTA?: Maybe<Slide_Datoscta>;
-  /**
-   * The desired slug of the post
-   */
-  desiredSlug?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * If a user has edited the node within the past 15 seconds, this will return the user that last edited. Null if the edit lock doesn&#039;t exist or is greater than 15 seconds
-   */
-  editingLockedBy?: Maybe<ContentNodeToEditLockConnectionEdge>;
-  /**
-   * The RSS enclosure for the object
-   */
-  enclosure?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * Connection between the ContentNode type and the EnqueuedScript type
-   */
-  enqueuedScripts: (args?: {
-    /**
-     * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
-    /**
-     * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
-    /**
-     * The number of items to return after the referenced "after" cursor
-     */
-    first?: Maybe<Scalars["Int"]>;
-    /**
-     * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
-  }) => Maybe<ContentNodeToEnqueuedScriptConnection>;
-  /**
-   * Connection between the ContentNode type and the EnqueuedStylesheet type
-   */
-  enqueuedStylesheets: (args?: {
-    /**
-     * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
-    /**
-     * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
-    /**
-     * The number of items to return after the referenced "after" cursor
-     */
-    first?: Maybe<Scalars["Int"]>;
-    /**
-     * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
-  }) => Maybe<ContentNodeToEnqueuedStylesheetConnection>;
-  /**
-   * Connection between the NodeWithFeaturedImage type and the MediaItem type
-   */
-  featuredImage?: Maybe<NodeWithFeaturedImageToMediaItemConnectionEdge>;
-  /**
-   * The database identifier for the featured image node assigned to the content node
-   */
-  featuredImageDatabaseId?: Maybe<ScalarsEnums["Int"]>;
-  /**
-   * Globally unique ID of the featured image assigned to the node
-   */
-  featuredImageId?: Maybe<ScalarsEnums["ID"]>;
-  /**
-   * The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table.
-   */
-  guid?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The globally unique identifier of the slide object.
-   */
-  id: ScalarsEnums["ID"];
-  imagenPortada?: Maybe<MediaItem>;
-  /**
-   * Whether the node is a Content Node
-   */
-  isContentNode: ScalarsEnums["Boolean"];
-  /**
-   * Whether the object is a node in the preview state
-   */
-  isPreview?: Maybe<ScalarsEnums["Boolean"]>;
-  /**
-   * Whether the object is restricted from the current viewer
-   */
-  isRestricted?: Maybe<ScalarsEnums["Boolean"]>;
-  /**
-   * Whether the node is a Term
-   */
-  isTermNode: ScalarsEnums["Boolean"];
-  /**
-   * The user that most recently edited the node
-   */
-  lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
-  /**
-   * The permalink of the post
-   */
-  link?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The local modified time for a post. If a post was recently updated the modified field will change to match the corresponding time.
-   */
-  modified?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT.
-   */
-  modifiedGmt?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * Connection between the Slide type and the slide type
-   */
-  preview?: Maybe<SlideToPreviewConnectionEdge>;
-  /**
-   * The database id of the preview node
-   */
-  previewRevisionDatabaseId?: Maybe<ScalarsEnums["Int"]>;
-  /**
-   * Whether the object is a node in the preview state
-   */
-  previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
-  /**
-   * The Yoast SEO data of the ContentNode
-   */
-  seo?: Maybe<PostTypeSEO>;
-  /**
-   * The id field matches the WP_Post-&gt;ID field.
-   * @deprecated Deprecated in favor of the databaseId field
-   */
-  slideId: ScalarsEnums["Int"];
-  /**
-   * The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
-   */
-  slug?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The current status of the object
-   */
-  status?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * Link to edit the content
-   */
-  styles?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The template assigned to the node
-   */
-  template?: Maybe<ContentTemplate>;
-  templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
-  /**
-   * The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made.
-   */
-  title: (args?: {
-    /**
-     * Format of the field output
-     */
-    format?: Maybe<PostObjectFieldFormatEnum>;
-  }) => Maybe<ScalarsEnums["String"]>;
-  titulo?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The unique resource identifier path
-   */
-  uri?: Maybe<ScalarsEnums["String"]>;
-}
-
-/**
- * Connection to slide Nodes
- */
-export interface SlideConnection {
-  __typename?: "RootQueryToSlideConnection" | "UserToSlideConnection";
-  /**
-   * A list of edges (relational context) between RootQuery and connected slide Nodes
-   */
-  edges: Array<SlideConnectionEdge>;
-  /**
-   * A list of connected slide Nodes
-   */
-  nodes: Array<Slide>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo: SlideConnectionPageInfo;
-  $on: $SlideConnection;
-}
-
-/**
- * Edge between a Node and a connected slide
- */
-export interface SlideConnectionEdge {
-  __typename?:
-    | "RootQueryToSlideConnectionEdge"
-    | "SlideToPreviewConnectionEdge"
-    | "UserToSlideConnectionEdge";
-  /**
-   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The connected slide Node
-   */
-  node: Slide;
-  $on: $SlideConnectionEdge;
-}
-
-/**
- * Page Info on the connected SlideConnectionEdge
- */
-export interface SlideConnectionPageInfo {
-  __typename?:
-    | "RootQueryToSlideConnectionPageInfo"
-    | "UserToSlideConnectionPageInfo";
-  /**
-   * When paginating forwards, the cursor to continue.
-   */
-  endCursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * When paginating forwards, are there more items?
-   */
-  hasNextPage: ScalarsEnums["Boolean"];
-  /**
-   * When paginating backwards, are there more items?
-   */
-  hasPreviousPage: ScalarsEnums["Boolean"];
-  /**
-   * Raw schema for page
-   */
-  seo?: Maybe<SEOPostTypePageInfo>;
-  /**
-   * When paginating backwards, the cursor to continue.
-   */
-  startCursor?: Maybe<ScalarsEnums["String"]>;
-  $on: $SlideConnectionPageInfo;
-}
-
-/**
- * Connection between the Slide type and the slide type
- */
-export interface SlideToPreviewConnectionEdge {
-  __typename?: "SlideToPreviewConnectionEdge";
-  /**
-   * Opaque reference to the nodes position in the connection. Value can be used with pagination args.
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The node of the connection, without the edges
-   */
-  node: Slide;
-}
-
-/**
- * Field Group
- */
-export interface Slide_Datoscta {
-  __typename?: "Slide_Datoscta";
-  cta?: Maybe<AcfLink>;
-  /**
-   * The name of the ACF Field Group
-   */
-  fieldGroupName?: Maybe<ScalarsEnums["String"]>;
 }
 
 /**
@@ -31769,7 +30848,6 @@ export interface UniformResourceIdentifiable {
     | "Post"
     | "PostFormat"
     | "Recurso"
-    | "Slide"
     | "Tag"
     | "User";
   /**
@@ -32073,21 +31151,6 @@ export interface UpdateSettingsPayload {
    * Update the WritingSettings setting.
    */
   writingSettings?: Maybe<WritingSettings>;
-}
-
-/**
- * The payload for the updateSlide mutation.
- */
-export interface UpdateSlidePayload {
-  __typename?: "UpdateSlidePayload";
-  /**
-   * If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
-   */
-  clientMutationId?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The Post object mutation type.
-   */
-  slide?: Maybe<Slide>;
 }
 
 /**
@@ -32633,30 +31696,9 @@ export interface User {
    */
   seo?: Maybe<SEOUser>;
   /**
-   * Connection between the User type and the slide type
+   * Whether the Toolbar should be displayed when the user is viewing the site.
    */
-  slides: (args?: {
-    /**
-     * Cursor used along with the "first" argument to reference where in the dataset to get data
-     */
-    after?: Maybe<Scalars["String"]>;
-    /**
-     * Cursor used along with the "last" argument to reference where in the dataset to get data
-     */
-    before?: Maybe<Scalars["String"]>;
-    /**
-     * The number of items to return after the referenced "after" cursor
-     */
-    first?: Maybe<Scalars["Int"]>;
-    /**
-     * The number of items to return before the referenced "before" cursor
-     */
-    last?: Maybe<Scalars["Int"]>;
-    /**
-     * Arguments for filtering the connection
-     */
-    where?: Maybe<UserToSlideConnectionWhereArgs>;
-  }) => Maybe<UserToSlideConnection>;
+  shouldShowAdminToolbar?: Maybe<ScalarsEnums["Boolean"]>;
   /**
    * The slug for the user. This field is equivalent to WP_User-&gt;user_nicename
    */
@@ -33821,67 +32863,6 @@ export interface UserToRevisionsConnectionPageInfo {
 }
 
 /**
- * Connection between the User type and the slide type
- */
-export interface UserToSlideConnection {
-  __typename?: "UserToSlideConnection";
-  /**
-   * Edges for the UserToSlideConnection connection
-   */
-  edges: Array<UserToSlideConnectionEdge>;
-  /**
-   * The nodes of the connection, without the edges
-   */
-  nodes: Array<Slide>;
-  /**
-   * Information about pagination in a connection.
-   */
-  pageInfo: UserToSlideConnectionPageInfo;
-}
-
-/**
- * An edge in a connection
- */
-export interface UserToSlideConnectionEdge {
-  __typename?: "UserToSlideConnectionEdge";
-  /**
-   * A cursor for use in pagination
-   */
-  cursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * The item at the end of the edge
-   */
-  node: Slide;
-}
-
-/**
- * Page Info on the &quot;UserToSlideConnection&quot;
- */
-export interface UserToSlideConnectionPageInfo {
-  __typename?: "UserToSlideConnectionPageInfo";
-  /**
-   * When paginating forwards, the cursor to continue.
-   */
-  endCursor?: Maybe<ScalarsEnums["String"]>;
-  /**
-   * When paginating forwards, are there more items?
-   */
-  hasNextPage: ScalarsEnums["Boolean"];
-  /**
-   * When paginating backwards, are there more items?
-   */
-  hasPreviousPage: ScalarsEnums["Boolean"];
-  /**
-   * Raw schema for page
-   */
-  seo?: Maybe<SEOPostTypePageInfo>;
-  /**
-   * When paginating backwards, the cursor to continue.
-   */
-  startCursor?: Maybe<ScalarsEnums["String"]>;
-}
-
-/**
  * Connection between the User type and the UserRole type
  */
 export interface UserToUserRoleConnection {
@@ -34009,7 +32990,6 @@ export interface WPPageInfo {
     | "RootQueryToPostFormatConnectionPageInfo"
     | "RootQueryToRecursoConnectionPageInfo"
     | "RootQueryToRevisionsConnectionPageInfo"
-    | "RootQueryToSlideConnectionPageInfo"
     | "RootQueryToTagConnectionPageInfo"
     | "RootQueryToTaxonomyConnectionPageInfo"
     | "RootQueryToTermNodeConnectionPageInfo"
@@ -34037,7 +33017,6 @@ export interface WPPageInfo {
     | "UserToPostConnectionPageInfo"
     | "UserToRecursoConnectionPageInfo"
     | "UserToRevisionsConnectionPageInfo"
-    | "UserToSlideConnectionPageInfo"
     | "UserToUserRoleConnectionPageInfo";
   /**
    * When paginating forwards, the cursor to continue.
@@ -34125,7 +33104,6 @@ export interface Mutation {
   createRecurso: (args: {
     input: CreateRecursoInput;
   }) => Maybe<CreateRecursoPayload>;
-  createSlide: (args: { input: CreateSlideInput }) => Maybe<CreateSlidePayload>;
   createTag: (args: { input: CreateTagInput }) => Maybe<CreateTagPayload>;
   createUser: (args: { input: CreateUserInput }) => Maybe<CreateUserPayload>;
   deleteCarrera: (args: {
@@ -34170,7 +33148,6 @@ export interface Mutation {
   deleteRecurso: (args: {
     input: DeleteRecursoInput;
   }) => Maybe<DeleteRecursoPayload>;
-  deleteSlide: (args: { input: DeleteSlideInput }) => Maybe<DeleteSlidePayload>;
   deleteTag: (args: { input: DeleteTagInput }) => Maybe<DeleteTagPayload>;
   deleteUser: (args: { input: DeleteUserInput }) => Maybe<DeleteUserPayload>;
   generateAuthorizationCode: (args: {
@@ -34236,7 +33213,6 @@ export interface Mutation {
   updateSettings: (args: {
     input: UpdateSettingsInput;
   }) => Maybe<UpdateSettingsPayload>;
-  updateSlide: (args: { input: UpdateSlideInput }) => Maybe<UpdateSlidePayload>;
   updateTag: (args: { input: UpdateTagInput }) => Maybe<UpdateTagPayload>;
   updateUser: (args: { input: UpdateUserInput }) => Maybe<UpdateUserPayload>;
 }
@@ -34588,24 +33564,6 @@ export interface Query {
     where?: Maybe<RootQueryToRevisionsConnectionWhereArgs>;
   }) => Maybe<RootQueryToRevisionsConnection>;
   seo?: Maybe<SEOConfig>;
-  slide: (args: {
-    asPreview?: Maybe<Scalars["Boolean"]>;
-    id: Scalars["ID"];
-    idType?: Maybe<SlideIdType>;
-  }) => Maybe<Slide>;
-  slideBy: (args?: {
-    id?: Maybe<Scalars["ID"]>;
-    slideId?: Maybe<Scalars["Int"]>;
-    slug?: Maybe<Scalars["String"]>;
-    uri?: Maybe<Scalars["String"]>;
-  }) => Maybe<Slide>;
-  slides: (args?: {
-    after?: Maybe<Scalars["String"]>;
-    before?: Maybe<Scalars["String"]>;
-    first?: Maybe<Scalars["Int"]>;
-    last?: Maybe<Scalars["Int"]>;
-    where?: Maybe<RootQueryToSlideConnectionWhereArgs>;
-  }) => Maybe<RootQueryToSlideConnection>;
   tag: (args: { id: Scalars["ID"]; idType?: Maybe<TagIdType> }) => Maybe<Tag>;
   tags: (args?: {
     after?: Maybe<Scalars["String"]>;
@@ -34670,7 +33628,6 @@ export interface Subscription {
 }
 
 export interface SchemaObjectTypes {
-  AcfLink: AcfLink;
   AcfOptionsConfiguracionesDeHubspot: AcfOptionsConfiguracionesDeHubspot;
   AcfOptionsConfiguracionesDeHubspot_Idcuentahubspot: AcfOptionsConfiguracionesDeHubspot_Idcuentahubspot;
   AcfOptionsRedesSociales: AcfOptionsRedesSociales;
@@ -34757,7 +33714,6 @@ export interface SchemaObjectTypes {
   CreatePostFormatPayload: CreatePostFormatPayload;
   CreatePostPayload: CreatePostPayload;
   CreateRecursoPayload: CreateRecursoPayload;
-  CreateSlidePayload: CreateSlidePayload;
   CreateTagPayload: CreateTagPayload;
   CreateUserPayload: CreateUserPayload;
   DefaultTemplate: DefaultTemplate;
@@ -34777,7 +33733,6 @@ export interface SchemaObjectTypes {
   DeletePostFormatPayload: DeletePostFormatPayload;
   DeletePostPayload: DeletePostPayload;
   DeleteRecursoPayload: DeleteRecursoPayload;
-  DeleteSlidePayload: DeleteSlidePayload;
   DeleteTagPayload: DeleteTagPayload;
   DeleteUserPayload: DeleteUserPayload;
   Departamento: Departamento;
@@ -34952,7 +33907,6 @@ export interface SchemaObjectTypes {
   RecursoToCarreraConnectionEdge: RecursoToCarreraConnectionEdge;
   RecursoToCarreraConnectionPageInfo: RecursoToCarreraConnectionPageInfo;
   RecursoToPreviewConnectionEdge: RecursoToPreviewConnectionEdge;
-  Recurso_Datosrecurso: Recurso_Datosrecurso;
   RegisterUserPayload: RegisterUserPayload;
   ResetUserPasswordPayload: ResetUserPasswordPayload;
   RestoreCommentPayload: RestoreCommentPayload;
@@ -35028,9 +33982,6 @@ export interface SchemaObjectTypes {
   RootQueryToRevisionsConnection: RootQueryToRevisionsConnection;
   RootQueryToRevisionsConnectionEdge: RootQueryToRevisionsConnectionEdge;
   RootQueryToRevisionsConnectionPageInfo: RootQueryToRevisionsConnectionPageInfo;
-  RootQueryToSlideConnection: RootQueryToSlideConnection;
-  RootQueryToSlideConnectionEdge: RootQueryToSlideConnectionEdge;
-  RootQueryToSlideConnectionPageInfo: RootQueryToSlideConnectionPageInfo;
   RootQueryToTagConnection: RootQueryToTagConnection;
   RootQueryToTagConnectionEdge: RootQueryToTagConnectionEdge;
   RootQueryToTagConnectionPageInfo: RootQueryToTagConnectionPageInfo;
@@ -35084,9 +34035,6 @@ export interface SchemaObjectTypes {
   SEOWebmaster: SEOWebmaster;
   SendPasswordResetEmailPayload: SendPasswordResetEmailPayload;
   Settings: Settings;
-  Slide: Slide;
-  SlideToPreviewConnectionEdge: SlideToPreviewConnectionEdge;
-  Slide_Datoscta: Slide_Datoscta;
   Subscription: Subscription;
   Tag: Tag;
   TagToContentNodeConnection: TagToContentNodeConnection;
@@ -35125,7 +34073,6 @@ export interface SchemaObjectTypes {
   UpdatePostPayload: UpdatePostPayload;
   UpdateRecursoPayload: UpdateRecursoPayload;
   UpdateSettingsPayload: UpdateSettingsPayload;
-  UpdateSlidePayload: UpdateSlidePayload;
   UpdateTagPayload: UpdateTagPayload;
   UpdateUserPayload: UpdateUserPayload;
   User: User;
@@ -35178,16 +34125,12 @@ export interface SchemaObjectTypes {
   UserToRevisionsConnection: UserToRevisionsConnection;
   UserToRevisionsConnectionEdge: UserToRevisionsConnectionEdge;
   UserToRevisionsConnectionPageInfo: UserToRevisionsConnectionPageInfo;
-  UserToSlideConnection: UserToSlideConnection;
-  UserToSlideConnectionEdge: UserToSlideConnectionEdge;
-  UserToSlideConnectionPageInfo: UserToSlideConnectionPageInfo;
   UserToUserRoleConnection: UserToUserRoleConnection;
   UserToUserRoleConnectionEdge: UserToUserRoleConnectionEdge;
   UserToUserRoleConnectionPageInfo: UserToUserRoleConnectionPageInfo;
   WritingSettings: WritingSettings;
 }
 export type SchemaObjectTypesNames =
-  | "AcfLink"
   | "AcfOptionsConfiguracionesDeHubspot"
   | "AcfOptionsConfiguracionesDeHubspot_Idcuentahubspot"
   | "AcfOptionsRedesSociales"
@@ -35274,7 +34217,6 @@ export type SchemaObjectTypesNames =
   | "CreatePostFormatPayload"
   | "CreatePostPayload"
   | "CreateRecursoPayload"
-  | "CreateSlidePayload"
   | "CreateTagPayload"
   | "CreateUserPayload"
   | "DefaultTemplate"
@@ -35294,7 +34236,6 @@ export type SchemaObjectTypesNames =
   | "DeletePostFormatPayload"
   | "DeletePostPayload"
   | "DeleteRecursoPayload"
-  | "DeleteSlidePayload"
   | "DeleteTagPayload"
   | "DeleteUserPayload"
   | "Departamento"
@@ -35469,7 +34410,6 @@ export type SchemaObjectTypesNames =
   | "RecursoToCarreraConnectionEdge"
   | "RecursoToCarreraConnectionPageInfo"
   | "RecursoToPreviewConnectionEdge"
-  | "Recurso_Datosrecurso"
   | "RegisterUserPayload"
   | "ResetUserPasswordPayload"
   | "RestoreCommentPayload"
@@ -35545,9 +34485,6 @@ export type SchemaObjectTypesNames =
   | "RootQueryToRevisionsConnection"
   | "RootQueryToRevisionsConnectionEdge"
   | "RootQueryToRevisionsConnectionPageInfo"
-  | "RootQueryToSlideConnection"
-  | "RootQueryToSlideConnectionEdge"
-  | "RootQueryToSlideConnectionPageInfo"
   | "RootQueryToTagConnection"
   | "RootQueryToTagConnectionEdge"
   | "RootQueryToTagConnectionPageInfo"
@@ -35601,9 +34538,6 @@ export type SchemaObjectTypesNames =
   | "SEOWebmaster"
   | "SendPasswordResetEmailPayload"
   | "Settings"
-  | "Slide"
-  | "SlideToPreviewConnectionEdge"
-  | "Slide_Datoscta"
   | "Subscription"
   | "Tag"
   | "TagToContentNodeConnection"
@@ -35642,7 +34576,6 @@ export type SchemaObjectTypesNames =
   | "UpdatePostPayload"
   | "UpdateRecursoPayload"
   | "UpdateSettingsPayload"
-  | "UpdateSlidePayload"
   | "UpdateTagPayload"
   | "UpdateUserPayload"
   | "User"
@@ -35695,9 +34628,6 @@ export type SchemaObjectTypesNames =
   | "UserToRevisionsConnection"
   | "UserToRevisionsConnectionEdge"
   | "UserToRevisionsConnectionPageInfo"
-  | "UserToSlideConnection"
-  | "UserToSlideConnectionEdge"
-  | "UserToSlideConnectionPageInfo"
   | "UserToUserRoleConnection"
   | "UserToUserRoleConnectionEdge"
   | "UserToUserRoleConnectionPageInfo"
@@ -35758,8 +34688,6 @@ export interface $AcfFieldGroup {
   PeriodoDeAdmision_Datosperiodosdeadmision_fechasExamenesAdmision?: PeriodoDeAdmision_Datosperiodosdeadmision_fechasExamenesAdmision;
   Post_Datospublicacion?: Post_Datospublicacion;
   Post_Datospublicacion_DatosDelEvento?: Post_Datospublicacion_DatosDelEvento;
-  Recurso_Datosrecurso?: Recurso_Datosrecurso;
-  Slide_Datoscta?: Slide_Datoscta;
 }
 
 export interface $CarreraConnection {
@@ -35912,7 +34840,6 @@ export interface $Connection {
   RootQueryToPostFormatConnection?: RootQueryToPostFormatConnection;
   RootQueryToRecursoConnection?: RootQueryToRecursoConnection;
   RootQueryToRevisionsConnection?: RootQueryToRevisionsConnection;
-  RootQueryToSlideConnection?: RootQueryToSlideConnection;
   RootQueryToTagConnection?: RootQueryToTagConnection;
   RootQueryToTaxonomyConnection?: RootQueryToTaxonomyConnection;
   RootQueryToTermNodeConnection?: RootQueryToTermNodeConnection;
@@ -35940,7 +34867,6 @@ export interface $Connection {
   UserToPostConnection?: UserToPostConnection;
   UserToRecursoConnection?: UserToRecursoConnection;
   UserToRevisionsConnection?: UserToRevisionsConnection;
-  UserToSlideConnection?: UserToSlideConnection;
   UserToUserRoleConnection?: UserToUserRoleConnection;
 }
 
@@ -35957,7 +34883,6 @@ export interface $ContentNode {
   PeriodoDeAdmision?: PeriodoDeAdmision;
   Post?: Post;
   Recurso?: Recurso;
-  Slide?: Slide;
 }
 
 export interface $ContentNodeConnection {
@@ -36042,7 +34967,6 @@ export interface $DatabaseIdentifier {
   Post?: Post;
   PostFormat?: PostFormat;
   Recurso?: Recurso;
-  Slide?: Slide;
   Tag?: Tag;
   User?: User;
 }
@@ -36164,14 +35088,12 @@ export interface $Edge {
   RootQueryToPostFormatConnectionEdge?: RootQueryToPostFormatConnectionEdge;
   RootQueryToRecursoConnectionEdge?: RootQueryToRecursoConnectionEdge;
   RootQueryToRevisionsConnectionEdge?: RootQueryToRevisionsConnectionEdge;
-  RootQueryToSlideConnectionEdge?: RootQueryToSlideConnectionEdge;
   RootQueryToTagConnectionEdge?: RootQueryToTagConnectionEdge;
   RootQueryToTaxonomyConnectionEdge?: RootQueryToTaxonomyConnectionEdge;
   RootQueryToTermNodeConnectionEdge?: RootQueryToTermNodeConnectionEdge;
   RootQueryToThemeConnectionEdge?: RootQueryToThemeConnectionEdge;
   RootQueryToUserConnectionEdge?: RootQueryToUserConnectionEdge;
   RootQueryToUserRoleConnectionEdge?: RootQueryToUserRoleConnectionEdge;
-  SlideToPreviewConnectionEdge?: SlideToPreviewConnectionEdge;
   TagToContentNodeConnectionEdge?: TagToContentNodeConnectionEdge;
   TagToPostConnectionEdge?: TagToPostConnectionEdge;
   TagToTaxonomyConnectionEdge?: TagToTaxonomyConnectionEdge;
@@ -36194,7 +35116,6 @@ export interface $Edge {
   UserToPostConnectionEdge?: UserToPostConnectionEdge;
   UserToRecursoConnectionEdge?: UserToRecursoConnectionEdge;
   UserToRevisionsConnectionEdge?: UserToRevisionsConnectionEdge;
-  UserToSlideConnectionEdge?: UserToSlideConnectionEdge;
   UserToUserRoleConnectionEdge?: UserToUserRoleConnectionEdge;
 }
 
@@ -36465,7 +35386,6 @@ export interface $Node {
   Post?: Post;
   PostFormat?: PostFormat;
   Recurso?: Recurso;
-  Slide?: Slide;
   Tag?: Tag;
   Taxonomy?: Taxonomy;
   Theme?: Theme;
@@ -36486,7 +35406,6 @@ export interface $NodeWithAuthor {
   PeriodoDeAdmision?: PeriodoDeAdmision;
   Post?: Post;
   Recurso?: Recurso;
-  Slide?: Slide;
 }
 
 export interface $NodeWithComments {
@@ -36513,7 +35432,6 @@ export interface $NodeWithFeaturedImage {
   Page?: Page;
   Post?: Post;
   Recurso?: Recurso;
-  Slide?: Slide;
 }
 
 export interface $NodeWithPageAttributes {
@@ -36538,7 +35456,6 @@ export interface $NodeWithTemplate {
   PeriodoDeAdmision?: PeriodoDeAdmision;
   Post?: Post;
   Recurso?: Recurso;
-  Slide?: Slide;
 }
 
 export interface $NodeWithTitle {
@@ -36554,7 +35471,6 @@ export interface $NodeWithTitle {
   PeriodoDeAdmision?: PeriodoDeAdmision;
   Post?: Post;
   Recurso?: Recurso;
-  Slide?: Slide;
 }
 
 export interface $NodeWithTrackbacks {
@@ -36595,7 +35511,6 @@ export interface $OneToOneConnection {
   PostFormatToTaxonomyConnectionEdge?: PostFormatToTaxonomyConnectionEdge;
   PostToPreviewConnectionEdge?: PostToPreviewConnectionEdge;
   RecursoToPreviewConnectionEdge?: RecursoToPreviewConnectionEdge;
-  SlideToPreviewConnectionEdge?: SlideToPreviewConnectionEdge;
   TagToTaxonomyConnectionEdge?: TagToTaxonomyConnectionEdge;
 }
 
@@ -36681,7 +35596,6 @@ export interface $PageInfo {
   RootQueryToPostFormatConnectionPageInfo?: RootQueryToPostFormatConnectionPageInfo;
   RootQueryToRecursoConnectionPageInfo?: RootQueryToRecursoConnectionPageInfo;
   RootQueryToRevisionsConnectionPageInfo?: RootQueryToRevisionsConnectionPageInfo;
-  RootQueryToSlideConnectionPageInfo?: RootQueryToSlideConnectionPageInfo;
   RootQueryToTagConnectionPageInfo?: RootQueryToTagConnectionPageInfo;
   RootQueryToTaxonomyConnectionPageInfo?: RootQueryToTaxonomyConnectionPageInfo;
   RootQueryToTermNodeConnectionPageInfo?: RootQueryToTermNodeConnectionPageInfo;
@@ -36709,7 +35623,6 @@ export interface $PageInfo {
   UserToPostConnectionPageInfo?: UserToPostConnectionPageInfo;
   UserToRecursoConnectionPageInfo?: UserToRecursoConnectionPageInfo;
   UserToRevisionsConnectionPageInfo?: UserToRevisionsConnectionPageInfo;
-  UserToSlideConnectionPageInfo?: UserToSlideConnectionPageInfo;
   UserToUserRoleConnectionPageInfo?: UserToUserRoleConnectionPageInfo;
 }
 
@@ -36800,7 +35713,6 @@ export interface $Previewable {
   PeriodoDeAdmision?: PeriodoDeAdmision;
   Post?: Post;
   Recurso?: Recurso;
-  Slide?: Slide;
 }
 
 export interface $RecursoConnection {
@@ -36820,22 +35732,6 @@ export interface $RecursoConnectionPageInfo {
   CarreraToRecursoConnectionPageInfo?: CarreraToRecursoConnectionPageInfo;
   RootQueryToRecursoConnectionPageInfo?: RootQueryToRecursoConnectionPageInfo;
   UserToRecursoConnectionPageInfo?: UserToRecursoConnectionPageInfo;
-}
-
-export interface $SlideConnection {
-  RootQueryToSlideConnection?: RootQueryToSlideConnection;
-  UserToSlideConnection?: UserToSlideConnection;
-}
-
-export interface $SlideConnectionEdge {
-  RootQueryToSlideConnectionEdge?: RootQueryToSlideConnectionEdge;
-  SlideToPreviewConnectionEdge?: SlideToPreviewConnectionEdge;
-  UserToSlideConnectionEdge?: UserToSlideConnectionEdge;
-}
-
-export interface $SlideConnectionPageInfo {
-  RootQueryToSlideConnectionPageInfo?: RootQueryToSlideConnectionPageInfo;
-  UserToSlideConnectionPageInfo?: UserToSlideConnectionPageInfo;
 }
 
 export interface $TagConnection {
@@ -36926,7 +35822,6 @@ export interface $UniformResourceIdentifiable {
   Post?: Post;
   PostFormat?: PostFormat;
   Recurso?: Recurso;
-  Slide?: Slide;
   Tag?: Tag;
   User?: User;
 }
@@ -37024,7 +35919,6 @@ export interface $WPPageInfo {
   RootQueryToPostFormatConnectionPageInfo?: RootQueryToPostFormatConnectionPageInfo;
   RootQueryToRecursoConnectionPageInfo?: RootQueryToRecursoConnectionPageInfo;
   RootQueryToRevisionsConnectionPageInfo?: RootQueryToRevisionsConnectionPageInfo;
-  RootQueryToSlideConnectionPageInfo?: RootQueryToSlideConnectionPageInfo;
   RootQueryToTagConnectionPageInfo?: RootQueryToTagConnectionPageInfo;
   RootQueryToTaxonomyConnectionPageInfo?: RootQueryToTaxonomyConnectionPageInfo;
   RootQueryToTermNodeConnectionPageInfo?: RootQueryToTermNodeConnectionPageInfo;
@@ -37052,7 +35946,6 @@ export interface $WPPageInfo {
   UserToPostConnectionPageInfo?: UserToPostConnectionPageInfo;
   UserToRecursoConnectionPageInfo?: UserToRecursoConnectionPageInfo;
   UserToRevisionsConnectionPageInfo?: UserToRevisionsConnectionPageInfo;
-  UserToSlideConnectionPageInfo?: UserToSlideConnectionPageInfo;
   UserToUserRoleConnectionPageInfo?: UserToUserRoleConnectionPageInfo;
 }
 
@@ -37113,7 +36006,6 @@ export interface ScalarsEnums extends MakeNullable<Scalars> {
   RecursoIdType: RecursoIdType | undefined;
   RelationEnum: RelationEnum | undefined;
   SEOCardType: SEOCardType | undefined;
-  SlideIdType: SlideIdType | undefined;
   TagIdType: TagIdType | undefined;
   TaxonomyEnum: TaxonomyEnum | undefined;
   TaxonomyIdTypeEnum: TaxonomyIdTypeEnum | undefined;

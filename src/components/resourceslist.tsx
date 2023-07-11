@@ -1,45 +1,45 @@
-import React, { useEffect } from 'react'
-import { css } from '@emotion/react'
-import styled from '@emotion/styled'
-import { h3 } from 'styles/tipography'
-import { SearchIcon } from './icons'
-import ResourceCard from './resource-card'
-import colors from 'components/colors'
-import useModal from 'hooks/useModal'
-import ctas from 'styles/cta'
-import { container, mq } from 'components/grid'
-import { client, Recurso } from 'client'
+import React, { useEffect } from "react";
+import { css } from "@emotion/react";
+import styled from "@emotion/styled";
+import { h3 } from "styles/tipography";
+import { SearchIcon } from "./icons";
+import ResourceCard from "./resource-card";
+import colors from "components/colors";
+import useModal from "hooks/useModal";
+import ctas from "styles/cta";
+import { container, mq } from "components/grid";
+import { client, Recurso } from "client";
 
 interface ResourcesListProps {
-  spaceTopNone?: boolean
-  spaceBottomNone?: boolean
-  spaceNone?: boolean
-  title?: string
-  titleAs?: any
-  titleColor?: string
-  resourceColor?: string
-  searchEnable?: boolean
-  alwaysVisibile?: boolean
-  noResultsText?: string
-  thin?: boolean
-  small?: boolean
-  medium?: boolean
-  large?: boolean
-  exclude?: any[]
-  items?: Recurso[]
+  spaceTopNone?: boolean;
+  spaceBottomNone?: boolean;
+  spaceNone?: boolean;
+  title?: string;
+  titleAs?: any;
+  titleColor?: string;
+  resourceColor?: string;
+  searchEnable?: boolean;
+  alwaysVisibile?: boolean;
+  noResultsText?: string;
+  thin?: boolean;
+  small?: boolean;
+  medium?: boolean;
+  large?: boolean;
+  exclude?: any[];
+  items?: Recurso[];
 }
 
 const ResourcesList = ({
   spaceTopNone,
   spaceBottomNone,
   spaceNone,
-  title = 'Recursos',
-  titleAs = 'h2',
+  title = "Recursos",
+  titleAs = "h2",
   titleColor = colors.primary.dark,
   resourceColor = colors.primary.dark,
   searchEnable = false,
   alwaysVisibile = false,
-  noResultsText = 'Sin resultados para mostrar',
+  noResultsText = "Sin resultados para mostrar",
   thin = false,
   small = false,
   medium = true,
@@ -48,12 +48,12 @@ const ResourcesList = ({
   items = [],
 }: ResourcesListProps) => {
   const resources = items?.filter(
-    (resource) => !exclude.includes(resource?.datosRecurso.tipo),
-  )
+    (resource) => !exclude.includes(resource.tipo)
+  );
 
-  const { openModal, ModalUI } = useModal()
+  const { openModal, ModalUI } = useModal();
 
-  useEffect(() => {}, [])
+  useEffect(() => {}, []);
 
   return resources.length || alwaysVisibile ? (
     <Section
@@ -102,7 +102,7 @@ const ResourcesList = ({
                     color={resourceColor}
                     item={item}
                   />
-                )
+                );
               })
             ) : (
               <Message color={colors.red.base}>{noResultsText}</Message>
@@ -111,10 +111,10 @@ const ResourcesList = ({
         </Container>
       </ModalUI>
     </Section>
-  ) : null
-}
+  ) : null;
+};
 
-export default ResourcesList
+export default ResourcesList;
 
 const Section = styled.section`
   margin-bottom: 6.4rem;
@@ -123,15 +123,15 @@ const Section = styled.section`
     margin-bottom: 12.8rem;
     margin-top: 12.8rem;
   }
-`
+`;
 const Container = styled.div`
   ${container}
-`
+`;
 
 const ContainerUI = styled.div`
   ${container}
   text-align:center;
-`
+`;
 
 const ContainerCard = styled.div`
   ${container}
@@ -145,7 +145,7 @@ const ContainerCard = styled.div`
   ${mq.xl} {
     grid-template-columns: 33.3333% 33.3333% 33.3333%;
   }
-`
+`;
 
 const Title = styled.h2`
   ${(props: { color?: string }) => css`
@@ -154,14 +154,14 @@ const Title = styled.h2`
     margin-bottom: 50px;
     color: ${props.color};
   `}
-`
+`;
 
 const SearchForm = styled.form`
   max-width: 600px;
   margin: 0 auto;
   margin-bottom: 80px;
   position: relative;
-`
+`;
 
 const SearchInput = styled.input`
   width: 100%;
@@ -173,7 +173,7 @@ const SearchInput = styled.input`
   background-color: rgba(0, 0, 0, 0.1);
   border-radius: 50px;
   font-size: 20px;
-`
+`;
 
 const SearchButton = styled.button`
   width: 60px;
@@ -193,7 +193,7 @@ const SearchButton = styled.button`
     display: inline-block;
     transform: scale(1.2);
   }
-`
+`;
 
 const Message = styled.p`
   ${h3}
@@ -201,8 +201,8 @@ const Message = styled.p`
     text-align: center;
     color: ${color};
   `}
-`
+`;
 
 const Button = styled.button`
   ${ctas}
-`
+`;

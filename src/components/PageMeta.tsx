@@ -1,27 +1,27 @@
-import React from 'react'
-import { client } from 'client'
-import { PageIdType } from '@faustjs/core/client'
+import React from "react";
+import { client } from "client";
+import { PageIdType } from "@faustjs/core/client";
 
 interface PageProps {
-  children?: any
-  uri: string
+  children?: any;
+  uri: string;
 }
 const PageMeta = ({ children, uri, ...props }: PageProps) => {
   const page = client.usePage({
-    id: uri ?? '',
+    id: uri ?? "",
     idType: PageIdType.URI,
-  })
+  });
 
-  const contacto = page?.contacto
+  const contacto = page?.contacto;
   const recursos = page?.datosRecursos?.relacion?.map(
-    (item) => item.$on.Recurso,
-  )
+    (item) => item.$on.Recurso
+  );
 
   const propiedades = {
     ...props,
     contacto,
     recursos,
-  }
+  };
 
   return (
     <>
@@ -29,12 +29,12 @@ const PageMeta = ({ children, uri, ...props }: PageProps) => {
         if (React.isValidElement(child)) {
           return React.cloneElement(child, {
             ...propiedades,
-          })
+          });
         }
-        return child
+        return child;
       })}
     </>
-  )
-}
+  );
+};
 
-export default PageMeta
+export default PageMeta;
