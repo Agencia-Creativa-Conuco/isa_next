@@ -6,7 +6,7 @@ import { container, mq } from "components/grid";
 import rector from "../../../public/images/nosotros/rector.jpg";
 
 const NosotrosRector = (props) => {
-  const name = "Ing. Angel Castillo",
+  const name = "Dr. Edwin Reyes",
     jobtitle = "Rector",
     content = `
             <p>En nombre de la Universidad ISA, les doy la bienvenida a este portal a través del cual podrán obtener información relevante sobre nuestra institución, además de todas las opciones que tiene la Universidad para ofrecerles como alternativa al momento de elegir una alma máter para su educación.</p>
