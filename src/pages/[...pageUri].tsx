@@ -38,7 +38,7 @@ export function PageComponent({ page }: PageProps) {
       // type: page.seo.opengraphType,
       images: [
         {
-          url: `${SITE_URL}/_next/image?url=${page.featuredImage.node.mediaItemUrl}&w=1920&q=75`,
+          url: `${SITE_URL}/_next/image?url=${page.featuredImage?.node.mediaItemUrl}&w=1920&q=75`,
         },
       ],
     },
