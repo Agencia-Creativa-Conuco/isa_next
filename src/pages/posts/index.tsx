@@ -38,7 +38,7 @@ export default function Page() {
   return (
     <Layout {...{ seo }}>
       <main className="content content-index">
-        <Posts posts={posts.nodes} heading="Publicaciones" />
+        <Posts posts={posts?.nodes} heading="Publicaciones" />
         <Pagination pageInfo={posts.pageInfo} basePath="/posts" />
       </main>
     </Layout>

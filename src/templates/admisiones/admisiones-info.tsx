@@ -1,31 +1,31 @@
-import React, { useState } from 'react'
-import styled from '@emotion/styled'
-import { css } from '@emotion/react'
-import { AdmissionRequisiteIcon } from 'components/icons'
-import { h2 } from 'styles/tipography'
-import { Spring, animated } from '@react-spring/web'
-import colors from 'components/colors'
-import { container, mq } from 'components/grid'
-import { client } from 'client'
+import React, { useState } from "react";
+import styled from "@emotion/styled";
+import { css } from "@emotion/react";
+import { AdmissionRequisiteIcon } from "components/icons";
+import { h2 } from "styles/tipography";
+import { Spring, animated } from "@react-spring/web";
+import colors from "components/colors";
+import { container, mq } from "components/grid";
+import { client } from "client";
 
 const AdmisionesInfo = (props) => {
-  const { useQuery } = client
+  const { useQuery } = client;
   const categories = useQuery().gruposDeRequisitos({
     first: 10000,
-  }).nodes
+  }).nodes;
 
   //Obtiene los grados
   const grades = useQuery()
     .grados({
       first: 10000,
     })
-    .nodes // ?.sort((a, b) => a.order - b.order)
+    ?.nodes // ?.sort((a, b) => a.order - b.order)
     ?.filter((grade) => {
-      return grade.datosRequisitos.requisitos?.length
+      return grade.datosRequisitos.requisitos?.length;
     })
-    .sort((a, b) => a.orden - b.orden)
+    .sort((a, b) => a.orden - b.orden);
 
-  const [view, setView] = useState(0)
+  const [view, setView] = useState(0);
 
   return grades.length ? (
     <Section fluid {...props}>
@@ -36,20 +36,20 @@ const AdmisionesInfo = (props) => {
           </Icon>
           <ImtemUl>
             {grades.map((grade, index) => {
-              const isActive = view === index
+              const isActive = view === index;
 
-              const { nombre, id } = grade
+              const { nombre, id } = grade;
 
               return (
                 <Item
                   key={index}
-                  color={isActive ? 'white' : colors.secondary.dark}
+                  color={isActive ? "white" : colors.secondary.dark}
                   onClick={() => setView(index)}
                   {...{ isActive }}
                 >
                   <ItemName>{nombre}</ItemName>
                 </Item>
-              )
+              );
             })}
           </ImtemUl>
         </ColumnContainer>
@@ -57,9 +57,9 @@ const AdmisionesInfo = (props) => {
 
       <Displayer>
         {grades.map((grade, index) => {
-          const requisitos = grade.datosRequisitos?.requisitos
+          const requisitos = grade.datosRequisitos?.requisitos;
 
-          const isActive = view === index
+          const isActive = view === index;
 
           return (
             <Spring
@@ -77,13 +77,13 @@ const AdmisionesInfo = (props) => {
 
                     <Groups>
                       {categories.map((group, index) => {
-                        const { id, name } = group
+                        const { id, name } = group;
 
                         const catRequirements = requisitos?.filter((item) => {
                           return item.categoria
                             .map((category) => category.id)
-                            .includes(id)
-                        })
+                            .includes(id);
+                        });
 
                         return catRequirements.length ? (
                           <Group key={index} color={colors.secondary.dark}>
@@ -97,25 +97,25 @@ const AdmisionesInfo = (props) => {
                                   >
                                     {item.requisito}
                                   </Requirement>
-                                )
+                                );
                               })}
                             </Requirements>
                           </Group>
-                        ) : null
+                        ) : null;
                       })}
                     </Groups>
                   </DisplayerSection>
                 </animated.div>
               )}
             </Spring>
-          )
+          );
         })}
       </Displayer>
     </Section>
-  ) : null
-}
+  ) : null;
+};
 
-export default AdmisionesInfo
+export default AdmisionesInfo;
 
 const Section = styled.section`
   ${container}
@@ -124,14 +124,14 @@ const Section = styled.section`
   display: grid;
   grid-template-columns: 100%;
   grid-template-areas:
-    'col_2'
-    'col_1';
+    "col_2"
+    "col_1";
 
   ${mq.md} {
     grid-template-columns: 58% 33% 9%;
-    grid-template-areas: 'col_1 col_2 space';
+    grid-template-areas: "col_1 col_2 space";
   }
-`
+`;
 const Navigation = styled.div`
   background-color: ${colors.secondary.light};
   width: 100%;
@@ -144,7 +144,7 @@ const Navigation = styled.div`
   ${mq.md} {
     padding: 3rem;
   }
-`
+`;
 
 const ColumnContainer = styled.div`
   display: grid;
@@ -155,19 +155,19 @@ const ColumnContainer = styled.div`
   ${mq.md} {
     grid-template-columns: 100%;
   }
-`
+`;
 
 const ImtemUl = styled.ul`
   margin: 0;
   padding: 0;
   align-self: end;
-`
+`;
 interface ItemProps {
-  color?: string
-  isActive?: boolean
+  color?: string;
+  isActive?: boolean;
 }
 const Item = styled.li`
-  ${({ color = 'green', isActive }: ItemProps) => css`
+  ${({ color = "green", isActive }: ItemProps) => css`
     ${h2}
     cursor: pointer;
     font-weight: bold;
@@ -186,16 +186,16 @@ const Item = styled.li`
         `
       : css``}
   `}
-`
+`;
 
 const ItemName = styled.span`
   display: block;
-`
+`;
 
 const Displayer = styled.div`
   grid-area: col_1;
   background-color: ${colors.secondary.lighter};
-`
+`;
 
 const DisplayerSection = styled.div`
   margin: 0;
@@ -207,38 +207,38 @@ const DisplayerSection = styled.div`
   ${mq.md} {
     padding: 3rem;
   }
-`
+`;
 
 const DisplayerSectionTitle = styled.h2`
-  ${({ color = 'red' }) => css`
+  ${({ color = "red" }) => css`
     color: ${color};
     text-transform: uppercase;
     font-weight: 900;
     margin-top: 0;
   `}
-`
+`;
 
-const Groups = styled.ul``
+const Groups = styled.ul``;
 
 const Group = styled.li`
-  ${({ color = 'green' }) => css`
+  ${({ color = "green" }) => css`
     color: ${color};
     list-style: none;
   `}
-`
+`;
 
 const GroupName = styled.h3`
   text-transform: uppercase;
   font-weight: 600;
   color: inherit;
-`
+`;
 
-const Requirements = styled.ul``
+const Requirements = styled.ul``;
 
 const Requirement = styled.li`
   color: ${colors.secondary.dark};
   list-style: none;
-`
+`;
 
 const Icon = styled.div`
   color: ${colors.secondary.dark};
@@ -249,4 +249,4 @@ const Icon = styled.div`
   ${mq.md} {
     order: 2;
   }
-`
+`;

@@ -32,7 +32,7 @@ const AdmisionesForm = (props) => {
         orderby: [order],
       },
     })
-    .nodes // .sort((a, b) => a.orden - b.orden)
+    ?.nodes // .sort((a, b) => a.orden - b.orden)
     ?.map((grado, index) => {
       return {
         ...grado.formulariosGrado,

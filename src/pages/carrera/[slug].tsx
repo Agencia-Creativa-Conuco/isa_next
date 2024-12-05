@@ -26,7 +26,7 @@ const Page = ({ slug }) => {
 
   const recursos = carrera
     .recursos()
-    .nodes?.filter((recurso) => recurso.tipo.toString() !== "pensum");
+    ?.nodes?.filter((recurso) => recurso.tipo.toString() !== "pensum");
 
   const seo = {
     title: carrera.title(),

@@ -78,7 +78,7 @@ const Calendar = ({
 }: CalendarProps) => {
   const { useQuery } = client;
   //Obtiene los datos de los Eventos
-  const events = useQuery().periodosDeAdmision().nodes;
+  const events = useQuery().periodosDeAdmision()?.nodes;
 
   //Ordena los eventos de menor a mayor
   // const events = events.nodes.nodes

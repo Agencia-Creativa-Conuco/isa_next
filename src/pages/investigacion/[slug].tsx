@@ -20,7 +20,7 @@ const Page = ({ slug }) => {
     idType: InvestigacionIdType.SLUG,
   });
 
-  const investigadores = investigacion.investigadores().nodes;
+  const investigadores = investigacion.investigadores()?.nodes;
 
   const seo = {
     title: investigacion.title(),

@@ -21,7 +21,7 @@ const ProjectLines = () => {
     .departamentos({
       first: 1000,
     })
-    .nodes?.filter((departamento) =>
+    ?.nodes?.filter((departamento) =>
       lineasDeInvestigacion
         .map((line) => line.departamento.node.id)
         .includes(departamento.id)
@@ -31,7 +31,7 @@ const ProjectLines = () => {
     .facultades({
       first: 1000,
     })
-    .nodes?.filter((facultad) => {
+    ?.nodes?.filter((facultad) => {
       return departamentos
         .map((departamento) => {
           return departamento.facultad.node.id;

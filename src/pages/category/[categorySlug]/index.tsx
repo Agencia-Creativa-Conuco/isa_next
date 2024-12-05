@@ -34,7 +34,7 @@ export default function Page() {
   return (
     <Layout {...{ seo }}>
       <main className="content content-single">
-        <Posts posts={posts.nodes} heading={`Categoría: ${category?.name}`} />
+        <Posts posts={posts?.nodes} heading={`Categoría: ${category?.name}`} />
 
         <Pagination
           pageInfo={posts.pageInfo}

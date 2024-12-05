@@ -22,7 +22,7 @@ const DepartamentoCarreras = ({ departamento }: DepartamentoProps) => {
     ?.nodes.filter((grado) => {
       return facultad
         .carreras()
-        .nodes?.map((carrera) => carrera.grado.node.id)
+        ?.nodes?.map((carrera) => carrera.grado.node.id)
         .includes(grado.id);
     })
     .sort((a, b) => a.orden - b.orden);
@@ -38,7 +38,7 @@ const DepartamentoCarreras = ({ departamento }: DepartamentoProps) => {
           <Container>
             {facultad
               .carreras()
-              .nodes.filter((carrera) => carrera.grado.node.id === grado.id)
+              ?.nodes.filter((carrera) => carrera.grado.node.id === grado.id)
               .map((carrera, index) => {
                 const { nombre, imagenPortada, uri } = carrera;
 

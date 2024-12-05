@@ -1,13 +1,13 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import Image from 'next/image'
-import colors from 'components/colors'
-import Form from 'components/form'
-import { container, mq } from 'components/grid'
-import image from '../../../public/images/home/contacto.jpg'
+import React from "react";
+import styled from "@emotion/styled";
+import Image from "next/image";
+import colors from "components/colors";
+import Form from "components/form";
+import { container, mq } from "components/grid";
+import image from "../../../public/images/home/contacto.jpg";
 
 const HomeContact = () => {
-  const title = 'Contáctanos'
+  const title = "Contáctanos";
 
   return (
     <Section id="section_5" fluid>
@@ -29,10 +29,10 @@ const HomeContact = () => {
         </Content>
       </Container>
     </Section>
-  )
-}
+  );
+};
 
-export default HomeContact
+export default HomeContact;
 
 const Section = styled.section`
   ${container}
@@ -40,23 +40,23 @@ const Section = styled.section`
   display: grid;
   grid-template-columns: 100%;
   grid-template-areas:
-    'col_1'
-    'col_2';
+    "col_1"
+    "col_2";
 
   ${mq.lg} {
     grid-template-columns: 1fr 1fr;
-    grid-template-areas: 'col_2 col_1';
+    grid-template-areas: "col_2 col_1";
   }
-`
+`;
 const Container = styled.div`
   position: relative;
   grid-area: col_2;
-`
+`;
 
 const Content = styled.div`
   margin: 3rem 1.5rem;
   &::after {
-    content: '';
+    content: "";
     background: ${colors.primary.light};
     width: 8%;
     padding: 8%;
@@ -64,12 +64,12 @@ const Content = styled.div`
     right: 0;
     bottom: 0;
   }
-`
+`;
 
 const SectionTitle = styled.h2`
   margin: 6rem auto;
   text-align: center;
-`
+`;
 
 const Imagen = styled(Image)`
   grid-area: col_1;
@@ -89,7 +89,7 @@ const Imagen = styled(Image)`
       transform: translateX(-8rem);
     }
   }
-`
+`;
 
 const Media = styled.div`
   display: flex;
@@ -97,4 +97,4 @@ const Media = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
-`
+`;

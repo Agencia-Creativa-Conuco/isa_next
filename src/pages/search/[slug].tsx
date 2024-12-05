@@ -22,7 +22,7 @@ const Page = ({ slug }) => {
         { field: PostObjectsConnectionOrderbyEnum.DATE, order: OrderEnum.DESC },
       ],
     },
-  }).nodes;
+  })?.nodes;
   const posts = useQuery().posts({
     where: {
       search: query,
@@ -30,7 +30,7 @@ const Page = ({ slug }) => {
         { field: PostObjectsConnectionOrderbyEnum.DATE, order: OrderEnum.DESC },
       ],
     },
-  }).nodes;
+  })?.nodes;
   const carreras = useQuery().carreras({
     where: {
       search: query,
@@ -38,7 +38,7 @@ const Page = ({ slug }) => {
         { field: PostObjectsConnectionOrderbyEnum.DATE, order: OrderEnum.DESC },
       ],
     },
-  }).nodes;
+  })?.nodes;
   const facultades = useQuery().facultades({
     where: {
       search: query,
@@ -46,7 +46,7 @@ const Page = ({ slug }) => {
         { field: PostObjectsConnectionOrderbyEnum.DATE, order: OrderEnum.DESC },
       ],
     },
-  }).nodes;
+  })?.nodes;
   const grados = useQuery().grados({
     where: {
       search: query,
@@ -54,7 +54,7 @@ const Page = ({ slug }) => {
         { field: PostObjectsConnectionOrderbyEnum.DATE, order: OrderEnum.DESC },
       ],
     },
-  }).nodes;
+  })?.nodes;
   const investigaciones = useQuery().investigaciones({
     where: {
       search: query,
@@ -62,7 +62,7 @@ const Page = ({ slug }) => {
         { field: PostObjectsConnectionOrderbyEnum.DATE, order: OrderEnum.DESC },
       ],
     },
-  }).nodes;
+  })?.nodes;
   const lineasDeInvestigacion = useQuery().lineasDeInvestigacion({
     where: {
       search: query,
@@ -70,7 +70,7 @@ const Page = ({ slug }) => {
         { field: PostObjectsConnectionOrderbyEnum.DATE, order: OrderEnum.DESC },
       ],
     },
-  }).nodes;
+  })?.nodes;
   const recursos = useQuery().recursos({
     where: {
       search: query,
@@ -78,7 +78,7 @@ const Page = ({ slug }) => {
         { field: PostObjectsConnectionOrderbyEnum.DATE, order: OrderEnum.DESC },
       ],
     },
-  }).nodes;
+  })?.nodes;
 
   const list = []
     .concat(

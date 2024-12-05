@@ -1,19 +1,19 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import { css } from '@emotion/react'
-import Link from 'next/link'
-import colors from 'components/colors'
-import { container, mq } from 'components/grid'
-import { Facultad } from 'client'
+import React from "react";
+import styled from "@emotion/styled";
+import { css } from "@emotion/react";
+import Link from "next/link";
+import colors from "components/colors";
+import { container, mq } from "components/grid";
+import { Facultad } from "client";
 
 export interface FacultadProps {
-  facultad: Facultad | Facultad['preview']['node'] | null | undefined
+  facultad: Facultad | Facultad["preview"]["node"] | null | undefined;
 }
 
 const FacultadAreas = ({ facultad }: FacultadProps) => {
-  const { color = colors.primary.base } = facultad
+  const { color = colors.primary.base } = facultad;
 
-  const departamentos = facultad.departamentos()?.nodes
+  const departamentos = facultad.departamentos()?.nodes;
 
   return departamentos?.length ? (
     <Section>
@@ -23,31 +23,31 @@ const FacultadAreas = ({ facultad }: FacultadProps) => {
           <List>
             {departamentos
               .filter((departament) => {
-                return departament.carreras().nodes?.length
+                return departament.carreras()?.nodes?.length;
               })
               .map((departament, index) => {
-                const { nombre, uri } = departament
+                const { nombre, uri } = departament;
 
                 return departament.nombre ? (
                   <Item key={index}>
                     <SLink
-                      href={uri ?? '/'}
+                      href={uri ?? "/"}
                       color={color}
                       color2={colors.text.base}
                     >
                       {nombre}
                     </SLink>
                   </Item>
-                ) : null
+                ) : null;
               })}
           </List>
         </Card>
       </Container>
     </Section>
-  ) : null
-}
+  ) : null;
+};
 
-export default FacultadAreas
+export default FacultadAreas;
 
 const Section = styled.section`
   margin-top: -10rem !important;
@@ -55,13 +55,13 @@ const Section = styled.section`
   ${mq.md} {
     margin-bottom: 9.6rem;
   }
-`
+`;
 
 const Container = styled.div`
   ${container}
   display:grid;
   grid-template-columns: 100%;
-`
+`;
 
 const Card = styled.div`
   box-shadow: 0 0.7rem 2rem rgba(0, 0, 0, 0.15);
@@ -70,14 +70,14 @@ const Card = styled.div`
   position: relative;
   margin-bottom: 50px;
   background: white;
-`
+`;
 
 const SectionTitle = styled.h2`
   margin-top: 4rem;
   margin-bottom: 2rem;
   text-align: center;
   color: ${(props) => props.color};
-`
+`;
 
 const SLink = styled(Link)`
   ${(props: { color?: string; color2?: string }) => css`
@@ -92,7 +92,7 @@ const SLink = styled(Link)`
     }
 
     &:before {
-      content: '•';
+      content: "•";
       transform-origin: 50% 50%;
       transform: scale(2);
       display: inline-block;
@@ -100,7 +100,7 @@ const SLink = styled(Link)`
       margin-left: -1.5rem;
     }
   `}
-`
+`;
 
 const List = styled.ul`
   margin: 0 auto;
@@ -112,9 +112,9 @@ const List = styled.ul`
   ${mq.md} {
     grid-template-columns: 60%;
   }
-`
+`;
 
 const Item = styled.li`
   list-style: none;
   line-height: 1;
-`
+`;
