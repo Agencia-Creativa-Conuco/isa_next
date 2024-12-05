@@ -1,42 +1,42 @@
-import React, { useState, useEffect } from 'react'
-import styled from '@emotion/styled'
-import Carousel from 'react-slick'
-import Image from 'next/image'
-import colors from 'components/colors'
-import Link from 'next/link'
-import { h4 } from 'styles/tipography'
-import { container, mq } from 'components/grid'
-import { client } from 'client'
-import blur from 'styles/blur'
+import React, { useState, useEffect } from "react";
+import styled from "@emotion/styled";
+import Carousel from "react-slick";
+import Image from "next/image";
+import colors from "components/colors";
+import Link from "next/link";
+import { h4 } from "styles/tipography";
+import { container, mq } from "components/grid";
+import { client } from "client";
+import blur from "styles/blur";
 
 const DIPGeneral = (props) => {
-  const { useQuery } = client
+  const { useQuery } = client;
 
   const facultades = useQuery().facultades({
     first: 10000,
-  })?.nodes
+  })?.nodes;
 
   const departamentos = useQuery()
     .departamentos({
       first: 10000,
     })
     ?.nodes?.filter(
-      (departamento) => departamento.lineasDeInvestigacion().nodes?.length,
-    )
+      (departamento) => departamento.lineasDeInvestigacion()?.nodes?.length
+    );
 
   const lineasDeInvestigacion = useQuery().lineasDeInvestigacion({
     first: 10000,
-  })?.nodes
+  })?.nodes;
 
-  const [nav1, setNav1] = useState(null)
-  const [nav2, setNav2] = useState(null)
-  const [slider1, setSlider1] = useState([])
-  const [slider2, setSlider2] = useState([])
+  const [nav1, setNav1] = useState(null);
+  const [nav2, setNav2] = useState(null);
+  const [slider1, setSlider1] = useState([]);
+  const [slider2, setSlider2] = useState([]);
 
   useEffect(() => {
-    setNav1(slider1)
-    setNav2(slider2)
-  }, [slider1, slider2])
+    setNav1(slider1);
+    setNav2(slider2);
+  }, [slider1, slider2]);
 
   return departamentos.length ? (
     <Section fluid {...props}>
@@ -47,16 +47,16 @@ const DIPGeneral = (props) => {
           return (
             <Dots>
               {dots.map((item, index) => {
-                return <Dot key={index}>{item}</Dot>
+                return <Dot key={index}>{item}</Dot>;
               })}
             </Dots>
-          )
+          );
         }}
         asNavFor={nav2}
         ref={(slider: any) => setSlider1(slider)}
       >
         {departamentos.map((item, index) => {
-          const { imagenPortada, nombre } = item
+          const { imagenPortada, nombre } = item;
 
           return (
             <Media key={index}>
@@ -70,7 +70,7 @@ const DIPGeneral = (props) => {
                 placeholder="blur"
               />
             </Media>
-          )
+          );
         })}
       </Carousel>
       <Carousel
@@ -81,15 +81,15 @@ const DIPGeneral = (props) => {
       >
         {departamentos.map((departamento, index) => {
           const [facultad] = facultades.filter((facultad) => {
-            return departamento.facultad.node.id === facultad.id
-          })
+            return departamento.facultad.node.id === facultad.id;
+          });
 
           const lines = lineasDeInvestigacion.filter((line) =>
             departamento
               .lineasDeInvestigacion()
               ?.nodes.map((item) => item.id)
-              .includes(line.id),
-          )
+              .includes(line.id)
+          );
 
           return (
             <Departament key={index}>
@@ -98,26 +98,26 @@ const DIPGeneral = (props) => {
                 <DepartamentName>{departamento.nombre}</DepartamentName>
                 <DepartamentProjects>
                   {lines.map((item, index) => {
-                    const { nombre } = item
+                    const { nombre } = item;
                     return (
                       <Project key={index}>
-                        <StyledLink href={item?.uri ?? ''}>
+                        <StyledLink href={item?.uri ?? ""}>
                           <ProjectName>{nombre}</ProjectName>
                         </StyledLink>
                       </Project>
-                    )
+                    );
                   })}
                 </DepartamentProjects>
               </ContentContainer>
             </Departament>
-          )
+          );
         })}
       </Carousel>
     </Section>
-  ) : null
-}
+  ) : null;
+};
 
-export default DIPGeneral
+export default DIPGeneral;
 
 const Section = styled.section`
   ${container}
@@ -129,7 +129,7 @@ const Section = styled.section`
   ${mq.lg} {
     grid-template-columns: 50% 50%;
   }
-`
+`;
 
 const ContentContainer = styled.div`
   ${container}
@@ -142,32 +142,32 @@ const ContentContainer = styled.div`
 
     width: 80%;
   }
-`
+`;
 
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: inherit;
-`
+`;
 
-const Departament = styled.div``
+const Departament = styled.div``;
 
 const FacultyName = styled.h3`
   margin-bottom: 0rem;
   font-weight: 300;
   text-transform: uppercase;
-`
+`;
 
 const DepartamentName = styled.h2`
   margin-top: 0;
   margin-bottom: 4rem;
   font-weight: 900;
   text-transform: uppercase;
-`
+`;
 
 const DepartamentProjects = styled.ul`
   /* padding: 0;
     margin: 0; */
-`
+`;
 
 const Project = styled.li`
   list-style: none;
@@ -180,7 +180,7 @@ const Project = styled.li`
   &:hover {
     color: ${colors.secondary.base};
   }
-`
+`;
 
 const ProjectName = styled.h3`
   ${h4}
@@ -189,14 +189,14 @@ const ProjectName = styled.h3`
   text-transform: uppercase;
   color: inherit;
   padding: 1rem 0;
-`
+`;
 
 const Dots = styled.ul`
   margin: 0;
   padding: 0;
   position: absolute;
   bottom: 2rem;
-`
+`;
 
 const Dot = styled.div`
   margin: 0;
@@ -223,9 +223,9 @@ const Dot = styled.div`
       opacity: 1;
     }
   }
-`
+`;
 
 const Media = styled.div`
   display: grid;
   font-size: 0;
-`
+`;
